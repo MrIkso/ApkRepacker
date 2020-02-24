@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="toolbarShadow" format="reference" />
+    <!--ATTRS-->
+    <attr name="colorAccentLight"
+        format="color|reference" />
+    <attr name="colorSelected"
+        format="color|reference" />
+    <attr name="colorBackgroundTint"
+        format="color|reference" />
+    <attr name="colorBackgroundLeft"
+        format="color|reference" />
+    <attr name="colorBackgroundRight"
+        format="color|reference" />
+    <attr name="colorBackgroundBottomMenu"
+        format="color|reference" />
+    <attr name="colorBackgroundIcon_1"
+        format="color|reference" />
+    <attr name="colorBackgroundIcon_2"
+        format="color|reference" />
+    <attr name="colorBackgroundIcon_3"
+        format="color|reference" />
+    <attr name="textColor"
+        format="color|reference" />
+    <attr name="textColor_1"
+        format="color|reference" />
+    <attr name="cardBackground"
+        format="color|reference" />
+
+    <attr name="popupOverlayStyle" format="reference"/>
+    <declare-styleable name="FastScrollRecyclerView">
+        <attr name="fastScrollThumbColor" format="reference|color" />
+        <attr name="fastScrollThumbInactiveColor" format="reference|color" />
+        <attr name="fastScrollTrackColor" format="reference|color" />
+        <attr name="fastScrollPopupBgColor" format="reference|color" />
+        <attr name="fastScrollPopupTextColor" format="reference|color" />
+        <attr name="fastScrollPopupTextSize" format="reference|dimension" />
+        <attr name="fastScrollPopupTextVerticalAlignmentMode" format="enum">
+            <enum name="text_bounds" value="0"/>
+            <enum name="font_metrics" value="1"/>
+        </attr>
+        <attr name="fastScrollPopupBackgroundSize" format="reference|dimension" />
+        <attr name="fastScrollPopupPosition" format="enum">
+            <enum name="adjacent" value="0"/>
+            <enum name="center" value="1"/>
+        </attr>
+        <attr name="fastScrollAutoHide" format="reference|boolean" />
+        <attr name="fastScrollAutoHideDelay" format="reference|integer" />
+        <attr name="fastScrollEnableThumbInactiveColor" format="reference|boolean" />
+        <attr name="fastScrollThumbEnabled" format="reference|boolean" />
+    </declare-styleable>
+</resources>

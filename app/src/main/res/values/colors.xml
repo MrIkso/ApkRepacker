@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--light  theme-->
+    <color name="light_primary">#FFFFFF</color>
+    <color name="light_accent">#FF5252</color>
+    <color name="light_primary_text">#212121</color>
+    <color name="light_secondary_text">#757575</color>
+    <color name="light_divider">#BDBDBD</color>
+    <color name="light_text_color_primary">#de000000</color>
+
+    <color name="dark_primary">#1E1E1E</color>
+    <color name="dark_primary_dark">#1E1E1E</color>
+    <color name="dark_accent">#1976d2</color>
+    <color name="dark_primary_text">#e1e1e1e1</color>
+    <color name="dark_secondary_text">#a5a5a5</color>
+    <color name="dark_divider">#BDBDBD</color>
+    <color name="dark_background">#282828</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="transparent">#00000000</color>
+    <color name="gray_very_light">#E0E0E0</color>
+    <color name="main_background">#EEEEEE</color>
+    <color name="md_selector_color">#ff686868</color>
+    <color name="dark_str_left_bg">#ff303030</color>
+    <color name="dark_card_background">#ff303030</color>
+    <color name="light_card_background">#fffafafa</color>
+    <color name="dark_str_right_bg">#ff383838</color>
+    <color name="light_str_left_bg">#fffafafa</color>
+    <color name="light_str_right_bg">#ffefefef</color>
+    <color name="ripple_material_light">#40000000</color>
+    <color name="textColorInverted">#ff212121</color>
+    <color name="color_divider">#ffbbbbbb</color>
+    <color name="color_divider_dark">#30ffffff</color>
+    <color name="color_gray_text_disabled">#9D9FA2</color>
+    <!-- Material Design Color - Color palette -->
+    <!-- Material Design Color - Color palette -->
+    <color name="red_primary">#F44336</color>
+    <color name="red_primary_dark">#D32F2F</color>
+    <color name="pink_primary">#E91E63</color>
+    <color name="pink_primary_dark">#C2185B</color>
+    <color name="purple_primary">#9C27B0</color>
+    <color name="purple_primary_dark">#7B1FA2</color>
+    <color name="deep_purple_primary">#673AB7</color>
+    <color name="deep_purple_primary_dark">#512DA8</color>
+    <color name="indigo_primary">#3F51B5</color>
+    <color name="indigo_primary_dark">#303F9F</color>
+    <color name="blue_primary">#2196F3</color>
+    <color name="blue_primary_dark">#1976D2</color>
+    <color name="light_blue_primary">#03A9F4</color>
+    <color name="light_blue_primary_dark">#0288D1</color>
+    <color name="cyan_primary">#00BCD4</color>
+    <color name="cyan_primary_dark">#0097A7</color>
+    <color name="teal_primary">#009688</color>
+    <color name="teal_primary_dark">#00796B</color>
+    <color name="green_primary">#4CAF50</color>
+    <color name="green_primary_dark">#388E3C</color>
+    <color name="light_green_primary">#8BC34A</color>
+    <color name="light_green_primary_dark">#689F38</color>
+    <color name="lime_primary">#CDDC39</color>
+    <color name="lime_primary_dark">#AFB42B</color>
+    <color name="yellow_primary">#FFEB3B</color>
+    <color name="yellow_primary_dark">#FBC02D</color>
+    <color name="amber_primary">#FFC107</color>
+    <color name="amber_primary_dark">#FFA000</color>
+    <color name="orange_primary">#FF9800</color>
+    <color name="orange_primary_dark">#F57C00</color>
+    <color name="deep_orange_primary">#FF5722</color>
+    <color name="deep_orange_primary_dark">#E64A19</color>
+    <color name="brown_primary">#795548</color>
+    <color name="brown_primary_dark">#5D4037</color>
+    <color name="grey_primary">#9E9E9E</color>
+    <color name="grey_primary_dark">#616161</color>
+    <color name="blue_grey_primary">#607D8B</color>
+    <color name="blue_grey_primary_dark">#455A64</color>
+    <!-- Google Logo Color -->
+    <color name="google_blue">#4285F4</color>
+    <color name="google_green">#34A853</color>
+    <color name="google_yellow">#FBBC05</color>
+    <color name="google_red">#EA4335</color>
+
+    <!-- Google Apps Color -->
+    <color name="app_blue">#4285F4</color>
+    <color name="app_blue_dark">#3367D6</color>
+    <color name="app_green">#0F9D58</color>
+    <color name="app_green_dark">#0B8043</color>
+    <color name="app_yellow">#F4B400</color>
+    <color name="app_yellow_dark">#F09300</color>
+    <color name="app_red">#DB4437</color>
+
+    <!--FILE COLORS-->
+    <color name="directory">#607D8B</color>
+    <color name="misc_file">#455A64</color>
+    <color name="audio">#EF6C00</color>
+    <color name="image">#9C27B0</color>
+    <color name="video">#F44336</color>
+    <color name="doc">#2196F3</color>
+    <color name="ppt">#FFC107</color>
+    <color name="xls">#4CAF50</color>
+    <color name="pdf">#F44336</color>
+    <color name="txt">#00BCD4</color>
+    <color name="zip">#78909c</color>
+    <color name="apk">#2E7D32</color>
+    <color name="dex">#EF6C00</color>
+    <color name="smali">#f45122</color>
+    <color name="xml">#43a047</color>
+</resources>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="8dp">
+    <TextView
+        android:id="@+id/decompile_app"
+        android:layout_marginTop="8dp"
+        android:drawableStart="@drawable/ic_decompile"
+        android:text="@string/decompile_app"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/ActionItem" />
+    <TextView
+        android:id="@+id/simple_edit_apk"
+        android:drawableStart="@drawable/ic_rename"
+        android:text="@string/simple_edit_app"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/decompile_app"
+        style="@style/ActionItem" />
+    <TextView
+        android:id="@+id/install_app"
+        android:drawableStart="@drawable/ic_install"
+        android:text="@string/install_app"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/simple_edit_apk"
+        style="@style/ActionItem" />
+    <TextView
+        android:id="@+id/sign_app"
+        android:drawableStart="@drawable/ic_sign"
+        android:text="@string/sign_app"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/install_app"
+        style="@style/ActionItem" />
+    <TextView
+        android:id="@+id/delete_item"
+        android:drawableStart="@drawable/ic_delete"
+        android:text="@string/action_delete"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sign_app"
+        style="@style/ActionItem" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

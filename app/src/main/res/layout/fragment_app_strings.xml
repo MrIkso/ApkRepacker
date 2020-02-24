@@ -1,0 +1,93 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    tools:context="fragment.StringsFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/language_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="4dp"
+            android:layout_margin="4dp"
+            android:popupBackground="?android:windowBackground"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="16sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?dividerColor"/>
+        <ListView
+            android:id="@+id/string_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="4dp"
+            android:layout_weight="1"
+            android:fastScrollEnabled="true"
+            android:divider="?dividerColor"
+            android:focusable="false" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/search_view"
+        android:visibility="invisible"
+        style="@style/FilterFooter">
+        <EditText
+            android:singleLine="true"
+            android:layout_gravity="bottom"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_big"
+            android:layout_marginRight="@dimen/margin_big"
+            android:id="@+id/search_text"/>
+    </FrameLayout>
+
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/fab"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="end|bottom"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp"
+        fab:menu_animationDelayPerItem="0"
+        fab:menu_colorNormal="?colorAccent"
+        fab:menu_colorPressed="@color/md_selector_color"
+        fab:menu_colorRipple="?colorAccent"
+        fab:menu_icon="@drawable/ic_add_white"
+        fab:menu_labels_ellipsize="end"
+        fab:menu_labels_maxLines="2">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_filter"
+            style="@style/MenuButtonsSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_search"
+            fab:fab_label="@string/action_search" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_add_language"
+            style="@style/MenuButtonsSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_add_white"
+            fab:fab_label="@string/action_add_new_lang" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_save_language"
+            style="@style/MenuButtonsSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_save"
+            fab:fab_label="@string/action_save_new_lang" />
+    </com.github.clans.fab.FloatingActionMenu>
+
+</FrameLayout>

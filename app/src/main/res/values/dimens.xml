@@ -1,0 +1,38 @@
+<resources>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+    <dimen name="text_margin_small">8dp</dimen>
+    <dimen name="text_margin_very_small">2dp</dimen>
+
+    <dimen name="card_margin_horizontal_big_activity">8dp</dimen>
+    <dimen name="card_margin_vertical_big_activity">4dp</dimen>
+    <dimen name="card_recycler_corner_radius">4dp</dimen>
+    <dimen name="card_recycler_elevation">2dp</dimen>
+
+    <dimen name="main_card_margin_horizontal">8dp</dimen>
+    <dimen name="main_card_margin_vertical">8dp</dimen>
+
+    <dimen name="card_title_margin">16dp</dimen>
+    <dimen name="avatar_size">40dp</dimen>
+    <dimen name="list_item_icon_margin">16dp</dimen>
+    <dimen name="list_item_name_marginStart">72dp</dimen>
+    <dimen name="list_item_name_marginStart_1">64dp</dimen>
+    <dimen name="list_item_name_marginEnd">16dp</dimen>
+    <dimen name="item_touch_helper_max_drag_scroll_per_frame">20dp</dimen>
+
+    <dimen name="drawable_padding">24dp</dimen>
+    <dimen name="text_size">16sp</dimen>
+    <dimen name="text_size_14">14sp</dimen>
+    <dimen name="normal_padding">16dp</dimen>
+    <dimen name="dialog_round">10dp</dimen>
+    <dimen name="dimen_small">10dp</dimen>
+    <dimen name="md_text_size_medium">12sp</dimen>
+
+    <dimen name="divider_height">0.5dp</dimen>
+    <dimen name="text_minHeight">42.0sp</dimen>
+    <dimen name="margin_big">28dp</dimen>
+
+    <dimen name="checkbox_margin">8dp</dimen>
+    <dimen name="toolbar_image_margin">16dp</dimen>
+    <dimen name="checkbox_dimens">44dp</dimen>
+</resources>

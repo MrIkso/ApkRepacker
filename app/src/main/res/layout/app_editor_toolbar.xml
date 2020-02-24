@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?colorPrimaryDark"
+    android:orientation="horizontal"
+    android:padding="2.0dip">
+
+    <ImageView
+        android:id="@+id/app_icon"
+        android:layout_width="48.0dip"
+        android:layout_height="48.0dip"
+        android:layout_gravity="center_vertical"
+        android:contentDescription="@android:string/no"
+        android:padding="4.0dip"
+        android:src="@mipmap/ic_launcher" />
+
+    <LinearLayout
+        android:layout_width="0.0dip"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center"
+        android:layout_weight="1.0"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/app_name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="marquee"
+            android:padding="2.0dip"
+            android:singleLine="true"
+            android:textSize="16.0sp"
+            android:textStyle="bold"
+            android:textColor="?attr/textColor"
+            />
+
+        <TextView
+            android:id="@+id/app_pkg"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2.0dip"
+            android:ellipsize="marquee"
+            android:paddingLeft="2.0dip"
+            android:singleLine="true"
+            android:textSize="12.0sp"
+            android:textColor="?attr/textColor" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="48dip"
+        android:layout_height="fill_parent"
+        android:paddingTop="2.0dip"
+        android:paddingBottom="2.0dip"
+        android:clickable="true"
+        android:background="@drawable/btn_pressed"
+        android:focusable="true">
+
+        <ImageView
+            android:layout_width="28dip"
+            android:layout_height="28dip"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_patch" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/build_app"
+        android:layout_width="48dip"
+        android:layout_height="fill_parent"
+        android:paddingTop="2.0dip"
+        android:paddingBottom="2.0dip"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/btn_pressed">
+
+        <ImageView
+            android:layout_width="28.0dip"
+            android:layout_height="28.0dip"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_build" />
+    </RelativeLayout>
+</LinearLayout>

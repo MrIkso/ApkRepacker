@@ -1,0 +1,6 @@
+R_DEF: Internal format may change without notice
+local
+attr netLoadingDrawable
+id messageTextView
+layout progress_layout
+style ProgressDialog

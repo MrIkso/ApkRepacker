@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/regex_check_menu"
+        android:checkable="true"
+        android:title="@string/regex"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/whole_words_only_menu"
+        android:checkable="true"
+        android:title="@string/whole_words_only"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/match_case_check"
+        android:checkable="true"
+        android:title="@string/case_sensitive"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/close_search_panel"
+        android:title="@string/close"
+        app:showAsAction="never"/>
+</menu>

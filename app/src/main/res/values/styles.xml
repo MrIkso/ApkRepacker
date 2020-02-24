@@ -1,0 +1,379 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/light_primary</item>
+        <item name="colorPrimaryDark">@color/light_primary</item>
+        <item name="colorAccent">@color/light_accent</item>
+        <item name="android:textColorPrimary">@color/light_primary_text</item>
+        <item name="android:textColorSecondary">@color/light_secondary_text</item>
+        <item name="dividerHorizontal">@color/light_divider</item>
+        <item name="colorSelected">#80B2EBF2</item>
+        <item name="toolbarShadow">@drawable/shadow</item>
+        <item name="popupOverlayStyle">@style/AppTheme.PopupOverlay</item>
+        <item name="bottomSheetDialogTheme">@style/BottomSheetDialog</item>
+        <item name="android:dialogTheme">@style/AlertDialog.AppTheme.Light</item>
+        <item name="android:alertDialogTheme">@style/AlertDialog.AppTheme.Light</item>
+        <item name="colorBackgroundTint">@color/light_primary</item>
+        <item name="colorBackgroundLeft">@color/light_str_left_bg</item>
+        <item name="colorBackgroundRight">@color/light_str_right_bg</item>
+        <item name="colorBackgroundBottomMenu">@color/main_background</item>
+        <item name="colorBackgroundIcon_1">#d6e1ea</item>
+        <item name="colorBackgroundIcon_2">#fff</item>
+        <item name="colorBackgroundIcon_3">#a6caff</item>
+        <item name="textColor">@color/light_text_color_primary</item>
+        <item name="textColor_1">@color/textColorInverted</item>
+        <item name="cardBackground">@color/light_card_background</item>
+
+
+        <item name="listItemBackground">?selectableItemBackground</item>
+        <item name="highlightBackground">#ffffff</item>
+        <item name="toolbarIconNormalColor">#829294</item>
+        <item name="toolbarIconDisabledColor">@color/gray_very_light</item>
+        <item name="menuIconNormalColor">#829294</item>
+
+       <!-- <item name="actionBarPopupTheme">@style/Light.Popup.Toolbar</item>
+        <item name="actionBarStyle">@style/Light.Toolbar</item>
+        <item name="actionBarTheme">@style/Light.Toolbar</item>-->
+        <item name="actionModeStyle">@style/ActionMode</item>
+        <item name="android:actionModeStyle">@style/ActionMode</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="dividerColor">@color/color_divider</item>
+
+        <!--TextEditor color-->
+        <item name="textForeground">#000000</item>
+        <item name="textBackground">#FFFFFF</item>
+        <item name="caret">#000000</item>
+        <item name="selection">#4D97FF54</item>
+        <item name="invisibles">#dddddd</item>
+        <item name="gutterForeground">#000000</item>
+        <item name="gutterBackground">#dfdfdf</item>
+        <item name="gutterDivider">#000000</item>
+        <item name="findResultsPath">#0000ff</item>
+        <item name="findResultsKeyword">#eaa95e</item>
+
+        <item name="hlComment1">#cc0000</item>
+        <item name="hlComment2">#ff8400</item>
+        <item name="hlComment3">#cc6600</item>
+        <item name="hlComment4">#cc6600</item>
+        <item name="hlDigit">#ff0000</item>
+        <item name="hlFoldLine0">#000000</item>
+        <item name="hlFoldLine1">#000000</item>
+        <item name="hlFoldLine2">#000000</item>
+        <item name="hlFoldLine3">#000000</item>
+        <item name="hlFunction">#9966ff</item>
+        <item name="hlInvalid">#ff0066</item>
+        <item name="hlKeyword1">#006699</item>
+        <item name="hlKeyword2">#009966</item>
+        <item name="hlKeyword3">#0099ff</item>
+        <item name="hlKeyword4">#66ccff</item>
+        <item name="hlLabel">#02b902</item>
+        <item name="hlLiteral1">#0F9D58</item>
+        <item name="hlLiteral2">#0B8043</item>
+        <item name="hlLiteral3">#0B8043</item>
+        <item name="hlLiteral4">#0B8043</item>
+        <item name="hlMarkup">#0000ff</item>
+        <item name="hlOperator">#000000</item>
+    </style>
+
+    <style name="AppTheme.Dark" parent="Theme.MaterialComponents.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/dark_primary_dark</item>
+        <item name="colorPrimaryDark">@color/dark_primary_dark</item>
+        <item name="colorAccent">@color/dark_accent</item>
+
+        <item name="android:textColorPrimary">@color/dark_primary_text</item>
+        <item name="android:textColorSecondary">@color/dark_secondary_text</item>
+        <item name="dividerHorizontal">@color/dark_divider</item>
+        <item name="colorSelected">#801565C0</item>
+        <item name="toolbarShadow">@drawable/shadow</item>
+        <item name="popupOverlayStyle">@style/AppTheme.PopupOverlay.Dark</item>
+        <item name="bottomSheetDialogTheme">@style/BottomSheetDialog.Dark</item>
+        <item name="android:dialogTheme">@style/AlertDialog.AppTheme.Dark</item>
+        <item name="android:alertDialogTheme">@style/AlertDialog.AppTheme.Dark</item>
+        <item name="colorBackgroundTint">@color/dark_primary</item>
+        <item name="colorBackgroundLeft">@color/dark_str_left_bg</item>
+        <item name="colorBackgroundRight">@color/dark_str_right_bg</item>
+        <item name="colorBackgroundBottomMenu">@color/dark_primary</item>
+        <item name="android:windowBackground">@color/dark_primary</item>
+        <item name="colorBackgroundIcon_1">@color/dark_background</item>
+        <item name="colorBackgroundIcon_2">#faaaaddd</item>
+        <item name="colorBackgroundIcon_3">#faaaaddd</item>
+        <item name="textColor">@color/dark_primary_text</item>
+        <item name="textColor_1">@color/dark_primary_text</item>
+        <item name="cardBackground">@color/dark_card_background</item>
+
+        <item name="actionModeStyle">@style/ActionMode</item>
+        <item name="android:actionModeStyle">@style/ActionMode</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="dividerColor">@color/color_divider_dark</item>
+
+        <item name="highlightBackground">#545454</item>
+        <item name="toolbarIconNormalColor">#ffffff</item>
+        <item name="toolbarIconDisabledColor">#50ffffff</item>
+        <item name="menuIconNormalColor">#829294</item>
+        <!--编辑器样式-->
+        <item name="textForeground">#A6B2C0</item>
+        <item name="textBackground">#2b2b2b</item>
+        <item name="caret">#528BFF</item>
+        <item name="selection">#3D4350</item>
+        <item name="invisibles">#747369</item>
+        <item name="gutterForeground">#747369</item>
+        <item name="gutterBackground">#393939</item>
+        <item name="gutterDivider">#2b2b2b</item>
+        <item name="findResultsPath">#0000ff</item>
+        <item name="findResultsKeyword">#C26509</item>
+
+        <!--高亮-->
+        <item name="hlComment1">#BC9458</item>
+        <item name="hlComment2">#808080</item>
+        <item name="hlComment3">#888888</item>
+        <item name="hlComment4">#cc6600</item>
+        <item name="hlDigit">#d1001c</item>
+        <item name="hlFoldLine0">#000000</item>
+        <item name="hlFoldLine1">#000000</item>
+        <item name="hlFoldLine2">#000000</item>
+        <item name="hlFoldLine3">#000000</item>
+        <item name="hlFunction">#5c92b9</item>
+        <item name="hlInvalid">#ff0066</item>
+        <!--关键字 if true... -->
+        <item name="hlKeyword1">#ff7300</item>
+        <!--函数名-->
+        <item name="hlKeyword2">#1d97b9</item>
+        <!--变量-->
+        <item name="hlKeyword3">#cfa621</item>
+        <!--类名-->
+        <item name="hlKeyword4">#0480f4</item>
+        <item name="hlLabel">#02b902</item>
+        <!--字符串,单引号-->
+        <item name="hlLiteral1">#519F50</item>
+        <!--字符串,双引号-->
+        <item name="hlLiteral2">#399138</item>
+        <item name="hlLiteral3">#519F50</item>
+        <item name="hlLiteral4">#9900cc</item>
+        <!--语言符号,如: <?php-->
+        <item name="hlMarkup">#E8BF6A</item>
+        <item name="hlOperator">#D0D0FF</item>
+
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.ActionBar" />
+
+    <style name="AppTheme.AppBarOverlay.Dark" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
+
+    <style name="AppTheme.PopupOverlay.Dark" parent="ThemeOverlay.MaterialComponents" />
+
+    <!--TEXT STYLES-->
+    <style name="Text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="Text.Body1">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body1</item>
+        <item name="android:textColor">?android:textColorSecondary</item>
+    </style>
+
+    <style name="Text.Subhead">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Subhead</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
+    </style>
+
+    <style name="Text.Subhead.All">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Subhead</item>
+    </style>
+
+    <!--Bottom sheet item-->
+    <style name="ActionItem">
+        <item name="android:background">?selectableItemBackground</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:textSize">@dimen/text_size</item>
+        <item name="android:drawablePadding">@dimen/drawable_padding</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">@dimen/normal_padding</item>
+    </style>
+
+    <style name="BottomSheetDialog" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="colorPrimary">@color/light_accent</item>
+        <item name="colorPrimaryDark">@color/light_accent</item>
+        <item name="colorAccent">@color/light_accent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowBackground">#00000000</item>
+        <item name="android:statusBarColor">#00000000</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:colorBackground">@color/white</item>
+    </style>
+
+    <style name="BottomSheetDialog.Dark" parent="Theme.MaterialComponents.BottomSheetDialog">
+        <item name="colorPrimary">@color/dark_accent</item>
+        <item name="colorPrimaryDark">@color/dark_accent</item>
+        <item name="colorAccent">@color/dark_accent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowBackground">#00000000</item>
+        <item name="android:statusBarColor">#00000000</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:colorBackground">@color/dark_background</item>
+    </style>
+
+    <!--CustomDialog-->
+    <style name="AlertDialog.AppTheme.Light" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+        <!--<item name="android:windowBackground">@drawable/dialog_bg_light</item>-->
+        <item name="colorPrimary">@color/light_accent</item>
+        <item name="colorAccent">@color/light_accent</item>
+        <item name="android:windowBackground">@color/white</item>
+        <item name="buttonBarButtonStyle">@style/MD2TextButton</item>
+        <item name="android:buttonBarButtonStyle">@style/MD2TextButton</item>
+    </style>
+
+    <style name="AlertDialog.AppTheme.Dark" parent="Theme.MaterialComponents.Dialog.Alert">
+        <!--  <item name="android:windowBackground">@drawable/dialog_bg_dark</item>-->
+        <item name="android:windowBackground">@color/dark_primary</item>
+        <item name="colorPrimary">@color/dark_accent</item>
+        <item name="colorAccent">@color/dark_accent</item>
+        <item name="dialogCornerRadius">@dimen/dialog_round</item>
+        <item name="buttonBarButtonStyle">@style/MD2TextButton</item>
+        <item name="android:buttonBarButtonStyle">@style/MD2TextButton</item>
+    </style>
+
+    <style name="DialogFullscreen" parent="Theme.MaterialComponents.Light.DialogWhenLarge">
+        <item name="colorPrimary">@color/light_primary</item>
+        <item name="colorPrimaryDark">@color/light_primary</item>
+        <item name="colorAccent">@color/light_accent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:statusBarColor">?colorPrimaryDark</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+    </style>
+
+    <style name="DialogFullscreen.Dark" parent="Theme.MaterialComponents.DialogWhenLarge">
+        <item name="colorPrimary">@color/dark_background</item>
+        <item name="colorPrimaryDark">@color/dark_background</item>
+        <item name="colorAccent">@color/dark_accent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:statusBarColor">?colorPrimaryDark</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:colorBackground">@color/dark_primary</item>
+    </style>
+
+    <style name="ColorPickerDialog.Dark" parent="Theme.MaterialComponents.Dialog">
+        <item name="colorPrimary">@color/dark_accent</item>
+    <item name="colorPrimaryDark">@color/dark_primary_dark</item>
+
+    <item name="colorAccent">@color/dark_accent</item>
+        <item name="redColor">#ff5252</item>
+        <item name="greenColor">#69f0ae</item>
+        <item name="blueColor">#536dfe</item>
+        <item name="backgroundColor">@color/dark_primary_dark</item>
+    </style>
+    <style name="ColorPickerDialog" parent="Theme.MaterialComponents.Light.Dialog">
+        <item name="colorPrimary">@color/light_accent</item>
+        <item name="colorPrimaryDark">@color/white</item>
+        <item name="colorAccent">@color/light_accent</item>
+        <item name="backgroundColor">@android:color/white</item>
+    </style>
+    <!--FAB-->
+    <style name="MenuButtonsSmall">
+        <item name="fab_size">mini</item>
+        <item name="fab_colorNormal">?colorAccent</item>
+        <item name="fab_colorPressed">@color/md_selector_color</item>
+        <item name="fab_colorRipple">?colorAccent</item>
+    </style>
+
+    <style name="MD2TextButton" parent="@style/Widget.MaterialComponents.Button.TextButton">
+        <item name="backgroundTint">@color/transparent</item>
+        <item name="android:textSize">@dimen/text_size</item>
+        <item name="android:clickable">true</item>
+        <item name="rippleColor">?colorAccent</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <!--TextButton-->
+    <style name="TexButton">
+        <item name="android:textAppearance">
+            @style/TextAppearance.AppCompat.Widget.Button.Borderless.Colored
+        </item>
+        <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="android:textColor">?attr/textColor_1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">?selectableItemBackground</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:minWidth">45.0dp</item>
+        <item name="android:minHeight">@dimen/text_minHeight</item>
+    </style>
+
+    <style name="MD2Button" parent="@style/Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="android:textColor">@color/white</item>
+        <item name="backgroundTint">?colorAccent</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <!--ActionMode-->
+    <style name="ActionMode" parent="@style/Widget.AppCompat.ActionMode">
+        <item name="background">?colorPrimary</item>
+        <item name="height">?attr/actionBarSize</item>
+        <item name="titleTextStyle">@style/ActionModeTitle</item>
+        <item name="subtitleTextStyle">@style/ActionModeSubtitle</item>
+    </style>
+
+    <style name="ActionModeTitle">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">?attr/textColor</item>
+    </style>
+
+    <style name="ActionModeSubtitle">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">?attr/textColor</item>
+    </style>
+
+   <!-- <style name="Light.Toolbar" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:layout_height">?attr/actionBarSize</item>
+    </style>
+
+    <style name="Light.Popup.Toolbar" parent="@style/ThemeOverlay.AppCompat.Light" />-->
+
+    <!--SearchPanel-->
+    <style name="FilterFooter">
+        <item name="android:layout_gravity">bottom</item>
+        <item name="android:background">@drawable/bg_poupup</item>
+        <item name="android:paddingBottom">16dp</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">70dp</item>
+        <item name="android:layout_marginBottom">-12dp</item>
+    </style>
+
+    <style name="TextInputLayout.OutlinedBox" parent="Widget.Design.TextInputLayout">
+      <!--  <item name="boxCornerRadiusBottomEnd">@dimen/text_margin_small</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/text_margin_small</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/text_margin_small</item>
+        <item name="boxCornerRadiusTopStart">@dimen/text_margin_small</item>-->
+        <item name="hintTextColor">?colorAccent</item>
+        <item name="boxStrokeColor">?colorAccent</item>
+        <item name="colorControlActivated">?colorAccent</item>
+    </style>
+
+    <style name="TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <!--  <item name="boxCornerRadiusBottomEnd">@dimen/text_margin_small</item>
+          <item name="boxCornerRadiusBottomStart">@dimen/text_margin_small</item>
+          <item name="boxCornerRadiusTopEnd">@dimen/text_margin_small</item>
+          <item name="boxCornerRadiusTopStart">@dimen/text_margin_small</item>-->
+        <item name="hintTextColor">?colorAccent</item>
+        <item name="boxStrokeColor">?colorAccent</item>
+    </style>
+
+    <style name="TabStyle" parent="Widget.Design.TabLayout">
+        <item name="tabIndicatorColor">?attr/colorAccent</item>
+        <item name="tabIndicatorHeight">2.5dp</item>
+        <item name="android:elevation">2dp</item>
+        <item name="tabIconTint">?attr/colorPrimaryDark</item>
+        <item name="tabSelectedTextColor">?attr/colorAccent</item>
+        <item name="tabTextColor">?attr/textColor</item>
+    </style>
+
+</resources>

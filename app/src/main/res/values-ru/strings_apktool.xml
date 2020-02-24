@@ -1,0 +1,7 @@
+<resources>
+    <string name="log_build_copy_file">Копирование ‘%1$s’...</string>
+    <string name="log_using_apktool">Используется Apktool %1$s для %2$s</string>
+    <string name="log_decoding_shared_library">Расшифровка общей библиотеки \(%1$s\), pkgId: %2$d</string>
+    <string name="log_report_error">Пожалуйста, сообщите об этом приложении в Apktool для исправления: https://github.com/iBotPeaches/Apktool/issues/1728</string>
+    <string name="log_unknown_skip_bytes">"Обнаружены неизвестные данные. Пропуск: %d byte\(s\)"</string>
+</resources>
