@@ -8,15 +8,17 @@ public class ChildData implements Parcelable{
 
     private String name;
     private SpannableStringBuilder spannableStringBuilder;
-private String path;
+    private String path;
+    private int offset;
 
     public ChildData(Parcel parcel) { name = parcel.readString();}
 
     public ChildData(String name) {
         this.name = name;
     }
-    public ChildData(SpannableStringBuilder name, String path) {
+    public ChildData(SpannableStringBuilder name, String path, int offset) {
         this.spannableStringBuilder = name;
+        this.offset= offset;
         this.path = path;
     }
 
@@ -35,7 +37,12 @@ private String path;
     public void setName(String name) {
         this.name = name;
     }
-
+public int getOffset(){
+        return offset;
+}
+    public void setOffset(int offset){
+        this.offset= offset;
+    }
     public static final Creator<ChildData> CREATOR = new Creator<ChildData>() {
         @Override
         public ChildData createFromParcel(Parcel in) {

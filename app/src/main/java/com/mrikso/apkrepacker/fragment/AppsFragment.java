@@ -163,7 +163,7 @@ public class AppsFragment extends Fragment implements AppsAdapter.OnItemInteract
                 try {
                     ApplicationInfo applicationInfo = context.getPackageManager().getApplicationInfo(current.packageName, 0);
                     FileUtils.copyFile(new File(applicationInfo.publicSourceDir), app);
-                    DecompileFragment decompileFragment = new DecompileFragment(current.label, app, true);
+                    DecompileFragment decompileFragment =  DecompileFragment.newInstance(current.label, app.getAbsolutePath(), true);
                     ((FragmentActivity)context).getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(android.R.id.content, decompileFragment).commit();
                 } catch (Exception e) {
                     UIUtils.toast(App.getContext(), R.string.toast_error_in_decompile_installed_app);

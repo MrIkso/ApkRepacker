@@ -92,8 +92,8 @@ import static com.mrikso.apkrepacker.App.getContext;
  * @author Jecelyin Peng <jecelyin@gmail.com>
  */
 public class MainActivity extends BaseActivity
-        implements MenuItem.OnMenuItemClickListener
-        , SharedPreferences.OnSharedPreferenceChangeListener, DrawClickableEditText.DrawableClickListener {
+        implements MenuItem.OnMenuItemClickListener, SharedPreferences.OnSharedPreferenceChangeListener,
+        DrawClickableEditText.DrawableClickListener {
 
     private static final String TAG = MainActivity.class.getName();
     private static final int RC_OPEN_FILE = 1;
@@ -270,10 +270,8 @@ public class MainActivity extends BaseActivity
 
     private void start() {
         ((ViewGroup) mLoadingLayout.getParent()).removeView(mLoadingLayout);
-
-//                inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//     inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         mTabPager.setVisibility(View.VISIBLE);
-
         initUI();
     }
 
@@ -285,7 +283,12 @@ public class MainActivity extends BaseActivity
             menuManager = new MenuManager(this);
         Intent intent = getIntent();
         openedFile = intent.getStringExtra("filePath");
-        openFile(openedFile, FileEncodingDetector.DEFAULT_ENCODING, 0);
+        int offset = intent.getIntExtra("offset", 0);
+        if(offset!=0){
+            openFile(openedFile, FileEncodingDetector.DEFAULT_ENCODING, offset);
+        }else {
+            openFile(openedFile, FileEncodingDetector.DEFAULT_ENCODING, 0);
+        }
         processIntent();
     }
 
@@ -839,7 +842,7 @@ public class MainActivity extends BaseActivity
         }
         if (!tabManager.newTab(f, offset, encoding))
             return;
-        DBHelper.getInstance(this).addRecentFile(file, encoding);
+       // DBHelper.getInstance(this).addRecentFile(file, encoding);
     }
 
     public void insertText(CharSequence text) {

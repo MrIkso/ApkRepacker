@@ -16,7 +16,6 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.fragment.app.Fragment;
 
-import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.CubeGrid;
 import com.google.android.material.button.MaterialButton;
 import com.mrikso.apkrepacker.R;
@@ -46,9 +45,28 @@ public class CompileFragment extends Fragment {
     private AppCompatTextView savedFileMsg;
     private AppCompatImageView imageError;
 
-    public CompileFragment(String project) {
-        projectDir = project;
+    public CompileFragment() {
+        // projectDir = project;
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        projectDir= getArguments() != null ? getArguments().getString("project") : null;
+        setRetainInstance(true);
+    }
+    public static CompileFragment newInstance(String param1) {
+        CompileFragment fragment = new CompileFragment();
+        Bundle args = new Bundle();
+        args.putString("project", param1);
+        fragment.setArguments(args);
+        return fragment;
+    }
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        //savedInstanceState.putParcelableArrayList("logArr", logarray);
     }
 
     @Override
@@ -74,13 +92,9 @@ public class CompileFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle bundle) {
         super.onViewCreated(view, bundle);
-        CubeGrid cubeGrid =  new CubeGrid();
-        cubeGrid.setBounds(0, 0, 100,100);
-
-            cubeGrid.setColor(ThemeWrapper.isLightTheme()? mContext.getResources().getColor(R.color.light_accent):
-                    mContext.getResources().getColor(R.color.dark_accent) );
-
-
+        CubeGrid cubeGrid = new CubeGrid();
+        cubeGrid.setBounds(0, 0, 100, 100);
+        cubeGrid.setColor(ThemeWrapper.isLightTheme() ? mContext.getResources().getColor(R.color.light_accent) : mContext.getResources().getColor(R.color.dark_accent));
         cubeGrid.setAlpha(0);
         progressBar.setIndeterminateDrawable(cubeGrid);
         logarray = new ArrayList<>();

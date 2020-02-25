@@ -256,27 +256,20 @@ public class FileUtil {
 
 
     public static File getInternalStorage() {
-
         //returns the path to the internal storage
-
         return Environment.getExternalStorageDirectory();
     }
 
     //----------------------------------------------------------------------------------------------
 
     public static File getExternalStorage() {
-
         //returns the path to the external storage or null if it doesn't exist
-
         String path = System.getenv("SECONDARY_STORAGE");
-
         return path != null ? new File(path) : null;
     }
 
     public static File getPublicDirectory(String type) {
-
         //returns the path to the public directory of the given type
-
         return Environment.getExternalStoragePublicDirectory(type);
     }
 
@@ -317,6 +310,7 @@ public class FileUtil {
                 return removeExtension(file.getName());
         }*/
     }
+
     public static String getNameVithoutExt(File file) {
 
         //returns the name of the file hiding extensions of known file types
@@ -332,9 +326,10 @@ public class FileUtil {
             default:
 
         */
-                return removeExtension(file.getName());
+        return removeExtension(file.getName());
 
     }
+
     public static String getCreateTime(File file) {
         BasicFileAttributes attributes = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -367,16 +362,12 @@ public class FileUtil {
     public static String getSize(Context context, File file) {
 
         if (file.isDirectory()) {
-
             //returns the size folder
             // return Formatter.formatShortFileSize(context,getFolderSize(file));
             File[] children = getChildren(file);
-
             if (children == null) return null;
-
-            return String.format("%s items", children.length);
+            return context.getResources().getString(R.string.items, children.length);
         } else {
-
             return Formatter.formatShortFileSize(context, file.length());
         }
     }

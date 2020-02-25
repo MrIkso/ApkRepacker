@@ -39,14 +39,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements onMoveAndSwipedListener {
 
     private Context context;
     private List<ProjectItem> mItems;
     private View parentView;
-
-
     public RecyclerViewAdapter(Context context) {
         this.context = context;
         mItems = new ArrayList<>();
@@ -60,8 +57,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void clear(){
         this.mItems.clear();
     }
-
-
 
     @NonNull
     @Override
@@ -110,7 +105,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 popup.setOnMenuItemClickListener(item -> {
                     switch (item.getItemId()) {
                         case R.id.action_build:
-                            Fragment compileFragment = new CompileFragment(projectItem.getAppProjectPatch());
+                            Fragment compileFragment = CompileFragment.newInstance(projectItem.getAppProjectPatch());
                             //  compileFragment.setArguments(bundle);
                             FragmentManager fm = ((FragmentActivity)parentView.getContext()).getSupportFragmentManager();
                             fm.beginTransaction().replace(android.R.id.content, compileFragment).addToBackStack(null).commit();

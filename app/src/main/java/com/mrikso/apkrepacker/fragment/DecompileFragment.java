@@ -43,17 +43,34 @@ public class DecompileFragment extends Fragment {
     private TextView mTextProgress;
     private AppCompatImageView mImageResult;
 
-    public DecompileFragment(File selected) {
-        selectedApk = selected;
+    public DecompileFragment() {
         // Required empty public constructor
     }
 
-    public DecompileFragment(String name, File selected, boolean f) {
-        selectedApk = selected;
-        nameApk = name;
-        apkMode = f;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        selectedApk = new File(getArguments().getString("selected"));
+        nameApk = getArguments().getString("name");
+        apkMode = getArguments().getBoolean("mode");
+        setRetainInstance(true);
     }
-
+    public static DecompileFragment newInstance(String name, String selected, boolean f) {
+        DecompileFragment fragment = new DecompileFragment();
+        Bundle args = new Bundle();
+        args.putString("name", name);
+        args.putString("selected", selected);
+        args.putBoolean("mode", f);
+        fragment.setArguments(args);
+        return fragment;
+    }
+    public static DecompileFragment newInstance(String selected) {
+        DecompileFragment fragment = new DecompileFragment();
+        Bundle args = new Bundle();
+        args.putString("selected", selected);
+        fragment.setArguments(args);
+        return fragment;
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

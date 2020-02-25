@@ -12,12 +12,16 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.UpdateAppearance;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
@@ -26,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jecelyin.common.utils.UIUtils;
 import com.jecelyin.editor.v2.ui.activities.MainActivity;
+import com.jecelyin.editor.v2.ui.editor.EditorDelegate;
 import com.jecelyin.editor.v2.utils.ExtGrep;
 import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
@@ -33,7 +38,7 @@ import com.mrikso.apkrepacker.fragment.dialogs.ProgressDialogFragment;
 import com.mrikso.apkrepacker.model.SearchFinder;
 import com.mrikso.apkrepacker.ui.findresult.ChildData;
 import com.mrikso.apkrepacker.ui.findresult.FilesAdapter;
-import com.mrikso.apkrepacker.ui.findresult.FindInFilesAdapter;
+//import com.mrikso.apkrepacker.ui.findresult.FindInFilesAdapter;
 import com.mrikso.apkrepacker.ui.findresult.MyAdapter;
 import com.mrikso.apkrepacker.ui.findresult.ParentData;
 import com.mrikso.apkrepacker.utils.FileUtil;
@@ -49,7 +54,7 @@ import me.zhanghai.android.fastscroll.FastScrollerBuilder;
 public class FindFragment extends Fragment implements ProgressDialogFragment.ProgressDialogFragmentListener {
 
     private RecyclerView recyclerView;
-    private FindInFilesAdapter findInFilesAdapter;
+ //   private FindInFilesAdapter findInFilesAdapter;
     private ExtGrep extGrep;
     private boolean findFiles;
     private String path, searchText;
@@ -61,7 +66,7 @@ public class FindFragment extends Fragment implements ProgressDialogFragment.Pro
     private Bundle mBundle;
     private MyAdapter myAdapter;
     private int findResultsKeywordColor;
-
+    private List<ParentData> list;
 
     public FindFragment() {
         // Required empty public constructor
@@ -169,7 +174,7 @@ public class FindFragment extends Fragment implements ProgressDialogFragment.Pro
 
             ssb.setSpan(new ForegroundColorSpan(findResultsKeywordColor), start + res.matchStart, start + res.matchEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             // if (!childDataList.contains(new ChildData(ssb, file.getAbsolutePath()))) {
-            childDataList.add(new ChildData(ssb, file.getAbsolutePath()));
+            childDataList.add(new ChildData(ssb, file.getAbsolutePath(), res.startOffset));
             // } else {
             //   childDataList.remove(new ChildData(ssb, file.getAbsolutePath()));
             ///     ssb = null;
@@ -180,7 +185,34 @@ public class FindFragment extends Fragment implements ProgressDialogFragment.Pro
 
         return parentDataList;
     }
+    private static class FileClickableSpan extends ClickableSpan
+            implements UpdateAppearance {
+        private final ExtGrep.Result result;
+        private final EditorDelegate editorDelegate;
+        private final int mColor;
 
+        public FileClickableSpan(@ColorInt int color, EditorDelegate editorDelegate, ExtGrep.Result result) {
+            this.editorDelegate = editorDelegate;
+            this.result = result;
+            mColor = color;
+        }
+
+        @Override
+        public void onClick(View widget) {
+            editorDelegate.getMainActivity().openFile(result.file.getPath(), null, result.startOffset);
+        }
+
+        /**
+         * Makes the text underlined and in the link color.
+         */
+        @Override
+        public void updateDrawState(TextPaint ds) {
+            ds.setColor(mColor);
+            ds.setUnderlineText(true);
+        }
+
+
+    }
     private void showProgress() {
         Bundle args = new Bundle();
         args.putString(ProgressDialogFragment.TITLE, getResources().getString(R.string.dialog_find));
@@ -296,8 +328,8 @@ public class FindFragment extends Fragment implements ProgressDialogFragment.Pro
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             if (!findFiles) {
-                findInFilesAdapter = new FindInFilesAdapter();
-                recyclerView.setAdapter(findInFilesAdapter);
+              //  myAdapter = new MyAdapter();
+               // recyclerView.setAdapter(findInFilesAdapter);
             } else {
                 if (mFinder != null && adapter != null) {
                     recyclerView.setAdapter(adapter);
@@ -310,10 +342,8 @@ public class FindFragment extends Fragment implements ProgressDialogFragment.Pro
     class SearchStringsTask extends AsyncTask<String, Integer, Void> {
         @Override
         protected Void doInBackground(String... extGreps) {
-            List<ParentData> list = getList(extGrep.execute());
-            if(list.isEmpty()){
-                UIUtils.toast(App.getContext(), R.string.find_not_found);
-            }
+            list = getList(extGrep.execute());
+
             myAdapter = new MyAdapter(App.getContext(), list);
 
             //findInFilesAdapter = new FindInFilesAdapter();
@@ -334,6 +364,9 @@ public class FindFragment extends Fragment implements ProgressDialogFragment.Pro
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
+            if(list.isEmpty()){
+                UIUtils.toast(App.getContext(), R.string.find_not_found);
+            }
             recyclerView.setAdapter(myAdapter);
             hideProgress();
         }

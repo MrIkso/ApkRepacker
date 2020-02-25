@@ -212,4 +212,5 @@
     <string name="dialog_sign">Signing...</string>
     <string name="sign_app">Sign Apk</string>
     <string name="toast_sign_done">Sign done</string>
+    <string name="items">%d items</string>
 </resources>

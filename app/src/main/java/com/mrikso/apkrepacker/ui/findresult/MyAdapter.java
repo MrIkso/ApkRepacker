@@ -55,6 +55,7 @@ public class MyAdapter extends ExpandableRecyclerViewAdapter<ParentViewHolder,Ch
         holder.textView_child.setOnClickListener(view ->{
             try{
                 Intent intent = new Intent(App.getContext(), MainActivity.class);
+                intent.putExtra("offset",childData.getOffset() );
                 intent.putExtra("filePath", childData.getPath());
                 App.getContext().startActivity(intent);
             }

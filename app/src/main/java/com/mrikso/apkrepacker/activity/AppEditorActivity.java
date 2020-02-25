@@ -153,7 +153,7 @@ public void setSearhArguments(Bundle bundle){
     mViewPager.setAdapter(mFragmentAdapter);
 }
     private void buildApp(){
-        Fragment compileFragment = new CompileFragment(projectPatch);
+        Fragment compileFragment = CompileFragment.newInstance(projectPatch);
       //  compileFragment.setArguments(bundle);
         fm.beginTransaction().addToBackStack(null).replace(android.R.id.content, compileFragment).commit();
       //  Runnable build = () -> SignUtil.loadKey(ctx, signTool -> new BuildTask(ctx, signTool).execute(new File(projectPatch)));

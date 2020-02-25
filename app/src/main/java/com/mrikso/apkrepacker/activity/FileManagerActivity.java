@@ -476,21 +476,11 @@ public class FileManagerActivity extends BaseActivity implements ApkOptionsDialo
         startActivity(intent);
     }
 
-    private void setType(String type) {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra(EXTRA_TYPE, type);
-        if (Build.VERSION.SDK_INT >= 21) {
-            intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
-        }
-        startActivity(intent);
-    }
-
     @Override
     public void onApkItemClick(Integer item) {
         switch (item) {
             case R.id.decompile_app:
-                DecompileFragment decompileFragment = new DecompileFragment(selectedApk);
+                DecompileFragment decompileFragment = DecompileFragment.newInstance(selectedApk.getAbsolutePath());
                 getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(android.R.id.content, decompileFragment).commit();
                 break;
             case R.id.simple_edit_apk:
