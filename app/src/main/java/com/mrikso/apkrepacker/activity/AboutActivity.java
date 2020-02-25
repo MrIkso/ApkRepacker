@@ -52,6 +52,7 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener 
         LinearLayout telegram = findViewById(R.id.ll_card_about_2_telegram);
         LinearLayout telegram_easy_apk = findViewById(R.id.ll_card_about_2_easy_apk);
         LinearLayout telegram_alex_stannik = findViewById(R.id.ll_card_about_2_alex_strannik);
+        telegram_alex_stannik.setOnClickListener(this);
         telegram.setOnClickListener(this);
         ll_card_about_2_email.setOnClickListener(this);
         ll_card_about_2_git_hub.setOnClickListener(this);
@@ -91,7 +92,7 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener 
                 LibraresFragment libraresFragment = new LibraresFragment();
                 getSupportFragmentManager().beginTransaction().
                         addToBackStack(null).replace(android.R.id.content, libraresFragment)
-                        .commit();;
+                        .commit();
                 break;
 
             case R.id.ll_card_about_2_git_hub:

@@ -7,8 +7,8 @@ android {
         applicationId "com.mrikso.apkrepacker"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 10
-        versionName "1.0.1"
+        versionCode 20
+        versionName "1.0.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

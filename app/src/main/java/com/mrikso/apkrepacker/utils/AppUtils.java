@@ -66,11 +66,14 @@ public class AppUtils {
                 case "armeabi-v7a":
                     return androidArch;
 
+                    /*
                 case "x86_64":
                     return androidArch;
 
                 case "x86":
                     return androidArch;
+
+                     */
             }
         }
         return "armeabi-v7a";

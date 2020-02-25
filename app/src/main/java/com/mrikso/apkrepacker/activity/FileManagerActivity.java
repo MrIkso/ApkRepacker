@@ -1,6 +1,7 @@
 package com.mrikso.apkrepacker.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -44,6 +45,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
 
@@ -89,7 +91,7 @@ public class FileManagerActivity extends BaseActivity implements ApkOptionsDialo
             return;
         }
         if (!FileUtil.isStorage(currentDirectory)) {
-            setPath(currentDirectory.getParentFile());
+            setPath(Objects.requireNonNull(currentDirectory.getParentFile()));
             return;
         }
         super.onBackPressed();
@@ -117,7 +119,7 @@ public class FileManagerActivity extends BaseActivity implements ApkOptionsDialo
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
-        adapter.select(savedInstanceState.getIntegerArrayList(SAVED_SELECTION));
+        adapter.select(Objects.requireNonNull(savedInstanceState.getIntegerArrayList(SAVED_SELECTION)));
         String path = savedInstanceState.getString(SAVED_DIRECTORY, getInternalStorage().getPath());
         if (currentDirectory != null) setPath(new File(path));
         super.onRestoreInstanceState(savedInstanceState);
@@ -225,7 +227,9 @@ public class FileManagerActivity extends BaseActivity implements ApkOptionsDialo
 
         if (recyclerView != null)
             new FastScrollerBuilder(recyclerView).build();
-        recyclerView.setAdapter(adapter);
+        if (recyclerView != null) {
+            recyclerView.setAdapter(adapter);
+        }
     }
 
     private void invalidateTitle() {
@@ -327,7 +331,7 @@ public class FileManagerActivity extends BaseActivity implements ApkOptionsDialo
                                 for (int i = 0; i < selectedItems.size(); i++) {
                                     File file = selectedItems.get(i);
                                     int index = adapter.indexOf(file);
-                                    File newFile = FileUtil.renameFile(file, input.toString() + String.format(format, i + 1));
+                                    @SuppressLint("DefaultLocale") File newFile = FileUtil.renameFile(file, input.toString() + String.format(format, i + 1));
                                     adapter.updateItemAt(index, newFile);
                                 }
                             }
@@ -491,7 +495,7 @@ public class FileManagerActivity extends BaseActivity implements ApkOptionsDialo
                 break;
             case R.id.simple_edit_apk:
                 SimpleEditorFragment simpleEditorFragment = new SimpleEditorFragment(selectedApk);
-                getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(android.R.id.content, simpleEditorFragment).commit();
+                getSupportFragmentManager().beginTransaction().addToBackStack(null).add(android.R.id.content, simpleEditorFragment).commit();
                 break;
             case R.id.install_app:
                 showMessage(this.getResources().getString(R.string.install_app));

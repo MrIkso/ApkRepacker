@@ -237,15 +237,19 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        projects = root.listFiles();//фикс некоректного обновления списка
-        if (projects != null && projects.length >0) {
-            empty.setVisibility(View.GONE);
-            mRecyclerView.setVisibility(View.VISIBLE);
-            refleshAdpter();
+        try {
+            projects = root.listFiles();//фикс некоректного обновления списка
+            if (projects != null && projects.length > 0) {
+                empty.setVisibility(View.GONE);
+                mRecyclerView.setVisibility(View.VISIBLE);
+                refleshAdpter();
+            } else {
+                empty.setVisibility(View.VISIBLE);
+                mRecyclerView.setVisibility(View.GONE);
+            }
         }
-        else {
-            empty.setVisibility(View.VISIBLE);
-            mRecyclerView.setVisibility(View.GONE);
+        catch (Exception ex){
+            ex.printStackTrace();
         }
     }
 }
