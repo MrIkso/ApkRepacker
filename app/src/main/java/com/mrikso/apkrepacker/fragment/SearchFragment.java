@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
@@ -20,10 +21,14 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.jecelyin.common.utils.UIUtils;
+import com.jecelyin.editor.v2.ui.activities.MainActivity;
+import com.jecelyin.editor.v2.utils.DBHelper;
 import com.jecelyin.editor.v2.utils.ExtGrep;
 import com.jecelyin.editor.v2.utils.GrepBuilder;
+import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.activity.AppEditorActivity;
+import com.mrikso.apkrepacker.ui.autocompleteeidttext.CustomAdapter;
 import com.mrikso.apkrepacker.ui.prererence.Preference;
 import com.mrikso.apkrepacker.utils.StringUtils;
 import com.mrikso.apkrepacker.utils.ThemeWrapper;
@@ -43,7 +48,7 @@ public class SearchFragment extends Fragment {
     private CheckBox mWholeWordsOnlyCheckBox;
     private CheckBox mRecursivelyCheckBox;
     private CheckBox mFilesCheckBox;
-    private EditText findText;
+    private AppCompatAutoCompleteTextView findText;
     private GrepBuilder builder;
     private ImageButton clear;
     private FloatingActionButton search;
@@ -55,6 +60,8 @@ public class SearchFragment extends Fragment {
     private Context mContext;
     private Preference mPtef;
     private Map<String, Boolean> extMap =  new HashMap<>();
+    private CustomAdapter adapter;
+    private DBHelper dbHelper;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -77,7 +84,7 @@ public class SearchFragment extends Fragment {
         mContext = view.getContext();
         mPtef = Preference.getInstance(mContext);
         loadPrefs();
-
+        dbHelper = new DBHelper(mContext);
         chipGroup = view.findViewById(R.id.ext_group);
         mAddExt = view.findViewById(R.id.button_add_ext);
         findText = view.findViewById(R.id.search_text);
@@ -92,6 +99,11 @@ public class SearchFragment extends Fragment {
 
         return view;
     }
+    private List<String> getData(){
+     //   List<String> dataList = new ArrayList<String>();
+        List<String> items = DBHelper.getInstance(mContext).getFindKeywordsAdnFile(filesMode);
+        return items;
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle bundle) {
@@ -104,14 +116,20 @@ public class SearchFragment extends Fragment {
         mRecursivelyCheckBox.setChecked(recursivlu);
         mWholeWordsOnlyCheckBox.setChecked(wordsOnly);
         searchOptions.setVisibility(filesMode ? View.GONE : View.VISIBLE);
+        adapter = new CustomAdapter(mContext, getData());
+        findText.setAdapter(adapter);
         mFilesCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 mPtef.setFilesMode(true);
                 filesMode = true;
+                adapter = new CustomAdapter(mContext, getData());
+                findText.setAdapter(adapter);
                 searchOptions.setVisibility(View.GONE);
             } else {
                 filesMode = false;
                 mPtef.setFilesMode(false);
+                adapter = new CustomAdapter(mContext, getData());
+                findText.setAdapter(adapter);
                 searchOptions.setVisibility(View.VISIBLE);
             }
         });
@@ -119,6 +137,7 @@ public class SearchFragment extends Fragment {
             if (isChecked) {
                 mPtef.setRegexMode(regex);
                 regex = true;
+                UIUtils.toast(App.getContext(), R.string.use_regex_to_find_tip);
             } else {
                 regex = false;
                 mPtef.setRegexMode(regex);
@@ -156,7 +175,11 @@ public class SearchFragment extends Fragment {
         {
             if (!com.jecelyin.common.utils.StringUtils.isEmpty(findText.getText().toString()) | !extList.isEmpty()) {
                 if (filesMode) {
-
+                    adapter.addValue(findText.getText().toString());
+                    dbHelper.clearFindKeywordAndFiles(true);
+                    for(String item : adapter.getDataList()){
+                        dbHelper.addFindKeywordAndFiles(item, true);
+                    }
                     Bundle bundle1 = new Bundle();
                     bundle1.putString("searchFileName", findText.getText().toString());
                     bundle1.putStringArrayList("expensions", getCheckedChips());
@@ -180,6 +203,11 @@ public class SearchFragment extends Fragment {
                     builder.setRegex(findText.getText().toString(), regex);
                     if (recursivlu) {
                         builder.recurseDirectories();
+                    }
+                    adapter.addValue(findText.getText().toString());
+                    dbHelper.clearFindKeywordAndFiles(false);
+                    for(String item : adapter.getDataList()){
+                        dbHelper.addFindKeywordAndFiles(item, false);
                     }
                     mPtef.setExt(extMap);
                     builder.setExeption(getCheckedChips());
@@ -235,6 +263,10 @@ public class SearchFragment extends Fragment {
         super.onDestroy();
         getCheckedChips();
         mPtef.setExt(extMap);
+        dbHelper.clearFindKeywordAndFiles(filesMode);
+        for(String item : adapter.getDataList()){
+            dbHelper.addFindKeywordAndFiles(item, filesMode);
+        }
     }
 
     @Override

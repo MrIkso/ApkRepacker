@@ -42,6 +42,7 @@ import android.widget.TextView;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -56,13 +57,11 @@ import com.jecelyin.common.task.TaskListener;
 import com.jecelyin.common.utils.DLog;
 import com.jecelyin.common.utils.IOUtils;
 import com.jecelyin.common.utils.UIUtils;
-import com.jecelyin.common.widget.DrawClickableEditText;
 import com.jecelyin.editor.v2.Pref;
 import com.jecelyin.editor.v2.common.Command;
 import com.jecelyin.editor.v2.io.FileEncodingDetector;
 import com.jecelyin.editor.v2.task.ClusterCommand;
 import com.jecelyin.editor.v2.ui.dialog.CharsetsDialog;
-import com.jecelyin.editor.v2.ui.dialog.FindKeywordsDialog;
 import com.jecelyin.editor.v2.ui.dialog.GotoLineDialog;
 import com.jecelyin.editor.v2.ui.dialog.LangListDialog;
 import com.jecelyin.editor.v2.ui.editor.EditorDelegate;
@@ -79,6 +78,7 @@ import com.jecelyin.editor.v2.utils.GrepBuilder;
 import com.jecelyin.editor.v2.utils.MatcherResult;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.activity.BaseActivity;
+import com.mrikso.apkrepacker.ui.autocompleteeidttext.CustomAdapter;
 
 import org.gjt.sp.jedit.Catalog;
 
@@ -92,8 +92,7 @@ import static com.mrikso.apkrepacker.App.getContext;
  * @author Jecelyin Peng <jecelyin@gmail.com>
  */
 public class MainActivity extends BaseActivity
-        implements MenuItem.OnMenuItemClickListener, SharedPreferences.OnSharedPreferenceChangeListener,
-        DrawClickableEditText.DrawableClickListener {
+        implements MenuItem.OnMenuItemClickListener, SharedPreferences.OnSharedPreferenceChangeListener{
 
     private static final String TAG = MainActivity.class.getName();
     private static final int RC_OPEN_FILE = 1;
@@ -127,8 +126,11 @@ public class MainActivity extends BaseActivity
     private boolean mCaseSensitive;
     private boolean mWholeWordsOnly;
     private boolean mRegex, mReplaceMode;
-    String openedFile;
+    private String openedFile;
     static MainActivity Intance;
+    private CustomAdapter searchAdapter;
+    private CustomAdapter repaceAdapter;
+
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         try {
@@ -337,8 +339,12 @@ public class MainActivity extends BaseActivity
         allReplace.setEnabled(false);
         allReplace.setTextColor(getResources().getColor(R.color.color_gray_text_disabled));
         TextView moreOption = findViewById(R.id.search_more_option);
-        final DrawClickableEditText searchET = findViewById(R.id.search_text);
-        final DrawClickableEditText replaceET = findViewById(R.id.replace_text);
+        searchAdapter = new CustomAdapter(this,getSearchData());
+        repaceAdapter = new CustomAdapter(this,getReplaceData());
+        final AppCompatAutoCompleteTextView searchET = findViewById(R.id.search_text);
+        final AppCompatAutoCompleteTextView replaceET = findViewById(R.id.replace_text);
+        searchET.setAdapter(searchAdapter);
+        replaceET.setAdapter(repaceAdapter);
         searchET.setText(findText);
         replaceET.setText(replaceText!=null ? replaceText : "");
         moreOption.setOnClickListener(view -> {
@@ -347,10 +353,6 @@ public class MainActivity extends BaseActivity
             popupMenu.setOnMenuItemClickListener(item -> {
                 switch (item.getItemId()){
                     case R.id.regex_check_menu:
-                        //флекс из кастованием item в CheckBox
-                      //  CheckBox checkBox = (CheckBox) item.getActionView();
-                       // item.setChecked(true);//ему похуй, всеравно отображет как false
-                       // pref.setRegexMode(!item.isChecked());
                         if(item.isChecked()){
                             mRegex = false;
                         }
@@ -361,9 +363,6 @@ public class MainActivity extends BaseActivity
 
                         break;
                     case R.id.whole_words_only_menu:
-
-                       // item.setChecked(true);//ему похуй, всеравно отображет как false
-                        //pref.setWholeWordsOnlyMode(!item.isChecked());
                         if(item.isChecked()){
                             mWholeWordsOnly = false;
                         }
@@ -460,16 +459,14 @@ public class MainActivity extends BaseActivity
 
     }
 
-    private boolean onFindButtonClick(DrawClickableEditText find, DrawClickableEditText replce, EditorDelegate delegate) {
+    private boolean onFindButtonClick(AppCompatAutoCompleteTextView find, AppCompatAutoCompleteTextView replce, EditorDelegate delegate) {
         //注意不要trim
         findText = find.getText().toString();
         if (TextUtils.isEmpty(findText)) {
             UIUtils.toast(this, R.string.cannot_be_empty);
             return false;
         }
-
-        String replaceText = mReplaceMode ? replce.getText().toString() : null;
-
+     //   String replaceText = mReplaceMode ? replce.getText().toString() : null;
 
         GrepBuilder builder = GrepBuilder.start();
         if (!mCaseSensitive) {
@@ -481,10 +478,20 @@ public class MainActivity extends BaseActivity
         builder.setRegex(findText, mRegex);
 
         grep = builder.build();
+        DBHelper dbHelper = new DBHelper(MainActivity.this);
 
-        DBHelper.getInstance(MainActivity.this).addFindKeyword(findText, false);
-        DBHelper.getInstance(MainActivity.this).addFindKeyword(replaceText, true);
-
+        searchAdapter.addValue(findText);
+        dbHelper.clearFindKeywords(false);
+        for(String item : searchAdapter.getDataList()){
+            dbHelper.addFindKeyword(item, false);
+        }
+        if(mReplaceMode) {
+            repaceAdapter.addValue(replaceText);
+            dbHelper.clearFindKeywords(true);
+            for (String item : repaceAdapter.getDataList()) {
+                dbHelper.addFindKeyword(item, true);
+            }
+        }
         findNext(delegate,grep);
 
         return true;
@@ -891,8 +898,14 @@ public class MainActivity extends BaseActivity
         return mMenuRecyclerView;
     }
 
-    @Override
-    public void onClickDrawEditText(DrawClickableEditText editText, DrawClickableEditText.DrawablePosition target) {
-        new FindKeywordsDialog(MainActivity.this, editText, editText.getId() != R.id.search_text).show();
+    private List<String> getSearchData(){
+        //   List<String> dataList = new ArrayList<String>();
+        List<String> items = DBHelper.getInstance(this).getFindKeywords(false);
+        return items;
+    }
+    private List<String> getReplaceData(){
+        //   List<String> dataList = new ArrayList<String>();
+        List<String> items = DBHelper.getInstance(this).getFindKeywords(true);
+        return items;
     }
 }

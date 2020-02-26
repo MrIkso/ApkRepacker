@@ -124,6 +124,7 @@ public class StringsAdapter extends BaseAdapter implements Filterable {
     public interface OnItemClickListener {
         void onTranslateClicked(String key, String value);
     }
+
     @Override
     public Filter getFilter() {
         Filter filter = new Filter() {

@@ -26,10 +26,8 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:text="@string/action_search"/>
-            <com.jecelyin.common.widget.DrawClickableEditText
-
+            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                     android:id="@+id/search_text"
-                    android:drawableEnd="@drawable/ic_arrow_drop_down"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.0"
@@ -48,9 +46,8 @@
                 android:gravity="center_vertical"
                 android:text="@string/replace" />
 
-            <com.jecelyin.common.widget.DrawClickableEditText
+            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                 android:id="@+id/replace_text"
-                android:drawableEnd="@drawable/ic_arrow_drop_down"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"

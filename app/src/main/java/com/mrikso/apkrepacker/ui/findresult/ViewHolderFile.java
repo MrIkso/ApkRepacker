@@ -86,8 +86,6 @@ public final class ViewHolderFile extends ViewHolder {
     protected void bindInfo(File file) {
 
     }
-
-
     private ShapeDrawable getBackground(int color) {
         ShapeDrawable shapeDrawable = new ShapeDrawable(new OvalShape());
         int size = (int) context.getResources().getDimension(R.dimen.avatar_size);

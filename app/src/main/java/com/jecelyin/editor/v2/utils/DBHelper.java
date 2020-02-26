@@ -31,7 +31,7 @@ import java.util.ArrayList;
  * @author Jecelyin Peng <jecelyin@gmail.com>
  */
 public class DBHelper extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME = "920-text-editor.db";
+    private static final String DATABASE_NAME = "search.db";
     private static final int DATABASE_VERSION = 4; // Version must be >= 1
 
     public DBHelper(Context context) {
@@ -73,8 +73,19 @@ public class DBHelper extends SQLiteOpenHelper {
                 "\tPRIMARY KEY(\"keyword\", \"is_replace\")\n" +
                 ")");
         db.execSQL("CREATE INDEX \"ctime\" ON find_keywords (\"ctime\" DESC)");
+
+        createFindKeywordsTableAndFile(db);
     }
 
+    public void createFindKeywordsTableAndFile(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE \"find_keywords_and_files\" (\n" +
+                "\t \"keyword\" TEXT NOT NULL,\n" +
+                "\t \"is_files\" integer,\n" +
+                "\t \"create_time\" integer,\n" +
+                "\tPRIMARY KEY(\"keyword\", \"is_files\")\n" +
+                ")");
+        db.execSQL("CREATE INDEX \"create_time\" ON find_keywords_and_files (\"create_time\" DESC)");
+    }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         for (int version = oldVersion; version < newVersion; version++) {
@@ -169,11 +180,25 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void clearFindKeywordAndFiles(boolean isFiles) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("delete from find_keywords_and_files where is_files=" + (isFiles ? "1" : "0"));
+        db.close();
+    }
+
     public void addFindKeyword(String keyword, boolean isReplace) {
         if (TextUtils.isEmpty(keyword))
             return;
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("REPLACE INTO find_keywords VALUES (?, ?, ?)", new Object[]{keyword, isReplace ? 1 : 0, System.currentTimeMillis()});
+        db.close();
+    }
+
+    public void addFindKeywordAndFiles(String keyword, boolean isFiles) {
+        if (TextUtils.isEmpty(keyword))
+            return;
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("REPLACE INTO find_keywords_and_files VALUES (?, ?, ?)", new Object[]{keyword, isFiles ? 1 : 0, System.currentTimeMillis()});
         db.close();
     }
 
@@ -190,6 +215,19 @@ public class DBHelper extends SQLiteOpenHelper {
         return list;
     }
 
+    public ArrayList<String> getFindKeywordsAdnFile(boolean isFiles) {
+        ArrayList<String> list = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query("find_keywords_and_files", new String[]{"keyword"}, "is_files=?",
+                new String[]{isFiles ? "1" : "0"}, null, null, "create_time desc", "100");
+
+        while (cursor.moveToNext()) {
+            list.add(cursor.getString(0));
+        }
+        cursor.close();
+        db.close();
+        return list;
+    }
     public static class RecentFileItem {
         public long time;
         public String path;
