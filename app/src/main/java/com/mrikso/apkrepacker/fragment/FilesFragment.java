@@ -369,7 +369,7 @@ public class FilesFragment extends Fragment implements FileOptionsDialogFragment
                     case INI:
                     case XML:
                         if (file.getName().equals("colors.xml")) {
-                            ColorEditorFragment colorEditorFragment = new ColorEditorFragment(file);
+                            Fragment colorEditorFragment = ColorEditorFragment.newInstance(file.getAbsolutePath());
                             getChildFragmentManager().beginTransaction()
                                     .replace(R.id.fragment_container, colorEditorFragment, ColorEditorFragment.TAG)
                                     .addToBackStack(null)

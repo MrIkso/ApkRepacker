@@ -29,6 +29,7 @@ import com.mrikso.apkrepacker.ui.colorslist.ColorsViewModel;
 import com.mrikso.apkrepacker.utils.ThemeWrapper;
 
 import java.io.File;
+import java.util.Objects;
 
 import me.jfenn.colorpickerdialog.dialogs.ColorPickerDialog;
 import me.jfenn.colorpickerdialog.interfaces.OnColorPickedListener;
@@ -47,11 +48,26 @@ public class ColorEditorFragment extends Fragment implements ColorsAdapter.OnIte
     private String colorName;
     private int pos;
 
-    public ColorEditorFragment(File colors) {
-        this.colors = colors;
+    public ColorEditorFragment() {
         // Required empty public constructor
     }
 
+    public static ColorEditorFragment newInstance(String colors){
+        ColorEditorFragment fragment = new ColorEditorFragment();
+        Bundle args = new Bundle();
+        args.putString("colorsFile", colors);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            this.colors= new File(Objects.requireNonNull(getArguments().getString("colorsFile")));
+        }
+        setRetainInstance(true);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
