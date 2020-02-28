@@ -2,18 +2,11 @@ package com.mrikso.apkrepacker.task;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.Looper;
-import android.util.Log;
-
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 
 import com.jecelyin.common.utils.UIUtils;
 import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.activity.FileManagerActivity;
-import com.mrikso.apkrepacker.fragment.dialogs.ProgressDialogFragment;
 import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.SignUtil;
 
@@ -33,7 +26,6 @@ public class SignTask extends AsyncTask<File, CharSequence, Boolean> {
 
     @Override
     protected Boolean doInBackground(File[] p1) {
-       // Log.i("wdfegth", "sign start");
         boolean success = true;
         for (File file : p1) {
             if (!process(file))
@@ -67,17 +59,11 @@ public class SignTask extends AsyncTask<File, CharSequence, Boolean> {
         String dir = f.getParent();
         try {
             outApk = FileUtil.genNameApk(mContext, f.getAbsolutePath(), f.getName(), "_signed", 0);
-           // Log.i("wdfegth", outApk);
             File out = new File(dir,outApk);
-            //signTool.sign(f, out, 14);
-           // Log.i("wdfegth", out.getAbsolutePath());
-           // Log.i("wdfegth", "sign done");
             signTool.sign(f, out, 14);
             resultFile = out;
             return true;
         } catch (Exception e) {
-           // Looper.prepare();
-
             e.printStackTrace();
             return false;
         }

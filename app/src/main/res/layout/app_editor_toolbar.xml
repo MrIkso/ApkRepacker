@@ -51,6 +51,7 @@
     </LinearLayout>
 
     <RelativeLayout
+        android:id="@+id/patch_app"
         android:layout_width="48dip"
         android:layout_height="fill_parent"
         android:paddingTop="2.0dip"

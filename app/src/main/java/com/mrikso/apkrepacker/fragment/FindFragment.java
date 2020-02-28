@@ -314,8 +314,6 @@ public class FindFragment extends Fragment implements ProgressDialogFragment.Pro
             mFinder.setCurrentPath(new File(path));
             mFinder.setExtensions(ext);
             mFinder.query(searchText);
-            adapter = new FilesAdapter(App.getContext(), mFinder.getFileList());
-            adapter.setOnItemClickListener(new OnItemClickListener(App.getContext()));
             return null;
         }
 
@@ -327,14 +325,17 @@ public class FindFragment extends Fragment implements ProgressDialogFragment.Pro
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-            if (!findFiles) {
-              //  myAdapter = new MyAdapter();
-               // recyclerView.setAdapter(findInFilesAdapter);
-            } else {
+                adapter = new FilesAdapter(App.getContext(), mFinder.getFileList());
                 if (mFinder != null && adapter != null) {
-                    recyclerView.setAdapter(adapter);
+                    if(!mFinder.getFileList().isEmpty())
+                    {
+                        adapter.setOnItemClickListener(new OnItemClickListener(App.getContext()));
+                        recyclerView.setAdapter(adapter);
+                    }
+                    else {
+                        UIUtils.toast(App.getContext(), R.string.find_not_found);
+                    }
                 }
-            }
             hideProgress();
         }
     }

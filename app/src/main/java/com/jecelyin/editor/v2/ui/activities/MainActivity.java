@@ -899,12 +899,11 @@ public class MainActivity extends BaseActivity
     }
 
     private List<String> getSearchData(){
-        //   List<String> dataList = new ArrayList<String>();
         List<String> items = DBHelper.getInstance(this).getFindKeywords(false);
         return items;
     }
+
     private List<String> getReplaceData(){
-        //   List<String> dataList = new ArrayList<String>();
         List<String> items = DBHelper.getInstance(this).getFindKeywords(true);
         return items;
     }

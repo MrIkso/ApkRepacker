@@ -4,6 +4,6 @@
     <string name="log_build_copy_file">Copying ‘%1$s’...</string>
     <string name="log_using_apktool">Using Apktool %1$s on %2$s</string>
     <string name="log_decoding_shared_library">Decoding Shared Library \(%1$s\), pkgId: %2$d</string>
-    <string name="log_report_error">Please report this application to Apktool for a fix: https://github.com/iBotPeaches/Apktool/issues/1728</string>
+    <string name="log_report_error">Please report this application to Apktool to get a fix: https://github.com/iBotPeaches/Apktool/issues/1728</string>
     <string name="log_unknown_skip_bytes">"Unknown data detected. Skipping: %d byte\(s\)"</string>
 </resources>
