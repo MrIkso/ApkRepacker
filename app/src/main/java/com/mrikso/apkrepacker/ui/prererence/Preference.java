@@ -27,11 +27,13 @@ import static com.mrikso.apkrepacker.ui.prererence.PreferenceKeys.KEY_DECODING_M
 import static com.mrikso.apkrepacker.ui.prererence.PreferenceKeys.KEY_EXTENSIONS;
 import static com.mrikso.apkrepacker.ui.prererence.PreferenceKeys.KEY_FILES_MODE;
 import static com.mrikso.apkrepacker.ui.prererence.PreferenceKeys.KEY_FRAMEWORK_PATH;
+import static com.mrikso.apkrepacker.ui.prererence.PreferenceKeys.KEY_KEEP_SCREEN_ON;
 import static com.mrikso.apkrepacker.ui.prererence.PreferenceKeys.KEY_KEY_TYPE;
 import static com.mrikso.apkrepacker.ui.prererence.PreferenceKeys.KEY_MATCH_CASE;
 import static com.mrikso.apkrepacker.ui.prererence.PreferenceKeys.KEY_PRIVATE_KEY;
 import static com.mrikso.apkrepacker.ui.prererence.PreferenceKeys.KEY_PRIVATE_KEY_PATH;
 import static com.mrikso.apkrepacker.ui.prererence.PreferenceKeys.KEY_RECURSIVELY;
+import static com.mrikso.apkrepacker.ui.prererence.PreferenceKeys.KEY_SHOW_HIDDEN_FILES;
 import static com.mrikso.apkrepacker.ui.prererence.PreferenceKeys.KEY_SIGN_OUT_APK;
 import static com.mrikso.apkrepacker.ui.prererence.PreferenceKeys.KEY_STORE_KEY;
 import static com.mrikso.apkrepacker.ui.prererence.PreferenceKeys.KEY_TOOLS_INSTALLED;
@@ -61,6 +63,7 @@ public class Preference implements SharedPreferences.OnSharedPreferenceChangeLis
 
         //init variable
         map = new HashMap<>();
+        map.put(KEY_SHOW_HIDDEN_FILES, false);
         map.put(KEY_USE_AAPT2, false);
         map.put(KEY_DECODING_FOLDER, Environment.getExternalStorageDirectory().getPath() + "/ApkRepacker");
         map.put(KEY_DECODING_MODE, 0);
@@ -84,6 +87,7 @@ public class Preference implements SharedPreferences.OnSharedPreferenceChangeLis
         map.put(KEY_RECURSIVELY, true);
         map.put(KEY_FILES_MODE, true);
         map.put(KEY_EXTENSIONS, initExt());
+        map.put(KEY_KEEP_SCREEN_ON, false);
 
         Map<String, ?> values = pm.getAll();
         for(String key : map.keySet()) {
@@ -124,6 +128,14 @@ public class Preference implements SharedPreferences.OnSharedPreferenceChangeLis
 
     public boolean isCopyOriginalFiles() {
         return (boolean) map.get(KEY_COPY_ORIGINAL_FILES);
+    }
+
+    public boolean isShowHiddenFiles() {
+        return (boolean) map.get(KEY_SHOW_HIDDEN_FILES);
+    }
+
+    public boolean isKeepScreenOn() {
+        return (boolean) map.get(KEY_KEEP_SCREEN_ON);
     }
 
     //getters

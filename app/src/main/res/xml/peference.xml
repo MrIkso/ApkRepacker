@@ -32,6 +32,15 @@
             android:title="@string/pref_show_file_sizes"
             android:defaultValue="false" />
 
+        <SwitchPreference
+            android:key="pref_show_hidden"
+            android:title="@string/pref_show_hidden_files"
+            android:defaultValue="false" />
+
+        <SwitchPreference
+            android:key="pref_keep_screen_on"
+            android:title="@string/pref_keep_screen_on" />
+
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/pref_general_decompiler">

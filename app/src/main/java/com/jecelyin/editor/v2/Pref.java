@@ -32,7 +32,6 @@ import com.jecelyin.common.utils.SysUtils;
 import com.stericson.RootTools.RootTools;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
@@ -54,21 +53,18 @@ public class Pref implements SharedPreferences.OnSharedPreferenceChangeListener 
     public static final String KEY_AUTO_CAPITALIZE = "pref_auto_capitalize";
     public static final String KEY_ENABLE_HIGHLIGHT = "pref_enable_highlight";
     public static final String KEY_HIGHLIGHT_FILE_SIZE_LIMIT = "pref_highlight_file_size_limit";
-    //public static final String KEY_THEME = "pref_current_theme";
    // public static final String KEY_AUTO_SAVE = "pref_auto_save";
-   // public static final String KEY_REMEMBER_LAST_OPENED_FILES = "pref_remember_last_opened_files";
+    public static final String KEY_REMEMBER_LAST_OPENED_FILES = "pref_remember_last_opened_files";
     public static final String KEY_SCREEN_ORIENTATION = "pref_screen_orientation";
-  //  public static final String KEY_KEEP_SCREEN_ON = "pref_keep_screen_on";
     public static final String KEY_ENABLE_ROOT = "pref_enable_root";
     //public static final String KEY_TOOLBAR_ICONS = "pref_toolbar_icons";
    // public static final String KEY_PREF_KEEP_BACKUP_FILE = "pref_keep_backup_file";
-    //public static final String KEY_PREF_ENABLE_DRAWERS = "pref_enable_drawers";
     public static final String KEY_LAST_OPEN_PATH = "last_open_path";
     public static final String KEY_READ_ONLY = "readonly_mode";
     public static final String KEY_SHOW_HIDDEN_FILES = "show_hidden_files";
     public static final String KEY_FILE_SORT_TYPE = "show_file_sort";
     public static final String KEY_FULL_SCREEN = "fullscreen_mode";
-    //public static final String KEY_LAST_TAB = "last_tab";
+    public static final String KEY_LAST_TAB = "last_tab";
     public static final String KEY_HIDE_SYMBOL_PANEL = "pref_hide_symbol_panel";
     //Search panel checkbox
     public static final String KEY_USE_REGEX = "pref_use_regex";
@@ -124,15 +120,12 @@ public class Pref implements SharedPreferences.OnSharedPreferenceChangeListener 
         map.put(KEY_AUTO_CAPITALIZE, true);
         map.put(KEY_ENABLE_HIGHLIGHT, true);
         map.put(KEY_HIGHLIGHT_FILE_SIZE_LIMIT, 500);
-       // map.put(KEY_THEME, 0);
        // map.put(KEY_AUTO_SAVE, false);
         map.put(KEY_ENABLE_ROOT, true);
-  //      map.put(KEY_REMEMBER_LAST_OPENED_FILES, true);
+        map.put(KEY_REMEMBER_LAST_OPENED_FILES, true);
         map.put(KEY_SCREEN_ORIENTATION, "auto");
-      //  map.put(KEY_KEEP_SCREEN_ON, false);
       //  map.put(KEY_PREF_AUTO_CHECK_UPDATES, true);
       //  map.put(KEY_PREF_KEEP_BACKUP_FILE, true);
-     //   map.put(KEY_PREF_ENABLE_DRAWERS, true);
 
         //not at preference setting
       //  toolbarIcons = pm.getStringSet(KEY_TOOLBAR_ICONS, null);
@@ -141,7 +134,7 @@ public class Pref implements SharedPreferences.OnSharedPreferenceChangeListener 
         map.put(KEY_SHOW_HIDDEN_FILES, false);
         map.put(KEY_FILE_SORT_TYPE, 0);
         map.put(KEY_FULL_SCREEN, false);
-  //      map.put(KEY_LAST_TAB, 0);
+        map.put(KEY_LAST_TAB, 0);
         map.put(KEY_HIDE_SYMBOL_PANEL, false);
         map.put(KEY_USE_REGEX, false);
         map.put(KEY_WHOLE_WORDS_ONLY, false);
@@ -212,19 +205,6 @@ public class Pref implements SharedPreferences.OnSharedPreferenceChangeListener 
         return (boolean) map.get(KEY_SHOW_WHITESPACE);
     }
 
-    /*
-    public int getTheme() {
-        return (int) map.get(KEY_THEME);
-    }
-
-
-    public void setTheme(int theme) {
-        map.put(KEY_THEME, theme);
-        pm.edit().putInt(KEY_THEME, theme).commit();
-    }
-
-
-     */
     public boolean isHighlight() {
         return (boolean) map.get(KEY_ENABLE_HIGHLIGHT);
     }
@@ -240,8 +220,6 @@ public class Pref implements SharedPreferences.OnSharedPreferenceChangeListener 
     public boolean isKeepScreenOn() {
         return (boolean) map.get(KEY_KEEP_SCREEN_ON);
     }
-
-
  */
 
     public Integer[] getToolbarIcons() {
@@ -255,28 +233,8 @@ public class Pref implements SharedPreferences.OnSharedPreferenceChangeListener 
         return list;
     }
 
-/*
-    public void setToolbarIcons(Integer[] toolbarIcons) {
-        this.toolbarIcons = new HashSet<>();
-        for (Integer id : toolbarIcons) {
-            this.toolbarIcons.add(String.valueOf(id));
-        }
-        pm.edit().putStringSet(KEY_TOOLBAR_ICONS, this.toolbarIcons).apply();
-    }
-
-
- */
     public Object getValue(String key) {
         return map.get(key);
-    }
-
-    public String getLastOpenPath() {
-        return (String)map.get(KEY_LAST_OPEN_PATH);
-    }
-
-    public void setLastOpenPath(String path) {
-        pm.edit().putString(KEY_LAST_OPEN_PATH, path).apply();
-        map.put(KEY_LAST_OPEN_PATH, path);
     }
 
     public int getFontSize() {
@@ -328,17 +286,33 @@ public class Pref implements SharedPreferences.OnSharedPreferenceChangeListener 
     public boolean isAutoCapitalize() {
         return (boolean) map.get(KEY_AUTO_CAPITALIZE);
     }
-/*
+
     public boolean isOpenLastFiles() {
         return (boolean) map.get(KEY_REMEMBER_LAST_OPENED_FILES);
     }
 
+    //last
+    public String getLastOpenPath() {
+        return (String)map.get(KEY_LAST_OPEN_PATH);
+    }
 
-*/
+    public void setLastOpenPath(String path) {
+        pm.edit().putString(KEY_LAST_OPEN_PATH, path).apply();
+        map.put(KEY_LAST_OPEN_PATH, path);
+    }
+
+    public void setLastTab(int index) {
+        pm.edit().putInt(KEY_LAST_TAB, index).apply();
+        map.put(KEY_LAST_TAB, index);
+    }
+
+    public int getLastTab() {
+        return (int)map.get(KEY_LAST_TAB);
+    }
+
     public int getTabSize() {
         return (int)map.get(KEY_TAB_SIZE);
     }
-
 
     @ScreenOrientation
     public int getScreenOrientation() {
@@ -355,38 +329,11 @@ public class Pref implements SharedPreferences.OnSharedPreferenceChangeListener 
     public boolean isRootable() {
         return ((boolean)map.get(KEY_ENABLE_ROOT)) && RootTools.isRootAvailable() && RootTools.isAccessGiven();
     }
-/*
-    public boolean isKeepBackupFile() {
-        return (boolean) map.get(KEY_PREF_KEEP_BACKUP_FILE);
-    }
 
-
- */
     public String getSymbol() {
         return (String) map.get(KEY_SYMBOL);
     }
 
-    /*
-    public boolean isShowHiddenFiles() {
-        return (boolean) map.get(KEY_SHOW_HIDDEN_FILES);
-    }
-
-    public void setShowHiddenFiles(boolean b) {
-        pm.edit().putBoolean(KEY_SHOW_HIDDEN_FILES, b).apply();
-        map.put(KEY_SHOW_HIDDEN_FILES, b);
-    }
-
-    public int getFileSortType() {
-        return (int) map.get(KEY_FILE_SORT_TYPE);
-    }
-
-    public void setFileSortType(int type) {
-        pm.edit().putInt(KEY_FILE_SORT_TYPE, type).apply();
-        map.put(KEY_FILE_SORT_TYPE, type);
-    }
-
-
-     */
     public void setFullScreenMode(boolean b) {
         pm.edit().putBoolean(KEY_FULL_SCREEN, b).apply();
         map.put(KEY_FULL_SCREEN, b);

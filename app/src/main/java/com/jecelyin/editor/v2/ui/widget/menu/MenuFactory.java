@@ -20,6 +20,7 @@ package com.jecelyin.editor.v2.ui.widget.menu;
 
 import android.content.Context;
 
+import com.jecelyin.editor.v2.ui.activities.MainActivity;
 import com.mrikso.apkrepacker.R;
 import com.jecelyin.editor.v2.Pref;
 import com.jecelyin.editor.v2.common.Command;
@@ -133,7 +134,7 @@ public class MenuFactory {
 
         //menuItemInfos.add(new MenuItemInfo(MenuGroup.OTHER, R.id.m_color, Command.CommandEnum.NONE, R.drawable.ic_color_lens_white_24dp, R.string.insert_color));
         //menuItemInfos.add(new MenuItemInfo(MenuGroup.OTHER, R.id.m_datetime, Command.CommandEnum.NONE, R.drawable.ic_date_range_white_24dp, R.string.insert_datetime));
-       // menuItemInfos.add(new MenuItemInfo(MenuGroup.OTHER, R.id.m_run, Command.CommandEnum.NONE, R.drawable.ic_play_arrow_white_24dp, R.string.run));
+        menuItemInfos.add(new MenuItemInfo(MenuGroup.OTHER, R.id.m_smali_java, Command.CommandEnum.NONE, R.drawable.ic_java, R.string.smali_java));
         menuItemInfos.add(new MenuItemInfo(MenuGroup.OTHER, R.id.m_settings, Command.CommandEnum.NONE, R.drawable.ic_settings, R.string.settings));
         menuItemInfos.add(new MenuItemInfo(MenuGroup.OTHER, R.id.m_exit, Command.CommandEnum.NONE, R.drawable.ic_exit, R.string.exit));
     }

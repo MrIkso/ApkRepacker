@@ -1,6 +1,7 @@
 package com.mrikso.apkrepacker.ui.prererence;
 
 public class PreferenceKeys {
+    public static final String KEY_SHOW_HIDDEN_FILES = "pref_show_hidden";
     public static final String KEY_USE_AAPT2 = "pref_use_aapt2";
     public static final String KEY_SIGN_OUT_APK = "pref_sign_apk";
     public static final String KEY_DECODING_FOLDER = "pref_decode_folder";
@@ -27,4 +28,5 @@ public class PreferenceKeys {
     public static final String KEY_RECURSIVELY = "pref_key_recursively";
     public static final String KEY_FILES_MODE = "pref_key_files_mode";
     public static final String KEY_EXTENSIONS = "pref_key_extensions";
+    public static final String KEY_KEEP_SCREEN_ON = "pref_keep_screen_on";
 }

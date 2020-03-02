@@ -2,9 +2,12 @@ package com.mrikso.apkrepacker.patchengine;
 
 import android.util.Log;
 
-import com.jecelyin.common.utils.IOUtils;
 import com.mrikso.apkrepacker.utils.FileUtil;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,12 +19,16 @@ public class AddFilesRule extends Core {
     private String target;
     private boolean extract;
 
+    AddFilesRule(){
+
+    }
+
     /*
         Парсим нужные значения для патчинга
      */
     @Override
     public void start(LineReader lineReader) {
-        line  = lineReader.getLine();
+        line = lineReader.getLine();
         String readLine = lineReader.readLine();
         while (readLine != null) {
             String trim = readLine.trim();
@@ -53,7 +60,8 @@ public class AddFilesRule extends Core {
         }
     }
 
-    public final boolean a() {
+    @Override
+    public boolean inSmali() {
         return Core.checkIsSmali(target);
     }
 
@@ -62,21 +70,34 @@ public class AddFilesRule extends Core {
      */
     @Override
     public String currentRule(ZipFile zipFile) {
-        FileOutputStream fileOutputStream;
         InputStream inputStream;
-        FileOutputStream fileOutputStream2 = null;
-        ZipEntry entry = zipFile.getEntry(source);
+        ZipEntry entry = getEntry(zipFile, source);
+      //  ZipEntry entry = zipFile.getEntry(source);
         if (entry == null) {
             Log.i("Reader","патч пустой");
         } else {
-            try {
-                inputStream = zipFile.getInputStream(entry);
-                IOUtils.copyFile(inputStream, new FileOutputStream(FileUtil.getProjectPath() + "/" + target));
-            } catch (IOException e) {
-                Log.i("Reader",String.format("Не скопировалось в %s",  target));
-                e.printStackTrace();
+         //   if (!extract) {
+
+         //   }
+        //else {
+                try {
+                    inputStream = zipFile.getInputStream(entry);
+                    File file = new File(FileUtil.getProjectPath() + "/" + "t.smali");
+                   if (!file.exists() && !file.mkdirs()) {
+                        return null;
+                   }
+                    IOUtils.copy(inputStream, new FileOutputStream(file));
+                    inputStream.close();
+                    Log.i("Reader", file.getAbsolutePath());
+                } catch (IOException e) {
+                    Log.i("Reader", String.format("Не скопировалось в %s", target));
+                    e.printStackTrace();
+                }
             }
-        }
+       // }
         return null;
+    }
+    public static  ZipEntry getEntry(ZipFile zf, String patch){
+        return zf.getEntry(patch);
     }
 }

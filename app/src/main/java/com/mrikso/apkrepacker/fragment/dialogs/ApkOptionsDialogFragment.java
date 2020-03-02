@@ -37,6 +37,7 @@ public class ApkOptionsDialogFragment extends BottomSheetDialogFragment
         view.findViewById(R.id.simple_edit_apk).setOnClickListener(this);
         view.findViewById(R.id.sign_app).setOnClickListener(this);
         view.findViewById(R.id.install_app).setOnClickListener(this);
+        view.findViewById(R.id.set_as_framework_app).setOnClickListener(this);
         view.findViewById(R.id.delete_item).setOnClickListener(this);
     }
 

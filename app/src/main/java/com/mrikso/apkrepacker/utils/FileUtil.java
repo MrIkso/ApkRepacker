@@ -18,7 +18,10 @@ import android.webkit.MimeTypeMap;
 
 import androidx.annotation.Nullable;
 
+import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
+import com.mrikso.apkrepacker.filepicker.Utility;
+import com.mrikso.apkrepacker.ui.prererence.Preference;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -34,8 +37,11 @@ import java.util.Objects;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import static com.mrikso.apkrepacker.App.getContext;
+
 public class FileUtil {
     private static final String TAG = "FileUtil";
+
     private static String projectPath;
 
     public static String genName(Context ctx, String path, String name, String suff, int cnt) {
@@ -146,30 +152,19 @@ public class FileUtil {
 
     //---------------------------
     public static File copyFile(File src, File path) throws Exception {
-
         try {
-
             if (src.isDirectory()) {
-
                 if (src.getPath().equals(path.getPath())) throw new Exception();
-
                 File directory = createDirectory(path, src.getName());
-
                 for (File file : src.listFiles()) copyFile(file, directory);
-
                 return directory;
             } else {
-
                 File file = new File(path, src.getName());
-
                 FileChannel channel = new FileInputStream(src).getChannel();
-
                 channel.transferTo(0, channel.size(), new FileOutputStream(file).getChannel());
-
                 return file;
             }
         } catch (Exception e) {
-
             throw new Exception(String.format("Error copying %s", src.getName()));
         }
     }
@@ -177,83 +172,55 @@ public class FileUtil {
     //----------------------------------------------------------------------------------------------
 
     public static File createDirectory(File path, String name) throws Exception {
-
         File directory = new File(path, name);
-
         if (directory.mkdirs()) return directory;
-
         if (directory.exists()) throw new Exception(String.format("%s already exists", name));
-
         throw new Exception(String.format("Error creating %s", name));
     }
 
     public static File deleteFile(File file) throws Exception {
-
         if (file.isDirectory()) {
-
             for (File child : file.listFiles()) {
-
                 deleteFile(child);
             }
         }
 
         if (file.delete()) return file;
-
         throw new Exception(String.format("Error deleting %s", file.getName()));
     }
 
     public static File renameFile(File file, String name) throws Exception {
 
         //  String extension = getExtension(file.getName());
-
         //  if (!extension.isEmpty()) name += "." + extension;
-
         File newFile = new File(file.getParent(), name);
-
         if (file.renameTo(newFile)) return newFile;
-
         throw new Exception(String.format("Error renaming %s", file.getName()));
     }
 
     public static File unzip(File zip) throws Exception {
-
         File directory = createDirectory(zip.getParentFile(), removeExtension(zip.getName()));
-
         FileInputStream fileInputStream = new FileInputStream(zip);
-
         BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
-
         try (ZipInputStream zipInputStream = new ZipInputStream(bufferedInputStream)) {
-
             ZipEntry zipEntry;
-
             while ((zipEntry = zipInputStream.getNextEntry()) != null) {
-
                 byte[] buffer = new byte[1024];
-
                 File file = new File(directory, zipEntry.getName());
-
                 if (zipEntry.isDirectory()) {
-
                     if (!file.mkdirs()) throw new Exception("Error uncompressing");
                 } else {
-
                     int count;
-
                     try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
-
                         while ((count = zipInputStream.read(buffer)) != -1) {
-
                             fileOutputStream.write(buffer, 0, count);
                         }
                     }
                 }
             }
         }
-
         return directory;
     }
-
 
     public static File getInternalStorage() {
         //returns the path to the internal storage
@@ -264,7 +231,7 @@ public class FileUtil {
 
     public static File getExternalStorage() {
         //returns the path to the external storage or null if it doesn't exist
-        String path = System.getenv("SECONDARY_STORAGE");
+        String path = Utility.getExternalStoragePath(getContext(), true);
         return path != null ? new File(path) : null;
     }
 
@@ -283,14 +250,12 @@ public class FileUtil {
     public static String getLastModified(File file) {
 
         //returns the last modified date of the given file as a formatted string
-
         return DateFormat.format("dd MMM yyy, HH:mm", new Date(file.lastModified())).toString();
     }
 
     public static String getMimeType(File file) {
 
         //returns the mime type for the given file or null iff there is none
-
         return MimeTypeMap.getSingleton().getMimeTypeFromExtension(getExtension(file.getName()));
     }
 
@@ -391,40 +356,25 @@ public class FileUtil {
     }
 
     public static String getStorageUsage(Context context) {
-
         File internal = getInternalStorage();
-
         File external = getExternalStorage();
-
         long f = internal.getFreeSpace();
-
         long t = internal.getTotalSpace();
-
         if (external != null) {
-
             f += external.getFreeSpace();
-
             t += external.getTotalSpace();
         }
-
         String use = Formatter.formatShortFileSize(context, t - f);
-
         String tot = Formatter.formatShortFileSize(context, t);
-
         return String.format("%s used of %s", use, tot);
     }
 
     public static String getTitle(File file) {
-
         try {
-
             MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-
             retriever.setDataSource(file.getPath());
-
             return retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
         } catch (Exception e) {
-
             return null;
         }
     }
@@ -432,52 +382,38 @@ public class FileUtil {
     public static String getExtension(String filename) {
 
         //returns the file extension or an empty string iff there is no extension
-
         return filename.contains(".") ? filename.substring(filename.lastIndexOf(".") + 1) : "";
     }
 
     //----------------------------------------------------------------------------------------------
 
     public static String removeExtension(String filename) {
-
         int index = filename.lastIndexOf(".");
-
         return index != -1 ? filename.substring(0, index) : filename;
     }
 
     public static int compareDate(File file1, File file2) {
-
         long lastModified1 = file1.lastModified();
-
         long lastModified2 = file2.lastModified();
-
         return Long.compare(lastModified2, lastModified1);
     }
 
     //----------------------------------------------------------------------------------------------
 
     public static int compareName(File file1, File file2) {
-
         String name1 = file1.getName();
-
         String name2 = file2.getName();
-
         return name1.compareToIgnoreCase(name2);
     }
 
     public static int compareSize(File file1, File file2) {
-
         long length1 = file1.length();
-
         long length2 = file2.length();
-
         return Long.compare(length2, length1);
     }
 
     public static int getColorResource(File file) {
-
         switch (FileType.getFileType(file)) {
-
             case DIRECTORY:
                 return R.color.directory;
             case MISC_FILE:
@@ -500,7 +436,6 @@ public class FileUtil {
                 return R.color.txt;
             case ZIP:
                 return R.color.zip;
-
             case APK:
                 return R.color.apk;
             case DEX:
@@ -517,53 +452,38 @@ public class FileUtil {
     //----------------------------------------------------------------------------------------------
 
     public static int getImageResource(File file) {
-
         switch (FileType.getFileType(file)) {
-
             case DIRECTORY:
                 return R.drawable.ic_directory;
-
             case MISC_FILE:
                 return R.drawable.ic_misc_file;
-
             case AUDIO:
                 return R.drawable.ic_audio;
-
             case IMAGE:
                 return R.drawable.ic_image;
-
             case VIDEO:
                 return R.drawable.ic_video;
-
             case DOC:
                 return R.drawable.ic_doc;
-
             case PPT:
                 return R.drawable.ic_ppt;
-
             case XLS:
                 return R.drawable.ic_xls;
-
             case PDF:
                 return R.drawable.ic_pdf;
-
             case TXT:
                 return R.drawable.ic_txt;
-
             case ZIP:
                 return R.drawable.ic_zip;
             case DEX:
                 return R.drawable.ic_txt;
-
             case SMALI:
             case JS:
             case JSON:
             case XML:
                 return R.drawable.ic_txt;
-
             case APK:
                 return R.drawable.ic_txt;
-
             case APKS:
                 return R.drawable.ic_zip;
             default:
@@ -572,46 +492,41 @@ public class FileUtil {
     }
 
     public static boolean isStorage(File dir) {
-
         return dir == null || dir.equals(getInternalStorage()) || dir.equals(getExternalStorage());
     }
 
     //----------------------------------------------------------------------------------------------
 
     public static File[] getChildren(File directory) {
-
-        if (!directory.canRead()) return null;
-
-        return directory.listFiles(pathname -> pathname.exists() && !pathname.isHidden());
+        if (!directory.canRead())
+            return null;
+            if (showIsHidden()) {
+                return directory.listFiles(pathname -> pathname.exists());
+            } else {
+                return directory.listFiles(pathname -> pathname.exists() && !pathname.isHidden());
+            }
     }
 
+    private static boolean showIsHidden() {
+        boolean show = Preference.getInstance(App.getContext()).isShowHiddenFiles();
+        return show;
+    }
     //----------------------------------------------------------------------------------------------
 
     public static ArrayList<File> searchFilesName(Context context, String name) {
-
         ArrayList<File> list = new ArrayList<>();
-
         Uri uri = MediaStore.Files.getContentUri("external");
-
         String data[] = new String[]{MediaStore.Files.FileColumns.DATA};
-
         Cursor cursor = new CursorLoader(context, uri, data, null, null, null).loadInBackground();
-
         if (cursor != null) {
-
             while (cursor.moveToNext()) {
-
                 File file = new File(cursor.getString(cursor.getColumnIndex(data[0])));
-
                 if (file.exists() && file.getName().startsWith(name)) list.add(file);
             }
-
             cursor.close();
         }
-
         return list;
     }
-
 
     public enum FileType {
 

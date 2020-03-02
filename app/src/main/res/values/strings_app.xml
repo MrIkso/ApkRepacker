@@ -214,4 +214,14 @@
     <string name="toast_sign_done">Sign done</string>
     <string name="items">%d items</string>
     <string name="select_patch">Select patch</string>
+    <string name="action_sd_card">External SD Card</string>
+    <string name="intenal_sd_card">Intenal SD Card</string>
+    <string name="pref_show_hidden_files">Show hidden files</string>
+    <string name="recent_open_files">Last opened files</string>
+    <string name="pref_keep_screen_on">Keep screen on</string>
+    <string name="toast_error_import_framework_failed">Error while import a framework!</string>
+    <string name="install_as_framework">Import as framework</string>
+    <string name="toast_import_framework_done">Framework successfully imported</string>
+    <string name="dialog_import">Importing..</string>
+    <string name="smali_java">Smali to Java</string>
 </resources>

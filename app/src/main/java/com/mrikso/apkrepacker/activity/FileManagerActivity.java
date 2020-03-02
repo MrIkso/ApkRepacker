@@ -34,6 +34,7 @@ import com.mrikso.apkrepacker.fragment.SimpleEditorFragment;
 import com.mrikso.apkrepacker.fragment.dialogs.ApkOptionsDialogFragment;
 import com.mrikso.apkrepacker.fragment.dialogs.ProgressDialogFragment;
 import com.mrikso.apkrepacker.recycler.Adapter;
+import com.mrikso.apkrepacker.task.ImportFrameworkTask;
 import com.mrikso.apkrepacker.task.SignTask;
 import com.mrikso.apkrepacker.utils.AppUtils;
 import com.mrikso.apkrepacker.utils.FileUtil;
@@ -49,11 +50,11 @@ import java.util.Objects;
 
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
 
+import static com.mrikso.apkrepacker.utils.FileUtil.getExternalStorage;
 import static com.mrikso.apkrepacker.utils.FileUtil.getInternalStorage;
 import static com.mrikso.apkrepacker.utils.FileUtil.getName;
 import static com.mrikso.apkrepacker.utils.FileUtil.getPath;
 import static com.mrikso.apkrepacker.utils.StringUtils.EXTRA_NAME;
-import static com.mrikso.apkrepacker.utils.StringUtils.EXTRA_TYPE;
 import static com.mrikso.apkrepacker.utils.StringUtils.SAVED_DIRECTORY;
 import static com.mrikso.apkrepacker.utils.StringUtils.SAVED_SELECTION;
 
@@ -69,6 +70,9 @@ public class FileManagerActivity extends BaseActivity implements ApkOptionsDialo
     private String type;
     private DialogFragment dialog;
     public static FileManagerActivity Intance;
+    private boolean flag = false;
+    private boolean signedMode = false;
+    private File sdCard;
     //----------------------------------------------------------------------------------------------
 
     @Override
@@ -94,6 +98,7 @@ public class FileManagerActivity extends BaseActivity implements ApkOptionsDialo
             setPath(Objects.requireNonNull(currentDirectory.getParentFile()));
             return;
         }
+
         super.onBackPressed();
     }
 
@@ -141,6 +146,9 @@ public class FileManagerActivity extends BaseActivity implements ApkOptionsDialo
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_sd_card:
+                actionGotoSDCard();
+                return true;
             case R.id.action_delete:
                 actionDelete();
                 return true;
@@ -167,6 +175,19 @@ public class FileManagerActivity extends BaseActivity implements ApkOptionsDialo
         }
     }
 
+    private void actionGotoSDCard() {
+        if(flag){
+            flag = false;
+            setPath(getInternalStorage());
+        }
+        else {
+            if(sdCard !=null) {
+                flag = true;
+                setPath(getExternalStorage());
+            }
+        }
+    }
+
     //----------------------------------------------------------------------------------------------
 
     @Override
@@ -174,6 +195,8 @@ public class FileManagerActivity extends BaseActivity implements ApkOptionsDialo
 
         if (adapter != null) {
             int count = adapter.getSelectedItemCount();
+            menu.findItem(R.id.action_sd_card).setVisible(sdCard !=null);
+            menu.findItem(R.id.action_sd_card).setTitle(flag ? R.string.intenal_sd_card : R.string.action_sd_card);
             menu.findItem(R.id.action_delete).setVisible(count >= 1);
             menu.findItem(R.id.action_rename).setVisible(count >= 1);
             menu.findItem(R.id.action_search).setVisible(count == 0);
@@ -198,6 +221,7 @@ public class FileManagerActivity extends BaseActivity implements ApkOptionsDialo
             adapter.addAll(FileUtil.searchFilesName(context, name));
             return;
         }
+        sdCard = getExternalStorage();
         setPath(getInternalStorage());
     }
 
@@ -240,6 +264,8 @@ public class FileManagerActivity extends BaseActivity implements ApkOptionsDialo
         } else if (name != null) {
             toolbar.setTitle(getResources().getString(R.string.search_for, name));
         } else if (currentDirectory != null && !currentDirectory.equals(getInternalStorage())) {
+            toolbar.setTitle(getName(currentDirectory));
+        } else if (currentDirectory != null && sdCard!=null &&!currentDirectory.equals(sdCard)) {
             toolbar.setTitle(getName(currentDirectory));
         } else {
             toolbar.setTitle(getResources().getString(R.string.app_name));
@@ -392,9 +418,14 @@ public class FileManagerActivity extends BaseActivity implements ApkOptionsDialo
         builder.setTitle(R.string.sort_by);
         builder.show();
     }
+
     public void showProgress() {
         Bundle args = new Bundle();
-        args.putString(ProgressDialogFragment.TITLE, getResources().getString(R.string.dialog_sign));
+        if(signedMode){
+            args.putString(ProgressDialogFragment.TITLE, getResources().getString(R.string.dialog_sign));
+        }else {
+            args.putString(ProgressDialogFragment.TITLE, getResources().getString(R.string.dialog_import));
+        }
         args.putString(ProgressDialogFragment.MESSAGE, getResources().getString(R.string.dialog_please_wait));
         args.putBoolean(ProgressDialogFragment.CANCELABLE, false);
         //  args.putInt(ProgressDialogFragment.MAX, 100);
@@ -415,8 +446,14 @@ public class FileManagerActivity extends BaseActivity implements ApkOptionsDialo
         dialog.dismiss();
         //setPath(new File(selectedApk.getParent()));
         //int index = adapter.indexOf(selectedApk);
-        setPath(new File(selectedApk.getParent()));
-        showMessage(this.getResources().getString(R.string.toast_sign_done));
+        if(signedMode){
+            setPath(new File(selectedApk.getParent()));
+            showMessage(this.getResources().getString(R.string.toast_sign_done));
+            signedMode = false;
+        }else {
+            showMessage(this.getResources().getString(R.string.toast_import_framework_done));
+        }
+
     }
 
     private ProgressDialogFragment getProgressDialogFragment() {
@@ -492,9 +529,13 @@ public class FileManagerActivity extends BaseActivity implements ApkOptionsDialo
                 FileUtil.installApk(FileManagerActivity.this, selectedApk);
                 break;
             case R.id.sign_app:
-                //showMessage("sign apk");
+                signedMode = true;
                 Runnable build = () -> SignUtil.loadKey(this, signTool -> new SignTask(this, signTool).execute(selectedApk));
                 build.run();
+                break;
+            case R.id.set_as_framework_app:
+                Runnable frame = () -> new ImportFrameworkTask(this).execute(selectedApk);
+                frame.run();
                 break;
             case R.id.delete_item:
                 try {
@@ -529,7 +570,7 @@ public class FileManagerActivity extends BaseActivity implements ApkOptionsDialo
                 if (file.canRead()) {
                     setPath(file);
                 } else {
-                    showMessage("Cannot open directory");
+                    showMessage(context.getResources().getString(R.string.cannt_open_directory));
                 }
             } else {
                 Thread thread;

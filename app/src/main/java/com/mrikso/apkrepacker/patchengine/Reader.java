@@ -9,7 +9,7 @@ import java.util.List;
 
 public class Reader {
 
-    private List lineList = new ArrayList();
+    public List taskList = new ArrayList();
 
     public static Reader read(InputStream inputStream) {
         Reader reader = new Reader();
@@ -19,7 +19,7 @@ public class Reader {
             if (line.startsWith("[")) {
                 switch (line) {
                     case "[MIN_ENGINE_VER]":
-                       int v= Integer.valueOf(lineReader.readLine()).intValue();
+                       int v = Integer.valueOf(lineReader.readLine()).intValue();
                         Log.i("Reader", String.format("Version: %d", v ));
                         break;
                     case "[AUTHOR]":
@@ -42,25 +42,25 @@ public class Reader {
                                 core = new MergeRule();
                                 break;
                             case "[MATCH_REPLACE]":
-                                //core = new AddFilesRule();
+                                core = new MatchReplaceRule();
                                 break;
                             case "[MATCH_GOTO]":
-                                //core = new AddFilesRule();
+                                core = new MatchGotoRule();
                                 break;
                             case "[MATCH_ASSIGN]":
-                                //core = new AddFilesRule();
+                                core = new MatchAssignRule();
                                 break;
                             case "[FUNCTION_REPLACE]":
-                               // core = new AddFilesRule();
+                                core = new FunctionReplaceRule();
                                 break;
                             case "[SIGNATURE_REVISE]":
                                 //core = new AddFilesRule();
                                 break;
                             case "[GOTO]":
-                                //core = new AddFilesRule();
+                                core = new GotoRule();
                                 break;
                             case "[DUMMY]":
-                                core = new DymmyRule();
+                                core = new DummyRule();
                                 break;
                             case "[EXECUTE_DEX]":
                                 core = new ExecuteDex();
@@ -71,9 +71,7 @@ public class Reader {
                         }
                         if (core != null) {
                             core.start(lineReader);
-                        }
-                       if (core != null) {
-                            reader.lineList.add(core);
+                            reader.taskList.add(core);
                         }
                        break;
                 }

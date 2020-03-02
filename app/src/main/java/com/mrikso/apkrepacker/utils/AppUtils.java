@@ -1,5 +1,6 @@
 package com.mrikso.apkrepacker.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -10,6 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
+import android.view.WindowManager;
 
 import com.mrikso.apkrepacker.R;
 
@@ -21,6 +23,18 @@ public class AppUtils {
             return true;
         } catch (PackageManager.NameNotFoundException e) {
             return false;
+        }
+    }
+
+    public static void toggledScreenOn(Activity mActivity, boolean screenon)
+    {
+        if (screenon)
+        {
+            mActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
+        else
+        {
+            mActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
     }
 

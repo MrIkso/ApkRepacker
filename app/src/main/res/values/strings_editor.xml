@@ -48,6 +48,7 @@
     <string name="give_up_document_changed_message">Document has changed, your changes will be lost if you don’t save them, confirm？</string>
     <string name="please_save_as_file_first">lease save to file first</string>
     <string name="editor">Editor</string>
+    <string name="tab">Tab</string>
     <string name="default_value">Default</string>
     <string name="font_size">Font Size</string>
     <string name="cursor_width">Cursor Width</string>
@@ -55,6 +56,8 @@
     <string name="word_wrap_in_editor">Word wrap</string>
     <string name="show_linenumber">Show line number</string>
     <string name="show_whitespace">Show Whitespace</string>
+    <string name="remember_last_opened_files">Remember last opened files</string>
+    <string name="remember_last_opened_files_summary">Auto open last opened files when startup</string>
     <string name="auto_indent">Auto Indent</string>
     <string name="highlight_and_theme">Highlight and Theme</string>
     <string name="highlight_the_file_size_limit">Limit highlight file size</string>

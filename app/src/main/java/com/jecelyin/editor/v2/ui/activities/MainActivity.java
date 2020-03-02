@@ -24,6 +24,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -56,6 +57,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.jecelyin.common.task.TaskListener;
 import com.jecelyin.common.utils.DLog;
 import com.jecelyin.common.utils.IOUtils;
+import com.jecelyin.common.utils.SysUtils;
 import com.jecelyin.common.utils.UIUtils;
 import com.jecelyin.editor.v2.Pref;
 import com.jecelyin.editor.v2.common.Command;
@@ -78,6 +80,7 @@ import com.jecelyin.editor.v2.utils.GrepBuilder;
 import com.jecelyin.editor.v2.utils.MatcherResult;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.activity.BaseActivity;
+import com.mrikso.apkrepacker.task.Smali2JavaTask;
 import com.mrikso.apkrepacker.ui.autocompleteeidttext.CustomAdapter;
 
 import org.gjt.sp.jedit.Catalog;
@@ -104,11 +107,13 @@ public class MainActivity extends BaseActivity
     private static final int ID_REPLACE = 3;
     private static final int ID_REPLACE_ALL = 4;
     private static final int ID_FIND_TEXT = 5;
+
     public Toolbar mToolbar;
     public LinearLayout mLoadingLayout;
     public ViewPager mTabPager;
     public RecyclerView mMenuRecyclerView;
     public DrawerLayout mDrawerLayout;
+    public RecyclerView mTabRecyclerView;
     private static LinearLayout searchPanel;
     public SymbolBarLayout mSymbolBarLayout;
 
@@ -126,7 +131,7 @@ public class MainActivity extends BaseActivity
     private boolean mCaseSensitive;
     private boolean mWholeWordsOnly;
     private boolean mRegex, mReplaceMode;
-    private String openedFile;
+    public String openedFile;
     static MainActivity Intance;
     private CustomAdapter searchAdapter;
     private CustomAdapter repaceAdapter;
@@ -196,14 +201,18 @@ public class MainActivity extends BaseActivity
                 hideSoftInput();
             }
         });
+        mTabRecyclerView = findViewById(R.id.tabRecyclerView);
 
         mSymbolBarLayout = findViewById(R.id.symbolBarLayout);
         mSymbolBarLayout.setOnSymbolCharClickListener((v, text) -> insertText(text));
 
-     //   setStatusBarColor(ColorDrawable.);
+        setStatusBarColor(mDrawerLayout);
 
         bindPreferences();
         setScreenOrientation();
+
+        mDrawerLayout.setEnabled(false);
+        mDrawerLayout.setScrimColor(Color.TRANSPARENT);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED
                 || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED
@@ -279,6 +288,9 @@ public class MainActivity extends BaseActivity
 
     private void initUI() {
         mMenuRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mTabRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mDrawerLayout.setEnabled(true);
+
         initToolbar();
 
         if (menuManager == null)
@@ -298,8 +310,8 @@ public class MainActivity extends BaseActivity
 
         Resources res = getResources();
 
-       // mToolbar.setNavigationIcon(R.drawable.ic_drawer_raw);
-       // mToolbar.setNavigationContentDescription(R.string.tab);
+        mToolbar.setNavigationIcon(R.drawable.ic_drawer_raw);
+        mToolbar.setNavigationContentDescription(R.string.tab);
 
         Menu menu = mToolbar.getMenu();
         List<MenuItemInfo> menuItemInfos = MenuFactory.getInstance(this).getToolbarIcon();
@@ -708,6 +720,17 @@ public class MainActivity extends BaseActivity
                 boolean hidePanel = !pref.isHidePanel();
                 pref.setHidePanel(hidePanel);
                 break;
+            case R.id.m_smali_java:
+                if(openedFile!=null) {
+                    if (openedFile.toLowerCase().endsWith(".smali")) {
+                        UIUtils.toast(this, "Decompiling");
+                        Runnable build = () -> new Smali2JavaTask().execute(new File(openedFile));
+                        build.run();
+                    } else {
+                        UIUtils.toast(this, "Works only on Smali");
+                    }
+                }
+                break;
             case R.id.m_encoding:
                 new CharsetsDialog(this).show();
                 break;
@@ -731,7 +754,6 @@ public class MainActivity extends BaseActivity
         return false;
     }
 
-
     public void closeMenu() {
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -740,6 +762,14 @@ public class MainActivity extends BaseActivity
             mDrawerLayout.closeDrawer(GravityCompat.END);
         }
     }
+
+    public void setDecompiled(String code){
+        tabManager.newTab(code, "Decompiled.java");
+        Command command = new Command(Command.CommandEnum.HIGHLIGHT);
+        command.object = "Java";
+        doCommand(command);
+    }
+
 /*
     @Override
     public void onFolderSelection(@NonNull FolderChooserDialog dialog, @NonNull File file) {
@@ -754,6 +784,7 @@ public class MainActivity extends BaseActivity
 
 
  */
+
     private void hideSoftInput() {
         doCommand(new Command(Command.CommandEnum.HIDE_SOFT_INPUT));
     }
@@ -788,8 +819,8 @@ public class MainActivity extends BaseActivity
 
             if (command.what == Command.CommandEnum.HIGHLIGHT) {
                 mToolbar.setTitle(editorDelegate.getToolbarText());
+                mToolbar.setSubtitle(editorDelegate.getToolbarSubText());
             }
-            mToolbar.setSubtitle(editorDelegate.getToolbarSubText());
         }
     }
 
@@ -869,6 +900,10 @@ public class MainActivity extends BaseActivity
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
 
             if (mDrawerLayout != null) {
+                if (mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
+                    mDrawerLayout.closeDrawer(Gravity.LEFT);
+                    return true;
+                }
                 if (mDrawerLayout.isDrawerOpen(Gravity.RIGHT)) {
                     mDrawerLayout.closeDrawer(Gravity.RIGHT);
                     return true;
@@ -896,6 +931,10 @@ public class MainActivity extends BaseActivity
 
     public RecyclerView getMenuRecyclerView() {
         return mMenuRecyclerView;
+    }
+
+    public RecyclerView getTabRecyclerView() {
+        return mTabRecyclerView;
     }
 
     private List<String> getSearchData(){

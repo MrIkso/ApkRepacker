@@ -20,4 +20,5 @@
     <item name="m_convert_to_lowercase" type="id" />
     <item name="m_fullscreen" type="id" />
     <item name="m_hide_symbol_panel" type="id" />
+    <item name="m_smali_java" type="id" />
 </resources>

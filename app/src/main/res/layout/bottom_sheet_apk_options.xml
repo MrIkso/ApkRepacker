@@ -39,12 +39,20 @@
         app:layout_constraintTop_toBottomOf="@+id/install_app"
         style="@style/ActionItem" />
     <TextView
+        android:id="@+id/set_as_framework_app"
+        android:drawableStart="@drawable/ic_framework"
+        android:text="@string/install_as_framework"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sign_app"
+        style="@style/ActionItem" />
+    <TextView
         android:id="@+id/delete_item"
         android:drawableStart="@drawable/ic_delete"
         android:text="@string/action_delete"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sign_app"
+        app:layout_constraintTop_toBottomOf="@+id/set_as_framework_app"
         style="@style/ActionItem" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

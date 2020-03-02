@@ -28,10 +28,12 @@ import android.view.ViewGroup;
 import androidx.annotation.Nullable;
 
 import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.jecelyin.common.adapter.ViewPagerAdapter;
 import com.jecelyin.editor.v2.common.Command;
 import com.jecelyin.editor.v2.common.SaveListener;
 import com.jecelyin.editor.v2.common.TabCloseListener;
+import com.jecelyin.editor.v2.common.TabInfo;
 import com.jecelyin.editor.v2.task.ClusterCommand;
 import com.jecelyin.editor.v2.ui.activities.MainActivity;
 import com.jecelyin.editor.v2.ui.dialog.SaveConfirmDialog;
@@ -118,6 +120,27 @@ public class EditorAdapter extends ViewPagerAdapter {
         return list.get(currentPosition);
     }
 
+    public int countNoFileEditor() {
+        int count = 0;
+        for (EditorDelegate f : list) {
+            if (f.getPath() == null) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public TabInfo[] getTabInfoList() {
+        int size = list.size();
+        TabInfo[] arr = new TabInfo[size];
+        EditorDelegate f;
+        for (int i = 0; i < size; i++) {
+            f = list.get(i);
+            arr[i] = new TabInfo(f.getTitle(), f.getPath(), f.isChanged());
+        }
+
+        return arr;
+    }
 
     public boolean removeEditor(final int position, final TabCloseListener listener) {
         EditorDelegate f = list.get(position);
@@ -127,26 +150,29 @@ public class EditorAdapter extends ViewPagerAdapter {
         final String path = f.getPath();
 
         if (f.isChanged()) {
-
-            new SaveConfirmDialog(context, f.getTitle(), (dialog, which) -> {
-                if (which == DialogAction.POSITIVE) {
-                    Command command = new Command(Command.CommandEnum.SAVE);
-                    command.object = (SaveListener) () -> {
+            new SaveConfirmDialog(context, f.getTitle(), new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(MaterialDialog dialog, DialogAction which) {
+                    if (which == DialogAction.POSITIVE) {
+                        Command command = new Command(Command.CommandEnum.SAVE);
+                        command.object = new SaveListener() {
+                            @Override
+                            public void onSaved() {
+                                remove(position);
+                                if (listener != null)
+                                    listener.onClose(path, encoding, offset);
+                            }
+                        };
+                        ((MainActivity) context).doCommand(command);
+                    } else if (which == DialogAction.NEGATIVE) {
                         remove(position);
                         if (listener != null)
                             listener.onClose(path, encoding, offset);
-                    };
-                    ((MainActivity) context).doCommand(command);
-                } else if (which == DialogAction.NEGATIVE) {
-                    remove(position);
-                    if (listener != null)
-                        listener.onClose(path, encoding, offset);
-                } else {
-                    dialog.dismiss();
+                    } else {
+                        dialog.dismiss();
+                    }
                 }
             }).show();
-
-
             return false;
         } else {
             remove(position);

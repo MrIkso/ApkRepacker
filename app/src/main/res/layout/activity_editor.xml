@@ -78,7 +78,45 @@
         </FrameLayout>
 
     </LinearLayout>
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/tabNavView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:background="?attr/colorPrimaryDark"
+                android:orientation="horizontal"
+                android:translationZ="3dp">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:textColor="?attr/textColor"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginStart="15dp"
+                    android:text="@string/recent_open_files"
+                    android:textSize="16sp" />
+
+            </RelativeLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/tabRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
+    </com.google.android.material.navigation.NavigationView>
     <!--Меню слева самого редактора-->
     <com.google.android.material.navigation.NavigationView
         android:layout_width="250dp"
