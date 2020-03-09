@@ -9,7 +9,6 @@
     tools:context=".fragment.DecompileFragment">
     <!--разметка когда разбирается apk-->
     <LinearLayout
-        android:id="@+id/layout_apk_decompiling"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"

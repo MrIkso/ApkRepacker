@@ -25,12 +25,10 @@ allprojects {
 }
 
 ext {
-    targetSdkVersion = 29
-    minSdkVersion = 21
-    compileSdkVersion = 29
-   // androidxVersion = '1.1.0'
-    versionCode = 7
-    versionName = '0.2.1'
+        compileSdkVersion = 29
+        buildToolsVersion = '29.0.2'
+        targetSdkVersion = 28
+        minSdkVersion = 21
 }
 task clean(type: Delete) {
     delete rootProject.buildDir

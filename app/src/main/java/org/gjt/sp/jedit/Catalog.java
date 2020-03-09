@@ -207,7 +207,7 @@ public class Catalog {
         modes.put("SHTML", new Mode("SHTML", "shtml.xml", "(?:.*[/\\\\])?.*\\.(shtml|shtm|ssi)", null));
         modes.put("Slate", new Mode("Slate", "slate.xml", "(?:.*[/\\\\])?.*\\.slate", null));
         modes.put("Slax", new Mode("Slax", "slax.xml", "(?:.*[/\\\\])?.*\\.slax", null));
-        modes.put("Smali", new Mode("Smali", "smali.xml", "(?:.*[/\\\\])?.*\\.smali", null));
+        modes.put("Smali", new Mode("Smali", "smali.xml", "(?:.*[/\\\\])?.*\\.smali",null));
         modes.put("Smalltalk", new Mode("Smalltalk", "smalltalk.xml", "(?:.*[/\\\\])?.*\\.(st|sources|changes)", null));
         modes.put("Smarty", new Mode("Smarty", "smarty.xml", "(?:.*[/\\\\])?.*\\.tpl", null));
         modes.put("Sdl/pr", new Mode("Sdl/pr", "sdl_pr.xml", "(?:.*[/\\\\])?.*\\.pr", null));

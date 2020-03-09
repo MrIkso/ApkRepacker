@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white">#FFF</color>
+    <color name="textColorInverted">#ff212121</color>
+    <color name="color_divider">#ffbbbbbb</color>
+    <color name="color_gray_text_disabled">#9D9FA2</color>
+</resources>

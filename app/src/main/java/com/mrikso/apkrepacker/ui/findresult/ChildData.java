@@ -1,8 +1,8 @@
 package com.mrikso.apkrepacker.ui.findresult;
 
-import android.core.text.SpannableStringBuilder;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.SpannableStringBuilder;
 
 public class ChildData implements Parcelable{
 

@@ -1,0 +1,57 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion project.minSdkVersion
+        targetSdkVersion project.targetSdkVersion
+        versionCode 8
+        versionName "N-IDE v10"
+        vectorDrawables.useSupportLibrary = true
+    }
+
+    sourceSets {
+        main {
+            res.srcDirs += "src/main/res-style"
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+  //  implementation 'com.google.code.gson:gson:2.8.6'
+    //implementation 'com.anjlab.android.iab.v3:library:1.1.0'
+
+  //  implementation 'com.yqritc:recyclerview-flexibledivider:1.2.9'
+  //  implementation 'org.apmem.tools:layouts:1.10@aar'
+    //implementation 'com.makeramen:roundedimageview:2.2.1'
+ //   implementation 'com.sothree.slidinguppanel:library:3.4.0'
+    //noinspection GradleDependency do not use latest version, java 8 cause crash
+   // implementation 'commons-io:commons-io:2.4'
+  //  implementation 'org.apache.commons:commons-lang3:3.9'
+  //  implementation 'com.google.guava:guava:28.2-android'
+ //   implementation 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
+
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.annotation:annotation:1.1.0'
+    implementation 'com.google.android.material:material:1.1.0'
+    implementation 'androidx.preference:preference:1.1.0'
+    implementation project(path: ':common')
+}

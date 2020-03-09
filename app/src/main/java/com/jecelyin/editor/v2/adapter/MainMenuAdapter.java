@@ -1,27 +1,10 @@
-/*
- * Copyright (C) 2016 Jecelyin Peng <jecelyin@gmail.com>
- *
- * This file is part of 920 Text Editor.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.jecelyin.editor.v2.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -29,19 +12,18 @@ import android.widget.TextView;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.duy.ide.editor.editor.R;
 import com.jecelyin.editor.v2.common.Command;
-import com.jecelyin.editor.v2.ui.manager.MenuManager;
-import com.jecelyin.editor.v2.ui.widget.menu.MenuFactory;
-import com.jecelyin.editor.v2.ui.widget.menu.MenuGroup;
-import com.jecelyin.editor.v2.ui.widget.menu.MenuItemInfo;
-import com.mrikso.apkrepacker.R;
+import com.jecelyin.editor.v2.manager.MenuManager;
+import com.jecelyin.editor.v2.widget.menu.MenuDef;
+import com.jecelyin.editor.v2.widget.menu.MenuFactory;
+import com.jecelyin.editor.v2.widget.menu.MenuGroup;
+import com.jecelyin.editor.v2.widget.menu.MenuItemInfo;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author Jecelyin Peng <jecelyin@gmail.com>
- */
 public class MainMenuAdapter extends RecyclerView.Adapter {
     private static final int ITEM_TYPE_GROUP = 1;
     private final List<MenuItemInfo> menuItems;
@@ -52,12 +34,12 @@ public class MainMenuAdapter extends RecyclerView.Adapter {
         inflater = LayoutInflater.from(context);
 
         MenuFactory menuFactory = MenuFactory.getInstance(context);
-        MenuGroup[] groups = MenuGroup.values();
+        MenuGroup[] groups = new MenuGroup[]{MenuGroup.FILE, MenuGroup.EDIT, MenuGroup.VIEW, MenuGroup.OTHER};
         menuItems = new ArrayList<>();
-
         for (MenuGroup group : groups) {
-            if (group.getNameResId() == 0)
-                continue; //top group
+            if (group == MenuGroup.TOP) {
+                continue;
+            }
             menuItems.add(new MenuItemInfo(group, 0, Command.CommandEnum.NONE, 0, 0));
             menuItems.addAll(menuFactory.getMenuItemsWithoutToolbarMenu(group));
         }
@@ -87,7 +69,7 @@ public class MainMenuAdapter extends RecyclerView.Adapter {
         if (holder instanceof ItemViewHolder) {
             final ItemViewHolder vh = (ItemViewHolder) holder;
             vh.mTextView.setText(item.getTitleResId());
-            Drawable icon = MenuManager.makeMenuNormalIcon(vh.itemView.getResources(), item.getIconResId());
+            Drawable icon = MenuManager.makeMenuNormalIcon(vh.itemView.getContext(), item.getIconResId());
             vh.mTextView.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
             vh.itemView.setOnClickListener(v -> {
                 if (menuItemClickListener != null) {
@@ -105,7 +87,7 @@ public class MainMenuAdapter extends RecyclerView.Adapter {
             }
         } else {
             GroupViewHolder vh = (GroupViewHolder) holder;
-            vh.mNameTextView.setText(item.getGroup().getNameResId());
+            vh.mNameTextView.setText(item.getGroup().getTitleId());
         }
     }
 
@@ -146,3 +128,4 @@ public class MainMenuAdapter extends RecyclerView.Adapter {
         }
     }
 }
+

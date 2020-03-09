@@ -3,8 +3,8 @@ package com.mrikso.apkrepacker.ui.findresult;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.TypedArray;
-import android.core.text.SpannableStringBuilder;
 import android.graphics.Color;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
@@ -17,10 +17,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.jecelyin.editor.v2.ui.activities.MainActivity;
+
 import com.jecelyin.editor.v2.utils.ExtGrep;
 import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
+import com.mrikso.apkrepacker.activity.CodeEditorActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +73,7 @@ public class FindInFilesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             ((RecyclerViewHolder) holder).mMatchLineTextView.setText(ssb, TextView.BufferType.SPANNABLE);
             ((RecyclerViewHolder)holder).mFindItem.setOnClickListener(v -> {
                 try{
-                    Intent intent = new Intent(App.getContext(), MainActivity.class);
+                    Intent intent = new Intent(App.getContext(), CodeEditorActivity.class);
                     intent.putExtra("filePath", item.file.getAbsolutePath());
                     App.getContext().startActivity(intent);
                 }

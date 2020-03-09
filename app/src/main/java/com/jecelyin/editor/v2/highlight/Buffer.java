@@ -1,13 +1,11 @@
 /*
- * Copyright (C) 2016 Jecelyin Peng <jecelyin@gmail.com>
- *
- * This file is part of 920 Text Editor.
+ * Copyright 2018 Mr Duy
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,8 +18,8 @@ package com.jecelyin.editor.v2.highlight;
 
 
 import android.content.Context;
-import android.core.text.SpannableStringBuilder;
-import android.text.Editable;
+import android.text.GetChars;
+import android.text.SpannableStringBuilder;
 
 import com.jecelyin.common.utils.DLog;
 
@@ -41,20 +39,16 @@ import org.gjt.sp.jedit.util.IntegerArray;
  * @author Jecelyin Peng <jecelyin@gmail.com>
  */
 public class Buffer {
-    private final Context context;
     private final IntegerArray integerArray;
     private TokenMarker tokenMarker;
     private LineManager lineMgr;
-    private Editable editable;
+    private GetChars editable;
     private Mode mode;
 
-    public Buffer(Context context) {
-        this.context = context;
+    public Buffer() {
         editable = new SpannableStringBuilder();
         lineMgr = new LineManager();
         integerArray = new IntegerArray();
-
-//        ModeProvider.instance.setAssets(context.getAssets());
     }
 
     /**
@@ -87,17 +81,13 @@ public class Buffer {
         this.lineMgr = lineManager;
     }
 
-    public Context getContext() {
-        return context;
-    }
-
     public Mode getMode() {
         return mode;
     }
 
-    public void setMode(Mode mode) {
+    public void setMode(Mode mode, Context context) {
         this.mode = mode;
-        tokenMarker = mode == null ? null : mode.getTokenMarker();
+        tokenMarker = mode == null ? null : mode.getTokenMarker(context);
     }
 
     public boolean isCanHighlight() {
@@ -138,7 +128,7 @@ public class Buffer {
      */
     public void getLineText(int line, int relativeStartOffset, Segment segment) {
         if (line < 0 || line >= lineMgr.getLineCount())
-            throw new ArrayIndexOutOfBoundsException(line);
+            throw new ArrayIndexOutOfBoundsException("length=" + lineMgr.getLineCount() + "; index=" + line);
 
         int start = (line == 0 ? 0 : lineMgr.getLineEndOffset(line - 1));
         int end = lineMgr.getLineEndOffset(line);
@@ -155,11 +145,9 @@ public class Buffer {
                 || start + length > editable.length())
             throw new ArrayIndexOutOfBoundsException(start + "+" + length + " > " + editable.length());
 
-//        editable.getText(start, length, seg);
         getTextByContentManager(start, length, seg);
     }
 
-    //{{{ markTokens() method
 
     /**
      * Returns the specified text range in a <code>Segment</code>.<p>
@@ -180,7 +168,6 @@ public class Buffer {
         seg.count = len;
     }
 
-    //{{{ getRuleSetAtOffset() method
 
     protected TokenMarker.LineContext markTokens(Segment seg, TokenMarker.LineContext prevContext,
                                                  TokenHandler _tokenHandler) {
@@ -261,7 +248,6 @@ public class Buffer {
         return token.rules;
     }
 
-    //{{{ contentInserted() method
     private void contentInserted(int offset, int length,
                                  IntegerArray endOffsets) {
         int startLine = lineMgr.getLineOfOffset(offset);
@@ -325,12 +311,12 @@ public class Buffer {
         return editable.toString();
     }
 
-    public void setEditable(Editable editable) {
-        if (this.editable == editable)
-            return;
-
-        if (!(editable instanceof SpannableStringBuilder))
-            throw new RuntimeException("Can't set a " + editable.getClass().getName() + " to Buffer");
+    public void setEditable(GetChars editable) {
+//        if (this.editable == editable)
+//            return;
+//
+//        if (!(editable instanceof SpannableStringBuilder))
+//            throw new RuntimeException("Can't set a " + editable.getClass().getName() + " to Buffer");
 
         this.editable = editable;
     }

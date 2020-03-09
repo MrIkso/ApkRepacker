@@ -4,13 +4,13 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
-import android.core.text.SpannableStringBuilder;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
@@ -28,12 +28,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.duy.ide.editor.EditorDelegate;
 import com.jecelyin.common.utils.UIUtils;
-import com.jecelyin.editor.v2.ui.activities.MainActivity;
-import com.jecelyin.editor.v2.ui.editor.EditorDelegate;
 import com.jecelyin.editor.v2.utils.ExtGrep;
 import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
+import com.mrikso.apkrepacker.activity.CodeEditorActivity;
 import com.mrikso.apkrepacker.fragment.dialogs.ProgressDialogFragment;
 import com.mrikso.apkrepacker.model.SearchFinder;
 import com.mrikso.apkrepacker.ui.findresult.ChildData;
@@ -185,34 +185,7 @@ public class FindFragment extends Fragment implements ProgressDialogFragment.Pro
 
         return parentDataList;
     }
-    private static class FileClickableSpan extends ClickableSpan
-            implements UpdateAppearance {
-        private final ExtGrep.Result result;
-        private final EditorDelegate editorDelegate;
-        private final int mColor;
 
-        public FileClickableSpan(@ColorInt int color, EditorDelegate editorDelegate, ExtGrep.Result result) {
-            this.editorDelegate = editorDelegate;
-            this.result = result;
-            mColor = color;
-        }
-
-        @Override
-        public void onClick(View widget) {
-            editorDelegate.getMainActivity().openFile(result.file.getPath(), null, result.startOffset);
-        }
-
-        /**
-         * Makes the text underlined and in the link color.
-         */
-        @Override
-        public void updateDrawState(TextPaint ds) {
-            ds.setColor(mColor);
-            ds.setUnderlineText(true);
-        }
-
-
-    }
     private void showProgress() {
         Bundle args = new Bundle();
         args.putString(ProgressDialogFragment.TITLE, getResources().getString(R.string.dialog_find));
@@ -263,7 +236,7 @@ public class FindFragment extends Fragment implements ProgressDialogFragment.Pro
                 case HTML:
                 case INI:
                 case XML:
-                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                    Intent intent = new Intent(getActivity(), CodeEditorActivity.class);
                     intent.putExtra("filePath", file.getAbsolutePath());
                     startActivity(intent);
                     break;

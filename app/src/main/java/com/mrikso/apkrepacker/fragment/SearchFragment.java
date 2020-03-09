@@ -16,13 +16,13 @@ import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
+import com.duy.ide.database.SQLHelper;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.jecelyin.common.utils.UIUtils;
-import com.jecelyin.editor.v2.ui.activities.MainActivity;
-import com.jecelyin.editor.v2.utils.DBHelper;
+
 import com.jecelyin.editor.v2.utils.ExtGrep;
 import com.jecelyin.editor.v2.utils.GrepBuilder;
 import com.mrikso.apkrepacker.App;
@@ -61,7 +61,7 @@ public class SearchFragment extends Fragment {
     private Preference mPtef;
     private Map<String, Boolean> extMap =  new HashMap<>();
     private CustomAdapter adapter;
-    private DBHelper dbHelper;
+    private SQLHelper dbHelper;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -84,7 +84,7 @@ public class SearchFragment extends Fragment {
         mContext = view.getContext();
         mPtef = Preference.getInstance(mContext);
         loadPrefs();
-        dbHelper = new DBHelper(mContext);
+        dbHelper = new SQLHelper(mContext);
         chipGroup = view.findViewById(R.id.ext_group);
         mAddExt = view.findViewById(R.id.button_add_ext);
         findText = view.findViewById(R.id.search_text);
@@ -101,7 +101,7 @@ public class SearchFragment extends Fragment {
     }
     private List<String> getData(){
      //   List<String> dataList = new ArrayList<String>();
-        List<String> items = DBHelper.getInstance(mContext).getFindKeywordsAdnFile(filesMode);
+        List<String> items = SQLHelper.getInstance(mContext).getFindKeywordsAdnFile(filesMode);
         return items;
     }
 

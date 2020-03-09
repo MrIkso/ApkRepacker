@@ -1,13 +1,11 @@
 /*
- * Copyright (C) 2016 Jecelyin Peng <jecelyin@gmail.com>
- *
- * This file is part of 920 Text Editor.
+ * Copyright 2018 Mr Duy
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,8 +21,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
-import com.mrikso.apkrepacker.R;
 
 
 /**
@@ -83,7 +79,7 @@ public class RangeAdapter extends BaseAdapter {
         TextView tv;
         if (convertView == null) {
             convertView = LayoutInflater.from(parent.getContext()).inflate(getLayoutResId(), parent, false);
-            tv = convertView.findViewById(getTextResId());
+            tv = (TextView) convertView.findViewById(getTextResId());
             convertView.setTag(tv);
         } else {
             tv = (TextView) convertView.getTag();
@@ -96,11 +92,11 @@ public class RangeAdapter extends BaseAdapter {
     }
 
     protected int getLayoutResId() {
-        return R.layout.md_listitem;
+        return android.R.layout.simple_list_item_1;
     }
 
     protected int getTextResId() {
-        return R.id.title;
+        return android.R.id.text1;
     }
 
     protected void setupTextView(TextView tv, int position) {

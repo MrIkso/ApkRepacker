@@ -3,6 +3,7 @@ package com.mrikso.apkrepacker.model;
 import android.os.Environment;
 
 import com.mrikso.apkrepacker.utils.QickEditParams;
+import com.mrikso.apkrepacker.utils.ZipUtils;
 import com.mrikso.apkrepacker.utils.qickedit.ManifestEditor;
 
 import org.apache.commons.io.IOUtils;
@@ -39,7 +40,7 @@ public class QickEdit {
     }
 
     private void patchManifest(){
-        ZipEntry entry = getEntry(zipFile, androidmanifest);
+        ZipEntry entry = ZipUtils.getEntry(zipFile, androidmanifest);
         if(entry == null){
             return;
         }
@@ -85,7 +86,5 @@ public class QickEdit {
         return store.getData();
     }
 
-    public static  ZipEntry getEntry(ZipFile zf, String patch){
-        return zf.getEntry(patch);
-    }
+
 }

@@ -1,8 +1,6 @@
 <resources>
     <string name="colorPickerDialog_dialogName">Color Picker</string>
 
-    <string name="colorPickerDialog_reset">Reset</string>
-
     <string name="colorPickerDialog_red">R</string>
     <string name="colorPickerDialog_blue">B</string>
     <string name="colorPickerDialog_green">G</string>

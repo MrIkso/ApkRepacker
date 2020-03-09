@@ -21,17 +21,14 @@
         <item>@string/decompile_res</item>
         <item>@string/decompile_dex</item>
     </string-array>
+
     <string-array name="install_location">
         <item>@string/install_location_default</item>
         <item>@string/install_location_auto</item>
         <item>@string/install_location_internal</item>
         <item>@string/install_location_external</item>
     </string-array>
-    <string-array name="screen_orientation_values" translatable="false">
-        <item>auto</item>
-        <item>landscape</item>
-        <item>portrait</item>
-    </string-array>
+
     <string-array name="key_format">
         <item>@string/jks</item>
         <item>@string/pkcs12</item>

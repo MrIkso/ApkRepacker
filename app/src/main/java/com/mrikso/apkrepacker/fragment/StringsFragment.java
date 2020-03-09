@@ -169,8 +169,8 @@ public class StringsFragment extends Fragment implements AddLanguageDialogFragme
         animation.setDuration(400);//speed animation 500 ms default
         animation.setFillAfter(true);
         view.startAnimation(animation);
-        fabMenu.setPadding(SysUtils.dpAsPixels(mContext, 10), SysUtils.dpAsPixels(mContext, 10),
-                SysUtils.dpAsPixels(mContext, 10),SysUtils.dpAsPixels(mContext, 40));
+        fabMenu.setPadding(SysUtils.dpToPixels(mContext, 10), SysUtils.dpToPixels(mContext, 10),
+                SysUtils.dpToPixels(mContext, 10),SysUtils.dpToPixels(mContext, 40));
     }
 
     private void slideDown(View view) {
@@ -179,8 +179,8 @@ public class StringsFragment extends Fragment implements AddLanguageDialogFragme
         animation.setDuration(400);//speed animation 500 ms default
         animation.setFillAfter(true);
         view.startAnimation(animation);
-        fabMenu.setPadding(SysUtils.dpAsPixels(mContext, 10), SysUtils.dpAsPixels(mContext, 10),
-                SysUtils.dpAsPixels(mContext, 10),SysUtils.dpAsPixels(mContext, 10));
+        fabMenu.setPadding(SysUtils.dpToPixels(mContext, 10), SysUtils.dpToPixels(mContext, 10),
+                SysUtils.dpToPixels(mContext, 10),SysUtils.dpToPixels(mContext, 10));
     }
 
     private void initList() {

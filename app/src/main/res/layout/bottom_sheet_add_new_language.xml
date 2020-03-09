@@ -54,7 +54,6 @@
         </FrameLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/code_tv"
             android:theme="@style/TextInputLayout.OutlinedBox"
             style="@style/TextInputLayout"
             android:layout_width="match_parent"

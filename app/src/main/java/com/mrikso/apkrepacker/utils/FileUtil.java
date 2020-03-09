@@ -16,8 +16,10 @@ import android.util.Base64;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.duy.common.DLog;
 import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.filepicker.Utility;
@@ -34,6 +36,8 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -43,6 +47,42 @@ public class FileUtil {
     private static final String TAG = "FileUtil";
 
     private static String projectPath;
+
+    public static boolean isRoot(File root, File current) {
+        try {
+            return root.getPath().equals(current.getPath());
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @NonNull
+    public static String findPackage(File projectDir, File currentFolder) {
+        try {
+            String path = currentFolder.getPath();
+            Pattern pattern = Pattern.compile("smali(_classes[0-9]+)?");
+            Matcher matcher = pattern.matcher(path);
+            //DLog.i(path);
+            while (matcher.find()) {
+                if (path.startsWith(projectDir.getPath())) {
+                    String pkg = path.substring(projectDir.getPath().length() + 2 + matcher.group().length());
+                    pkg = pkg.replace(File.separator, ".");
+                    DLog.i("pkg: " + pkg);
+                    return pkg;
+                }
+                else {
+                    DLog.i("Not found1");
+                    return "";
+                }
+            } {
+                DLog.i("Not found2");
+                return "";
+            }
+        } catch (Exception e) {
+            return "";
+        }
+
+    }
 
     public static String genName(Context ctx, String path, String name, String suff, int cnt) {
         boolean overwrite = true;//Settings.getb(ctx, "overwrite_apk", true);
@@ -500,11 +540,11 @@ public class FileUtil {
     public static File[] getChildren(File directory) {
         if (!directory.canRead())
             return null;
-            if (showIsHidden()) {
-                return directory.listFiles(pathname -> pathname.exists());
-            } else {
-                return directory.listFiles(pathname -> pathname.exists() && !pathname.isHidden());
-            }
+        if (showIsHidden()) {
+            return directory.listFiles(pathname -> pathname.exists());
+        } else {
+            return directory.listFiles(pathname -> pathname.exists() && !pathname.isHidden());
+        }
     }
 
     private static boolean showIsHidden() {
@@ -616,7 +656,5 @@ public class FileUtil {
             else
                 return FileType.MISC_FILE;
         }
-
-
     }
 }

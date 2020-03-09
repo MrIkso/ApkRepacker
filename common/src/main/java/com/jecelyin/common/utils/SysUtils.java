@@ -74,7 +74,7 @@ public class SysUtils {
         return result != null && ((boolean)result);
     }
 
-    public static int dpAsPixels(Context context, int dp)
+    public static int dpToPixels(Context context, int dp)
     {
         Resources resources = context.getResources();
         return (int) TypedValue.applyDimension(1, dp, resources.getDisplayMetrics());

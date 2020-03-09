@@ -5,7 +5,6 @@
     <string name="about_version">Version: %s(%s)</string>
     <string name="about_email_intent" translatable="false">About:Apk Repacker</string>
     <string name="about_not_found_email">Email app hasn`t been found</string>
-    <string name="share_with">Share with</string>
 
     <string name="settings">Settings</string>
     <string name="theme_light">Light</string>
@@ -64,7 +63,6 @@
     <string name="search_request">Search request</string>
     <string name="caption_search_options">Search options</string>
     <string name="label_ignore_case">Ignore Case</string>
-    <string name="label_re">Regular Exprensions</string>
     <string name="label_ext">Extensions</string>
     <string name="add_ext">Add Ext</string>
     <string name="recursively">Recursively</string>
@@ -80,12 +78,7 @@
     <string name="menu_string">Strings</string>
     <string name="menu_files">Files</string>
     <string name="menu_find_list">Find List</string>
-    <string name="build_run_title">Build App</string>
-    <string name="complete">Complete</string>
     <string name="toast_deleted_item">File %s has been deleted</string>
-    <string name="menu_build_app">Build App</string>
-    <string name="menu_delete_project">Delete Project</string>
-    <string name="menu_about_project">About Project</string>
     <string name="error">Error</string>
 
     <!--Signature-->
@@ -111,12 +104,9 @@
     <string name="locality_name">Locality Name:</string>
     <string name="state_name">State Name:</string>
     <string name="country">Country:</string>
-    <string name="gen_key_title">Create a key file</string>
-    <string name="gen_key_summary">Touch to create a key file.</string>
-     <string name="create_and_use">Create and use</string>
+    <string name="create_and_use">Create and use</string>
     <!--FilePicker-->
     <string name="toast_sd_card_not_found">SD Card not found!</string>
-    <string name="toast_error_grant_permisson_sd_card">Please select and grant SD Card permission!</string>
     <string name="error_dir_access">Dir Access</string>
     <string name="label_parent_dir">...</string>
     <string name="label_path">Path: </string>
@@ -124,13 +114,11 @@
     <string name="choose_button_label">Select</string>
     <string name="label_parent_directory">Parent folder</string>
     <string name="select_directory">Select folder:</string>
-    <string name="label_date_ceared">Creation date</string>
     <string name="label_last_date_write">Last changed date</string>
     <string name="label_size_prj">Project Size</string>
     <string name="label_package_app">App Package</string>
     <string name="select_file">Select File:</string>
     <string name="files">Files</string>
-    <string name="label_search_string_in_files">Text in files</string>
     <string name="dialog_add_extensions">Add Extensions</string>
     <string name="dialog_please_wait">Please Wait...</string>
     <string name="dialog_find">Searching</string>
@@ -138,20 +126,14 @@
     <string name="common_error">Error</string>
     <string name="signer_permissions_denied">Permission Denied</string>
     <string name="sign_done">Signing Done</string>
-    <string name="search_apps_hint">Search Apps</string>
     <string name="backup_search_splits_only">Split Only</string>
     <string name="backup_search_show_system_apps">System Apps</string>
-    <string name="action_next_panel">Next</string>
-    <string name="action_replace_panel">Replace</string>
-    <string name="action_all_replace_panel">All</string>
-    <string name="action_prev_panel">Prev</string>
     <string name="open_app_in_settings">Open in Settings</string>
     <string name="about_telegram">Telegram</string>
 
     <string name="compile_in_progress">Building...</string>
     <string name="uninstall_app">Uninstall app</string>
     <string name="lang_code">Language Code</string>
-    <string name="language">Language</string>
     <string name="lang_code_exapmle">For example: en-US</string>
     <string name="action_open_project">Open Project</string>
     <string name="action_copy_log">Copy log</string>
@@ -217,11 +199,16 @@
     <string name="action_sd_card">External SD Card</string>
     <string name="intenal_sd_card">Intenal SD Card</string>
     <string name="pref_show_hidden_files">Show hidden files</string>
-    <string name="recent_open_files">Last opened files</string>
     <string name="pref_keep_screen_on">Keep screen on</string>
     <string name="toast_error_import_framework_failed">Error while import a framework!</string>
     <string name="install_as_framework">Import as framework</string>
     <string name="toast_import_framework_done">Framework successfully imported</string>
     <string name="dialog_import">Importing..</string>
-    <string name="smali_java">Smali to Java</string>
+    <string name="project">Project:</string>
+    <string name="select_from_storage">Select from storage</string>
+    <string name="action_create_xml">Create xml file</string>
+    <string name="action_create_class">Create smali class file</string>
+    <string name="class_name">Class name</string>
+    <string name="editor_theme">Editor theme</string>
+    <string name="selected_editor_theme">Selected %s. Restart app to apply theme.</string>
 </resources>

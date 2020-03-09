@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <com.duy.ide.editor.view.GutterView
+        android:id="@+id/gutter_view"
+        android:layout_width="0dp"
+        android:layout_height="match_parent" />
+
+    <com.duy.ide.editor.view.CodeEditor
+        android:id="@+id/edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffffff"
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
+        android:padding="0dp"
+        android:scrollbars="vertical"
+        android:typeface="monospace"
+        tools:text="Sample code" />
+
+</LinearLayout>

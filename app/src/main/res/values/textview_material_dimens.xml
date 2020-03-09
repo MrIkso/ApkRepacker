@@ -38,5 +38,4 @@
     <!-- Default insets (outer padding) around controls -->
     <!-- Default inner padding within controls -->
     <!-- Default rounded corner for controls -->
-    <dimen name="text_size_large_material">22sp</dimen>
 </resources>

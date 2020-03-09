@@ -20,9 +20,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.jecelyin.editor.v2.ui.activities.MainActivity;
 import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
+import com.mrikso.apkrepacker.activity.CodeEditorActivity;
 import com.mrikso.apkrepacker.ui.colorslist.ColorMeta;
 import com.mrikso.apkrepacker.ui.colorslist.ColorsAdapter;
 import com.mrikso.apkrepacker.ui.colorslist.ColorsViewModel;
@@ -89,7 +89,7 @@ public class ColorEditorFragment extends Fragment implements ColorsAdapter.OnIte
 
         FloatingActionButton fabEdit = view.findViewById(R.id.fab_go_editor);
         fabEdit.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), MainActivity.class);
+            Intent intent = new Intent(getActivity(), CodeEditorActivity.class);
             intent.putExtra("filePath", colors.getAbsolutePath());
             startActivity(intent);
         });

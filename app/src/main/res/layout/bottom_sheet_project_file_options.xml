@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="8dp">
+    <TextView
+        android:id="@+id/create_class_file"
+        android:layout_marginTop="8dp"
+        android:drawableStart="@drawable/ic_rename"
+        android:text="@string/action_create_class"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/ActionItem" />
+    <TextView
+        android:id="@+id/create_xml_file"
+        android:drawableStart="@drawable/ic_rename"
+        android:text="@string/action_create_xml"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/create_class_file"
+        style="@style/ActionItem" />
+    <TextView
+        android:id="@+id/add_new_folder"
+        android:drawableStart="@drawable/ic_create_new_folder_dark"
+        android:text="@string/action_create_new_folder"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/create_xml_file"
+        style="@style/ActionItem" />
+    <TextView
+        android:id="@+id/select_file"
+        android:drawableStart="@drawable/ic_file_add_grey"
+        android:text="@string/select_from_storage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_new_folder"
+        style="@style/ActionItem" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

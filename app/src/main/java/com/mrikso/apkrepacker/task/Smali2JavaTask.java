@@ -2,10 +2,11 @@ package com.mrikso.apkrepacker.task;
 
 import android.os.AsyncTask;
 
+import com.duy.ide.core.api.IdeActivity;
 import com.jecelyin.common.utils.UIUtils;
-import com.jecelyin.editor.v2.ui.activities.MainActivity;
 import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
+import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.Smali2Java;
 
 import org.antlr.runtime.CommonTokenStream;
@@ -26,43 +27,14 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 
 public class Smali2JavaTask extends AsyncTask<File, CharSequence, Boolean> {
-    String javaCode;
+    private IdeActivity editorActivity;
+    private String javaCode;
+    private File smali;
 
-    public Smali2JavaTask(){
-
+    public Smali2JavaTask(IdeActivity editorActivity) {
+        this.editorActivity = editorActivity;
     }
 
-    @Override
-    protected void onPostExecute(Boolean result) {
-        super.onPostExecute(result);
-        MainActivity mainActivity = MainActivity.getInstance();
-        mainActivity.setDecompiled(javaCode);
-        //dialog.hideProgress();
-        if(!result)
-            UIUtils.toast(App.getContext(), R.string.toast_error_import_framework_failed);
-
-    }
-    @Override
-    protected Boolean doInBackground(File... files) {
-        boolean success = true;
-        for (File file : files) {
-            if (!process(file))
-                success = false;
-        }
-        return success;
-    }
-
-private boolean process(File smali){
-    try {
-        DexBuilder dexBuilder = new DexBuilder(Opcodes.getDefault());
-        assembleSmaliFile(smali, dexBuilder, new SmaliOptions());
-       javaCode = Smali2Java.translate(dexBuilder);
-       return true;
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-    return false;
-}
     private static boolean assembleSmaliFile(File smaliFile, DexBuilder dexBuilder, SmaliOptions options)
             throws Exception {
         FileInputStream fis = null;
@@ -71,13 +43,13 @@ private boolean process(File smali){
             InputStreamReader reader = new InputStreamReader(fis, "UTF-8");
 
             LexerErrorInterface lexer = new smaliFlexLexer(reader, options.apiLevel);
-            ((smaliFlexLexer)lexer).setSourceFile(smaliFile);
-            CommonTokenStream tokens = new CommonTokenStream((TokenSource)lexer);
+            ((smaliFlexLexer) lexer).setSourceFile(smaliFile);
+            CommonTokenStream tokens = new CommonTokenStream((TokenSource) lexer);
 
             if (options.printTokens) {
                 tokens.getTokens();
 
-                for (int i=0; i<tokens.size(); i++) {
+                for (int i = 0; i < tokens.size(); i++) {
                     Token token = tokens.get(i);
                     if (token.getChannel() == smaliParser.HIDDEN) {
                         continue;
@@ -128,5 +100,38 @@ private boolean process(File smali){
                 fis.close();
             }
         }
+    }
+
+    @Override
+    protected void onPostExecute(Boolean result) {
+        super.onPostExecute(result);
+        editorActivity.openJavaText(javaCode, FileUtil.getNameVithoutExt(smali));
+        //dialog.hideProgress();
+        if (!result)
+            UIUtils.toast(App.getContext(), R.string.toast_error_import_framework_failed);
+
+    }
+
+    @Override
+    protected Boolean doInBackground(File... files) {
+        boolean success = true;
+        for (File file : files) {
+            if (!process(file))
+                success = false;
+        }
+        return success;
+    }
+
+    private boolean process(File smali) {
+        try {
+            this.smali = smali;
+           // DexBuilder dexBuilder = new DexBuilder(Opcodes.getDefault());
+          //  assembleSmaliFile(smali, dexBuilder, new SmaliOptions());
+            javaCode = Smali2Java.translate(smali);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

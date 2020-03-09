@@ -2,12 +2,12 @@ package com.mrikso.apkrepacker.fragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.core.text.TextUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,9 +25,10 @@ import com.github.clans.fab.FloatingActionMenu;
 import com.jecelyin.common.utils.DLog;
 import com.jecelyin.common.utils.StringUtils;
 import com.jecelyin.common.utils.UIUtils;
-import com.jecelyin.editor.v2.ui.activities.MainActivity;
+
 import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
+import com.mrikso.apkrepacker.activity.CodeEditorActivity;
 import com.mrikso.apkrepacker.filepicker.FilePickerDialog;
 import com.mrikso.apkrepacker.fragment.dialogs.FileOptionsDialogFragment;
 import com.mrikso.apkrepacker.ui.filelist.FileAdapter;
@@ -375,7 +376,7 @@ public class FilesFragment extends Fragment implements FileOptionsDialogFragment
                                     .addToBackStack(null)
                                     .commit();
                         } else {
-                            Intent intent = new Intent(getActivity(), MainActivity.class);
+                            Intent intent = new Intent(getActivity(), CodeEditorActivity.class);
                             intent.putExtra("filePath", file.getAbsolutePath());
                             startActivity(intent);
                         }

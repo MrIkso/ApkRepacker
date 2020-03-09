@@ -23,17 +23,17 @@
 package org.gjt.sp.jedit.syntax;
 
 
+import android.content.Context;
 import android.util.Log;
 
 import com.jecelyin.common.utils.DLog;
-import com.mrikso.apkrepacker.App;
 
 import org.gjt.sp.jedit.Mode;
+import org.gjt.sp.jedit.util.XMLUtilities;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
 
-import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Stack;
 import java.util.Vector;
@@ -48,6 +48,7 @@ import java.util.regex.PatternSyntaxException;
  */
 public abstract class XModeHandler extends DefaultHandler {
 
+    private static final String TAG = "XModeHandler";
     /**
      * The token marker cannot be null.
      */
@@ -62,32 +63,40 @@ public abstract class XModeHandler extends DefaultHandler {
     private String propValue;
     private Hashtable<String, String> props;
     private Hashtable<String, String> modeProps;
-
     private ParserRuleSet rules;
-
     /**
      * A list of modes to be reloaded at the end, loaded through DELEGATEs
-     *
-     * @see http://sourceforge.net/tracker/index.php?func=detail&aid=1742250&group_id=588&atid=100588
+     * <p>
+     * {see https://sourceforge.net/tracker/index.php?func=detail&aid=1742250&group_id=588&atid=100588}
      */
     private Vector<Mode> reloadModes;
+    private Context context;
 
-
-    public XModeHandler(String modeName) {
+    public XModeHandler(String modeName, Context context) {
         this.modeName = modeName;
         marker = new TokenMarker();
         marker.addRuleSet(new ParserRuleSet(modeName, "MAIN"));
         stateStack = new Stack<TagDecl>();
+        this.context = context;
     }
 
+    public Context getContext() {
+        return context;
+    }
 
     public InputSource resolveEntity(String publicId, String systemId) {
 //        return XMLUtilities.findEntity(systemId, "xmode.dtd", XModeHandler.class);
-        try {
-            return new InputSource(App.getContext().getAssets().open("xmode.dtd"));
-        } catch (IOException e) {
-            e.printStackTrace();
+        String test = "xmode.dtd";
+        if (systemId != null && systemId.endsWith(test)) {
+            try {
+                return new InputSource(getContext().getAssets().open("xmode.dtd"));
+            } catch (Exception e) {
+                DLog.log(Log.ERROR, XMLUtilities.class,
+                        "Error while opening " + test + ':');
+                DLog.log(Log.ERROR, XMLUtilities.class, e);
+            }
         }
+
         return null;
     }
 
@@ -343,7 +352,7 @@ public abstract class XModeHandler extends DefaultHandler {
         }
         for (Mode mode : reloadModes) {
             mode.setTokenMarker(null);
-            mode.loadIfNecessary();
+            mode.loadIfNecessary(context);
         }
     }
 
@@ -390,7 +399,6 @@ public abstract class XModeHandler extends DefaultHandler {
      */
     protected abstract TokenMarker getTokenMarker(String mode);
 
-
     private void addKeyword(String k, byte id) {
         if (keywords == null) return;
         keywords.add(k, id);
@@ -415,7 +423,6 @@ public abstract class XModeHandler extends DefaultHandler {
         return stateStack.pop();
     }
 
-
     /**
      * Finds the first element whose tag matches 'tagName',
      * searching backwards in the stack.
@@ -428,7 +435,6 @@ public abstract class XModeHandler extends DefaultHandler {
         }
         return null;
     }
-
 
     /**
      * Hold info about what tag was read and what attributes were
@@ -526,6 +532,7 @@ public abstract class XModeHandler extends DefaultHandler {
                 try {
                     termChar = Integer.parseInt(tmp);
                 } catch (NumberFormatException e) {
+                    if (DLog.DEBUG) DLog.e(TAG, "TagDecl: ", e);
                     error("termchar-invalid", tmp);
                     termChar = -1;
                 }

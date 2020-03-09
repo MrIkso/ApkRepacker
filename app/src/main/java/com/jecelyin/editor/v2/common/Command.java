@@ -24,8 +24,8 @@ import android.os.Bundle;
  * @author Jecelyin Peng <jecelyin@gmail.com>
  */
 public class Command {
-    public CommandEnum what;
-    public Bundle args = new Bundle();
+    public final Bundle args = new Bundle();
+    public final CommandEnum what;
     public Object object;
 
     public Command(CommandEnum what) {
@@ -46,20 +46,22 @@ public class Command {
         PASTE,
         SELECT_ALL,
         DUPLICATION,
-        CONVERT_WRAP_CHAR,
-        GOTO_LINE,
+        GOTO_INDEX,
         FIND,
         GOTO_TOP,
         GOTO_END,
-        BACK,
-        FORWARD,
         DOC_INFO,
         READONLY_MODE,
         HIGHLIGHT,
+        COMMENT,
         INSERT_TEXT,
         RELOAD_WITH_ENCODING,
-        FULL_SCREEN,
-        THEME,
-      //  HIDE_SYMBOL_PANEL
+        REQUEST_FOCUS,
+        HIGHLIGHT_ERROR,
+        SHARE_CODE,
+        FORMAT_SOURCE,
+        CLEAR_ERROR,
+        CLEAR_WARNING,
+        REFRESH_THEME
     }
 }

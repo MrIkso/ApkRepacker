@@ -5,14 +5,14 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.Editable;
 
+import com.duy.ide.editor.editor.R;
+import com.duy.ide.editor.view.IEditAreaView;
 import com.jecelyin.common.task.JecAsyncTask;
 import com.jecelyin.common.task.TaskListener;
 import com.jecelyin.common.task.TaskResult;
 import com.jecelyin.common.utils.DLog;
 import com.jecelyin.common.utils.UIUtils;
 import com.jecelyin.editor.v2.io.FileEncodingDetector;
-import com.mrikso.apkrepacker.App;
-import com.mrikso.apkrepacker.R;
 
 import org.apache.commons.io.FileUtils;
 
@@ -72,7 +72,7 @@ public class ExtGrep implements Parcelable {
     private Pattern grepPattern;
     private String regex;
     private boolean useRegex;
-     ArrayList<String> mExtensions = new ArrayList<>();
+    ArrayList<String> mExtensions = new ArrayList<>();
 
     public ExtGrep() {
     }
@@ -228,7 +228,7 @@ public class ExtGrep implements Parcelable {
         Result result = new Result();
         result.file = file;
         //не обзезать найденую строку
-     //   result.line = line;//.substring((int) start, (int) end);
+        //   result.line = line;//.substring((int) start, (int) end);
         result.line = line.substring((int) start, (int) end);//строка будет обрезаться
         result.lineNumber = lineNumber;
         result.startOffset = startOffset;
@@ -366,8 +366,8 @@ public class ExtGrep implements Parcelable {
         return null;
     }
 
-    public void replaceAll(Editable text, String replaceText) {
-        Matcher m = grepPattern.matcher(text);
+    public void replaceAll(IEditAreaView text, String replaceText) {
+        Matcher m = grepPattern.matcher(text.getEditableText());
         ArrayList<Integer> array = new ArrayList<>();
         // 从头开始搜索获取所有位置
         while (m.find()) {
@@ -376,15 +376,15 @@ public class ExtGrep implements Parcelable {
         }
         int size = array.size();
         if (size == 0) {
-            UIUtils.toast(App.getContext(), App.getContext().getResources().getQuantityString(R.plurals.x_text_replaced, 0));
+            UIUtils.toast(text.getContext(), text.getContext().getResources().getQuantityString(R.plurals.x_text_replaced, 0));
             return;
         }
         int count = 0;
         for (int i = size - 2; i >= 0; i -= 2) {
             count++;
-            text.replace(array.get(i), array.get(i + 1), replaceText);
+            text.getEditableText().replace(array.get(i), array.get(i + 1), replaceText);
         }
-        UIUtils.toast(App.getContext(), App.getContext().getResources().getQuantityString(R.plurals.x_text_replaced, count, count));
+        UIUtils.toast(text.getContext(), text.getContext().getResources().getQuantityString(R.plurals.x_text_replaced, count, count));
     }
 
     private List<Result> grepFile(final File file) {
@@ -571,12 +571,12 @@ public class ExtGrep implements Parcelable {
             }
         }.setTaskListener(listener).execute();
     }
-public  List<Result> execute(){
-    compilePattern();
-    verifyFileList();
-    List<Result> results = grepFiles();
-    return  results;
-}
+    public  List<Result> execute(){
+        compilePattern();
+        verifyFileList();
+        List<Result> results = grepFiles();
+        return  results;
+    }
     @Override
     public int describeContents() {
         return 0;

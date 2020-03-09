@@ -1,31 +1,26 @@
 /*
- * ModeProvider.java - An edit mode provider.
- * :tabSize=4:indentSize=4:noTabs=false:
- * :folding=explicit:collapseFolds=1:
+ * Copyright 2018 Mr Duy
  *
- * Copyright (C) 2003 Slava Pestov
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or any later version.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.gjt.sp.jedit.syntax;
 
 
-import android.util.Log;
+import android.content.Context;
+import androidx.annotation.Nullable;
 
-import com.duy.text.editor.utils.IStreamProvider;
-import com.duy.text.editor.utils.StreamProviderFactory;
+import com.duy.ide.file.model.AssetFile;
+import com.duy.ide.file.model.IFileObject;
 import com.jecelyin.common.utils.DLog;
 
 import org.gjt.sp.jedit.Catalog;
@@ -42,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -64,6 +60,10 @@ public class ModeProvider {
         modes = Catalog.modes;
     }
 
+    public static ModeProvider getInstance() {
+        return instance;
+    }
+
     public void removeAll() {
         modes.clear();
     }
@@ -74,8 +74,18 @@ public class ModeProvider {
      * @param name The edit mode
      * @since jEdit 4.3pre10
      */
+    @Nullable
     public Mode getMode(String name) {
-        return modes.get(name);
+        Mode mode = modes.get(name);
+        if (mode != null) {
+            return mode;
+        }
+        for (Map.Entry<String, Mode> entry : modes.entrySet()) {
+            if (entry.getKey().equalsIgnoreCase(name)) {
+                return entry.getValue();
+            }
+        }
+        return null;
     }
 
     /**
@@ -99,7 +109,7 @@ public class ModeProvider {
      * @return the edit mode, or null if no mode match the file
      * @since jEdit 4.5pre1
      */
-    public Mode getModeForFile(String filepath, String filename, String firstLine) {
+    public Mode getModeForFile(@Nullable String filepath, @Nullable String filename, String firstLine) {
         if (filepath != null && filepath.endsWith(".gz"))
             filepath = filepath.substring(0, filepath.length() - 3);
         if (filename != null && filename.endsWith(".gz"))
@@ -177,11 +187,7 @@ public class ModeProvider {
         modes.put(name, mode);
     }
 
-    public void loadMode(Mode mode, XModeHandler xmh, IStreamProvider provider) {
-        String fileName = mode.getFile();
-
-        DLog.log(Log.DEBUG, this, "Loading edit mode " + fileName);
-
+    public void loadMode(Mode mode, XModeHandler handler, IFileObject file) {
         XMLReader parser = null;
         try {
             SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
@@ -193,34 +199,23 @@ public class ModeProvider {
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         }
-        mode.setTokenMarker(xmh.getTokenMarker());
+        mode.setTokenMarker(handler.getTokenMarker());
 
-        InputStream grammar;
-
+        InputStream grammar = null;
         try {
-            grammar = new BufferedInputStream(provider.getFileInputStream(fileName));
-        } catch (IOException e1) {
-            if (DLog.DEBUG) DLog.w(TAG, "loadMode: ", e1);
-            InputStream resource;
-            try {
-                resource = provider.getAssetInputStream("syntax/" + fileName);
-            } catch (IOException e) {
-                if (DLog.DEBUG) DLog.e(TAG, "loadMode: ", e);
-                return;
-            }
-            grammar = new BufferedInputStream(resource);
+            grammar = new BufferedInputStream(file.openInputStream());
+        } catch (IOException ignored) {
         }
 
         try {
-            InputSource isrc = new InputSource(grammar);
+            InputSource isrc = new InputSource(
+                    new BufferedInputStream(file.openInputStream()));
             isrc.setSystemId("jedit.jar");
-            parser.setContentHandler(xmh);
-            parser.setDTDHandler(xmh);
-            parser.setEntityResolver(xmh);
-            parser.setErrorHandler(xmh);
+            parser.setContentHandler(handler);
+            parser.setDTDHandler(handler);
+            parser.setEntityResolver(handler);
+            parser.setErrorHandler(handler);
             parser.parse(isrc);
-
-            mode.setProperties(xmh.getModeProperties());
         } catch (Throwable e) {
             if (DLog.DEBUG) DLog.e(TAG, "loadMode: ", e);
         } finally {
@@ -228,8 +223,8 @@ public class ModeProvider {
         }
     }
 
-    public void loadMode(Mode mode) {
-        XModeHandler xmh = new XModeHandler(mode.getName()) {
+    public void loadMode(Mode mode, Context context) {
+        XModeHandler handler = new XModeHandler(mode.getName(), context) {
             @Override
             public void error(String what, Object subst) {
                 if (DLog.DEBUG) DLog.e(TAG, "error: ", subst);
@@ -241,14 +236,12 @@ public class ModeProvider {
                 if (mode == null)
                     return null;
                 else
-                    return mode.getTokenMarker();
+                    return mode.getTokenMarker(getContext());
             }
         };
-        loadMode(mode, xmh, StreamProviderFactory.provider());
-    }
 
-    protected void error(String file, Throwable e) {
-        DLog.log(Log.ERROR, this, e);
+        AssetFile file = new AssetFile(context.getAssets(), "syntax/" + mode.getFile());
+        loadMode(mode, handler, file);
     }
 
 }
