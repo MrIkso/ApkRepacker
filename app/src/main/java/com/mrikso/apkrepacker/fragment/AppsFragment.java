@@ -159,11 +159,11 @@ public class AppsFragment extends Fragment implements AppsAdapter.OnItemInteract
         Preference preference = Preference.getInstance(context);
         switch (item) {
             case R.id.decompile_app:
-                File app = FileUtil.createBackupFile(current, preference.getDecodingPath());
+              //  File app = FileUtil.createBackupFile(current, preference.getDecodingPath());
                 try {
                     ApplicationInfo applicationInfo = context.getPackageManager().getApplicationInfo(current.packageName, 0);
-                    FileUtils.copyFile(new File(applicationInfo.publicSourceDir), app);
-                    DecompileFragment decompileFragment =  DecompileFragment.newInstance(current.label, app.getAbsolutePath(), true);
+                   // FileUtils.copyFile(new File(applicationInfo.publicSourceDir), app);
+                    DecompileFragment decompileFragment =  DecompileFragment.newInstance(current.label, applicationInfo.publicSourceDir, true);
                     ((FragmentActivity)context).getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(android.R.id.content, decompileFragment).commit();
                 } catch (Exception e) {
                     UIUtils.toast(App.getContext(), R.string.toast_error_in_decompile_installed_app);
@@ -172,11 +172,11 @@ public class AppsFragment extends Fragment implements AppsAdapter.OnItemInteract
                 }
                 break;
             case R.id.simple_edit_apk:
-                File selectedApk = FileUtil.createBackupFile(current, preference.getDecodingPath());
+              //  File selectedApk = FileUtil.createBackupFile(current, preference.getDecodingPath());
                 try {
                     ApplicationInfo applicationInfo = context.getPackageManager().getApplicationInfo(current.packageName, 0);
-                    FileUtils.copyFile(new File(applicationInfo.publicSourceDir), selectedApk);
-                    SimpleEditorFragment simpleEditorFragment = new SimpleEditorFragment(selectedApk);
+                  //  FileUtils.copyFile(new File(applicationInfo.publicSourceDir), selectedApk);
+                    SimpleEditorFragment simpleEditorFragment = SimpleEditorFragment.newInstance(applicationInfo.publicSourceDir);
                     ((FragmentActivity) context).getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(android.R.id.content, simpleEditorFragment).commit();
                 }catch (Exception e){
                     UIUtils.toast(App.getContext(), R.string.toast_error_in_simple_edit_installed_app);

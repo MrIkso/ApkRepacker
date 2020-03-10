@@ -245,7 +245,7 @@ public class SignUtil {
         ApkSigner.Builder apksigner = new ApkSigner.Builder(ImmutableList.of(signerConfig));
         apksigner.setInputApk(in);
         apksigner.setOutputApk(out);
-        apksigner.setCreatedBy("ApkRepacker by Mr Ikso");
+        apksigner.setCreatedBy("Apk Repacker by Mr Ikso");
         apksigner.setMinSdkVersion(minSdk);
         apksigner.setV1SigningEnabled(true);
         apksigner.setV2SigningEnabled(preference.isV2SignatureEnabled());

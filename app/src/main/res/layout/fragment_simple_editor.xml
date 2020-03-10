@@ -160,6 +160,7 @@
                         android:id="@+id/app_minimum_sdk"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:maxEms="30"
                         android:inputType="number" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -175,6 +176,7 @@
                         android:id="@+id/app_target_sdk"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:maxEms="30"
                         android:inputType="number" />
                 </com.google.android.material.textfield.TextInputLayout>
 

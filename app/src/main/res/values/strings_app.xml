@@ -149,6 +149,7 @@
     <string name="toast_error_pasring">Error while parsing xml</string>
     <string name="toast_error_empty_find">Search request is empty!</string>
     <string name="toast_error_not_selectable">Can`t select</string>
+    <string name="build_run_title">Building app</string>
     <string name="selected">%d selected</string>
     <string name="search_for">Search for %s</string>
     <string name="sort_by">Sort by</string>
@@ -211,4 +212,6 @@
     <string name="class_name">Class name</string>
     <string name="editor_theme">Editor theme</string>
     <string name="selected_editor_theme">Selected %s. Restart app to apply theme.</string>
+    <string name="toast_apk_succes_edited" type="id">Apk successful builded!</string>
+    <string name="toast_apk_falied_edited" type="id">Apk falied edited!</string>
 </resources>

@@ -521,7 +521,7 @@ public class FileManagerActivity extends BaseActivity implements ApkOptionsDialo
                 getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(android.R.id.content, decompileFragment).commit();
                 break;
             case R.id.simple_edit_apk:
-                SimpleEditorFragment simpleEditorFragment = new SimpleEditorFragment(selectedApk);
+                SimpleEditorFragment simpleEditorFragment =  SimpleEditorFragment.newInstance(selectedApk.getAbsolutePath());
                 getSupportFragmentManager().beginTransaction().addToBackStack(null).add(android.R.id.content, simpleEditorFragment).commit();
                 break;
             case R.id.install_app:

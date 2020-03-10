@@ -1,28 +1,37 @@
 package com.mrikso.apkrepacker.utils;
 
-public class QickEditParams {
-    static String oldpackage, newpackage;
-    static String oldname, newname;
-    static String installLoacation;
-    static String buildCode, buildNumber;
-    static int minimumSdk, targetSdk;
-    static boolean inRes, inDex;
+import android.graphics.Bitmap;
 
-    public static void setOldPackage(String old) {
-        oldpackage = old;
-    }
+public class QickEditParams {
+    private static String oldpackage, newpackage;
+    private static String oldname, newname;
+    private static int installLocation;
+    private static String buildCode, buildNumber;
+    private static int minimumSdk, targetSdk;
+    private static boolean inRes, inDex;
+    private static Bitmap bitmap;
+    private static String iconName;
 
     public static void setOldName(String old) {
         oldname = old;
     }
 
-    public static void setInstallLocation(String location) {
-        installLoacation = location;
+    public static void setOldPackage(String old) {
+        oldpackage = old;
+    }
+
+    public static void setInstallLocation(int location) {
+        installLocation = location;
     }
 
     ////getters
-    public static String getInstallLoacation() {
-        return installLoacation;
+
+    public static String getOldPackage() {
+        return oldpackage;
+    }
+
+    public static int getInstallLoacation() {
+        return installLocation;
     }
 
     public static String getVersionCode() {
@@ -87,5 +96,26 @@ public class QickEditParams {
 
     public static void setInDex(boolean dex) {
         inDex = dex;
+    }
+
+    public static void setBitmap(Bitmap bit)
+    {
+        bitmap = bit;
+    }
+    public static void setIconName(String str)
+    {
+        if (!str.equals(""))
+            iconName = str;
+    }
+
+    public static Bitmap getBitmap()
+    {
+       return bitmap;
+    }
+    public static String getIconName()
+    {
+        if (!iconName.equals(""))
+          return iconName;
+        return null;
     }
 }
