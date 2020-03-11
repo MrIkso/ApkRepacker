@@ -14,12 +14,14 @@
         <item>0</item>
         <item>1</item>
         <item>2</item>
+        <item>3</item>
     </string-array>
 
     <string-array name="decoding_names">
         <item>@string/decompile_all</item>
         <item>@string/decompile_res</item>
         <item>@string/decompile_dex</item>
+        <item>@string/show_decompile_option_dialog</item>
     </string-array>
 
     <string-array name="install_location">

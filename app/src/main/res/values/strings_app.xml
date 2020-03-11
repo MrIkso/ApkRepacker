@@ -214,4 +214,5 @@
     <string name="selected_editor_theme">Selected %s. Restart app to apply theme.</string>
     <string name="toast_apk_succes_edited" type="id">Apk successful builded!</string>
     <string name="toast_apk_falied_edited" type="id">Apk falied edited!</string>
+    <string name="show_decompile_option_dialog">Show dialog for choosing decompilation mode</string>
 </resources>

@@ -32,10 +32,12 @@ import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.fragment.DecompileFragment;
 import com.mrikso.apkrepacker.fragment.SimpleEditorFragment;
 import com.mrikso.apkrepacker.fragment.dialogs.ApkOptionsDialogFragment;
+import com.mrikso.apkrepacker.fragment.dialogs.DecompileOptionsDialogFragment;
 import com.mrikso.apkrepacker.fragment.dialogs.ProgressDialogFragment;
 import com.mrikso.apkrepacker.recycler.Adapter;
 import com.mrikso.apkrepacker.task.ImportFrameworkTask;
 import com.mrikso.apkrepacker.task.SignTask;
+import com.mrikso.apkrepacker.ui.prererence.Preference;
 import com.mrikso.apkrepacker.utils.AppUtils;
 import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.PreferenceUtils;
@@ -58,7 +60,7 @@ import static com.mrikso.apkrepacker.utils.StringUtils.EXTRA_NAME;
 import static com.mrikso.apkrepacker.utils.StringUtils.SAVED_DIRECTORY;
 import static com.mrikso.apkrepacker.utils.StringUtils.SAVED_SELECTION;
 
-public class FileManagerActivity extends BaseActivity implements ApkOptionsDialogFragment.ItemClickListener {
+public class FileManagerActivity extends BaseActivity implements ApkOptionsDialogFragment.ItemClickListener, DecompileOptionsDialogFragment.ItemClickListener {
 
     private static File selectedApk;
     public File signedApk;
@@ -73,6 +75,7 @@ public class FileManagerActivity extends BaseActivity implements ApkOptionsDialo
     private boolean flag = false;
     private boolean signedMode = false;
     private File sdCard;
+    private DecompileFragment decompileFragment;
     //----------------------------------------------------------------------------------------------
 
     @Override
@@ -517,8 +520,15 @@ public class FileManagerActivity extends BaseActivity implements ApkOptionsDialo
     public void onApkItemClick(Integer item) {
         switch (item) {
             case R.id.decompile_app:
-                DecompileFragment decompileFragment = DecompileFragment.newInstance(selectedApk.getAbsolutePath());
-                getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(android.R.id.content, decompileFragment).commit();
+                Preference preference = Preference.getInstance(this);
+                int mode = preference.getDecodingMode();
+                if(mode == 3){
+                    DecompileOptionsDialogFragment decompileOptionsDialogFragment = DecompileOptionsDialogFragment.newInstance();
+                    decompileOptionsDialogFragment.show(getSupportFragmentManager(), DecompileOptionsDialogFragment.TAG);
+                }else {
+                    decompileFragment = DecompileFragment.newInstance(selectedApk.getAbsolutePath());
+                    getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(android.R.id.content, decompileFragment).commit();
+                }
                 break;
             case R.id.simple_edit_apk:
                 SimpleEditorFragment simpleEditorFragment =  SimpleEditorFragment.newInstance(selectedApk.getAbsolutePath());
@@ -545,6 +555,24 @@ public class FileManagerActivity extends BaseActivity implements ApkOptionsDialo
                     showMessage(this.getResources().getString(R.string.error));
                     e.printStackTrace();
                 }
+                break;
+        }
+    }
+
+    @Override
+    public void onModeItemClick(Integer item) {
+        switch (item){
+            case R.id.decompile_all:
+                decompileFragment = DecompileFragment.newInstance(selectedApk.getAbsolutePath(), 3);
+                getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(android.R.id.content, decompileFragment).commit();
+                break;
+            case R.id.decompile_all_res:
+                decompileFragment = DecompileFragment.newInstance(selectedApk.getAbsolutePath(), 2);
+                getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(android.R.id.content, decompileFragment).commit();
+                break;
+            case R.id.decompile_all_dex:
+                decompileFragment = DecompileFragment.newInstance(selectedApk.getAbsolutePath(), 1);
+                getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(android.R.id.content, decompileFragment).commit();
                 break;
         }
     }

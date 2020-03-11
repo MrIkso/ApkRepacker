@@ -42,6 +42,7 @@ public class DecompileFragment extends Fragment {
     private ProgressBar mProgress;
     private TextView mTextProgress;
     private AppCompatImageView mImageResult;
+    private int mMode;
 
     public DecompileFragment() {
         // Required empty public constructor
@@ -61,6 +62,14 @@ public class DecompileFragment extends Fragment {
         args.putString("name", name);
         args.putString("selected", selected);
         args.putBoolean("mode", f);
+        fragment.setArguments(args);
+        return fragment;
+    }
+    public static DecompileFragment newInstance(String selected, int mode) {
+        DecompileFragment fragment = new DecompileFragment();
+        Bundle args = new Bundle();
+        args.putString("selected", selected);
+        args.putInt("mode", mode);
         fragment.setArguments(args);
         return fragment;
     }

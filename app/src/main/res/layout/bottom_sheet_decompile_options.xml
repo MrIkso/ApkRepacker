@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="8dp">
+    <TextView
+        android:id="@+id/decompile_all"
+        android:layout_marginTop="8dp"
+        android:drawableStart="@drawable/ic_decompile"
+        android:text="@string/decompile_all"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/ActionItem" />
+    <TextView
+        android:id="@+id/decompile_all_res"
+        android:drawableStart="@drawable/ic_decompile"
+        android:text="@string/decompile_res"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/decompile_all"
+        style="@style/ActionItem" />
+    <TextView
+        android:id="@+id/decompile_all_dex"
+        android:drawableStart="@drawable/ic_decompile"
+        android:text="@string/decompile_dex"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/decompile_all_res"
+        style="@style/ActionItem" />
+</androidx.constraintlayout.widget.ConstraintLayout>
