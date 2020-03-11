@@ -23,21 +23,16 @@ import com.jecelyin.common.utils.UIUtils;
 import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.fragment.dialogs.AppsOptionsItemDialogFragment;
-import com.mrikso.apkrepacker.task.DecodeTask;
+import com.mrikso.apkrepacker.fragment.dialogs.DecompileOptionsDialogFragment;
 import com.mrikso.apkrepacker.ui.appslist.AppsAdapter;
 import com.mrikso.apkrepacker.ui.appslist.AppsViewModel;
 import com.mrikso.apkrepacker.ui.prererence.Preference;
 import com.mrikso.apkrepacker.utils.AppUtils;
-import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.PackageMeta;
-
-import org.apache.commons.io.FileUtils;
-
-import java.io.File;
 
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
 
-public class AppsFragment extends Fragment implements AppsAdapter.OnItemInteractionListener, AppsOptionsItemDialogFragment.ItemClickListener {
+public class AppsFragment extends Fragment implements AppsAdapter.OnItemInteractionListener, AppsOptionsItemDialogFragment.ItemClickListener, DecompileOptionsDialogFragment.ItemClickListener {
 
     private static final String TAG = "AppsFragment";
     private RecyclerView appsList;
@@ -48,6 +43,9 @@ public class AppsFragment extends Fragment implements AppsAdapter.OnItemInteract
     private Chip mChipFilterIncludeSystemApps;
     private Context context;
     private PackageMeta current;
+    private DecompileFragment decompileFragment;
+    private ApplicationInfo applicationInfo;
+    private String mAppName;
 
     public AppsFragment() {
         // Required empty public constructor
@@ -159,12 +157,19 @@ public class AppsFragment extends Fragment implements AppsAdapter.OnItemInteract
         Preference preference = Preference.getInstance(context);
         switch (item) {
             case R.id.decompile_app:
-              //  File app = FileUtil.createBackupFile(current, preference.getDecodingPath());
+                //  File app = FileUtil.createBackupFile(current, preference.getDecodingPath());
                 try {
-                    ApplicationInfo applicationInfo = context.getPackageManager().getApplicationInfo(current.packageName, 0);
-                   // FileUtils.copyFile(new File(applicationInfo.publicSourceDir), app);
-                    DecompileFragment decompileFragment =  DecompileFragment.newInstance(current.label, applicationInfo.publicSourceDir, true);
-                    ((FragmentActivity)context).getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(android.R.id.content, decompileFragment).commit();
+                     applicationInfo = context.getPackageManager().getApplicationInfo(current.packageName, 0);
+                    mAppName = current.packageName;
+                    // FileUtils.copyFile(new File(applicationInfo.publicSourceDir), app);
+                    int mode = preference.getDecodingMode();
+                    if (mode == 3) {
+                        DecompileOptionsDialogFragment decompileOptionsDialogFragment = DecompileOptionsDialogFragment.newInstance();
+                        decompileOptionsDialogFragment.show(getChildFragmentManager(), DecompileOptionsDialogFragment.TAG);
+                    } else {
+                        decompileFragment = DecompileFragment.newInstance(current.label, applicationInfo.publicSourceDir, true);
+                        ((FragmentActivity) context).getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(android.R.id.content, decompileFragment).commit();
+                    }
                 } catch (Exception e) {
                     UIUtils.toast(App.getContext(), R.string.toast_error_in_decompile_installed_app);
                     Log.e(TAG, "Error in decompile installed app");
@@ -172,13 +177,13 @@ public class AppsFragment extends Fragment implements AppsAdapter.OnItemInteract
                 }
                 break;
             case R.id.simple_edit_apk:
-              //  File selectedApk = FileUtil.createBackupFile(current, preference.getDecodingPath());
+                //  File selectedApk = FileUtil.createBackupFile(current, preference.getDecodingPath());
                 try {
                     ApplicationInfo applicationInfo = context.getPackageManager().getApplicationInfo(current.packageName, 0);
-                  //  FileUtils.copyFile(new File(applicationInfo.publicSourceDir), selectedApk);
+                    //  FileUtils.copyFile(new File(applicationInfo.publicSourceDir), selectedApk);
                     SimpleEditorFragment simpleEditorFragment = SimpleEditorFragment.newInstance(applicationInfo.publicSourceDir);
                     ((FragmentActivity) context).getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(android.R.id.content, simpleEditorFragment).commit();
-                }catch (Exception e){
+                } catch (Exception e) {
                     UIUtils.toast(App.getContext(), R.string.toast_error_in_simple_edit_installed_app);
                     Log.e(TAG, "Error in simple edit installed app");
                     e.printStackTrace();
@@ -189,6 +194,24 @@ public class AppsFragment extends Fragment implements AppsAdapter.OnItemInteract
                 break;
             case R.id.goto_settings_app:
                 AppUtils.gotoApplicationSettings(context, current.packageName);
+                break;
+        }
+    }
+
+    @Override
+    public void onModeItemClick(Integer item) {
+        switch (item) {
+            case R.id.decompile_all:
+                decompileFragment = DecompileFragment.newInstance(mAppName,applicationInfo.publicSourceDir, true, 3);
+                ((FragmentActivity) context).getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(android.R.id.content, decompileFragment).commit();
+                break;
+            case R.id.decompile_all_res:
+                decompileFragment = DecompileFragment.newInstance(mAppName,applicationInfo.publicSourceDir, true, 2);
+                ((FragmentActivity) context).getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(android.R.id.content, decompileFragment).commit();
+                break;
+            case R.id.decompile_all_dex:
+                decompileFragment = DecompileFragment.newInstance(mAppName,applicationInfo.publicSourceDir, true, 1);
+                ((FragmentActivity) context).getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(android.R.id.content, decompileFragment).commit();
                 break;
         }
     }

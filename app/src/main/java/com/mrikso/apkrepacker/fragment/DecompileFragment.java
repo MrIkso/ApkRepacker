@@ -42,7 +42,7 @@ public class DecompileFragment extends Fragment {
     private ProgressBar mProgress;
     private TextView mTextProgress;
     private AppCompatImageView mImageResult;
-    private int mMode;
+    private int mMode = -1;
 
     public DecompileFragment() {
         // Required empty public constructor
@@ -54,6 +54,7 @@ public class DecompileFragment extends Fragment {
         selectedApk = new File(getArguments().getString("selected"));
         nameApk = getArguments().getString("name");
         apkMode = getArguments().getBoolean("mode");
+        mMode = getArguments().getInt("decMode");
         setRetainInstance(true);
     }
     public static DecompileFragment newInstance(String name, String selected, boolean f) {
@@ -65,11 +66,21 @@ public class DecompileFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+    public static DecompileFragment newInstance(String name, String selected, boolean f, int mode) {
+        DecompileFragment fragment = new DecompileFragment();
+        Bundle args = new Bundle();
+        args.putString("name", name);
+        args.putString("selected", selected);
+        args.putBoolean("mode", f);
+        args.putInt("decMode", mode);
+        fragment.setArguments(args);
+        return fragment;
+    }
     public static DecompileFragment newInstance(String selected, int mode) {
         DecompileFragment fragment = new DecompileFragment();
         Bundle args = new Bundle();
         args.putString("selected", selected);
-        args.putInt("mode", mode);
+        args.putInt("decMode", mode);
         fragment.setArguments(args);
         return fragment;
     }
@@ -113,28 +124,56 @@ public class DecompileFragment extends Fragment {
         listView.setDividerHeight(0);
         Preference preference = Preference.getInstance(mContext);
         if (!apkMode) {
-            switch (preference.getDecodingMode()) {
-                case 0://Decompile all
-                    new DecodeTask(mContext, 3, selectedApk.getName(), this).execute(selectedApk);
-                    break;
-                case 1://Decompile only res
-                    new DecodeTask(mContext, 2, selectedApk.getName(), this).execute(selectedApk);
-                    break;
-                case 2://Decompile dex
-                    new DecodeTask(mContext, 1, selectedApk.getName(), this).execute(selectedApk);
-                    break;
+            if(mMode!=-1){
+                switch (mMode) {
+                    case 1://Decompile dex
+                        new DecodeTask(mContext, 1, selectedApk.getName(), this).execute(selectedApk);
+                        break;
+                    case 2://Decompile only res
+                        new DecodeTask(mContext, 2, selectedApk.getName(), this).execute(selectedApk);
+                        break;
+                    case 3://Decompile all
+                        new DecodeTask(mContext, 3, selectedApk.getName(), this).execute(selectedApk);
+                        break;
+                }
+            }else {
+                switch (preference.getDecodingMode()) {
+                    case 0://Decompile all
+                        new DecodeTask(mContext, 3, selectedApk.getName(), this).execute(selectedApk);
+                        break;
+                    case 1://Decompile only res
+                        new DecodeTask(mContext, 2, selectedApk.getName(), this).execute(selectedApk);
+                        break;
+                    case 2://Decompile dex
+                        new DecodeTask(mContext, 1, selectedApk.getName(), this).execute(selectedApk);
+                        break;
+                }
             }
         } else {
-            switch (preference.getDecodingMode()) {
-                case 0://Decompile all
-                    new DecodeTask(mContext, 3, nameApk, this).execute(selectedApk);
-                    break;
-                case 1://Decompile only res
-                    new DecodeTask(mContext, 2, nameApk, this).execute(selectedApk);
-                    break;
-                case 2://Decompile dex
-                    new DecodeTask(mContext, 1, nameApk, this).execute(selectedApk);
-                    break;
+            if(mMode!=-1){
+                switch (mMode) {
+                    case 1://Decompile dex
+                        new DecodeTask(mContext, 1, selectedApk.getName(), this).execute(selectedApk);
+                        break;
+                    case 2://Decompile only res
+                        new DecodeTask(mContext, 2, selectedApk.getName(), this).execute(selectedApk);
+                        break;
+                    case 3://Decompile all
+                        new DecodeTask(mContext, 3, selectedApk.getName(), this).execute(selectedApk);
+                        break;
+                }
+            }else {
+                switch (preference.getDecodingMode()) {
+                    case 0://Decompile all
+                        new DecodeTask(mContext, 3, nameApk, this).execute(selectedApk);
+                        break;
+                    case 1://Decompile only res
+                        new DecodeTask(mContext, 2, nameApk, this).execute(selectedApk);
+                        break;
+                    case 2://Decompile dex
+                        new DecodeTask(mContext, 1, nameApk, this).execute(selectedApk);
+                        break;
+                }
             }
         }
     }

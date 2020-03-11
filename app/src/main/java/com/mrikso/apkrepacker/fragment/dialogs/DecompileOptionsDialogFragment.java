@@ -41,10 +41,10 @@ public class DecompileOptionsDialogFragment extends BottomSheetDialogFragment im
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        final Fragment parent= getParentFragment();
-        if(parent!=null){
+        final Fragment parent = getParentFragment();
+        if (parent != null) {
             mListener = (ItemClickListener) parent;
-        }else{
+        } else {
             mListener = (ItemClickListener) context;
         }
     }
