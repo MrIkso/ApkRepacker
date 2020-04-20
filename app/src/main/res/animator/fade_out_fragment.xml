@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+	android:ordering="together">
+
+	<objectAnimator
+		android:interpolator="@android:anim/accelerate_decelerate_interpolator"
+		android:propertyName="z"
+		android:valueType="floatType"
+		android:valueTo="500"
+		android:valueFrom="0"
+		android:duration="1500"/>
+
+	<objectAnimator
+		android:interpolator="@android:anim/accelerate_interpolator"
+		android:propertyName="alpha"
+		android:valueType="floatType"
+		android:valueFrom="1"
+		android:valueTo="0"
+		android:duration="400"/>
+
+</set>
