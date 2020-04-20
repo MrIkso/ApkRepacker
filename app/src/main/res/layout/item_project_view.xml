@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:foreground="?attr/selectableItemBackground"
+    style="@style/Material.CardView">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:animateLayoutChanges="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/checkbox_margin">
+
+            <ImageView
+                android:id="@+id/icon_app"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/checkbox_margin"
+                tools:src="@mipmap/ic_launcher_round" />
+
+            <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_toEndOf="@id/icon_app"
+                android:layout_centerVertical="true">
+
+                <TextView
+                    android:singleLine="true"
+                    android:ellipsize="marquee"
+                    android:textColor="?attr/textColor_1"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size"
+                    android:id="@+id/app_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="@string/app_name" />
+
+                <TextView
+                    android:singleLine="true"
+                    android:ellipsize="marquee"
+                    android:textColor="?android:textColorSecondary"
+                    android:textSize="@dimen/text_size_14"
+                    android:id="@+id/app_pkg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/app_name"
+                    tools:text="com.mrikso.apkrepacker" />
+
+                <TextView
+                    android:id="@+id/app_patch"
+                    android:singleLine="true"
+                    android:ellipsize="start"
+                    android:textColor="?android:textColorSecondary"
+                    android:textSize="@dimen/text_size_14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/app_pkg"
+                    tools:text="/storage/emulated/0/ApkRepacker/projects/Apk Repacker_src" />
+
+            </LinearLayout>
+        </RelativeLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/menu_expand_container"
+            android:background="?dividerColor"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/app_pkg">
+
+            <com.google.android.material.button.MaterialButton
+                android:textSize="12.0sp"
+                android:textColor="?colorAccent"
+                android:id="@+id/action_build"
+                android:tag="binding_6"
+                android:layout_width="0.0dip"
+                android:layout_height="wrap_content"
+                android:minHeight="24.0dip"
+                android:text="@string/menu_build_app"
+                android:textAllCaps="false"
+                app:icon="@drawable/ic_build"
+                app:iconTint="?colorAccent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/action_about_project"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="?colorPrimary"
+                style="@style/MD2TextButton" />
+
+            <View
+                android:background="?colorSurface"
+                android:layout_width="1.0dip"
+                android:layout_height="0.0dip"
+                android:layout_marginTop="@dimen/main_card_margin_vertical"
+                android:layout_marginBottom="@dimen/main_card_margin_vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/action_build"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:textSize="12.0sp"
+                android:textColor="?colorAccent"
+                android:id="@+id/action_about_project"
+                android:layout_width="0.0dip"
+                android:layout_height="wrap_content"
+                android:minHeight="24.0dip"
+                android:text="@string/menu_about_project"
+                android:textAllCaps="false"
+                app:icon="@drawable/ic_info"
+                app:iconTint="?colorAccent"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/action_delete"
+                app:layout_constraintStart_toEndOf="@id/action_build"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="?colorAccent"
+                style="@style/MD2TextButton" />
+
+            <View
+                android:background="?colorSurface"
+                android:layout_width="1.0dip"
+                android:layout_height="0.0dip"
+                android:layout_marginTop="@dimen/main_card_margin_vertical"
+                android:layout_marginBottom="@dimen/main_card_margin_vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/action_about_project"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:textSize="12.0sp"
+                android:textColor="@color/red_primary_dark"
+                android:id="@+id/action_delete"
+                android:layout_width="0.0dip"
+                android:layout_height="wrap_content"
+                android:minHeight="24.0dip"
+                android:text="@string/menu_delete_project"
+                android:textAllCaps="false"
+                app:icon="@drawable/ic_delete"
+                app:iconTint="@color/red_primary_dark"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/action_about_project"
+                app:layout_constraintTop_toTopOf="parent"
+                app:rippleColor="?colorError"
+                style="@style/MD2TextButton" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

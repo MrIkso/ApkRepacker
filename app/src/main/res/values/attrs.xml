@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--ATTRS-->
+    <attr name="colorAccentLight"
+        format="color|reference" />
+    <attr name="colorSelected"
+        format="color|reference" />
+    <attr name="colorBackgroundTint"
+        format="color|reference" />
+    <attr name="colorBackgroundLeft"
+        format="color|reference" />
+    <attr name="colorBackgroundRight"
+        format="color|reference" />
+    <attr name="colorBackgroundBottomMenu"
+        format="color|reference" />
+    <attr name="colorBackgroundIcon_1"
+        format="color|reference" />
+    <attr name="colorBackgroundIcon_2"
+        format="color|reference" />
+    <attr name="colorBackgroundIcon_3"
+        format="color|reference" />
+    <attr name="textColor"
+        format="color|reference" />
+    <attr name="textColor_1"
+        format="color|reference" />
+    <attr name="cardBackground"
+        format="color|reference" />
+    <attr name="dividerColor" format="color|reference" />
+</resources>

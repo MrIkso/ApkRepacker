@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Material.CardView"
+    app:strokeWidth="0dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/decompile_all"
+            android:drawableStart="@drawable/ic_decompile"
+            android:text="@string/decompile_all"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            style="@style/ActionItem" />
+
+        <TextView
+            android:id="@+id/decompile_all_res"
+            android:drawableStart="@drawable/ic_decompile"
+            android:text="@string/decompile_res"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/decompile_all"
+            style="@style/ActionItem" />
+
+        <TextView
+            android:id="@+id/decompile_all_dex"
+            android:drawableStart="@drawable/ic_decompile"
+            android:text="@string/decompile_dex"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/decompile_all_res"
+            style="@style/ActionItem" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string name="copy">Copy</string>
+    <string name="cut">Cut</string>
+    <string name="delete">Delete</string>
+    <string name="paste">Paste</string>
+    <string name="addToDictionary">Add to dictionary</string>
+    <string name="deleteText">Delete Text</string>
+    <string name="replace">Replace</string>
+    <string name="selectAll">Select All</string>
+    <string name="find">Find</string>
+    <string name="save">Save</string>
+    <string name="undo">Undo</string>
+    <string name="redo">Redo</string>
+    <string name="duplication_line">Duplication line</string>
+    <string name="jump_to_start">Jump to start</string>
+    <string name="jump_to_end">Jump to end</string>
+    <string name="goto_line">Goto line</string>
+    <string name="highlight_language">Highlight language</string>
+    <string name="encoding">Encoding</string>
+    <string name="read_only">Read only</string>
+    <string name="hide_symbol_panel">Hide symbol panel</string>
+    <string name="other">Other</string>
+    <string name="view">View</string>
+    <string name="new_filename">untitled %d</string>
+    <string name="confirm_save">Confirm save</string>
+    <string name="confirm_save_msg">Document %s has changed，do you want to save and exit?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="cannt_access_file">Can not access file: %s</string>
+    <string name="cannt_read_file">Can not read file: %s</string>
+    <string name="ok">OK</string>
+    <string name="read_file_exception">Occurs exception when read file</string>
+    <string name="close">Close</string>
+    <string name="cancel">Cancel</string>
+    <string name="save_success">Save Success</string>
+    <string name="case_sensitive">Case sensitive</string>
+    <string name="whole_words_only">Whole words only</string>
+    <string name="regex">Regular expression</string>
+    <string name="cannot_be_empty">Can not be empty</string>
+    <string name="find_not_found">Not found</string>
+    <string name="searching">Search…</string>
+    <string name="select_lang_to_highlight">Select a language to highlight</string>
+    <string name="more_menu">More menu</string>
+    <string name="reopen_with_encoding">Reopen with encoding</string>
+    <string name="document_changed">Document changed</string>
+    <string name="give_up_document_changed_message">Document has changed, your changes will be lost if you don’t save them, confirm？</string>
+    <string name="please_save_as_file_first">lease save to file first</string>
+    <string name="editor">Editor</string>
+    <string name="default_value">Default</string>
+    <string name="font_size">Font Size</string>
+    <string name="cursor_width">Cursor Width</string>
+    <string name="touch_to_adjust_text_size">Touch to change text size</string>
+    <string name="word_wrap_in_editor">Auto wordwrap</string>
+    <string name="show_linenumber">Show Linenumber</string>
+    <string name="show_whitespace">Show Whitespace</string>
+    <string name="auto_indent">Auto Indent</string>
+    <string name="highlight_and_theme">Highlight and Theme</string>
+    <string name="highlight_the_file_size_limit">Limit highlight file size</string>
+    <string name="screen_orientation">Screen Orientation</string>
+    <string name="auto_capitalize">Auto capitalize</string>
+    <string name="enable_highlight">Enable highlight</string>
+    <string name="need_to_enable_read_storage_permissions">Need to enable read storage permissions</string>
+    <string name="file_not_exists">File not exists</string>
+    <string name="cannt_handle_intent_x">Can not process intent: %s</string>
+    <string name="handle_intent_x_error">An error occurred when process intent: %s</string>
+    <string name="press_again_will_exit">Press again will exit</string>
+    <string name="find_title">\"%s\" Find Results</string>
+    <string name="zero_matches">0 matches</string>
+    <string name="find_or_replace">Find/Replace…</string>
+    <string name="convert_to_uppercase">Convert to uppercase</string>
+    <string name="convert_to_lowercase">Convert to lowercase</string>
+    <string name="duplication_text">Duplication text</string>
+    <string name="writing">Writing</string>
+    <plurals name="x_text_replaced">
+        <item quantity="zero">0 found</item>
+        <item quantity="other">%d text replaced</item>
+    </plurals>
+    <string-array name="screen_orientation">
+        <item>Auto</item>
+        <item>Landscape</item>
+        <item>Portrait</item>
+    </string-array>
+    <string name="exit">Exit</string>
+    <string name="save_all_without_new_document_message">Save all will skip new document</string>
+    <string name="clear_history">Clear History</string>
+    <string name="custom_symbol_list">Custom symbol list</string>
+    <string name="reset">Reset</string>
+    <string name="fullscreen_mode">Fullscreen Mode</string>
+    <string name="enable_fullscreen_mode_message">Restart the application will enable the full screen mode</string>
+    <string name="disabled_fullscreen_mode_message">Restart the application will disable the full screen mode</string>
+    <string name="out_of_memory_error">Out of application memory</string>
+    <string name="find_log">Find Log</string>
+    <string name="replace_log">Replace Log</string>
+    <string name="use_regex_to_find_tip">Replace keyword support: \\r, \\n, \\t and capturing groups $0 ~ $9</string>
+</resources>

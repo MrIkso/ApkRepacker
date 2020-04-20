@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Material.CardView"
+    app:strokeWidth="0dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/open_in_editor"
+            android:drawableStart="@drawable/ic_rename"
+            android:text="@string/action_open_vector"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone"
+            style="@style/ActionItem" />
+
+        <TextView
+            android:id="@+id/rename_file"
+            android:drawableStart="@drawable/ic_rename"
+            android:text="@string/action_rename"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/open_in_editor"
+            style="@style/ActionItem" />
+
+        <TextView
+            android:id="@+id/add_new_folder"
+            android:drawableStart="@drawable/ic_create_new_folder_dark"
+            android:text="@string/action_create_new_folder"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rename_file"
+            style="@style/ActionItem" />
+
+        <TextView
+            android:id="@+id/delete_file"
+            android:drawableStart="@drawable/ic_delete"
+            android:text="@string/action_delete"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/add_new_folder"
+            style="@style/ActionItem" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

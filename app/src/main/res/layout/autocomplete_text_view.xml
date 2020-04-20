@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?selectableItemBackground"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/item_autocomplete"
+        style="?android:attr/dropDownItemStyle"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_weight="1"
+        android:ellipsize="marquee"
+        android:singleLine="true"
+        android:text="item"
+        android:textAppearance="?android:attr/textAppearanceLargePopupMenu" />
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/delete_item_autocomplete"
+            style="?android:attr/dropDownItemStyle"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:layout_margin="2.0dip"
+            android:drawableTint="?android:textColorSecondary"
+            android:drawableEnd="@drawable/ic_clear" />
+    </FrameLayout>
+</LinearLayout>

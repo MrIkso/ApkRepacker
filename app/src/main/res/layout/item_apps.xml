@@ -1,0 +1,65 @@
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="?android:selectableItemBackground"
+    style="@style/Material.CardView">
+
+    <LinearLayout
+        android:id="@+id/app_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:clickable="true"
+        android:gravity="center"
+        android:padding="@dimen/checkbox_margin"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/tv_app_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="@dimen/checkbox_margin"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/ic_launcher" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_app_name"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/checkbox_margin"
+                    android:layout_weight="1"
+                    android:singleLine="false"
+                    tools:text="ApkRepacker"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                <TextView
+                    android:id="@+id/tv_app_version"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="marquee"
+                    android:gravity="end"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:maxWidth="150dp"
+                    android:singleLine="true"
+                    tools:text="1.0" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_app_package"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="com.mrikso.apkrepacker" />
+
+        </LinearLayout>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

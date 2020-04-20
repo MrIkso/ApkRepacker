@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="?android:windowBackground"
+    android:clickable="true"
+    tools:context=".fragment.CompileFragment">
+
+    <!--разметка когда собирается apk-->
+    <LinearLayout
+        android:id="@+id/layout_apk_compiling"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/image_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:srcCompat="@drawable/ic_error" />
+            <TextView
+                android:id="@+id/progress_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:text="@string/compile_in_progress"
+                android:textStyle="bold"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+            <ListView
+                android:padding="4dp"
+                android:id="@+id/log"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </LinearLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_copy"
+            style="@style/MD2Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/normal_padding"
+            android:text="@string/action_copy_log"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <!--разметка когда апк собрано-->
+    <include
+        android:id="@+id/layout_apk_compiled"
+        layout="@layout/compiled_app"
+        android:visibility="gone" />
+
+</FrameLayout>

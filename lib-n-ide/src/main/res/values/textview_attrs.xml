@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="SelectionModeDrawables">
+        <attr name="actionModeSelectAllDrawable" />
+        <attr name="actionModeCutDrawable" />
+        <attr name="actionModeCopyDrawable" />
+        <attr name="actionModePasteDrawable" />
+        <attr name="actionModeFindDrawable" />
+    </declare-styleable>
+</resources>

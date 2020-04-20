@@ -1,0 +1,5 @@
+<resources>
+    <string name="colorPickerDialog_dialogName">Выбор цвета</string>
+
+    <string name="colorPickerDialog_preset">Шаблоны</string>
+</resources>

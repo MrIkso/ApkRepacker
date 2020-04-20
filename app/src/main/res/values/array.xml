@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="theme_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string-array name="theme_names">
+        <item>@string/theme_light</item>
+        <item>@string/theme_dark</item>
+    </string-array>
+
+    <string-array name="decoding_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="decoding_names">
+        <item>@string/decompile_all</item>
+        <item>@string/decompile_res</item>
+        <item>@string/decompile_dex</item>
+        <item>@string/show_decompile_option_dialog</item>
+    </string-array>
+
+    <string-array name="install_location">
+        <item>@string/install_location_default</item>
+        <item>@string/install_location_auto</item>
+        <item>@string/install_location_internal</item>
+        <item>@string/install_location_external</item>
+    </string-array>
+
+    <string-array name="key_format">
+        <item>@string/jks</item>
+        <item>@string/pkcs12</item>
+        <item>@string/bks</item>
+        <item>@string/pk8</item>
+    </string-array>
+</resources>
