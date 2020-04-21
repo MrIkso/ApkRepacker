@@ -89,7 +89,12 @@ public final class ViewHolder0 extends ViewHolder {
                     Glide.with(image).load(imageBitmap != null ? imageBitmap : getImageResource(file)).fitCenter().placeholder(getImageResource(file)).into(image);
 
                     image.setBackground(null);
-                    image.setImageDrawable(AppUtils.getApkIcon(context, file.getAbsolutePath()));
+                    Drawable apkIcon = AppUtils.getApkIcon(context, file.getAbsolutePath());
+                    if(apkIcon!=null){
+                        image.setImageDrawable(apkIcon);
+                    }else {
+                        image.setImageDrawable(context.getResources().getDrawable(R.drawable.default_app_icon));
+                    }
                 }/* else if (FileUtil.FileType.getFileType(file).equals(FileUtil.FileType.IMAGE)) {
 
 //                    InputStream is = (InputStream) url.getContent();
