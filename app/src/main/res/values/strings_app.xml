@@ -256,4 +256,5 @@
     <string name="action_auto_translate_lang">Auto translate language</string>
     <string name="done">Done!</string>
     <string name="install_app_message">Install this Apk?</string>
+    <string name="error_no_string_tosave">No string to save!</string>
 </resources>

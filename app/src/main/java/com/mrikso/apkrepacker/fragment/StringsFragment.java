@@ -1,6 +1,5 @@
 package com.mrikso.apkrepacker.fragment;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -22,6 +21,7 @@ import androidx.fragment.app.Fragment;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.jecelyin.common.utils.DLog;
 import com.jecelyin.common.utils.SysUtils;
 import com.jecelyin.common.utils.UIUtils;
 import com.mrikso.apkrepacker.App;
@@ -84,6 +84,7 @@ public class StringsFragment extends Fragment implements AddLanguageDialogFragme
     private List<String> langFiles = new ArrayList<>();
     private ArrayAdapter<String> spinnerAdapter;
     private Context mContext;
+    private String mTargetLang;
 
     public StringsFragment() {
         // Required empty public constructor
@@ -141,13 +142,12 @@ public class StringsFragment extends Fragment implements AddLanguageDialogFragme
             });
             fabAutoTranslate.setOnClickListener(v -> {
                 fabMenu.close(true);
-                String targetLang;
                 String selectedLang = langSpinner.getSelectedItem().toString();
                 List<TranslateItem> stringValues = new ArrayList();
                 if (selectedLang.equals("default")) {
-                    targetLang = "-auto";
+                    mTargetLang = "-auto";
                 } else {
-                    targetLang = "-" + langSpinner.getSelectedItem().toString();
+                    mTargetLang = "-" + langSpinner.getSelectedItem().toString();
                 }
                 DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
                 try {
@@ -170,11 +170,11 @@ public class StringsFragment extends Fragment implements AddLanguageDialogFragme
                     UIUtils.toast(App.getContext(), getResources().getString(R.string.toast_error_pasring));
                     e.printStackTrace();
                 }
-                Fragment fragment = this;
+                // Fragment fragment = this;
                 TranslateStringsHelper.setDefaultStrings(stringValues);
                 Intent intent = new Intent(mContext, AutoTranslatorActivity.class);
-                intent.putExtra("targetLanguageCode", targetLang);
-                fragment.startActivityForResult(intent, Activity.RESULT_OK);
+                intent.putExtra("targetLanguageCode", mTargetLang);
+                startActivityForResult(intent, 10);
             });
             fabSave.setOnClickListener(v -> {
                 fabMenu.close(true);
@@ -439,8 +439,56 @@ public class StringsFragment extends Fragment implements AddLanguageDialogFragme
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Activity.RESULT_OK) {
-            UIUtils.toast(App.getContext(), "auto translated");
+        if (requestCode == 10) {
+            saveAutotranslatedStrings(TranslateStringsHelper.getTranslatedStrings(), mTargetLang.replace("-auto", ""));
+        }
+    }
+
+    private void saveAutotranslatedStrings(List<TranslateItem> items, String language) {
+        int tempnumber = 0; // Temp number for (<string name="...">)
+        File resultFile = new File(projectPatch + "/res/values" + language + "/");
+        resultFile.mkdirs(); // Create path
+        DocumentBuilderFactory dbFactory;
+        DocumentBuilder dBuilder;
+        Document doc;
+        try {
+            dbFactory = DocumentBuilderFactory.newInstance();
+            dBuilder = dbFactory.newDocumentBuilder();
+            doc = dBuilder.newDocument();
+            // root element
+            Element rootElement = doc.createElement("resources"); // Create resources in document
+            doc.appendChild(rootElement); // Add resources in document
+
+            // string element
+            for (TranslateItem item : items) {
+                String stringId = item.name;
+                String stringText = item.translatedValue;
+                DLog.d(stringId +" "+stringText );
+                Element stringelement = doc.createElement("string"); // Create string in document
+                Attr attrType = doc.createAttribute("name"); // Create atribute name
+                attrType.setValue(stringId); // Add to "name" the word code
+                stringelement.setAttributeNode(attrType); // Add atribute to string elemt
+                stringelement.appendChild(doc.createTextNode(stringText)); // Add translated word to string
+                rootElement.appendChild(stringelement); // Add string element to document
+
+                tempnumber++;
+            }
+            File resultString = new File(resultFile.getCanonicalPath() + "/strings.xml");
+            // write the content into xml file
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty(OutputKeys.ENCODING, encoding);
+            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+            //    transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+            DOMSource source = new DOMSource(doc);
+            FileOutputStream fileOutputStream = new FileOutputStream(resultString); // Write file
+            transformer.transform(source, new StreamResult(fileOutputStream));
+            parseStings(resultString);
+            reloadAdapter();
+        } catch (Exception e) {
+            UIUtils.toast(App.getContext(), getResources().getString(R.string.toast_error_translate_language));
+            e.printStackTrace();
         }
     }
 }

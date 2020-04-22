@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
+import com.duy.common.DLog;
 import com.google.android.material.tabs.TabLayout;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.adapter.FragmentAdapter;
@@ -204,12 +205,4 @@ public class AppEditorActivity extends BaseActivity {
     public void onBackPressed(){
         super.onBackPressed();
     }*/
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        super.onActivityResult(requestCode, resultCode, data);
-       /* for(Fragment fragment : getSupportFragmentManager().getFragments()){
-            fragment.onActivityResult(requestCode, resultCode, data);
-        }*/
-    }
 }

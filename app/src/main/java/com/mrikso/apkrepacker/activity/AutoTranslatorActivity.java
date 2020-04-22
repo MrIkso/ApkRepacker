@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -17,6 +18,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.duy.common.DLog;
 import com.google.android.material.button.MaterialButton;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.autotranslator.common.ActivityUtil;
@@ -40,7 +42,7 @@ public class AutoTranslatorActivity extends BaseActivity implements View.OnClick
     private TranslateStringsAdapter stringsAdapter;
 
     // All the string views
-    private Map<String, AppCompatEditText> etMap = new HashMap<>();
+    //private Map<String, String> etMap = new HashMap<>();
     private LinearLayout translatingLayout;
     private LinearLayout translatedLayout;
     private AppCompatTextView translatingMsg;
@@ -116,7 +118,8 @@ public class AutoTranslatorActivity extends BaseActivity implements View.OnClick
     // Transfer modified files to parent activity
     private void setResult(List<TranslateItem> stringValues) {
         TranslateStringsHelper.setTranslatedStrings(stringValues);
-        setResult(RESULT_OK);
+        setResult(10);
+        finish();
     }
 
     @Override
@@ -143,22 +146,25 @@ public class AutoTranslatorActivity extends BaseActivity implements View.OnClick
     private void saveStringAsResource() {
         // Prepare translated values (collect from the edit text)
         List<TranslateItem> stringValues = new ArrayList<>();
-        for (Map.Entry<String, AppCompatEditText> entry : etMap.entrySet()) {
+       // etMap.putAll(stringsAdapter.getTranslatedMap());
+        for (Map.Entry<String, String> entry : stringsAdapter.getTranslatedMap().entrySet()) {
             String name = entry.getKey();
-            String translatedVal = entry.getValue().getText().toString();
+            String translatedVal = entry.getValue();
             if (!"".equals(translatedVal)) {
-                stringValues.add(new TranslateItem(name, null, translatedVal));
+                DLog.d("translated",String.format("%s : %s", name, translatedVal));
+                stringValues.add(new TranslateItem(name,null, translatedVal));
             }
         }
 
         // No translated string
         if (stringValues.isEmpty()) {
-            //Toast.makeText(this, R.string.error_no_string_tosave,
-            //Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.error_no_string_tosave, Toast.LENGTH_LONG).show();
             return;
         }
 
-        setResult(stringValues);
+        TranslateStringsHelper.setTranslatedStrings(stringValues);
+        setResult(10);
+        //finish();
     }
 
     // Update views

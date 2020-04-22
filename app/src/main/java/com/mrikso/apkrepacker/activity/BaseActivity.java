@@ -15,9 +15,10 @@ import android.view.WindowManager;
 import androidx.annotation.CallSuper;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import com.jecelyin.common.utils.DLog;
+import com.duy.common.DLog;
 import com.jecelyin.editor.v2.Preferences;
 import com.mrikso.apkrepacker.ui.prererence.Preference;
 import com.mrikso.apkrepacker.utils.AppUtils;
@@ -91,6 +92,5 @@ public class BaseActivity extends AppCompatActivity {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
     }
-
 
 }
