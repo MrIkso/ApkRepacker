@@ -1088,9 +1088,10 @@ public class FloatingActionButton extends ImageButton {
 
     public void setLabelText(String text) {
         mLabelText = text;
-        TextView labelView = getLabelView();
+        Label labelView = getLabelView();
         if (labelView != null) {
             labelView.setText(text);
+            labelView.updateBackground();
         }
     }
 
