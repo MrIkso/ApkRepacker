@@ -198,7 +198,7 @@ public class StringsFragment extends Fragment implements AddLanguageDialogFragme
         }
         fabMenu.setClosedOnTouchOutside(true);
 
-        if (!isnoFullApk) {
+        if (!isnoFullApk && !files.isEmpty()) {
             initList();
         }
         return view;
