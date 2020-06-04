@@ -131,12 +131,14 @@ public class SimpleEditTask extends AsyncTask<File, Integer, Boolean> {
     public void setResult(File f) {
         resultFile = f;
         DLog.i(resultFile.getAbsolutePath());
+        simpleEditorFragment.setOutputFile(f);
     }
 
     public void setResult(String f) {
         try {
             resultFile = new File(f);
             DLog.i(resultFile.getAbsolutePath());
+            simpleEditorFragment.setOutputFile(resultFile);
         } catch (Exception e) {
             e.printStackTrace();
         }

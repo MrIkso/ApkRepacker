@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatImageButton;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.filepicker.FilePickerDialog;
@@ -67,7 +68,7 @@ import sun1.security.x509.X509CertInfo;
 
 public class GenKeystorePreference extends DialogPreference implements TextWatcher, AdapterView.OnItemSelectedListener {
     private EditText alias;
-    private TextView cert;
+    private TextInputLayout cert;
     private EditText commonName;
     private EditText country;
     private Button create;
@@ -138,7 +139,7 @@ public class GenKeystorePreference extends DialogPreference implements TextWatch
             case 0:
             case 1:
             case 2:
-                this.cert.setText(R.string.key_alias);
+                this.cert.setHint(getContext().getResources().getString(R.string.key_alias));
               //  selectKey.setVisibility(View.GONE);
              //   selectCert.setVisibility(View.GONE);
                 this.password.setVisibility(View.VISIBLE);
@@ -149,7 +150,7 @@ public class GenKeystorePreference extends DialogPreference implements TextWatch
                 return;
             case 3:
                 setAlias();
-                this.cert.setText(R.string.cert_path);
+                this.cert.setHint(getContext().getResources().getString(R.string.cert_path));
                // selectKey.setVisibility(View.VISIBLE);
                 selectCert.setVisibility(View.VISIBLE);
                 this.password.setVisibility(View.GONE);

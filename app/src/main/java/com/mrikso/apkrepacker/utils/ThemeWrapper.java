@@ -1,11 +1,13 @@
 package com.mrikso.apkrepacker.utils;
 
 import android.app.Activity;
+import android.content.Context;
+import android.view.ContextThemeWrapper;
 
 import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
 /**
- * @author @SVlolf
+ * @author @SVolf
  */
 public abstract class ThemeWrapper {
     /**

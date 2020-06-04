@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="?android:attr/background"
     android:layout_width="match_parent"
@@ -10,17 +11,18 @@
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="?android:listPreferredItemHeight"
-        android:background="?attr/colorPrimary"
+        android:background="?colorAccent"
+        android:backgroundTint="?colorAccent"
         android:orientation="horizontal">
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iv_title"
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/toolbar_image_margin"
             android:background="@null"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_phone_android" />
+            android:scaleType="center"
+            app:srcCompat="@drawable/ic_phone_android" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,30 +31,27 @@
             android:background="@null"
             android:orientation="vertical">
 
-
             <TextView
                 android:id="@+id/tv_dialog_title"
                 style="?android:attr/textViewStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:text="@string/label_path"
                 android:background="@null"
                 android:textColor="@color/white"
                 android:textSize="16sp"
-                android:textStyle="bold" />
-
+                android:textStyle="bold"
+                android:text="@string/label_path" />
 
             <TextView
                 android:id="@+id/tv_dir_path"
                 style="?android:attr/textViewStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:background="@null"
                 android:singleLine="true"
                 android:ellipsize="marquee"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                tools:text="/storage/emulated/0" />
         </LinearLayout>
     </LinearLayout>
 
@@ -64,6 +63,7 @@
         android:layout_above="@id/footer"
         android:layout_below="@id/header"
         android:layout_gravity="center_horizontal"
+        android:fastScrollEnabled="true"
         tools:listitem="@layout/dialog_file_list_item" />
 
     <LinearLayout
@@ -83,26 +83,20 @@
 
         <Button
             android:id="@+id/btn_cancel"
-            style="?android:attr/buttonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:background="?android:selectableItemBackground"
-            android:padding="4dp"
-            android:textColor="@color/white"
-            android:text="@string/cancel_button_label" />
+            android:layout_margin="@dimen/checkbox_margin"
+            android:text="@string/cancel_button_label"
+            style="@style/MD2TextButton" />
 
         <Button
             android:id="@+id/btn_select"
-            style="?android:attr/buttonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:background="?android:selectableItemBackground"
-            android:padding="4dp"
-            android:textColor="@color/white"
+            android:layout_margin="@dimen/checkbox_margin"
             android:text="@string/choose_button_label"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            style="@style/MD2TextButton" />
     </LinearLayout>
 
 </RelativeLayout>

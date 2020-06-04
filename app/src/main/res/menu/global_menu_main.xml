@@ -8,19 +8,21 @@
         android:id="@+id/menu_apps"
         android:icon="@drawable/ic_apps"
         android:title="@string/installed_apps"
-        app:showAsAction="ifRoom|withText" />
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/menu_settings"
         android:icon="@drawable/ic_settings"
         android:title="@string/settings"
-        app:showAsAction="ifRoom|withText" />
+        app:showAsAction="ifRoom" />
+
     <item
         android:id="@+id/menu_about"
         android:icon="@drawable/ic_info"
-        android:title="@string/about_title"/>
+        android:title="@string/about_title" />
+
     <item
         android:id="@+id/menu_exit"
         android:icon="@drawable/ic_exit"
-        android:title="@string/exit"/>
+        android:title="@string/exit" />
 </menu>

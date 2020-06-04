@@ -5,12 +5,17 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.Nullable;
+
+import com.mrikso.apkrepacker.R;
 
 public class PackageMeta implements Parcelable {
 
@@ -21,6 +26,7 @@ public class PackageMeta implements Parcelable {
     public long versionCode;
     public String versionName;
     public Uri iconUri;
+    public Drawable iconDrawable;
 
     public PackageMeta(String packageName, String label) {
         this.packageName = packageName;
@@ -35,6 +41,7 @@ public class PackageMeta implements Parcelable {
         versionCode = in.readLong();
         versionName = in.readString();
         iconUri = in.readParcelable(Uri.class.getClassLoader());
+        iconDrawable = in.readParcelable(Drawable.class.getClassLoader());
     }
 
     public static final Creator<PackageMeta> CREATOR = new Creator<PackageMeta>() {
@@ -63,6 +70,7 @@ public class PackageMeta implements Parcelable {
         dest.writeLong(versionCode);
         dest.writeString(versionName);
         dest.writeParcelable(iconUri, 0);
+        dest.writeParcelable((Parcelable) iconDrawable, 0);
     }
 
     public static class Builder {
@@ -112,6 +120,11 @@ public class PackageMeta implements Parcelable {
             return this;
         }
 
+        public Builder setIconDrawable(Drawable iconDrawable) {
+            mPackageMeta.iconDrawable = iconDrawable;
+            return this;
+        }
+
         public PackageMeta build() {
             return mPackageMeta;
         }
@@ -132,6 +145,7 @@ public class PackageMeta implements Parcelable {
                     .serVersionCode(AppUtils.apiIsAtLeast(Build.VERSION_CODES.P) ? packageInfo.getLongVersionCode() : packageInfo.versionCode)
                     .setVersionName(packageInfo.versionName)
                     .setIcon(applicationInfo.icon)
+                    .setIconDrawable(applicationInfo.loadIcon(pm))
                     .build();
 
         } catch (PackageManager.NameNotFoundException e) {

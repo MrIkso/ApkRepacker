@@ -202,12 +202,6 @@ public class DLog {
         }
     }
 
-    public static void reportException(@NonNull Throwable e) {
-        if (!DEBUG) {
-//            Crashlytics.logException(e);
-        }
-    }
-
     /**
      * Report an error to firebase server
      *

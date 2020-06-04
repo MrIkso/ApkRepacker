@@ -1,33 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingBottom="8dp">
-    <TextView
-        android:id="@+id/decompile_all"
-        android:layout_marginTop="8dp"
-        android:drawableStart="@drawable/ic_decompile"
-        android:text="@string/decompile_all"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        style="@style/ActionItem" />
-    <TextView
-        android:id="@+id/decompile_all_res"
-        android:drawableStart="@drawable/ic_decompile"
-        android:text="@string/decompile_res"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/decompile_all"
-        style="@style/ActionItem" />
-    <TextView
-        android:id="@+id/decompile_all_dex"
-        android:drawableStart="@drawable/ic_decompile"
-        android:text="@string/decompile_dex"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/decompile_all_res"
-        style="@style/ActionItem" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+    style="@style/Material.CardView.BottomSheet"
+    app:strokeWidth="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="183dp"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="@dimen/checkbox_dimens"
+            android:layout_height="5dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/bottom_sheet_dialog_indicator" />
+
+        <TextView
+            android:id="@+id/decompile_all"
+            style="@style/ActionItem"
+            android:drawableStart="@drawable/ic_decompile"
+            android:text="@string/decompile_all"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/decompile_all_res"
+            style="@style/ActionItem"
+            android:drawableStart="@drawable/ic_decompile"
+            android:text="@string/decompile_res"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/decompile_all" />
+
+        <TextView
+            android:id="@+id/decompile_all_dex"
+            style="@style/ActionItem"
+            android:drawableStart="@drawable/ic_decompile"
+            android:text="@string/decompile_dex"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/decompile_all_res" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

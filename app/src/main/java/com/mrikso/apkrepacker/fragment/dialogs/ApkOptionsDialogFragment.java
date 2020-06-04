@@ -12,8 +12,7 @@ import androidx.annotation.Nullable;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.mrikso.apkrepacker.R;
 
-public class ApkOptionsDialogFragment extends BottomSheetDialogFragment
-        implements View.OnClickListener {
+public class ApkOptionsDialogFragment extends BottomSheetDialogFragment implements View.OnClickListener {
 
     public static final String TAG = "ApkOptionsDialogFragment";
 
@@ -25,8 +24,7 @@ public class ApkOptionsDialogFragment extends BottomSheetDialogFragment
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
        // setStyle(STYLE_NORMAL, );
         return inflater.inflate(R.layout.bottom_sheet_apk_options, container, false);
     }

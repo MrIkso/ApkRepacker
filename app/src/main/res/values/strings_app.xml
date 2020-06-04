@@ -1,10 +1,49 @@
 <resources>
     <string name="app_name" translatable="false">Apk Repacker</string>
 
+    <string name="about_licenses_html_style_light" translatable="false">
+        body {
+            background: white;
+            color: black;
+            font-family: sans-serif;
+            margin: 0;
+            overflow-wrap: break-word;
+            padding: 12px;
+        }
+        pre {
+            background: #eeeeee;
+            padding: 12px;
+            white-space: pre-wrap;
+        }
+        a, a:link, a:visited, a:hover, a:focus, a:active {
+            color: #4eaff5;
+        }
+    </string>
+    <string name="about_licenses_html_style_dark" translatable="false">
+        body {
+            background: #424242;
+            color: white;
+            font-family: sans-serif;
+            margin: 0;
+            overflow-wrap: break-word;
+            padding: 12px;
+        }
+        pre {
+            background: #303030;
+            padding: 12px;
+            white-space: pre-wrap;
+        }
+        a, a:link, a:visited, a:hover, a:focus, a:active {
+            color: #4eaff5;
+        }
+    </string>
+
     <string name="title_activity_about">About</string>
-    <string name="about_version">Version: %s(%s)</string>
+    <string name="about_version">Version: %s (%s)</string>
     <string name="about_email_intent" translatable="false">About:Apk Repacker</string>
     <string name="about_not_found_email">Email app hasn`t been found</string>
+    <string name="share_with">Share with</string>
+    <string name="projects_count">Projects: %d</string>
 
     <string name="settings">Settings</string>
     <string name="theme_light">Light</string>
@@ -13,6 +52,8 @@
 
     <string name="action_delete">Delete</string>
     <string name="action_rename">Rename</string>
+    <string name="action_open_with">Open with</string>
+    <string name="action_open_in_editor">Open in editor</string>
     <string name="action_search">Search</string>
     <string name="action_copy">Copy</string>
     <string name="action_move">Move</string>
@@ -27,6 +68,7 @@
     <string name="pref_show_last">Show last modified</string>
     <string name="pref_show_file_sizes">Show file sizes</string>
     <string name="install_app">Install</string>
+    <string name="dialog_install_app">Install app?</string>
     <string name="decompile_app">Decompile</string>
 
     <string name="output_directory_not_extsts">Output directory \'%1$s\' doesn`t exist and can not be created!</string>
@@ -38,7 +80,7 @@
     <string name="decompile_dex">Decompile classes.dex</string>
     <string name="app_build">Build</string>
     <string name="action_about_project">Info</string>
-    <string name="project_list_is_empry">Project is empty</string>
+    <string name="project_list_is_empty">No projects</string>
     <string name="translate_string">Translate String</string>
     <string name="text_after_translation">Text after translation</string>
     <string name="pref_general_decompiler">Decompiler</string>
@@ -59,17 +101,20 @@
     <string name="action_create_folder">Add Folder</string>
     <string name="action_add_file">Add File</string>
     <string name="action_add_new_lang">Add new language</string>
+    <string name="action_add_new_color">Add new color</string>
+    <string name="action_change_color">Change the color</string>
     <string name="root_path">Root</string>
     <string name="search_request">Search request</string>
     <string name="caption_search_options">Search options</string>
     <string name="label_ignore_case">Ignore Case</string>
+    <string name="label_re">Regular Exprensions</string>
     <string name="label_ext">Extensions</string>
     <string name="add_ext">Add Ext</string>
     <string name="recursively">Recursively</string>
     <string name="cannt_open_directory">Can`t open directory</string>
-    <string name="cannt_open_file">Error! Can`t open file!</string>
+    <string name="cannt_open_file">You do not have any apps that can open this type of file.</string>
     <string name="about_title">About App</string>
-    <string name="about_source_licenses">Source Licenses</string>
+    <string name="about_source_licenses">Licenses</string>
     <string name="about_website">Open Website</string>
     <string name="about_git_hub">Open GitHub</string>
     <string name="about_email">Send Email</string>
@@ -78,8 +123,15 @@
     <string name="menu_string">Strings</string>
     <string name="menu_files">Files</string>
     <string name="menu_find_list">Find List</string>
+    <string name="complete">Complete</string>
     <string name="toast_deleted_item">File %s has been deleted</string>
+    <string name="menu_build_app">Build</string>
+    <string name="menu_delete_project">Delete</string>
+    <string name="menu_about_project">About</string>
     <string name="error">Error</string>
+    <string name="enter_color_name">Enter a color name</string>
+    <string name="loading">Loading, please wait.</string>
+    <string name="image_viewer_subtitle_format" translatable="false">%d/%d</string>
 
     <!--Signature-->
     <string name="signature_file">Signature file</string>
@@ -104,9 +156,12 @@
     <string name="locality_name">Locality Name:</string>
     <string name="state_name">State Name:</string>
     <string name="country">Country:</string>
+    <string name="gen_key_title">Create a key file</string>
+    <string name="gen_key_summary">Touch to create a key file.</string>
     <string name="create_and_use">Create and use</string>
     <!--FilePicker-->
     <string name="toast_sd_card_not_found">SD Card not found!</string>
+    <string name="toast_error_grant_permisson_sd_card">Please select and grant permission sd card!</string>
     <string name="error_dir_access">Dir Access</string>
     <string name="label_parent_dir">...</string>
     <string name="label_path">Path: </string>
@@ -114,27 +169,38 @@
     <string name="choose_button_label">Select</string>
     <string name="label_parent_directory">Parent folder</string>
     <string name="select_directory">Select folder:</string>
-    <string name="label_last_date_write">Last changed date</string>
+    <string name="label_date_ceared">Create Date</string>
+    <string name="label_last_date_write">Last Date Write</string>
     <string name="label_size_prj">Project Size</string>
     <string name="label_package_app">App Package</string>
     <string name="select_file">Select File:</string>
     <string name="files">Files</string>
+    <string name="label_search_string_in_files">Text in files</string>
     <string name="dialog_add_extensions">Add Extensions</string>
     <string name="dialog_please_wait">Please Wait...</string>
     <string name="dialog_find">Searching</string>
+    <string name="dialog_deleting">Deleting</string>
+    <string name="dialog_loading_projects">Loading projects</string>
 
     <string name="common_error">Error</string>
     <string name="signer_permissions_denied">Permission Denied</string>
     <string name="sign_done">Signing Done</string>
     <string name="backup_search_splits_only">Split Only</string>
     <string name="backup_search_show_system_apps">System Apps</string>
-    <string name="open_app_in_settings">Open in Settings</string>
-    <string name="about_telegram">Telegram</string>
+    <string name="action_next_panel">Next</string>
+    <string name="action_replace_panel">Replace</string>
+    <string name="action_all_replace_panel">All</string>
+    <string name="action_prev_panel">Prev</string>
+    <string name="open_app_in_settings">Open In settings</string>
+    <string name="about_telegram">Telegram Channel</string>
 
     <string name="compile_in_progress">Building...</string>
     <string name="uninstall_app">Uninstall app</string>
-    <string name="lang_code">Language Code</string>
+    <string name="language">Language</string>
+    <string name="lang_code">Language code</string>
     <string name="lang_code_exapmle">For example: en-US</string>
+    <string name="color_name">Color name</string>
+    <string name="color_name_exapmle">For example: abc_color_name</string>
     <string name="action_open_project">Open Project</string>
     <string name="action_copy_log">Copy log</string>
     <string name="error_decompilation_failed">Failed Decompilation</string>
@@ -142,7 +208,7 @@
     <string name="error_build_failed">Build Failed</string>
     <string name="build_successful">Build Successful</string>
     <string name="dialog_color_picker">Pick a color</string>
-    <string name="action_save_new_lang">Save Translation</string>
+    <string name="action_select_lang">Select a language (%s)</string>
     <string name="toast_files_deleted">%d files deleted</string>
     <string name="toast_error_create_new_language">Failed to create new language</string>
     <string name="toast_error_translate_language">Error while saving translation</string>
@@ -186,10 +252,13 @@
     <string name="toast_error_in_simple_edit_installed_app">Error while editing an installed app!</string>
     <string name="select_icon">Select a new icon</string>
     <string name="toast_error_cant_parse_apk">Error while parsing an apk!</string>
+    <string name="install_location">Install Location</string>
     <string name="install_location_default">Default (Not Specified)</string>
     <string name="install_location_auto">Auto (OS Make Decision)</string>
     <string name="install_location_internal">Internal Only</string>
     <string name="install_location_external">Prefer External</string>
+    <string name="about_telegram_developer_mrikso">MrIkso - Developer</string>
+    <string name="about_telegram_developer_phoenix">Phoenix.Ltd - Developer</string>
     <string name="about_telegram_sponsor_alex_modz">Alex.Strannik - lite modz</string>
     <string name="toast_error_sign_failed">Error while signing an apk!</string>
     <string name="dialog_sign">Signing...</string>
@@ -198,7 +267,7 @@
     <string name="items">%d items</string>
     <string name="select_patch">Select patch</string>
     <string name="action_sd_card">External SD Card</string>
-    <string name="intenal_sd_card">Intenal SD Card</string>
+    <string name="intenal_sd_card">Internal SD Card</string>
     <string name="pref_show_hidden_files">Show hidden files</string>
     <string name="pref_keep_screen_on">Keep screen on</string>
     <string name="toast_error_import_framework_failed">Error while import a framework!</string>
@@ -212,7 +281,24 @@
     <string name="class_name">Class name</string>
     <string name="editor_theme">Editor theme</string>
     <string name="selected_editor_theme">Selected %s. Restart app to apply theme.</string>
-    <string name="toast_apk_succes_edited" type="id">Apk successful builded!</string>
-    <string name="toast_apk_falied_edited" type="id">Apk falied edited!</string>
+    <string name="toast_apk_succes_edited">Apk successful builded!</string>
+    <string name="toast_apk_falied_edited">Apk falied edited!</string>
     <string name="show_decompile_option_dialog">Show dialog for choosing decompilation mode</string>
+    <string name="string_name_copied">String name copied: %s</string>
+    <string name="color_name_copied">Color name copied: %s</string>
+    <!--auto translator-->
+    <string name="stop">Stop</string>
+    <string name="save_and_close">Save &amp; Close</string>
+    <string name="translating">Translating &#8230;</string>
+    <string name="translated">Translated</string>
+    <string name="translated_format">%d strings translated</string>
+    <string name="failed_format">%d strings failed</string>
+    <string name="untranslated_format">%d strings untranslated</string>
+    <string name="error_no_string_totranslate">No string needs to be translated.</string>
+    <string name="save_translation_title">Save the translation?</string>
+    <string name="save_translation_msg">The translation is not saved yet. Save it before further operation?</string>
+    <string name="string_notsaved_msg">%d strings are discarded.</string>
+    <string name="title_activity_auto_translator">Auto Translator</string>
+    <string name="action_auto_translate_lang">Auto translate language</string>
+    <string name="error_no_string_tosave">No string to save!</string>
 </resources>

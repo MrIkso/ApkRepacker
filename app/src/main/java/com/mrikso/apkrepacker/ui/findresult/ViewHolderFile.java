@@ -49,26 +49,25 @@ public final class ViewHolderFile extends ViewHolder {
     }
 
     @Override
-    protected void bindIcon(File file, Boolean selected) {
+    protected void bindIcon(File file) {
         if (getBoolean(context, "pref_icon", true)) {
             image.setOnClickListener(onActionClickListener);
             image.setOnLongClickListener(onActionLongClickListener);
-            if (selected) {
+/*            if (selected) {
                 int color = ContextCompat.getColor(context, R.color.misc_file);
                 image.setBackground(getBackground(color));
                 Drawable drawable = ContextCompat.getDrawable(context, R.drawable.ic_selected);
                 DrawableCompat.setTint(drawable, Color.rgb(255, 255, 255));
                 image.setImageDrawable(drawable);
             }
-            else {
+            else { */
                 int color = ContextCompat.getColor(context, getColorResource(file));
                 image.setBackground(getBackground(color));
                 Drawable drawable = ContextCompat.getDrawable(context, getImageResource(file));
                 DrawableCompat.setTint(drawable, Color.rgb(255, 255, 255));
                 image.setImageDrawable(drawable);
-            }
-        }
-        else {
+//            }
+        } else {
             int color = ContextCompat.getColor(context, getColorResource(file));
             image.setBackground(null);
             Drawable drawable = ContextCompat.getDrawable(context, getImageResource(file));

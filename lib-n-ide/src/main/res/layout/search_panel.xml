@@ -1,100 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_alignParentLeft="true"
-    android:layout_alignParentRight="true"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentEnd="true"
     android:layout_alignParentBottom="true"
     android:orientation="vertical"
+    android:elevation="25dp"
+    android:background="?android:windowBackground"
     android:id="@+id/search_panel">
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-       />
-    <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TableRow
-            android:paddingLeft="5dp"
-            android:paddingTop="2dp"
-            android:paddingRight="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="@string/search"/>
-            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-                android:id="@+id/search_text"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.0"
-                android:singleLine="true"
-                />
-        </TableRow>
-        <TableRow
-            android:id="@+id/replace_row"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="@string/replace" />
 
-            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-                android:id="@+id/replace_text"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.0"
-                android:singleLine="true" />
-
-        </TableRow>
-    </TableLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:id="@+id/search_prev_result"
-            android:layout_width="wrap_content"
+        android:animateLayoutChanges="true"
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1.0"
-            android:text="@string/action_prev_panel"
-            style="@style/TexButton" />
-        <TextView
-            android:id="@+id/search_next_result"
-            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingTop="8dp"
+            android:paddingRight="16dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/TextInputLayout"
+                android:theme="@style/TextInputLayout.OutlinedBox"
+                android:id="@+id/text_input_layout_old"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:hint="@string/find">
+
+                <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                    android:id="@+id/search_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:inputType="textMultiLine"
+                    android:textIsSelectable="true"
+                    android:maxLines="8" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/TextInputLayout"
+                android:theme="@style/TextInputLayout.OutlinedBox"
+                android:id="@+id/replace_text_input_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:hint="@string/replace">
+
+                <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                    android:id="@+id/replace_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:inputType="textMultiLine"
+                    android:textIsSelectable="true"
+                    android:maxLines="8" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1.0"
-            android:text="@string/action_next_panel"
-            style="@style/TexButton" />
-        <TextView
-            android:id="@+id/search_replace_option"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.0"
-            android:text="@string/action_replace_panel"
-            style="@style/TexButton"/>
-        <TextView
-            android:id="@+id/all_replace_option"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.0"
-            android:text="@string/action_all_replace_panel"
-            style="@style/TexButton" />
-        <TextView
-            android:id="@+id/search_more_option"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=":"
-            style="@style/TexButton" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/search_prev_result"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:text="@string/action_prev_panel"
+                style="@style/TexButton" />
+
+            <TextView
+                android:id="@+id/search_next_result"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:text="@string/action_next_panel"
+                style="@style/TexButton" />
+
+            <TextView
+                android:id="@+id/search_replace_option"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:text="@string/action_replace_panel"
+                style="@style/TexButton" />
+
+            <TextView
+                android:id="@+id/all_replace_option"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:text="@string/action_all_replace_panel"
+                style="@style/TexButton" />
+
+            <ImageButton
+                android:id="@+id/search_more_option"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_more_horiz_white"
+                android:tint="?toolbarTextColor"
+                style="@style/TexButton" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

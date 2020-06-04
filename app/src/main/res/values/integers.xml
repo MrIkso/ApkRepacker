@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="span_count0">1</integer>
+    <integer name="anim_duration">400</integer>
+    <integer name="dialog_anim_duration">400</integer>
 </resources>

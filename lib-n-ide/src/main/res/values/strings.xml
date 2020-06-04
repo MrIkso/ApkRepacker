@@ -77,8 +77,12 @@
     <string name="editor">Editor</string>
     <string name="default_value">Default</string>
     <string name="font_size">Font Size</string>
-    <string name="touch_to_adjust_text_size">Touch to change text size</string>
-    <string name="word_wrap_in_editor">Wordwrap</string>
+    <string name="touch_to_adjust_text_size_title">Touch to change text size</string>
+    <string name="touch_to_adjust_text_size_summary">Change font size (Zoom) with two finger</string>
+    <string name="word_wrap_in_editor_title">Wordwrap</string>
+    <string name="word_wrap_in_editor_summary">Use soft wrap in editor</string>
+    <string name="auto_complete_title">Auto complete</string>
+    <string name="auto_complete_summary">Show small popup to suggest code when you typing. It can be not supported current language</string>
     <string name="show_linenumber">Show Linenumber</string>
     <string name="show_whitespace">Show Whitespace</string>
     <string name="auto_indent">Auto Indent</string>
@@ -90,7 +94,8 @@
     <string name="remember_last_opened_files_summary">Auto open last opened files when startup</string>
     <string name="screen_orientation">Screen Orientation</string>
     <string name="keep_screen_on">Keep screen on</string>
-    <string name="auto_capitalize">Auto capitalize</string>
+    <string name="auto_capitalize_title">Auto capitalize</string>
+    <string name="auto_capitalize_summary">Not recommend</string>
     <string name="enable_highlight">Enable highlight</string>
     <string name="file_not_exists">File not exists</string>
     <string name="cannt_handle_intent_x">Can not process intent: %s</string>
@@ -117,6 +122,8 @@
     <string name="exit">Exit</string>
     <string name="clear_history">Clear History</string>
     <string name="custom_symbol_list">Custom symbol list</string>
+    <string name="volume_move_title">Volume move</string>
+    <string name="volume_move_summary">Press volume up (+) to move cursor to right, press volume down (-) to move cursor to left</string>
     <string name="reset">Reset</string>
     <string name="fullscreen_mode">Full screen Mode</string>
     <string name="enable_fullscreen_mode_message">Restart the application will enable the full screen mode</string>
@@ -146,4 +153,5 @@
     <string name="action_replace_panel">Replace</string>
     <string name="action_all_replace_panel">All</string>
     <string name="action_prev_panel">Prev</string>
+    <string name="confirm_exit">Confirm of the exit</string>
 </resources>

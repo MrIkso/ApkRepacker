@@ -19,9 +19,10 @@ dependencies {
     testImplementation 'androidx.test.espresso:espresso-contrib:3.2.0'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(":md-dialog-core")
     implementation 'com.google.android.material:material:1.1.0'
     //implementation 'com.rengwuxian.materialedittext:library:2.1.4'
-    implementation 'com.afollestad.material-dialogs:commons:0.9.6.0'
+//    implementation 'com.afollestad.material-dialogs:commons:0.9.6.0'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'androidx.annotation:annotation:1.1.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'

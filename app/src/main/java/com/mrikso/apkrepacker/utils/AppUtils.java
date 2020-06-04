@@ -26,14 +26,10 @@ public class AppUtils {
         }
     }
 
-    public static void toggledScreenOn(Activity mActivity, boolean screenon)
-    {
-        if (screenon)
-        {
+    public static void toggledScreenOn(Activity mActivity, boolean screenon) {
+        if (screenon) {
             mActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        }
-        else
-        {
+        } else {
             mActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
     }
@@ -42,7 +38,7 @@ public class AppUtils {
         return Build.VERSION.SDK_INT >= sdkInt;
     }
 
-    public static void uninstallApp(Context context, String packageName){
+    public static void uninstallApp(Context context, String packageName) {
         context.startActivity(new Intent(Intent.ACTION_DELETE, Uri.parse("package:" + packageName)));
     }
 
@@ -71,7 +67,7 @@ public class AppUtils {
         return (int) (displayMetrics.widthPixels / displayMetrics.density);
     }
 
-    public  static String getArchName() {
+    public static String getArchName() {
         for (String androidArch : Build.SUPPORTED_ABIS) {
             switch (androidArch) {
                 case "arm64-v8a":
@@ -93,16 +89,15 @@ public class AppUtils {
         return "armeabi-v7a";
     }
 
-    public static Drawable getApkIcon(Context c, String n)
-    {
+    public static Drawable getApkIcon(Context c, String n) {
         Object[] apkInfo = getApkInfo(c, n);
         if (apkInfo != null)
-            return (Drawable)apkInfo[0];
+            return (Drawable) apkInfo[0];
         else
             return null;
     }
 
-    public static String getApkPackage(Context context, String apk){
+    public static String getApkPackage(Context context, String apk) {
         Object[] apkInfo = getApkInfo(context, apk);
         if (apkInfo != null)
             return (String) apkInfo[2];
@@ -110,7 +105,7 @@ public class AppUtils {
             return null;
     }
 
-    public static String getApkName(Context context, String apk){
+    public static String getApkName(Context context, String apk) {
         Object[] apkInfo = getApkInfo(context, apk);
         if (apkInfo != null)
             return (String) apkInfo[1];
@@ -118,15 +113,12 @@ public class AppUtils {
             return null;
     }
 
-    public static Object[] getApkInfo(Context c, String n)
-    {
+    public static Object[] getApkInfo(Context c, String n) {
         Object[] res = new Object[8];
-        try
-        {
+        try {
             PackageManager pm = c.getPackageManager();
             PackageInfo packageInfo = pm.getPackageArchiveInfo(n, PackageManager.GET_ACTIVITIES);
-            if (packageInfo != null)
-            {
+            if (packageInfo != null) {
                 ApplicationInfo appInfo = packageInfo.applicationInfo;
                 appInfo.sourceDir = n;
                 appInfo.publicSourceDir = n;
@@ -143,16 +135,11 @@ public class AppUtils {
                 res[6] = appInfo.targetSdkVersion;
                 res[7] = packageInfo.installLocation;
                 return res;
-            }
-            else
-            {
+            } else {
                 return null;
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return null;
         }
     }
-
 }

@@ -53,9 +53,10 @@ public class CompileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        projectDir= getArguments() != null ? getArguments().getString("project") : null;
+        projectDir = getArguments() != null ? getArguments().getString("project") : null;
         setRetainInstance(true);
     }
+
     public static CompileFragment newInstance(String param1) {
         CompileFragment fragment = new CompileFragment();
         Bundle args = new Bundle();
@@ -63,6 +64,7 @@ public class CompileFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
@@ -70,8 +72,7 @@ public class CompileFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_compile, container, false);
         mContext = view.getContext();
         listView = view.findViewById(R.id.log);
@@ -134,13 +135,12 @@ public class CompileFragment extends Fragment {
 
     public void builded(File result) {
         if (result != null) {
-            Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.anim_about_card_show);
+            Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.about_card_show);
             layoutApkCompiling.setVisibility(View.GONE);
             layoutApkCompiled.setVisibility(View.VISIBLE);
             layoutApkCompiled.startAnimation(animation);
             String pkg = AppUtils.getApkPackage(mContext, result.getAbsolutePath());
-            if (AppUtils.checkAppInstalled(mContext, pkg)) ;
-            {
+            if (AppUtils.checkAppInstalled(mContext, pkg)) {
                 uninstallApp.setVisibility(View.VISIBLE);
                 uninstallApp.setOnClickListener(v -> AppUtils.uninstallApp(mContext, pkg));
             }

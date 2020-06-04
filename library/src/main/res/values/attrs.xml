@@ -11,6 +11,7 @@
         <attr name="fab_shadowRadius" format="dimension" />
         <attr name="fab_shadowXOffset" format="dimension" />
         <attr name="fab_shadowYOffset" format="dimension" />
+        <attr name="fab_iconColor" format="color" />
         <attr name="fab_size" format="enum">
             <enum name="normal" value="0" />
             <enum name="mini" value="1" />

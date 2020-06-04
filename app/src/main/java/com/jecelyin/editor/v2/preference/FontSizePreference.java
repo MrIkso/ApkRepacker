@@ -19,6 +19,7 @@
 package com.jecelyin.editor.v2.preference;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.widget.TextView;
@@ -59,6 +60,7 @@ public class FontSizePreference extends JecListPreference {
         public void setupTextView(TextView tv, int position) {
             int fontSize = getValue(position);
             tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
+            tv.setTextColor(Color.RED);
         }
     }
 }

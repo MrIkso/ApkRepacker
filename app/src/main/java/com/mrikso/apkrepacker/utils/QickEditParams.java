@@ -16,18 +16,18 @@ public class QickEditParams {
         oldname = old;
     }
 
-    public static void setOldPackage(String old) {
-        oldpackage = old;
-    }
-
     public static void setInstallLocation(int location) {
         installLocation = location;
     }
 
-    ////getters
-
     public static String getOldPackage() {
         return oldpackage;
+    }
+
+    ////getters
+
+    public static void setOldPackage(String old) {
+        oldpackage = old;
     }
 
     public static int getInstallLoacation() {
@@ -98,24 +98,22 @@ public class QickEditParams {
         inDex = dex;
     }
 
-    public static void setBitmap(Bitmap bit)
-    {
-        bitmap = bit;
-    }
-    public static void setIconName(String str)
-    {
-        if (!str.equals(""))
-            iconName = str;
+    public static Bitmap getBitmap() {
+        return bitmap;
     }
 
-    public static Bitmap getBitmap()
-    {
-       return bitmap;
+    public static void setBitmap(Bitmap bit) {
+        bitmap = bit;
     }
-    public static String getIconName()
-    {
+
+    public static String getIconName() {
         if (!iconName.equals(""))
-          return iconName;
+            return iconName;
         return null;
+    }
+
+    public static void setIconName(String str) {
+        if (!str.equals(""))
+            iconName = str;
     }
 }

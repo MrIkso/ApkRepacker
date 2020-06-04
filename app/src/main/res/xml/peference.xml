@@ -13,7 +13,6 @@
         android:title="@string/pref_use_circular_icons"
         android:defaultValue="true" />
     </PreferenceCategory>
-
     <PreferenceCategory
         android:title="@string/pref_general">
         <SwitchPreference

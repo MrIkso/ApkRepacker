@@ -148,7 +148,7 @@ public class DecodeTask extends AsyncTask<File, CharSequence, Boolean> implement
 
     private boolean decode(ApkDecoder decoder) {
         try {
-            decoder.decode();
+            decoder.decode(mContext);
             return true;
         } catch (AndrolibException e) {
             log(Level.WARNING, "Decompile failed", e);
@@ -185,7 +185,7 @@ public class DecodeTask extends AsyncTask<File, CharSequence, Boolean> implement
             return null;
         }
         //}
-        name = name + "_src";
+//        name = name + "_src";
         if (!overwrite)
             name = FileUtil.genName(mContext, dir, name, "", 0);
         return new ExtFile(dir, name);

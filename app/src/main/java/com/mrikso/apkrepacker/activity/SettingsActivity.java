@@ -24,9 +24,7 @@ public class SettingsActivity extends BaseActivity {
         FragmentManager fm = getFragmentManager();
         Fragment f = fm.findFragmentById(R.id.content);
         if (f == null) {
-            fm.beginTransaction()
-                    .replace(R.id.content,new SettingsFragment())
-                    .commit();
+            fm.beginTransaction().replace(R.id.content, new SettingsFragment()).commit();
         }
         //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

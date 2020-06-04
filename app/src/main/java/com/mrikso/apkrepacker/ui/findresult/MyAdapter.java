@@ -25,7 +25,6 @@ public class MyAdapter extends ExpandableRecyclerViewAdapter<ParentViewHolder, C
         this.context = context;
     }
 
-
     @Override
     public ParentViewHolder onCreateGroupViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -45,7 +44,7 @@ public class MyAdapter extends ExpandableRecyclerViewAdapter<ParentViewHolder, C
         final ChildData childData = ((ParentData) group).getItems().get(childIndex);
         holder.setText(childData.getSpannableName(), TextView.BufferType.SPANNABLE);
 
-        holder.textView_child.setOnClickListener(view -> {
+        holder.view.setOnClickListener(view -> {
             try {
                 Intent intent = new Intent(context, CodeEditorActivity.class);
                 intent.putExtra("offset", childData.getOffset());

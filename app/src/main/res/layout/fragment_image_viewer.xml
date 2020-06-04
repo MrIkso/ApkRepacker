@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- This layout also clips the toolbar in order to avoid overlap with status bar. -->
+    <com.mrikso.apkrepacker.ui.imageviewer.FixIllegalArgumentExceptionViewPager
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/alpha" />
+
+<!--    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="?colorPrimary"
+        android:fitsSystemWindows="true">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:backgroundTint="?colorPrimary"
+            app:navigationIcon="@drawable/ic_back"
+            app:popupTheme="?actionBarPopupTheme" />
+    </FrameLayout>-->
+
+    <include layout="@layout/appbar" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_go_editor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom|center"
+        android:layout_margin="16.0dip"
+        app:backgroundTint="?colorAccent"
+        app:tint="@color/white"
+        android:fitsSystemWindows="true"
+        android:src="@drawable/ic_rename" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

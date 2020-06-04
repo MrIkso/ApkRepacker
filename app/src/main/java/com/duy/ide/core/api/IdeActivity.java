@@ -40,8 +40,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -70,6 +70,7 @@ import com.duy.ide.file.FileManager;
 import com.duy.ide.file.dialogs.DialogNewFile;
 import com.duy.ide.settings.EditorSettingsActivity;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.textfield.TextInputLayout;
 import com.jecelyin.common.task.TaskListener;
 import com.jecelyin.common.utils.DLog;
 import com.jecelyin.common.utils.SysUtils;
@@ -151,7 +152,7 @@ public abstract class IdeActivity extends BaseActivity implements MenuItem.OnMen
     private boolean mWholeWordsOnly;
     private boolean mRegex, mReplaceMode;
     private CustomAdapter searchAdapter;
-    private CustomAdapter repaceAdapter;
+    private CustomAdapter replaceAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -691,7 +692,7 @@ public abstract class IdeActivity extends BaseActivity implements MenuItem.OnMen
             return;
         }
         if (mTabManager.onDestroy()) {
-            if ((System.currentTimeMillis() - mExitTime) > 2000) {
+            if ((System.currentTimeMillis() - mExitTime) > 2000 && mPreferences.isConfirmExit()) {
                 UIUtils.toast(this, R.string.press_again_will_exit);
                 mExitTime = System.currentTimeMillis();
             } else {
@@ -752,26 +753,30 @@ public abstract class IdeActivity extends BaseActivity implements MenuItem.OnMen
     }
 
     public void initSearchPanel(final EditorDelegate editorDelegate) {
-        final TableRow replaceRow = findViewById(R.id.replace_row);
+//        final TableRow replaceRow = findViewById(R.id.replace_row);
+        TextInputLayout replaceTextInputLayout = findViewById(R.id.replace_text_input_layout);
         searchPanel = findViewById(R.id.search_panel);
         searchPanel.setVisibility(View.VISIBLE);
         mRegex = mPreferences.isRegexMode();
         mCaseSensitive = mPreferences.isMatchCaseMode();
         mWholeWordsOnly = mPreferences.isWholeWordsOnlyMode();
-        replaceRow.setVisibility(mReplaceMode ? View.VISIBLE : View.GONE);
+        replaceTextInputLayout.setVisibility(mReplaceMode ? View.VISIBLE : View.GONE);
         TextView nextResult = findViewById(R.id.search_next_result);
         TextView prevResult = findViewById(R.id.search_prev_result);
         TextView replaceOption = findViewById(R.id.search_replace_option);
-        final TextView allReplace = findViewById(R.id.all_replace_option);
+        TextView allReplace = findViewById(R.id.all_replace_option);
+        nextResult.setTextColor(getThemeAccentColor(IdeActivity.this));
+        prevResult.setTextColor(getThemeAccentColor(IdeActivity.this));
+        replaceOption.setTextColor(getThemeAccentColor(IdeActivity.this));
         allReplace.setEnabled(false);
         allReplace.setTextColor(getResources().getColor(R.color.color_gray_text_disabled));
-        TextView moreOption = findViewById(R.id.search_more_option);
+        ImageButton moreOption = findViewById(R.id.search_more_option);
         searchAdapter = new CustomAdapter(this, getSearchData());
-        repaceAdapter = new CustomAdapter(this, getReplaceData());
+        replaceAdapter = new CustomAdapter(this, getReplaceData());
         final AppCompatAutoCompleteTextView searchET = findViewById(R.id.search_text);
         final AppCompatAutoCompleteTextView replaceET = findViewById(R.id.replace_text);
         searchET.setAdapter(searchAdapter);
-        replaceET.setAdapter(repaceAdapter);
+        replaceET.setAdapter(replaceAdapter);
         searchET.setText(findText);
         replaceET.setText(replaceText != null ? replaceText : "");
         moreOption.setOnClickListener(view -> {
@@ -805,6 +810,7 @@ public abstract class IdeActivity extends BaseActivity implements MenuItem.OnMen
                 }
                 return true;
             });
+
             popupMenu.getMenu().findItem(R.id.regex_check_menu).setChecked(mRegex);
             popupMenu.getMenu().findItem(R.id.whole_words_only_menu).setChecked(mWholeWordsOnly);
             popupMenu.getMenu().findItem(R.id.match_case_check).setChecked(mCaseSensitive);
@@ -813,21 +819,22 @@ public abstract class IdeActivity extends BaseActivity implements MenuItem.OnMen
             mPreferences.setMatchCaseMode(mCaseSensitive);
             popupMenu.show();
         });
+
         nextResult.setOnClickListener(view -> {
-            if (onFindButtonClick(searchET, replaceET, editorDelegate)) ;
-            {
+            if (onFindButtonClick(searchET, replaceET, editorDelegate)) {
                 doFind(ID_FIND_NEXT, grep, editorDelegate);
             }
-
         });
+
         prevResult.setOnClickListener(view -> {
             if (lastResults != null) {
                 doFind(ID_FIND_PREV, grep, editorDelegate);
             }
         });
+
         replaceOption.setOnClickListener(view -> {
             mReplaceMode = true;
-            replaceRow.setVisibility(View.VISIBLE);
+            replaceTextInputLayout.setVisibility(View.VISIBLE);
             allReplace.setEnabled(true);
             allReplace.setTextColor(getThemeAccentColor(IdeActivity.this));
             if (replaceText != null) {
@@ -837,7 +844,13 @@ public abstract class IdeActivity extends BaseActivity implements MenuItem.OnMen
                 }
             }
         });
-        allReplace.setOnClickListener(view -> grep.replaceAll(editorDelegate.getEditText(), replaceText));
+        allReplace.setOnClickListener(view -> {
+            if (editorDelegate.getEditText() != null && !TextUtils.isEmpty(searchET.getText().toString()) && !TextUtils.isEmpty(replaceET.getText().toString()) && onFindButtonClick(searchET, replaceET, editorDelegate)) {
+                grep.replaceAll(editorDelegate.getEditText(), replaceText);
+            } else {
+                UIUtils.toast(this, R.string.cannot_be_empty);
+            }
+        });
 
         searchET.addTextChangedListener(new TextWatcher() {
             @Override
@@ -897,7 +910,7 @@ public abstract class IdeActivity extends BaseActivity implements MenuItem.OnMen
         grep = builder.build();
         ITabDatabase database = SQLHelper.getInstance(IdeActivity.this);
 //        database.addFindKeyword(findText, false);
-      //  database.addFindKeyword(replaceText, true);
+        //  database.addFindKeyword(replaceText, true);
         /*
         grep = builder.build();
         SQLHelper dbHelper = new SQLHelper(this);
@@ -995,11 +1008,13 @@ public abstract class IdeActivity extends BaseActivity implements MenuItem.OnMen
         List<String> items = SQLHelper.getInstance(this).getFindKeywords(true);
         return items;
     }
-    public static int getThemeAccentColor (final Context context) {
-        final TypedValue value = new TypedValue ();
-        context.getTheme ().resolveAttribute (R.attr.toolbarTextColor, value, true);
+
+    public static int getThemeAccentColor(final Context context) {
+        final TypedValue value = new TypedValue();
+        context.getTheme().resolveAttribute(R.attr.colorAccent, value, true);
         return value.data;
     }
+
     private class KeyBoardEventListener implements ViewTreeObserver.OnGlobalLayoutListener {
         IdeActivity activity;
 

@@ -1,5 +1,6 @@
 R_DEF: Internal format may change without notice
 local
+animator appbar_elevation
 array screen_orientation
 array screen_orientation_values
 attr? actionModeCopyDrawable
@@ -50,6 +51,7 @@ color dark_actionmode_light_background
 color textColorInverted
 color white
 dimen cab_find_text_width
+dimen dialog_round
 dimen divider_height
 dimen smallest_text_size
 dimen symbol_bar_height
@@ -82,6 +84,7 @@ drawable ic_themes
 drawable ic_undo_white
 drawable ic_vertical_align_bottom_white
 drawable ic_vertical_align_top_white
+drawable shadow
 id action_convert_to_lowercase
 id action_convert_to_uppercase
 id action_copy
@@ -117,6 +120,7 @@ id drawer_layout
 id edit_input
 id edit_path
 id edit_text
+id editor_appbar
 id editor_view
 id editor_view_pager
 id encoding_textView
@@ -147,8 +151,8 @@ id regex_check_menu
 id replaceTextView
 id replace_check_box
 id replace_edit_text
-id replace_row
 id replace_text
+id replace_text_input_layout
 id right_navigation_view
 id searchTextView
 id search_more_option
@@ -161,6 +165,7 @@ id spinner_exts
 id symbolBarLayout
 id tab_layout
 id textView
+id text_input_layout_old
 id title_text_view
 id toolbar
 id txt_document_info
@@ -173,7 +178,7 @@ id whole_words_only_menu
 id word_count_textView
 layout activity_default_ide
 layout activity_editor_setting
-layout appbar
+layout appbar_editor
 layout dialog_document_info
 layout dialog_find_replace_default
 layout dialog_input
@@ -196,7 +201,10 @@ string action_editor_themes
 string action_next_panel
 string action_prev_panel
 string action_replace_panel
-string auto_capitalize
+string auto_capitalize_summary
+string auto_capitalize_title
+string auto_complete_summary
+string auto_complete_title
 string auto_indent
 string auto_pair
 string auto_save
@@ -211,6 +219,7 @@ string clear_history
 string close
 string close_drawer
 string code_editor
+string confirm_exit
 string confirm_save
 string confirm_save_msg
 string convert_to_lowercase
@@ -275,6 +284,7 @@ string pref_auto_complete
 string pref_auto_indent
 string pref_auto_pair
 string pref_auto_save
+string pref_confirm_exit
 string pref_desc_auto_pair
 string pref_font_size
 string pref_highlight_file_size_limit
@@ -322,12 +332,16 @@ string smali_java
 string sort_by_name
 string sort_by_size
 string tab_size
-string touch_to_adjust_text_size
+string touch_to_adjust_text_size_summary
+string touch_to_adjust_text_size_title
 string undo
 string use_regex_to_find_tip
 string view
+string volume_move_summary
+string volume_move_title
 string whole_words_only
-string word_wrap_in_editor
+string word_wrap_in_editor_summary
+string word_wrap_in_editor_title
 string word_x
 string yes
 style ActionModeSubtitle
@@ -338,6 +352,8 @@ style DarkToolbarTheme
 style Light.ActionMode
 style Light.Toolbar
 style TexButton
+style TextInputLayout
+style TextInputLayout.OutlinedBox
 styleable Editor textForeground textBackground caretColor selectionColor invisibles gutterForeground gutterBackground gutterDivider findResultsPath findResultsKeyword
 styleable Highlight hlComment1 hlComment2 hlComment3 hlComment4 hlDigit hlFoldLine0 hlFoldLine1 hlFoldLine2 hlFoldLine3 hlFunction hlInvalid hlKeyword1 hlKeyword2 hlKeyword3 hlKeyword4 hlLabel hlLiteral1 hlLiteral2 hlLiteral3 hlLiteral4 hlMarkup hlOperator
 styleable SelectionModeDrawables actionModeSelectAllDrawable actionModeCutDrawable actionModeCopyDrawable actionModePasteDrawable actionModeFindDrawable

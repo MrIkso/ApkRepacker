@@ -1,31 +1,37 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="AppTheme" parent="@style/Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/light_primary</item>
         <item name="colorPrimaryDark">@color/light_primary</item>
         <item name="colorAccent">@color/light_accent</item>
+
         <item name="android:textColorPrimary">@color/light_primary_text</item>
         <item name="android:textColorSecondary">@color/light_secondary_text</item>
-        <item name="dividerHorizontal">@color/light_divider</item>
+        <!--        <item name="android:windowLightStatusBar">true</item>-->
+        <item name="android:statusBarColor">@color/gray_very_light</item>
+        <item name="android:navigationBarColor">@color/gray_very_light</item>
+        <item name="dividerHorizontal">@color/color_divider</item>
         <item name="colorSelected">#80B2EBF2</item>
-        <item name="toolbarShadow">@drawable/shadow</item>
-        <item name="popupOverlayStyle">@style/AppTheme.PopupOverlay</item>
+
+        <item name="popupMenuStyle">@style/PopupMenu</item>
+        <item name="actionOverflowMenuStyle">@style/OverflowMenu</item>
+        <item name="android:dropDownListViewStyle">@style/DropDown.ListView</item>
         <item name="bottomSheetDialogTheme">@style/BottomSheetDialog</item>
         <item name="android:dialogTheme">@style/AlertDialog.AppTheme.Light</item>
         <item name="android:alertDialogTheme">@style/AlertDialog.AppTheme.Light</item>
         <item name="colorBackgroundTint">@color/light_primary</item>
         <item name="colorBackgroundLeft">@color/light_str_left_bg</item>
         <item name="colorBackgroundRight">@color/light_str_right_bg</item>
-        <item name="colorBackgroundBottomMenu">@color/main_background</item>
+        <item name="colorBackgroundBottomMenu">@color/light_primary</item>
         <item name="colorBackgroundIcon_1">#d6e1ea</item>
         <item name="colorBackgroundIcon_2">#fff</item>
         <item name="colorBackgroundIcon_3">#a6caff</item>
         <item name="textColor">@color/light_text_color_primary</item>
         <item name="textColor_1">@color/textColorInverted</item>
-        <item name="cardBackground">@color/light_card_background</item>
-
+        <item name="cardBackground">@color/light_primary</item>
+        <item name="md_background_color">@color/light_primary</item>
 
         <item name="actionModeStyle">@style/ActionMode</item>
         <item name="android:actionModeStyle">@style/ActionMode</item>
@@ -36,26 +42,31 @@
         <item name="toolbarIconDisabledColor">#c6c6c6</item>
         <item name="toolbarTextColor">@color/light_text_color_primary</item>
         <item name="menuIconNormalColor">?colorControlNormal</item>
-
         <item name="editorTabBackground">@drawable/drawer_tab_item_background_light</item>
         <item name="findResultsPath">#0000ff</item>
         <item name="findResultsKeyword">#eaa95e</item>
 
+        <item name="android:windowAnimationStyle">@style/Animation.Activity</item>
+
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+
     </style>
 
-    <style name="AppTheme.Dark" parent="Theme.MaterialComponents.NoActionBar">
+    <style name="AppTheme.Dark" parent="@style/Theme.MaterialComponents.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/dark_primary_dark</item>
-        <item name="colorPrimaryDark">@color/dark_primary_dark</item>
+        <item name="colorPrimary">@color/dark_primary</item>
+        <item name="colorPrimaryDark">@color/dark_primary</item>
         <item name="colorAccent">@color/dark_accent</item>
 
         <item name="android:textColorPrimary">@color/dark_primary_text</item>
         <item name="android:textColorSecondary">@color/dark_secondary_text</item>
-        <item name="dividerHorizontal">@color/dark_divider</item>
+        <item name="android:navigationBarColor">@color/dark_primary</item>
+        <item name="dividerHorizontal">@color/color_divider_dark</item>
         <item name="colorSelected">#801565C0</item>
-        <item name="toolbarShadow">@drawable/shadow</item>
-        <item name="popupOverlayStyle">@style/AppTheme.PopupOverlay.Dark</item>
+
+        <item name="popupMenuStyle">@style/PopupMenu</item>
+        <item name="actionOverflowMenuStyle">@style/OverflowMenu</item>
+        <item name="android:dropDownListViewStyle">@style/DropDown.ListView</item>
         <item name="bottomSheetDialogTheme">@style/BottomSheetDialog.Dark</item>
         <item name="android:dialogTheme">@style/AlertDialog.AppTheme.Dark</item>
         <item name="android:alertDialogTheme">@style/AlertDialog.AppTheme.Dark</item>
@@ -69,7 +80,8 @@
         <item name="colorBackgroundIcon_3">#faaaaddd</item>
         <item name="textColor">@color/dark_primary_text</item>
         <item name="textColor_1">@color/dark_primary_text</item>
-        <item name="cardBackground">@color/dark_card_background</item>
+        <item name="cardBackground">@color/dark_primary</item>
+        <item name="md_background_color">@color/dark_primary</item>
 
         <item name="actionModeStyle">@style/ActionMode</item>
         <item name="android:actionModeStyle">@style/ActionMode</item>
@@ -80,21 +92,27 @@
         <item name="toolbarIconNormalColor">#ffffff</item>
         <item name="toolbarIconDisabledColor">#50ffffff</item>
         <item name="toolbarTextColor">#fff</item>
-
         <item name="menuIconNormalColor">#ffffff</item>
         <item name="editorTabBackground">@drawable/drawer_tab_item_background_dark</item>
-
         <item name="findResultsPath">#0000ff</item>
         <item name="findResultsKeyword">#C26509</item>
 
+        <item name="android:windowAnimationStyle">@style/Animation.Activity</item>
+
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
+    <style name="AppTheme.AppBarOverlay.Dark" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay.Dark" parent="ThemeOverlay.MaterialComponents" />
+    <style name="Animation.Activity" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/activity_open_enter</item>
+        <item name="android:activityOpenExitAnimation">@anim/activity_open_exit</item>
+        <item name="android:activityCloseEnterAnimation">@anim/activity_close_enter</item>
+        <item name="android:activityCloseExitAnimation">@anim/activity_close_exit</item>
+    </style>
 
     <!--TEXT STYLES-->
     <style name="Text">
@@ -113,6 +131,10 @@
         <item name="android:textColor">?android:textColorPrimary</item>
     </style>
 
+    <style name="Text.Subhead.All">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Subhead</item>
+    </style>
+
     <!--Bottom sheet item-->
     <style name="ActionItem">
         <item name="android:background">?selectableItemBackground</item>
@@ -120,8 +142,9 @@
         <item name="android:clickable">true</item>
         <item name="android:textSize">@dimen/text_size</item>
         <item name="android:drawablePadding">@dimen/drawable_padding</item>
-        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_vertical</item>
         <item name="android:padding">@dimen/normal_padding</item>
     </style>
 
@@ -134,6 +157,10 @@
         <item name="android:statusBarColor">#00000000</item>
         <item name="android:windowFullscreen">false</item>
         <item name="android:colorBackground">@color/white</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+        <item name="android:navigationBarColor">@color/gray_very_light</item>
+        <item name="bottomSheetStyle">@style/BottomSheetDialogStyle</item>
     </style>
 
     <style name="BottomSheetDialog.Dark" parent="Theme.MaterialComponents.BottomSheetDialog">
@@ -145,26 +172,47 @@
         <item name="android:statusBarColor">#00000000</item>
         <item name="android:windowFullscreen">false</item>
         <item name="android:colorBackground">@color/dark_background</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+        <item name="android:navigationBarColor">@color/dark_primary</item>
+        <item name="bottomSheetStyle">@style/BottomSheetDialogStyle</item>
+    </style>
+
+    <style name="BottomSheetDialogStyle" parent="Widget.Design.BottomSheet.Modal">
+        <!--        <item name="android:background">@drawable/bottom_sheet_dialog_bg</item>-->
+        <item name="android:background">@android:color/transparent</item>
+        <!--        <item name="android:padding">@dimen/checkbox_margin</item>-->
     </style>
 
     <!--CustomDialog-->
-    <style name="AlertDialog.AppTheme.Light" parent="Theme.MaterialComponents.Light.Dialog.Alert">
-        <!--<item name="android:windowBackground">@drawable/dialog_bg_light</item>-->
+    <style name="AlertDialog.AppTheme.Light" parent="@style/Theme.MaterialComponents.Light.Dialog.Alert">
         <item name="colorPrimary">@color/light_accent</item>
         <item name="colorAccent">@color/light_accent</item>
-        <item name="android:windowBackground">@color/white</item>
+        <item name="android:textColorSecondary">@color/light_secondary_text</item>
+        <item name="dialogCornerRadius">@dimen/dialog_round</item>
         <item name="buttonBarButtonStyle">@style/MD2TextButton</item>
         <item name="android:buttonBarButtonStyle">@style/MD2TextButton</item>
+        <item name="android:windowAnimationStyle">@style/WindowAnimationDialog</item>
+        <item name="android:windowMinWidthMajor">@android:dimen/dialog_min_width_major</item>
+        <item name="android:windowMinWidthMinor">@android:dimen/dialog_min_width_minor</item>
     </style>
 
-    <style name="AlertDialog.AppTheme.Dark" parent="Theme.MaterialComponents.Dialog.Alert">
-        <!--  <item name="android:windowBackground">@drawable/dialog_bg_dark</item>-->
-        <item name="android:windowBackground">@color/dark_primary</item>
+    <style name="AlertDialog.AppTheme.Dark" parent="@style/Theme.MaterialComponents.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/action_popup_bg</item>
+        <item name="backgroundTint">@color/dark_primary</item>
         <item name="colorPrimary">@color/dark_accent</item>
         <item name="colorAccent">@color/dark_accent</item>
         <item name="dialogCornerRadius">@dimen/dialog_round</item>
         <item name="buttonBarButtonStyle">@style/MD2TextButton</item>
         <item name="android:buttonBarButtonStyle">@style/MD2TextButton</item>
+        <item name="android:windowAnimationStyle">@style/WindowAnimationDialog</item>
+        <item name="android:windowMinWidthMajor">@android:dimen/dialog_min_width_major</item>
+        <item name="android:windowMinWidthMinor">@android:dimen/dialog_min_width_minor</item>
+    </style>
+
+    <style name="WindowAnimationDialog" parent="@android:style/Animation.Dialog">
+        <item name="android:windowEnterAnimation">@anim/fade_in_dialog</item>
+        <item name="android:windowExitAnimation">@anim/fade_out_dialog</item>
     </style>
 
     <style name="DialogFullscreen" parent="Theme.MaterialComponents.Light.DialogWhenLarge">
@@ -172,59 +220,145 @@
         <item name="colorPrimaryDark">@color/light_primary</item>
         <item name="colorAccent">@color/light_accent</item>
         <item name="android:windowNoTitle">true</item>
-        <item name="android:statusBarColor">?colorPrimaryDark</item>
         <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:statusBarColor">@color/gray_very_light</item>
+        <item name="android:navigationBarColor">@color/gray_very_light</item>
     </style>
 
     <style name="DialogFullscreen.Dark" parent="Theme.MaterialComponents.DialogWhenLarge">
-        <item name="colorPrimary">@color/dark_background</item>
-        <item name="colorPrimaryDark">@color/dark_background</item>
+        <item name="colorPrimary">@color/dark_primary</item>
+        <item name="colorPrimaryDark">@color/dark_primary</item>
         <item name="colorAccent">@color/dark_accent</item>
         <item name="android:windowNoTitle">true</item>
-        <item name="android:statusBarColor">?colorPrimaryDark</item>
-        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:statusBarColor">@color/dark_primary</item>
         <item name="android:colorBackground">@color/dark_primary</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:navigationBarColor">@color/dark_primary</item>
+    </style>
+
+    <!--MaterialCardView-->
+    <style name="Material.CardView" parent="@style/Widget.MaterialComponents.CardView">
+        <item name="cardElevation">0dp</item>
+        <item name="strokeColor">?dividerColor</item>
+        <item name="strokeWidth">@dimen/divider_height</item>
+        <!--        <item name="cardCornerRadius">@dimen/dialog_round</item>-->
+        <item name="cardBackgroundColor">?cardBackground</item>
+        <item name="cardPreventCornerOverlap">false</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.CardView</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <!--        <item name="android:foreground">?selectableItemBackground</item>-->
+        <item name="android:layout_marginTop">@dimen/card_title_margin</item>
+        <item name="android:layout_marginLeft">@dimen/card_title_margin</item>
+        <item name="android:layout_marginRight">@dimen/card_title_margin</item>
+    </style>
+
+    <style name="Material.CardView.BottomSheet" parent="@style/Material.CardView">
+        <item name="shapeAppearance">@style/ShapeAppearance.CardView.BottomSheet</item>
+    </style>
+
+    <style name="ShapeAppearance.CardView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">@dimen/dialog_round</item>
+        <item name="cornerSizeTopLeft">@dimen/dialog_round</item>
+        <item name="cornerSizeBottomRight">@dimen/dialog_round</item>
+        <item name="cornerSizeBottomLeft">@dimen/dialog_round</item>
+    </style>
+
+    <style name="ShapeAppearance.CardView.BottomSheet" parent="@style/ShapeAppearance.CardView">
+        <item name="cornerSizeTopRight">@dimen/bottom_sheet_dialog_round</item>
+        <item name="cornerSizeTopLeft">@dimen/bottom_sheet_dialog_round</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
     </style>
 
     <style name="ColorPickerDialog.Dark" parent="Theme.MaterialComponents.Dialog">
         <item name="colorPrimary">@color/dark_accent</item>
-    <item name="colorPrimaryDark">@color/dark_primary_dark</item>
-
-    <item name="colorAccent">@color/dark_accent</item>
-        <item name="redColor">#ff5252</item>
-        <item name="greenColor">#69f0ae</item>
-        <item name="blueColor">#536dfe</item>
-        <item name="backgroundColor">@color/dark_primary_dark</item>
+        <item name="colorAccent">@color/dark_accent</item>
+        <item name="dialogCornerRadius">@dimen/dialog_round</item>
+        <item name="buttonBarButtonStyle">@style/MD2TextButton</item>
+        <item name="android:buttonBarButtonStyle">@style/MD2TextButton</item>
     </style>
+
     <style name="ColorPickerDialog" parent="Theme.MaterialComponents.Light.Dialog">
         <item name="colorPrimary">@color/light_accent</item>
-        <item name="colorPrimaryDark">@color/white</item>
         <item name="colorAccent">@color/light_accent</item>
-        <item name="backgroundColor">@android:color/white</item>
+        <item name="dialogCornerRadius">@dimen/dialog_round</item>
+        <item name="buttonBarButtonStyle">@style/MD2TextButton</item>
+        <item name="android:buttonBarButtonStyle">@style/MD2TextButton</item>
     </style>
+
     <!--FAB-->
     <style name="MenuButtonsSmall">
         <item name="fab_size">mini</item>
+        <item name="fab_iconColor">@android:color/white</item>
+        <item name="fab_colorRipple">?colorSelected</item>
         <item name="fab_colorNormal">?colorAccent</item>
-        <item name="fab_colorPressed">@color/md_selector_color</item>
-        <item name="fab_colorRipple">?colorAccent</item>
-    </style>
-
-    <style name="MD2TextButton" parent="@style/Widget.MaterialComponents.Button.TextButton">
-        <item name="backgroundTint">@color/transparent</item>
-        <item name="android:textSize">@dimen/text_size</item>
-        <item name="android:clickable">true</item>
-        <item name="rippleColor">?colorAccent</item>
-        <item name="android:textAllCaps">false</item>
+        <item name="fab_colorPressed">?colorAccent</item>
     </style>
 
     <!--TextButton-->
+    <style name="TexButton">
+        <item name="android:textAppearance">
+            @style/TextAppearance.AppCompat.Widget.Button.Borderless.Colored
+        </item>
+        <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="android:textColor">?attr/textColor_1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">?selectableItemBackground</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:minWidth">45.0dp</item>
+        <item name="android:minHeight">@dimen/text_minHeight</item>
+    </style>
+
+    <style name="MD2TextButton" parent="@style/Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:clickable">true</item>
+        <item name="rippleColor">?colorAccent</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconPadding">@dimen/checkbox_margin</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
 
     <style name="MD2Button" parent="@style/Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="cornerRadius">19dp</item>
         <item name="android:textColor">@color/white</item>
         <item name="backgroundTint">?colorAccent</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="MD_ActionButton.Text" parent="MD2TextButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/md_button_height</item>
+        <item name="android:textSize">@dimen/md_button_textsize</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:gravity">center</item>
+        <item name="android:minWidth">@dimen/md_button_min_width</item>
+        <item name="android:paddingLeft">@dimen/md_button_textpadding_horizontal</item>
+        <item name="android:paddingRight">@dimen/md_button_textpadding_horizontal</item>
+    </style>
+
+    <style name="OverflowMenu" parent="Widget.AppCompat.PopupMenu.Overflow">
+        <item name="android:windowDisablePreview">true</item>
+        <item name="overlapAnchor">false</item>
+        <item name="android:popupElevation">4dp</item>
+        <item name="android:dropDownVerticalOffset">0dp</item>
+        <item name="android:dropDownHorizontalOffset">0dp</item>
+        <item name="android:popupBackground">@drawable/action_popup_bg</item>
+    </style>
+
+    <style name="PopupMenu" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:popupElevation">4dp</item>
+        <item name="android:popupBackground">@drawable/action_popup_bg</item>
+    </style>
+
+    <style name="DropDown.ListView" parent="">
+        <item name="android:listSelector">@drawable/action_popup_selector</item>
     </style>
 
     <!--ActionMode-->
@@ -245,16 +379,16 @@
         <item name="android:textColor">?attr/textColor</item>
     </style>
 
-   <!-- <style name="Light.Toolbar" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-        <item name="android:layout_height">?attr/actionBarSize</item>
-    </style>
+    <!-- <style name="Light.Toolbar" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+         <item name="android:layout_height">?attr/actionBarSize</item>
+     </style>
 
-    <style name="Light.Popup.Toolbar" parent="@style/ThemeOverlay.AppCompat.Light" />-->
+     <style name="Light.Popup.Toolbar" parent="@style/ThemeOverlay.AppCompat.Light" />-->
 
     <!--SearchPanel-->
     <style name="FilterFooter">
         <item name="android:layout_gravity">bottom</item>
-        <item name="android:background">@drawable/bg_poupup</item>
+        <item name="android:background">@drawable/action_popup_bg</item>
         <item name="android:paddingBottom">16dp</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">70dp</item>
@@ -262,22 +396,25 @@
     </style>
 
     <style name="TextInputLayout.OutlinedBox" parent="Widget.Design.TextInputLayout">
-      <!--  <item name="boxCornerRadiusBottomEnd">@dimen/text_margin_small</item>
-        <item name="boxCornerRadiusBottomStart">@dimen/text_margin_small</item>
-        <item name="boxCornerRadiusTopEnd">@dimen/text_margin_small</item>
-        <item name="boxCornerRadiusTopStart">@dimen/text_margin_small</item>-->
+        <item name="boxCornerRadiusBottomEnd">@dimen/dialog_round</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/dialog_round</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/dialog_round</item>
+        <item name="boxCornerRadiusTopStart">@dimen/dialog_round</item>
         <item name="hintTextColor">?colorAccent</item>
         <item name="boxStrokeColor">?colorAccent</item>
         <item name="colorControlActivated">?colorAccent</item>
     </style>
 
-    <style name="TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <!--  <item name="boxCornerRadiusBottomEnd">@dimen/text_margin_small</item>
-          <item name="boxCornerRadiusBottomStart">@dimen/text_margin_small</item>
-          <item name="boxCornerRadiusTopEnd">@dimen/text_margin_small</item>
-          <item name="boxCornerRadiusTopStart">@dimen/text_margin_small</item>-->
+    <style name="TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxCornerRadiusBottomEnd">@dimen/dialog_round</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/dialog_round</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/dialog_round</item>
+        <item name="boxCornerRadiusTopStart">@dimen/dialog_round</item>
         <item name="hintTextColor">?colorAccent</item>
-        <item name="boxStrokeColor">?colorAccent</item>
+        <item name="boxStrokeColor" tools:ignore="PrivateResource">
+            @color/mtrl_outlined_stroke_color
+        </item>
+        <item name="boxStrokeWidth">@dimen/divider_height</item>
     </style>
 
     <style name="TabStyle" parent="Widget.Design.TabLayout">

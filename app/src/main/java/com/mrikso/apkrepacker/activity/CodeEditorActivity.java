@@ -86,5 +86,4 @@ public class CodeEditorActivity  extends IdeActivity implements FileChangeListen
         ft.replace(R.id.left_navigation_content, folderStructureFragment, tag).commit();
         mFilePresenter = new ProjectFilePresenter(folderStructureFragment);
     }
-
 }

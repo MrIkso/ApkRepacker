@@ -11,15 +11,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.recycler.OnItemClickListener;
-import com.mrikso.apkrepacker.recycler.OnItemSelectedListener;
 import com.mrikso.apkrepacker.recycler.ViewHolder;
-
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FilesAdapter extends   RecyclerView.Adapter<ViewHolder> {
+public class FilesAdapter extends RecyclerView.Adapter<ViewHolder> {
     private List<File> items;
     private Context context;
     private final SparseBooleanArray selectedItems;
@@ -51,6 +49,7 @@ public class FilesAdapter extends   RecyclerView.Adapter<ViewHolder> {
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
+
     public void refresh() {
         for (int i = 0; i < getItemCount(); i++) {
             notifyItemChanged(i);

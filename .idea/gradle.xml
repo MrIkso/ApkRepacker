@@ -18,7 +18,10 @@
             <option value="$PROJECT_DIR$/expandablerecyclerview" />
             <option value="$PROJECT_DIR$/lib-n-ide" />
             <option value="$PROJECT_DIR$/library" />
+            <option value="$PROJECT_DIR$/md-dialog-core" />
+            <option value="$PROJECT_DIR$/photoview" />
             <option value="$PROJECT_DIR$/treeview" />
+            <option value="$PROJECT_DIR$/vectormaster" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

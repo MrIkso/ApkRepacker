@@ -1,69 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/card_margin_vertical_big_activity"
-    android:layout_marginEnd="@dimen/card_margin_horizontal_big_activity"
-    android:layout_marginStart="@dimen/card_margin_horizontal_big_activity"
-    android:layout_marginTop="@dimen/card_margin_vertical_big_activity"
-    android:foreground="?attr/selectableItemBackground"
-    app:cardCornerRadius="@dimen/card_recycler_corner_radius"
-    app:cardBackgroundColor="?attr/cardBackground"
-    app:cardElevation="@dimen/card_recycler_elevation">
+    style="@style/Material.CardView">
 
-    <RelativeLayout
+    <LinearLayout
+        android:orientation="vertical"
+        android:animateLayoutChanges="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="@dimen/text_margin">
+        android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/icon_app"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/text_margin" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <TextView
-            android:singleLine="true"
-            android:ellipsize="marquee"
-            android:textColor="?attr/textColor_1"
-            android:textStyle="bold"
-            android:textSize="@dimen/text_size"
-            android:id="@+id/app_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/icon_app"
-            />
+            <LinearLayout
+                android:id="@+id/icon_layout"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:padding="@dimen/checkbox_margin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
-        <TextView
-            android:singleLine="true"
-            android:ellipsize="marquee"
-            android:id="@+id/app_pkg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/app_name"
-            android:layout_marginTop="@dimen/text_margin_very_small"
-            android:layout_toEndOf="@id/icon_app" />
-        <TextView
-            android:id="@+id/app_patch"
-            android:singleLine="true"
-            android:ellipsize="start"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/app_pkg"
-            android:layout_marginTop="@dimen/text_margin_very_small"
-            android:layout_toEndOf="@id/icon_app" />
-        <ImageView
-            android:layout_centerHorizontal="true"
-            android:id="@+id/optionMenu"
-            android:clickable="true"
-            android:focusable="true"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:paddingLeft="15dp"
-            android:src="@drawable/ic_more_card" />
-    </RelativeLayout>
-</androidx.cardview.widget.CardView>
+                <com.mrikso.apkrepacker.utils.view.ElevationImageView
+                    android:id="@+id/icon_app"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    tools:src="@drawable/default_app_icon"
+                    tools:ignore="ContentDescription" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:paddingEnd="@dimen/checkbox_margin"
+                android:layout_toEndOf="@id/icon_layout"
+                android:layout_centerVertical="true"
+                tools:ignore="RtlSymmetry">
+
+                <TextView
+                    android:singleLine="true"
+                    android:ellipsize="marquee"
+                    android:textColor="?attr/textColor_1"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size"
+                    android:id="@+id/app_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="@string/app_name" />
+
+                <TextView
+                    android:singleLine="true"
+                    android:ellipsize="marquee"
+                    android:textColor="?android:textColorSecondary"
+                    android:textSize="@dimen/text_size_14"
+                    android:id="@+id/app_pkg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="com.mrikso.apkrepacker" />
+
+                <TextView
+                    android:id="@+id/app_patch"
+                    android:singleLine="true"
+                    android:ellipsize="start"
+                    android:textColor="?android:textColorSecondary"
+                    android:textSize="@dimen/text_size_14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="/storage/emulated/0/ApkRepacker/projects/Apk Repacker_src" />
+
+            </LinearLayout>
+        </RelativeLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/menu_expand_container"
+            android:background="?dividerColor"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/app_pkg">
+
+            <com.google.android.material.button.MaterialButton
+                android:textSize="@dimen/text_size_12"
+                android:textColor="?colorAccent"
+                android:id="@+id/action_build"
+                android:layout_width="0.0dip"
+                android:layout_height="wrap_content"
+                android:minHeight="32dp"
+                android:text="@string/menu_build_app"
+                android:textAllCaps="false"
+                app:icon="@drawable/ic_build"
+                app:iconTint="?colorAccent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/action_about_project"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="?colorPrimary"
+                style="@style/MD2TextButton" />
+
+            <View
+                android:background="?colorSurface"
+                android:layout_width="1.0dip"
+                android:layout_height="0.0dip"
+                android:layout_marginTop="@dimen/main_card_margin_vertical"
+                android:layout_marginBottom="@dimen/main_card_margin_vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/action_build"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:textSize="@dimen/text_size_12"
+                android:textColor="?colorAccent"
+                android:id="@+id/action_about_project"
+                android:layout_width="0.0dip"
+                android:layout_height="wrap_content"
+                android:minHeight="32dp"
+                android:text="@string/menu_about_project"
+                android:textAllCaps="false"
+                app:icon="@drawable/ic_info"
+                app:iconTint="?colorAccent"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/action_delete"
+                app:layout_constraintStart_toEndOf="@id/action_build"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="?colorAccent"
+                style="@style/MD2TextButton" />
+
+            <View
+                android:background="?colorSurface"
+                android:layout_width="1.0dip"
+                android:layout_height="0.0dip"
+                android:layout_marginTop="@dimen/main_card_margin_vertical"
+                android:layout_marginBottom="@dimen/main_card_margin_vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/action_about_project"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:textSize="@dimen/text_size_12"
+                android:textColor="@color/red_primary_dark"
+                android:id="@+id/action_delete"
+                android:layout_width="0.0dip"
+                android:layout_height="wrap_content"
+                android:minHeight="32dp"
+                android:text="@string/menu_delete_project"
+                android:textAllCaps="false"
+                app:icon="@drawable/ic_delete"
+                app:iconTint="@color/red_primary_dark"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/action_about_project"
+                app:layout_constraintTop_toTopOf="parent"
+                app:rippleColor="?colorError"
+                style="@style/MD2TextButton" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

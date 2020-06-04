@@ -54,8 +54,9 @@ public class Preferences implements SharedPreferences.OnSharedPreferenceChangeLi
     public static final String KEY_KEEP_SCREEN_ON = "pref_keep_screen_on";
     public static final String KEY_READ_ONLY = "readonly_mode";
     public static final String KEY_HIDE_SYMBOL_PANEL = "pref_hide_symbol_panel";
+    public static final String KEY_CONFIRM_EXIT = "pref_confirm_exit";
 
-    public static final int DEF_MIN_FONT_SIZE = 9;
+    public static final int DEF_MIN_FONT_SIZE = 6;
     public static final int DEF_MAX_FONT_SIZE = 32;
 
     public static final int SCREEN_ORIENTATION_AUTO = 0;
@@ -119,6 +120,7 @@ public class Preferences implements SharedPreferences.OnSharedPreferenceChangeLi
 
         map.put(KEY_SCREEN_ORIENTATION, "auto");
         map.put(KEY_KEEP_SCREEN_ON, false);
+        map.put(KEY_CONFIRM_EXIT, true);
 
         toolbarIcons = preferences.getStringSet(KEY_TOOLBAR_ICONS, null);
         map.put(KEY_LAST_OPEN_PATH, Environment.getExternalStorageDirectory().getPath());
@@ -398,6 +400,10 @@ public class Preferences implements SharedPreferences.OnSharedPreferenceChangeLi
     public void setLastTab(int index) {
         preferences.edit().putInt(KEY_LAST_TAB, index).apply();
         map.put(KEY_LAST_TAB, index);
+    }
+
+    public boolean isConfirmExit() {
+        return (boolean) map.get(KEY_CONFIRM_EXIT);
     }
 
     /**

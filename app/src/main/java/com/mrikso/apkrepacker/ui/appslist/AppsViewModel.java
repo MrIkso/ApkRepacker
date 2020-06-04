@@ -89,7 +89,7 @@ public class AppsViewModel extends AndroidViewModel {
                     //Apply query
                     if (query.length() > 0) {
                         //Check if app label matches
-                        String[] wordsInLabel = packageMeta.label.toLowerCase().split(" ");
+                        String[] wordsInLabel = packageMeta.label.toLowerCase().split("  ");
                         boolean labelMatches = false;
                         for (String word : wordsInLabel) {
                             if (word.startsWith(query)) {

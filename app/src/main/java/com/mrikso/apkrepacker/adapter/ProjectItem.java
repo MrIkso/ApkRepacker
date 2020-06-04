@@ -3,29 +3,41 @@ package com.mrikso.apkrepacker.adapter;
 import android.graphics.drawable.Drawable;
 
 public class ProjectItem {
+    private String appIcon;
     private String appName;
     private String appPackage;
-    private Drawable appIcon;
     private String apkPatch;
     private String appProjectPatch;
+    private String appVersionName;
+    private String appVersionCode;
+
+    private boolean isChecked = false;
 
     //constructor initializing values
-    public ProjectItem(String appName, String appPackage,String appProjectPatch, Drawable icon) {
+    public ProjectItem(String icon, String appName, String appPackage, String appProjectPatch, String appVersionName, String appVersionCode) {
+        this.appIcon = icon;
         this.appName = appName;
         this.appPackage = appPackage;
-        this.appIcon = icon;
         this.appProjectPatch = appProjectPatch;
+        this.appVersionName = appVersionName;
+        this.appVersionCode = appVersionCode;
     }
 
-    public ProjectItem(String appName, String appPackage,String appProjectPatch,String apkPatch, Drawable icon) {
+    public ProjectItem(String icon, String appName, String appPackage, String appProjectPatch, String apkPatch, String appVersionName, String appVersionCode) {
+        this.appIcon = icon;
         this.appName = appName;
         this.appPackage = appPackage;
-        this.appIcon = icon;
         this.appProjectPatch = appProjectPatch;
         this.apkPatch = apkPatch;
+        this.appVersionName = appVersionName;
+        this.appVersionCode = appVersionCode;
     }
 
     //getters
+    public String getAppIcon() {
+        return appIcon;
+    }
+
     public String getAppName() {
         return appName;
     }
@@ -38,11 +50,23 @@ public class ProjectItem {
         return apkPatch;
     }
 
-    public String getAppProjectPatch(){
+    public String getAppProjectPatch() {
         return appProjectPatch;
     }
 
-    public Drawable getAppIcon() {
-        return appIcon;
+    public String getAppVersionName() {
+        return appVersionName;
+    }
+
+    public String getAppVersionCode() {
+        return appVersionCode;
+    }
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
     }
 }

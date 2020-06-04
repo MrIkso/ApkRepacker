@@ -9,14 +9,14 @@
 
         <SwitchPreference
             android:key="@string/pref_touch_to_adjust_text_size"
-            android:summary="Change font size (Zoom) with two finger"
-            android:title="@string/touch_to_adjust_text_size" />
+            android:summary="@string/touch_to_adjust_text_size_summary"
+            android:title="@string/touch_to_adjust_text_size_title" />
 
         <SwitchPreference
             android:defaultValue="false"
             android:key="@string/pref_word_wrap"
-            android:summary="Use soft wrap in editor"
-            android:title="@string/word_wrap_in_editor" />
+            android:title="@string/word_wrap_in_editor_title" />
+        <!--            android:summary="@string/word_wrap_in_editor_summary"-->
 
         <SwitchPreference
             android:key="@string/pref_show_linenumber"
@@ -26,20 +26,20 @@
             android:key="@string/pref_show_whitespace"
             android:title="@string/show_whitespace" />
 
-        <SwitchPreference
+<!--        <SwitchPreference
             android:defaultValue="true"
             android:key="@string/pref_auto_complete"
-            android:summary="Show small popup to suggest code when you typing. It can be not supported current language"
-            android:title="Auto complete" />
+            android:summary="@string/auto_complete_summary"
+            android:title="@string/auto_complete_title" />-->
 
         <SwitchPreference
             android:key="@string/pref_auto_indent"
             android:title="@string/auto_indent" />
 
-        <SwitchPreference
+<!--        <SwitchPreference
             android:key="@string/pref_auto_pair"
             android:summary="@string/pref_desc_auto_pair"
-            android:title="@string/auto_pair" />
+            android:title="@string/auto_pair" />-->
 
         <SwitchPreference
             android:key="@string/pref_insert_space_for_tab"
@@ -55,9 +55,8 @@
 
         <SwitchPreference
             android:key="@string/pref_auto_capitalize"
-            android:summary="Not recommend"
-            android:title="@string/auto_capitalize" />
-
+            android:summary="@string/auto_capitalize_summary"
+            android:title="@string/auto_capitalize_title" />
 
         <EditTextPreference
             android:key="@string/pref_symbol"
@@ -66,11 +65,11 @@
             android:scrollbars="vertical"
             android:title="@string/custom_symbol_list" />
 
-        <SwitchPreference
+<!--        <SwitchPreference
             android:defaultValue="true"
             android:key="@string/pref_volume_move"
-            android:summary="Press volume up (+) to move cursor to right, press volume down (-) to move cursor to left"
-            android:title="Volume move" />
+            android:summary="@string/volume_move_summary"
+            android:title="@string/volume_move_title" />-->
 
     </PreferenceCategory>
 
@@ -118,6 +117,10 @@
         <SwitchPreference
             android:key="@string/pref_keep_screen_on"
             android:title="@string/keep_screen_on" />
+
+        <SwitchPreference
+            android:key="@string/pref_confirm_exit"
+            android:title="@string/confirm_exit" />
 
     </PreferenceCategory>
 

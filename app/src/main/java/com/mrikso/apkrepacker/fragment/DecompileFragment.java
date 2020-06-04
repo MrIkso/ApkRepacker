@@ -14,7 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.fragment.app.Fragment;
 
-import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.CubeGrid;
 import com.google.android.material.button.MaterialButton;
 import com.mrikso.apkrepacker.R;
@@ -22,6 +21,8 @@ import com.mrikso.apkrepacker.activity.AppEditorActivity;
 import com.mrikso.apkrepacker.adapter.LogAdapter;
 import com.mrikso.apkrepacker.task.DecodeTask;
 import com.mrikso.apkrepacker.ui.prererence.Preference;
+import com.mrikso.apkrepacker.utils.AppUtils;
+import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.StringUtils;
 import com.mrikso.apkrepacker.utils.ThemeWrapper;
 
@@ -57,6 +58,7 @@ public class DecompileFragment extends Fragment {
         mMode = getArguments().getInt("decMode");
         setRetainInstance(true);
     }
+
     public static DecompileFragment newInstance(String name, String selected, boolean f) {
         DecompileFragment fragment = new DecompileFragment();
         Bundle args = new Bundle();
@@ -66,6 +68,7 @@ public class DecompileFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
     public static DecompileFragment newInstance(String name, String selected, boolean f, int mode) {
         DecompileFragment fragment = new DecompileFragment();
         Bundle args = new Bundle();
@@ -76,6 +79,7 @@ public class DecompileFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
     public static DecompileFragment newInstance(String selected, int mode) {
         DecompileFragment fragment = new DecompileFragment();
         Bundle args = new Bundle();
@@ -84,6 +88,7 @@ public class DecompileFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
     public static DecompileFragment newInstance(String selected) {
         DecompileFragment fragment = new DecompileFragment();
         Bundle args = new Bundle();
@@ -91,10 +96,10 @@ public class DecompileFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragmet_decompile, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_decompile, container, false);
         mContext = view.getContext();
         listView = view.findViewById(R.id.log);
         mProgress = view.findViewById(R.id.progressBar);
@@ -111,10 +116,10 @@ public class DecompileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle bundle) {
         super.onViewCreated(view, bundle);
-        CubeGrid cubeGrid =  new CubeGrid();
-        cubeGrid.setBounds(0, 0, 100,100);
-        cubeGrid.setColor(ThemeWrapper.isLightTheme()? mContext.getResources().getColor(R.color.light_accent):
-                mContext.getResources().getColor(R.color.dark_accent) );
+        CubeGrid cubeGrid = new CubeGrid();
+        cubeGrid.setBounds(0, 0, 100, 100);
+        cubeGrid.setColor(ThemeWrapper.isLightTheme() ? mContext.getResources().getColor(R.color.light_accent) :
+                mContext.getResources().getColor(R.color.dark_accent));
         cubeGrid.setAlpha(0);
         mProgress.setIndeterminateDrawable(cubeGrid);
         logarray = new ArrayList<>();
@@ -123,55 +128,56 @@ public class DecompileFragment extends Fragment {
         listView.setDivider(null);
         listView.setDividerHeight(0);
         Preference preference = Preference.getInstance(mContext);
+        String decodeAppName = AppUtils.getApkName(mContext, selectedApk.getAbsolutePath());
         if (!apkMode) {
-            if(mMode!=-1){
+            if (mMode != -1) {
                 switch (mMode) {
                     case 1://Decompile dex
-                        new DecodeTask(mContext, 1, selectedApk.getName(), this).execute(selectedApk);
+                        new DecodeTask(mContext, 1, decodeAppName, this).execute(selectedApk);
                         break;
                     case 2://Decompile only res
-                        new DecodeTask(mContext, 2, selectedApk.getName(), this).execute(selectedApk);
+                        new DecodeTask(mContext, 2, decodeAppName, this).execute(selectedApk);
                         break;
                     case 3://Decompile all
-                        new DecodeTask(mContext, 3, selectedApk.getName(), this).execute(selectedApk);
+                        new DecodeTask(mContext, 3, decodeAppName, this).execute(selectedApk);
                         break;
                 }
-            }else {
+            } else {
                 switch (preference.getDecodingMode()) {
                     case 0://Decompile all
-                        new DecodeTask(mContext, 3, selectedApk.getName(), this).execute(selectedApk);
+                        new DecodeTask(mContext, 3, decodeAppName, this).execute(selectedApk);
                         break;
                     case 1://Decompile only res
-                        new DecodeTask(mContext, 2, selectedApk.getName(), this).execute(selectedApk);
+                        new DecodeTask(mContext, 2, decodeAppName, this).execute(selectedApk);
                         break;
                     case 2://Decompile dex
-                        new DecodeTask(mContext, 1, selectedApk.getName(), this).execute(selectedApk);
+                        new DecodeTask(mContext, 1, decodeAppName, this).execute(selectedApk);
                         break;
                 }
             }
         } else {
-            if(mMode!=-1){
+            if (mMode != -1) {
                 switch (mMode) {
                     case 1://Decompile dex
-                        new DecodeTask(mContext, 1, selectedApk.getName(), this).execute(selectedApk);
+                        new DecodeTask(mContext, 1, decodeAppName, this).execute(selectedApk);
                         break;
                     case 2://Decompile only res
-                        new DecodeTask(mContext, 2, selectedApk.getName(), this).execute(selectedApk);
+                        new DecodeTask(mContext, 2, decodeAppName, this).execute(selectedApk);
                         break;
                     case 3://Decompile all
-                        new DecodeTask(mContext, 3, selectedApk.getName(), this).execute(selectedApk);
+                        new DecodeTask(mContext, 3, decodeAppName, this).execute(selectedApk);
                         break;
                 }
-            }else {
+            } else {
                 switch (preference.getDecodingMode()) {
                     case 0://Decompile all
-                        new DecodeTask(mContext, 3, nameApk, this).execute(selectedApk);
+                        new DecodeTask(mContext, 3, decodeAppName, this).execute(selectedApk);
                         break;
                     case 1://Decompile only res
-                        new DecodeTask(mContext, 2, nameApk, this).execute(selectedApk);
+                        new DecodeTask(mContext, 2, decodeAppName, this).execute(selectedApk);
                         break;
                     case 2://Decompile dex
-                        new DecodeTask(mContext, 1, nameApk, this).execute(selectedApk);
+                        new DecodeTask(mContext, 1, decodeAppName, this).execute(selectedApk);
                         break;
                 }
             }
@@ -212,9 +218,15 @@ public class DecompileFragment extends Fragment {
             mImageResult.setImageResource(R.drawable.ic_done);
             mTextProgress.setText(R.string.decompile_finished);
             mOpen.setOnClickListener(v -> {
+
+                File dataFile = new File(result.getAbsolutePath(), "apktool.json");
+                String apkFileName = FileUtil.readJson(dataFile, "apkFileName");
+
                 Intent intent = new Intent(mContext, AppEditorActivity.class);
                 intent.putExtra("projectPatch", result.getAbsolutePath());
-                intent.putExtra("apkPatch", selectedApk.getAbsolutePath());
+                intent.putExtra("apkFileIcon", FileUtil.readJson(dataFile, "apkFileIcon"));
+                intent.putExtra("apkFileName", (apkFileName != null) ? apkFileName : result.getName());
+                intent.putExtra("apkFilePackageName", FileUtil.readJson(dataFile, "apkFilePackageName"));
                 mContext.startActivity(intent);
             });
         }
@@ -232,6 +244,8 @@ public class DecompileFragment extends Fragment {
             mTextProgress.setText(R.string.error_decompilation_failed);
             mTextProgress.setTextColor(mContext.getResources().getColor(R.color.google_red));
         }
-        mClose.setOnClickListener(v -> getActivity().onBackPressed());
+        mClose.setOnClickListener(v -> {
+            requireActivity().onBackPressed();
+        });
     }
 }

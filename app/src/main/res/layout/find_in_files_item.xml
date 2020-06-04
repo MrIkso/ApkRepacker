@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/find_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:id="@+id/find_item"
-    android:clickable="true"
-    android:padding="8dp"
-    android:focusable="true">
+    android:padding="@dimen/checkbox_margin"
+    android:background="?selectableItemBackground">
 
     <TextView
         android:id="@+id/file_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:ellipsize="middle"
         android:singleLine="true"
         android:drawablePadding="5dp"
-        android:drawableRight="@drawable/ic_down_arrow"
-        android:text="File name"
+        android:drawableEnd="@drawable/ic_down_arrow"
+        tools:text="File name"
         android:textStyle="bold" />
 </LinearLayout>

@@ -1,42 +1,51 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="72dp"
-    android:foreground="?attr/selectableItemBackground"
-    android:background="@drawable/selectable_background" >
+    android:layout_height="@dimen/list_item_name_marginStart"
+    android:background="@drawable/selectable_background">
 
-    <ImageView
-        android:id="@+id/list_item_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
+    <LinearLayout
+        android:id="@+id/icon_layout"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:padding="@dimen/checkbox_margin"
+        android:layout_marginStart="@dimen/checkbox_margin"
         android:layout_centerVertical="true"
-        android:layout_marginStart="@dimen/list_item_icon_margin"
-        android:scaleType="center"
-        tools:ignore="ContentDescription" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.mrikso.apkrepacker.utils.view.ElevationImageView
+            android:id="@+id/list_item_image"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:scaleType="center"
+            tools:srcCompat="@drawable/ic_directory"
+            tools:ignore="ContentDescription" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
-        android:layout_marginStart="@dimen/list_item_name_marginStart"
+        android:layout_toEndOf="@id/icon_layout"
         android:layout_marginEnd="@dimen/list_item_name_marginEnd"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <TextView
             style="@style/Text.Subhead"
+            tools:text="File Name"
             android:id="@+id/list_item_name" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content">
 
             <TextView
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 style="@style/Text.Body1"
+                tools:text="Date"
                 android:id="@+id/list_item_date" />
 
             <TextView
