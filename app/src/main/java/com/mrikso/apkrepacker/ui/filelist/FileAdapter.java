@@ -16,13 +16,14 @@ import com.mrikso.apkrepacker.recycler.Callback;
 import com.mrikso.apkrepacker.recycler.OnItemClickListener;
 import com.mrikso.apkrepacker.recycler.OnItemSelectedListener;
 import com.mrikso.apkrepacker.recycler.ViewHolder;
+import com.mrikso.apkrepacker.ui.appslist.AppsAdapter;
 //import com.mrikso.apkrepacker.recycler.ViewHolder0;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class FileAdapter extends RecyclerView.Adapter<ViewHolder> {
+public class FileAdapter extends RecyclerView.Adapter<ViewHolderFile> {
 
     private final Context context;
     private final SortedList<File> items;
@@ -46,9 +47,9 @@ public class FileAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolderFile onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(context).inflate(R.layout.item_project_file, parent, false);
-        return new ViewHolderFile(context, onItemClickListener, itemView);
+        return new ViewHolderFile(parent.getContext(), onItemClickListener, itemView);
     }
 
     @Override
@@ -58,8 +59,13 @@ public class FileAdapter extends RecyclerView.Adapter<ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolderFile holder, int position) {
         holder.setData(get(position), getSelected(position));
+    }
+
+    @Override
+    public void onViewRecycled(@NonNull ViewHolderFile holder) {
+        holder.recycle();
     }
 
     @Override
@@ -121,6 +127,10 @@ public class FileAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     public void updateItemAt(int index, File file) {
         items.updateItemAt(index, file);
+    }
+
+    public void removeItemAt(int index) {
+        items.removeItemAt(index);
     }
 
     //----------------------------------------------------------------------------------------------

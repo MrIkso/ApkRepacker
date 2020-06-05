@@ -1,23 +1,23 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\Yaroslav\Desktop\Project\ApkRepacker\common\src\main\AndroidManifest.xml:1:1-4:12
-INJECTED from C:\Users\Yaroslav\Desktop\Project\ApkRepacker\common\src\main\AndroidManifest.xml:1:1-4:12
-INJECTED from C:\Users\Yaroslav\Desktop\Project\ApkRepacker\common\src\main\AndroidManifest.xml:1:1-4:12
+ADDED from F:\Program Files\Android\AndroidStudioProjects\ApkRepacker\common\src\main\AndroidManifest.xml:1:1-4:12
+INJECTED from F:\Program Files\Android\AndroidStudioProjects\ApkRepacker\common\src\main\AndroidManifest.xml:1:1-4:12
+INJECTED from F:\Program Files\Android\AndroidStudioProjects\ApkRepacker\common\src\main\AndroidManifest.xml:1:1-4:12
 	package
-		ADDED from C:\Users\Yaroslav\Desktop\Project\ApkRepacker\common\src\main\AndroidManifest.xml:1:70-99
-		INJECTED from C:\Users\Yaroslav\Desktop\Project\ApkRepacker\common\src\main\AndroidManifest.xml
-		INJECTED from C:\Users\Yaroslav\Desktop\Project\ApkRepacker\common\src\main\AndroidManifest.xml
+		ADDED from F:\Program Files\Android\AndroidStudioProjects\ApkRepacker\common\src\main\AndroidManifest.xml:1:70-99
+		INJECTED from F:\Program Files\Android\AndroidStudioProjects\ApkRepacker\common\src\main\AndroidManifest.xml
+		INJECTED from F:\Program Files\Android\AndroidStudioProjects\ApkRepacker\common\src\main\AndroidManifest.xml
 	xmlns:android
-		ADDED from C:\Users\Yaroslav\Desktop\Project\ApkRepacker\common\src\main\AndroidManifest.xml:1:11-69
+		ADDED from F:\Program Files\Android\AndroidStudioProjects\ApkRepacker\common\src\main\AndroidManifest.xml:1:11-69
 application
-ADDED from C:\Users\Yaroslav\Desktop\Project\ApkRepacker\common\src\main\AndroidManifest.xml:2:5-3:19
+ADDED from F:\Program Files\Android\AndroidStudioProjects\ApkRepacker\common\src\main\AndroidManifest.xml:2:5-3:19
 	android:allowBackup
-		ADDED from C:\Users\Yaroslav\Desktop\Project\ApkRepacker\common\src\main\AndroidManifest.xml:2:18-44
+		ADDED from F:\Program Files\Android\AndroidStudioProjects\ApkRepacker\common\src\main\AndroidManifest.xml:2:18-44
 uses-sdk
-INJECTED from C:\Users\Yaroslav\Desktop\Project\ApkRepacker\common\src\main\AndroidManifest.xml reason: use-sdk injection requested
-INJECTED from C:\Users\Yaroslav\Desktop\Project\ApkRepacker\common\src\main\AndroidManifest.xml
-INJECTED from C:\Users\Yaroslav\Desktop\Project\ApkRepacker\common\src\main\AndroidManifest.xml
+INJECTED from F:\Program Files\Android\AndroidStudioProjects\ApkRepacker\common\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from F:\Program Files\Android\AndroidStudioProjects\ApkRepacker\common\src\main\AndroidManifest.xml
+INJECTED from F:\Program Files\Android\AndroidStudioProjects\ApkRepacker\common\src\main\AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from C:\Users\Yaroslav\Desktop\Project\ApkRepacker\common\src\main\AndroidManifest.xml
-		ADDED from C:\Users\Yaroslav\Desktop\Project\ApkRepacker\common\src\main\AndroidManifest.xml
-		INJECTED from C:\Users\Yaroslav\Desktop\Project\ApkRepacker\common\src\main\AndroidManifest.xml
+		INJECTED from F:\Program Files\Android\AndroidStudioProjects\ApkRepacker\common\src\main\AndroidManifest.xml
+		ADDED from F:\Program Files\Android\AndroidStudioProjects\ApkRepacker\common\src\main\AndroidManifest.xml
+		INJECTED from F:\Program Files\Android\AndroidStudioProjects\ApkRepacker\common\src\main\AndroidManifest.xml

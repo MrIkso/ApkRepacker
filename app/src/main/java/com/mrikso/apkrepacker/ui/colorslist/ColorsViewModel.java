@@ -4,16 +4,12 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 import android.widget.Filter;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
-
-import com.mrikso.apkrepacker.App;
-import com.mrikso.apkrepacker.R;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -24,7 +20,6 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -63,21 +58,35 @@ public class ColorsViewModel extends AndroidViewModel {
         colorsFile = file;
         mPackagesLiveData.setValue(new ArrayList<>());
 
-        mColorRepo = ColorsLoader.getInstance(mContext, colorsFile);
+        mColorRepo = new ColorsLoader(mContext, colorsFile);
         mBackupRepoPackagesObserver = (packages) -> filter(mCurrentFilterQuery);
         mColorRepo.getPackages().observeForever(mBackupRepoPackagesObserver);
         Log.i("ColorsViewModel", String.format("colors file %s", file.getAbsolutePath()));
 
     }
 
-    public void setNewColor(int position, String color, String name) {
+    public void deleteColor(int position) {
         mUpdatedColors = mColorRepo.getPackages().getValue();
-        ColorMeta colorMeta = new ColorMeta.Builder(name)
-                .setValue(color)
-                .setIcon(color)
-                .build();
+        ColorMeta colorMeta = new ColorMeta.Builder(null).setValue(null).setIcon(null).build();
         mUpdatedColors.set(position, colorMeta);
-        isChanget =true;
+        mUpdatedColors.remove(position);
+        isChanget = true;
+        saveColor();
+    }
+
+    public void addNewColor(String name, String color) {
+        mUpdatedColors = mColorRepo.getPackages().getValue();
+        ColorMeta colorMeta = new ColorMeta.Builder(name).setValue(color).setIcon(color).build();
+        mUpdatedColors.add(colorMeta);
+        isChanget = true;
+        saveColor();
+    }
+
+    public void setNewColor(int position, String name, String color) {
+        mUpdatedColors = mColorRepo.getPackages().getValue();
+        ColorMeta colorMeta = new ColorMeta.Builder(name).setValue(color).setIcon(color).build();
+        mUpdatedColors.set(position, colorMeta);
+        isChanget = true;
         saveColor();
     }
 
@@ -116,18 +125,17 @@ public class ColorsViewModel extends AndroidViewModel {
         }
     }
 
-    public void saveColor(){
+    public void saveColor() {
         int tempnumber = 0; // Temp number for (<string name="...">)
-       // File resultFile = new File(projectPatch+"/res/values-"+language+"/");
-       // resultFile.mkdirs(); // Create path
+        // File resultFile = new File(projectPatch+"/res/values-"+language+"/");
+        // resultFile.mkdirs(); // Create path
         DocumentBuilderFactory dbFactory;
         DocumentBuilder dBuilder;
         Document doc;
         try {
-        dbFactory = DocumentBuilderFactory.newInstance();
-        dBuilder = dbFactory.newDocumentBuilder();
-        doc = dBuilder.newDocument();
-
+            dbFactory = DocumentBuilderFactory.newInstance();
+            dBuilder = dbFactory.newDocumentBuilder();
+            doc = dBuilder.newDocument();
 
 
             // root element
@@ -141,14 +149,14 @@ public class ColorsViewModel extends AndroidViewModel {
                 String stringText = colorMeta.value;
 
                 //String temp = translatorfunction(mo, lenguage);
-
-                Element stringelement = doc.createElement("color"); // Create string in document
-                Attr attrType = doc.createAttribute("name"); // Create atribute name
-                attrType.setValue(stringId); // Add to "name" the word code
-                stringelement.setAttributeNode(attrType); // Add atribute to string elemt
-                stringelement.appendChild(doc.createTextNode(stringText)); // Add translated word to string
-                rootElement.appendChild(stringelement); // Add string element to document
-
+                if (stringId != null && stringText != null) {
+                    Element stringelement = doc.createElement("color"); // Create string in document
+                    Attr attrType = doc.createAttribute("name"); // Create atribute name
+                    attrType.setValue(stringId); // Add to "name" the word code
+                    stringelement.setAttributeNode(attrType); // Add atribute to string elemt
+                    stringelement.appendChild(doc.createTextNode(stringText)); // Add translated word to string
+                    rootElement.appendChild(stringelement); // Add string element to document
+                }
                 tempnumber++;
             }
 
@@ -172,6 +180,7 @@ public class ColorsViewModel extends AndroidViewModel {
             e.printStackTrace();
         }
     }
+
     private class ColorFilter extends Filter {
 
         @Override

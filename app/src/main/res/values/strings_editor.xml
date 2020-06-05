@@ -59,7 +59,8 @@
     <string name="highlight_and_theme">Highlight and Theme</string>
     <string name="highlight_the_file_size_limit">Limit highlight file size</string>
     <string name="screen_orientation">Screen Orientation</string>
-    <string name="auto_capitalize">Auto capitalize</string>
+    <string name="auto_capitalize_title">Auto capitalize</string>
+    <string name="auto_capitalize_summary">Not recommend</string>
     <string name="enable_highlight">Enable highlight</string>
     <string name="need_to_enable_read_storage_permissions">Need to enable read storage permissions</string>
     <string name="file_not_exists">File not exists</string>
@@ -86,6 +87,8 @@
     <string name="save_all_without_new_document_message">Save all will skip new document</string>
     <string name="clear_history">Clear History</string>
     <string name="custom_symbol_list">Custom symbol list</string>
+    <string name="volume_move_title">Volume move</string>
+    <string name="volume_move_summary">Press volume up (+) to move cursor to right, press volume down (-) to move cursor to left</string>
     <string name="reset">Reset</string>
     <string name="fullscreen_mode">Fullscreen Mode</string>
     <string name="enable_fullscreen_mode_message">Restart the application will enable the full screen mode</string>
@@ -94,4 +97,5 @@
     <string name="find_log">Find Log</string>
     <string name="replace_log">Replace Log</string>
     <string name="use_regex_to_find_tip">Replace keyword support: \\r, \\n, \\t and capturing groups $0 ~ $9</string>
+    <string name="confirm_exit">Confirm of the exit</string>
 </resources>

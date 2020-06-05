@@ -2,6 +2,7 @@ package com.mrikso.apkrepacker.utils;
 
 import android.os.Bundle;
 
+import androidx.annotation.AnimRes;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,9 +10,17 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
+import com.mrikso.apkrepacker.R;
+
 public class FragmentUtils {
 
-    private FragmentUtils() {}
+    private static int enter = R.anim.q_enter;
+    private static int exit = R.anim.q_exit;
+    private static int popEnter = R.anim.q_pop_enter;
+    private static int popExit = R.anim.q_pop_exit;
+
+    private FragmentUtils() {
+    }
 
     @NonNull
     public static BundleBuilder getArgumentsBuilder(@NonNull Fragment fragment) {
@@ -62,14 +71,18 @@ public class FragmentUtils {
     }
 
     @Deprecated
-    public static void add(@NonNull Fragment fragment, @NonNull FragmentManager fragmentManager, @IdRes int containerViewId, @Nullable String tag) {
-        fragmentManager.beginTransaction().add(containerViewId, fragment, tag).commit();
+    public static void add(@NonNull Fragment fragment, @NonNull FragmentManager fragmentManager, @IdRes int containerViewId, @Nullable String tag, String back_stack, @AnimRes int anim_in, @AnimRes int anim_out, @AnimRes int anim_popIn, @AnimRes int anim_popOut) {
+        fragmentManager.beginTransaction()
+                .setCustomAnimations(anim_in, anim_out, anim_popIn, anim_popOut)
+                .add(containerViewId, fragment, tag)
+                .addToBackStack(back_stack)
+                .commit();
     }
 
     @Deprecated
     public static void add(@NonNull Fragment fragment, @NonNull FragmentManager fragmentManager, @IdRes int containerViewId) {
         //noinspection deprecation
-        add(fragment, fragmentManager, containerViewId, null);
+        add(fragment, fragmentManager, containerViewId, null, null, enter, exit, popEnter, popExit);
     }
 
     public static void add(@NonNull Fragment fragment, @NonNull FragmentActivity activity, @IdRes int containerViewId) {
@@ -83,20 +96,20 @@ public class FragmentUtils {
     }
 
     @Deprecated
-    public static void add(@NonNull Fragment fragment, @NonNull FragmentManager fragmentManager, @NonNull String tag) {
+    public static void add(@NonNull Fragment fragment, @NonNull FragmentManager fragmentManager, @NonNull String tag, String back_stack) {
         // Pass 0 as in {@link android.support.v4.app.BackStackRecord#add(Fragment, String)}.
         //noinspection deprecation
-        add(fragment, fragmentManager, 0, tag);
+        add(fragment, fragmentManager, 0, tag, back_stack, 0, 0, 0, 0);
     }
 
-    public static void add(@NonNull Fragment fragment, @NonNull FragmentActivity activity, @NonNull String tag) {
+    public static void add(@NonNull Fragment fragment, @NonNull FragmentActivity activity, @NonNull String tag, String back_stack) {
         //noinspection deprecation
-        add(fragment, activity.getSupportFragmentManager(), tag);
+        add(fragment, activity.getSupportFragmentManager(), tag, back_stack);
     }
 
-    public static void add(@NonNull Fragment fragment, @NonNull Fragment parentFragment, @NonNull String tag) {
+    public static void add(@NonNull Fragment fragment, @NonNull Fragment parentFragment, @NonNull String tag, String back_stack) {
         //noinspection deprecation
-        add(fragment, parentFragment.getChildFragmentManager(), tag);
+        add(fragment, parentFragment.getChildFragmentManager(), tag, back_stack);
     }
 
     /**
@@ -104,7 +117,7 @@ public class FragmentUtils {
      */
     public static void add(@NonNull Fragment fragment, @NonNull FragmentActivity activity) {
         //noinspection deprecation
-        add(fragment, activity.getSupportFragmentManager(), 0, null);
+        add(fragment, activity.getSupportFragmentManager(), 0, null, null, enter, exit, popEnter, popExit);
     }
 
     /**
@@ -112,7 +125,7 @@ public class FragmentUtils {
      */
     public static void add(@NonNull Fragment fragment, @NonNull Fragment parentFragment) {
         //noinspection deprecation
-        add(fragment, parentFragment.getChildFragmentManager(), 0, null);
+        add(fragment, parentFragment.getChildFragmentManager(), 0, null, null, enter, exit, popEnter, popExit);
     }
 
     public static void remove(@NonNull Fragment fragment) {
@@ -124,51 +137,88 @@ public class FragmentUtils {
     }
 
     @Deprecated
-    public static void replace(@NonNull Fragment fragment, @NonNull FragmentManager fragmentManager, @IdRes int containerViewId, @Nullable String tag) {
-        fragmentManager.beginTransaction().replace(containerViewId, fragment, tag).commit();
+    public static void replace(@NonNull Fragment fragment, @NonNull FragmentManager fragmentManager, @IdRes int containerViewId, @Nullable String tag, String back_stack, @AnimRes int enter, @AnimRes int exit, @AnimRes int popEnter, @AnimRes int popExit) {
+        fragmentManager.beginTransaction()
+                .setCustomAnimations(enter, exit, popEnter, popExit)
+                .replace(containerViewId, fragment, tag)
+                .addToBackStack(back_stack)
+                .commit();
     }
 
     @Deprecated
+    public static void replace(@NonNull Fragment fragment, @NonNull FragmentManager fragmentManager, @IdRes int containerViewId, @Nullable String tag, @AnimRes int enter, @AnimRes int exit) {
+        //noinspection deprecation
+        replace(fragment, fragmentManager, containerViewId, tag, null, enter, exit, enter, exit);
+    }
+
+    @Deprecated
+    public static void replace(@NonNull Fragment fragment, @NonNull FragmentManager fragmentManager, @IdRes int containerViewId, @Nullable String tag, @AnimRes int enter, @AnimRes int exit, @AnimRes int popEnter, @AnimRes int popExit) {
+        //noinspection deprecation
+        replace(fragment, fragmentManager, containerViewId, tag, null, enter, exit, popEnter, popExit);
+    }
+
+    @Deprecated
+    public static void replace(@NonNull Fragment fragment, @NonNull FragmentManager fragmentManager, @IdRes int containerViewId, @AnimRes int enter, @AnimRes int exit) {
+        //noinspection deprecation
+        replace(fragment, fragmentManager, containerViewId, null, null, enter, exit, enter, exit);
+    }
+
+    @Deprecated
+    public static void replace(@NonNull Fragment fragment, @NonNull FragmentManager fragmentManager, @IdRes int containerViewId, @AnimRes int enter, @AnimRes int exit, @AnimRes int popEnter, @AnimRes int popExit) {
+        //noinspection deprecation
+        replace(fragment, fragmentManager, containerViewId, null, null, enter, exit, popEnter, popExit);
+    }
+
+    public static void replace(@NonNull Fragment fragment, @NonNull FragmentActivity activity, @IdRes int containerViewId, @Nullable String tag, @AnimRes int enter, @AnimRes int exit, @AnimRes int popEnter, @AnimRes int popExit) {
+        //noinspection deprecation
+        replace(fragment, activity.getSupportFragmentManager(), containerViewId, tag, enter, exit, popEnter, popExit);
+    }
+
+    public static void replace(@NonNull Fragment fragment, @NonNull Fragment parentFragment, @IdRes int containerViewId, @Nullable String tag, @AnimRes int enter, @AnimRes int exit, @AnimRes int popEnter, @AnimRes int popExit) {
+        //noinspection deprecation
+        replace(fragment, parentFragment.getChildFragmentManager(), containerViewId, tag, enter, exit, popEnter, popExit);
+    }
+
+    @Deprecated
+    public static void replace(@NonNull Fragment fragment, @NonNull FragmentManager fragmentManager, @NonNull String tag, String back_stack) {
+        // Pass 0 as in {@link android.support.v4.app.BackStackRecord#replace(Fragment, String)}.
+        //noinspection deprecation
+        replace(fragment, fragmentManager, 0, tag, back_stack, enter, exit, popEnter, popExit);
+    }
+
+    public static void replace(@NonNull Fragment fragment, @NonNull FragmentManager fragmentManager, @IdRes int containerViewId, @NonNull String tag) {
+        //noinspection deprecation
+        replace(fragment, fragmentManager, containerViewId, tag, enter, exit, popEnter, popExit);
+    }
+
     public static void replace(@NonNull Fragment fragment, @NonNull FragmentManager fragmentManager, @IdRes int containerViewId) {
         //noinspection deprecation
-        replace(fragment, fragmentManager, containerViewId, null);
+        replace(fragment, fragmentManager, containerViewId, null, enter, exit, popEnter, popExit);
     }
 
     public static void replace(@NonNull Fragment fragment, @NonNull FragmentActivity activity, @IdRes int containerViewId) {
         //noinspection deprecation
-        replace(fragment, activity.getSupportFragmentManager(), containerViewId);
+        replace(fragment, activity.getSupportFragmentManager(), containerViewId, null, enter, exit, popEnter, popExit);
     }
 
-    public static void replace(@NonNull Fragment fragment, @NonNull Fragment parentFragment, @IdRes int containerViewId) {
+    public static void replace(@NonNull Fragment fragment, @NonNull FragmentActivity activity, @NonNull String tag, String back_stack) {
         //noinspection deprecation
-        replace(fragment, parentFragment.getChildFragmentManager(), containerViewId);
+        replace(fragment, activity.getSupportFragmentManager(), tag, back_stack);
     }
 
-    @Deprecated
-    public static void replace(@NonNull Fragment fragment, @NonNull FragmentManager fragmentManager, @NonNull String tag) {
-        // Pass 0 as in {@link android.support.v4.app.BackStackRecord#replace(Fragment, String)}.
+    public static void replace(@NonNull Fragment fragment, @NonNull Fragment parentFragment, @NonNull String tag, String back_stack) {
         //noinspection deprecation
-        replace(fragment, fragmentManager, 0, tag);
-    }
-
-    public static void replace(@NonNull Fragment fragment, @NonNull FragmentActivity activity, @NonNull String tag) {
-        //noinspection deprecation
-        replace(fragment, activity.getSupportFragmentManager(), tag);
-    }
-
-    public static void replace(@NonNull Fragment fragment, @NonNull Fragment parentFragment, @NonNull String tag) {
-        //noinspection deprecation
-        replace(fragment, parentFragment.getChildFragmentManager(), tag);
+        replace(fragment, parentFragment.getChildFragmentManager(), tag, back_stack);
     }
 
     public static void replace(@NonNull Fragment fragment, @NonNull FragmentActivity activity) {
         //noinspection deprecation
-        replace(fragment, activity.getSupportFragmentManager(), 0, null);
+        replace(fragment, activity.getSupportFragmentManager(), 0, null, null, enter, exit, popEnter, popExit);
     }
 
     public static void replace(@NonNull Fragment fragment, @NonNull Fragment parentFragment) {
         //noinspection deprecation
-        replace(fragment, parentFragment.getChildFragmentManager(), 0, null);
+        replace(fragment, parentFragment.getChildFragmentManager(), 0, null, null, enter, exit, popEnter, popExit);
     }
 
     public static void executePendingTransactions(@NonNull FragmentActivity activity) {

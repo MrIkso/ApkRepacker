@@ -1,20 +1,54 @@
 /**
- *  Copyright (C) 2019 Ryszard Wiśniewski <brut.alll@gmail.com>
- *  Copyright (C) 2019 Connor Tumbleson <connor.tumbleson@gmail.com>
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Copyright (C) 2019 Ryszard Wiśniewski <brut.alll@gmail.com>
+ * Copyright (C) 2019 Connor Tumbleson <connor.tumbleson@gmail.com>
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package brut.androlib;
+
+import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BlurMaskFilter;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
+import android.graphics.drawable.AdaptiveIconDrawable;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
+import android.os.Build;
+import android.util.Base64;
+
+import androidx.annotation.RequiresApi;
+
+import com.google.common.base.Strings;
+import com.mrikso.apktool.R;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
 
 import brut.androlib.err.InFileNotFoundException;
 import brut.androlib.err.OutDirExistsException;
@@ -26,18 +60,11 @@ import brut.androlib.meta.VersionInfo;
 import brut.androlib.res.AndrolibResources;
 import brut.androlib.res.data.ResPackage;
 import brut.androlib.res.data.ResTable;
-import brut.directory.ExtFile;
 import brut.androlib.res.xml.ResXmlPatcher;
-import brut.common.BrutException;
 import brut.directory.DirectoryException;
+import brut.directory.ExtFile;
 import brut.util.Logger;
 import brut.util.OS;
-import com.google.common.base.Strings;
-import com.mrikso.apktool.R;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
 //import java.util.logging.Logger;
 
 /**
@@ -72,7 +99,8 @@ public class ApkDecoder {
         if (mApkFile != null) {
             try {
                 mApkFile.close();
-            } catch (IOException ignored) {}
+            } catch (IOException ignored) {
+            }
         }
 
         mApkFile = new ExtFile(apkFile);
@@ -87,7 +115,7 @@ public class ApkDecoder {
         mApi = api;
     }
 
-    public void decode() throws AndrolibException {
+    public void decode(Context context) throws AndrolibException {
         try {
             File outDir = getOutDir();
             AndrolibResources.sKeepBroken = mKeepBrokenResources;
@@ -103,7 +131,7 @@ public class ApkDecoder {
             OS.rmdir(outDir);
             outDir.mkdirs();
 
-            LOGGER.info(R.string.log_using_apktool, Androlib.getVersion() , mApkFile.getName());
+            LOGGER.info(R.string.log_using_apktool, Androlib.getVersion(), getApkName(context, mApkFile.getAbsolutePath()));
 
             if (hasResources()) {
                 switch (mDecodeResources) {
@@ -136,8 +164,7 @@ public class ApkDecoder {
                     if (mDecodeResources == DECODE_RESOURCES_FULL
                             || mForceDecodeManifest == FORCE_DECODE_MANIFEST_FULL) {
                         mAndrolib.decodeManifestFull(mApkFile, outDir, getResTable());
-                    }
-                    else {
+                    } else {
                         mAndrolib.decodeManifestRaw(mApkFile, outDir);
                     }
                 }
@@ -160,8 +187,8 @@ public class ApkDecoder {
                 Set<String> files = mApkFile.getDirectory().getFiles(true);
                 for (String file : files) {
                     if (file.endsWith(".dex")) {
-                        if (! file.equalsIgnoreCase("classes.dex")) {
-                            switch(mDecodeSources) {
+                        if (!file.equalsIgnoreCase("classes.dex")) {
+                            switch (mDecodeSources) {
                                 case DECODE_SOURCES_NONE:
                                     mAndrolib.decodeSourcesRaw(mApkFile, outDir, file);
                                     break;
@@ -186,14 +213,85 @@ public class ApkDecoder {
             mUncompressedFiles = new ArrayList<String>();
             mAndrolib.recordUncompressedFiles(mApkFile, mUncompressedFiles);
             mAndrolib.writeOriginalFiles(mApkFile, outDir);
-            writeMetaFile();
+            writeMetaFile(context);
         } catch (Exception ex) {
-            throw  new AndrolibException(ex);
+            throw new AndrolibException(ex);
         } finally {
             try {
                 mApkFile.close();
-            } catch (IOException ignored) {}
+            } catch (IOException ignored) {
+            }
         }
+    }
+
+    private Drawable getApkIcon(Context context, String apkFilePatch) {
+        try {
+            PackageManager pm = context.getPackageManager();
+            android.content.pm.PackageInfo packageInfo = pm.getPackageArchiveInfo(apkFilePatch, PackageManager.GET_ACTIVITIES);
+            if (packageInfo != null) {
+                ApplicationInfo appInfo = packageInfo.applicationInfo;
+                appInfo.sourceDir = apkFilePatch;
+                appInfo.publicSourceDir = apkFilePatch;
+                try {
+                    return appInfo.loadIcon(pm);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
+        }
+        return null;
+    }
+
+    private String getApkName(Context context, String apkFilePatch) {
+        try {
+            PackageManager pm = context.getPackageManager();
+            android.content.pm.PackageInfo packageInfo = pm.getPackageArchiveInfo(apkFilePatch, PackageManager.GET_ACTIVITIES);
+            if (packageInfo != null) {
+                ApplicationInfo appInfo = packageInfo.applicationInfo;
+                return (String) appInfo.loadLabel(pm);
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private String getApkPackage(Context context, String apkFilePatch) {
+        try {
+            PackageManager pm = context.getPackageManager();
+            android.content.pm.PackageInfo packageInfo = pm.getPackageArchiveInfo(apkFilePatch, PackageManager.GET_ACTIVITIES);
+            if (packageInfo != null) {
+                ApplicationInfo appInfo = packageInfo.applicationInfo;
+                return appInfo.packageName;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private Bitmap getBitmapFromDrawable(Drawable drawable) {
+        if (drawable != null) {
+            final Bitmap bmp = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+            final Canvas canvas = new Canvas(bmp);
+            drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+            drawable.draw(canvas);
+            return bmp;
+        } else {
+            return null;
+        }
+    }
+
+    private static String encodeToBase64(Bitmap image) {
+        ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOS);
+        return Base64.encodeToString(byteArrayOS.toByteArray(), Base64.NO_WRAP);
     }
 
     public void setDecodeSources(short mode) {
@@ -212,7 +310,7 @@ public class ApkDecoder {
         mDecodeAssets = mode;
     }
 
-    public void setAnalysisMode(boolean mode, boolean pass) throws AndrolibException{
+    public void setAnalysisMode(boolean mode, boolean pass) throws AndrolibException {
         mAnalysisMode = mode;
 
         // only set mResTable, once it exists
@@ -243,7 +341,7 @@ public class ApkDecoder {
         mForceDelete = forceDelete;
     }
 
-    public void setFrameworkTag(String tag)  {
+    public void setFrameworkTag(String tag) {
         mAndrolib.apkOptions.frameworkTag = tag;
     }
 
@@ -259,7 +357,7 @@ public class ApkDecoder {
         if (mResTable == null) {
             boolean hasResources = hasResources();
             boolean hasManifest = hasManifest();
-            if (! (hasManifest || hasResources)) {
+            if (!(hasManifest || hasResources)) {
                 throw new AndrolibException(
                         "Apk doesn't contain either AndroidManifest.xml file or resources.arsc file");
             }
@@ -281,7 +379,7 @@ public class ApkDecoder {
             Set<String> files = mApkFile.getDirectory().getFiles(false);
             for (String file : files) {
                 if (file.endsWith(".dex")) {
-                    if (! file.equalsIgnoreCase("classes.dex")) {
+                    if (!file.equalsIgnoreCase("classes.dex")) {
                         return true;
                     }
                 }
@@ -328,6 +426,8 @@ public class ApkDecoder {
     public final static short DECODE_ASSETS_NONE = 0x0000;
     public final static short DECODE_ASSETS_FULL = 0x0001;
     private String apkFileName;
+//    private String apkFilePackageName;
+//    private String apkFileIcon;
 
     private File getOutDir() throws AndrolibException {
         if (mOutDir == null) {
@@ -336,14 +436,22 @@ public class ApkDecoder {
         return mOutDir;
     }
 
-    private void writeMetaFile() throws AndrolibException {
+    private void writeMetaFile(Context context) throws AndrolibException {
         MetaInfo meta = new MetaInfo();
         meta.version = Androlib.getVersion();
         meta.apkFileName = mApkFile.getName();
         String apkFileName = this.apkFileName;
         if (apkFileName == null)
             apkFileName = mApkFile.getName();
+
+        Drawable appIcon = getApkIcon(context, mApkFile.getAbsolutePath());
+
+
+//        if (appIcon != null) {
+            meta.apkFileIcon = appIcon != null ? encodeToBase64(getBitmapFromDrawable(appIcon)) : null;
+//        }
         meta.apkFileName = apkFileName;
+        meta.apkFilePackageName = getApkPackage(context, mApkFile.getAbsolutePath());
         meta.apkFilePatch = mApkFile.getAbsolutePath();
 
         if (mDecodeResources != DECODE_RESOURCES_NONE && (hasManifest() || hasResources())) {
@@ -396,7 +504,8 @@ public class ApkDecoder {
         int id = getResTable().getPackageId();
         try {
             id = getResTable().getPackage(renamed).getId();
-        } catch (UndefinedResObject ignored) {}
+        } catch (UndefinedResObject ignored) {
+        }
 
         if (Strings.isNullOrEmpty(original)) {
             return;

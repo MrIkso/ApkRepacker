@@ -5,6 +5,10 @@ import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Build;
@@ -18,12 +22,20 @@ import android.webkit.MimeTypeMap;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
+import com.bumptech.glide.load.resource.bitmap.BitmapDrawableDecoder;
+import com.bumptech.glide.load.resource.bitmap.BitmapDrawableEncoder;
+import com.bumptech.glide.load.resource.bitmap.BitmapDrawableResource;
 import com.duy.common.DLog;
 import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.filepicker.Utility;
 import com.mrikso.apkrepacker.ui.prererence.Preference;
+
+import org.apache.commons.io.IOUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -35,11 +47,12 @@ import java.nio.file.Files;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+
+import brut.androlib.meta.VersionInfo;
 
 import static com.mrikso.apkrepacker.App.getContext;
 
@@ -69,12 +82,12 @@ public class FileUtil {
                     pkg = pkg.replace(File.separator, ".");
                     DLog.i("pkg: " + pkg);
                     return pkg;
-                }
-                else {
+                } else {
                     DLog.i("Not found1");
                     return "";
                 }
-            } {
+            }
+            {
                 DLog.i("Not found2");
                 return "";
             }
@@ -143,6 +156,7 @@ public class FileUtil {
         return new String[]{filename, extension};
     }
 
+    @SuppressLint("WrongConstant")
     public static void installApk(Context c, File apk) {
         Uri data;
         if (Build.VERSION.SDK_INT >= 24) {
@@ -377,7 +391,7 @@ public class FileUtil {
         }
     }
 
-    public static String getFolderSize(Context context, File file) {
+    public static String getFormatFolderSize(Context context, File file) {
         if (file.isDirectory())
             //returns the size folder
             return Formatter.formatShortFileSize(context, getFolderSize(file));
@@ -385,14 +399,19 @@ public class FileUtil {
     }
 
     public static long getFolderSize(File dir) {
-        long size = 0;
-        for (File file : Objects.requireNonNull(dir.listFiles())) {
-            if (file.isFile()) {
-                size += file.length();
-            } else
-                size += getFolderSize(file);
+        if (dir.exists()) {
+            long result = 0;
+            File[] fileList = dir.listFiles();
+            for (int i = 0; i < fileList.length; i++) {
+                if (fileList[i].isDirectory()) {
+                    result += getFolderSize(fileList[i]);
+                } else {
+                    result += fileList[i].length();
+                }
+            }
+            return result;
         }
-        return size;
+        return 0;
     }
 
     public static String getStorageUsage(Context context) {
@@ -489,6 +508,17 @@ public class FileUtil {
         }
     }
 
+    public static int getColorResourceSimple(File file) {
+        switch (FileType.getFileType(file)) {
+            case DIRECTORY:
+                return R.color.directory;
+            case MISC_FILE:
+                return R.color.xml;
+            default:
+                return R.color.xml;
+        }
+    }
+
     //----------------------------------------------------------------------------------------------
 
     public static int getImageResource(File file) {
@@ -543,7 +573,7 @@ public class FileUtil {
         if (showIsHidden()) {
             return directory.listFiles(pathname -> pathname.exists());
         } else {
-            return directory.listFiles(pathname -> pathname.exists() && !pathname.isHidden());
+            return directory.listFiles(pathname -> pathname.exists() && !pathname.isHidden() && !pathname.getName().equals("apktool.json"));
         }
     }
 
@@ -570,7 +600,7 @@ public class FileUtil {
 
     public enum FileType {
 
-        DIRECTORY, MISC_FILE, AUDIO, IMAGE, VIDEO, DOC, PPT, XLS, PDF, TXT, ZIP, APK, DEX, BAK, APKS,
+        DIRECTORY, MISC_FILE, AUDIO, IMAGE, VIDEO, TTF, DOC, PPT, XLS, PDF, TXT, ZIP, APK, DEX, BAK, APKS,
         XML, SMALI, JSON, HTML, HTM, INI, JS;
 
         public static FileType getFileType(File file) {
@@ -611,6 +641,8 @@ public class FileUtil {
                 return FileType.HTM;
             } else if (ext.startsWith("js")) {
                 return FileType.JS;
+            } else if (ext.startsWith("ttf")) {
+                return FileType.TTF;
             } else if (mime == null)
                 return FileType.MISC_FILE;
 
@@ -655,6 +687,40 @@ public class FileUtil {
 
             else
                 return FileType.MISC_FILE;
+        }
+    }
+
+
+    public static String readJson(File file, String stringName) {
+        String content;
+        try {
+            content = IOUtils.toString(new FileInputStream(file));
+            JSONObject json = new JSONObject(content);
+            VersionInfo versionInfo = VersionInfo.load(json);
+            if (stringName.equals("versionName")) {
+                return versionInfo.versionName;
+            } else if (stringName.equals("versionCode")) {
+                return versionInfo.versionCode;
+            } else {
+                return json.isNull(stringName) ? null : json.getString(stringName);
+            }
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Drawable getProjectIconDrawable(String appIconBase64) {
+        Drawable icon = (decodeBase64(appIconBase64) != null) ? new BitmapDrawable(getContext().getResources(), decodeBase64(appIconBase64)) : null;
+        return appIconBase64 != null ? icon : ContextCompat.getDrawable(getContext(), R.drawable.default_app_icon);
+    }
+
+    private static Bitmap decodeBase64(String input) {
+        try {
+            byte[] decodedBytes = Base64.decode(input, 0);
+            return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+        } catch (Exception e) {
+            return null;
         }
     }
 }

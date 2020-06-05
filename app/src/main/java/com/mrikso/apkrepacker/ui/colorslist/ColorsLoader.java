@@ -33,7 +33,7 @@ public class ColorsLoader {
 
     private MutableLiveData<List<ColorMeta>> mColorsLiveData = new MutableLiveData<>();
 
-    private ColorsLoader(Context c, File file) {
+    public ColorsLoader(Context c, File file) {
         sInstance = this;
 
         mContext = c.getApplicationContext();

@@ -3,24 +3,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="46dp"
-    android:background="@drawable/selectable_background" >
+    android:background="?selectableItemBackground" >
 
     <ImageView
         android:id="@+id/list_item_image"
         android:layout_width="32dp"
         android:layout_height="32dp"
+        android:scaleType="center"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:layout_marginStart="@dimen/list_item_icon_margin"
-        android:scaleType="center"
+        android:layout_marginEnd="@dimen/list_item_icon_margin"
+        tools:src="@drawable/ic_directory"
         tools:ignore="ContentDescription" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
-        android:layout_marginStart="@dimen/list_item_name_marginStart_1"
+        android:layout_toEndOf="@id/list_item_image"
         android:layout_marginEnd="@dimen/list_item_name_marginEnd"
         android:orientation="vertical" >
 
@@ -28,7 +29,8 @@
             style="@style/Text.Subhead"
             android:singleLine="true"
             android:ellipsize="middle"
-            android:id="@+id/list_item_name" />
+            android:id="@+id/list_item_name"
+            tools:text="File name"/>
 
     </LinearLayout>
 

@@ -5,6 +5,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.mrikso.apkrepacker.utils.view.ElevationImageView;
+
 import java.io.File;
 
 public abstract class ViewHolder extends RecyclerView.ViewHolder {
@@ -36,7 +38,7 @@ public abstract class ViewHolder extends RecyclerView.ViewHolder {
 
     protected abstract void loadInfo();
 
-    protected abstract void bindIcon(File file, Boolean selected);
+    protected abstract void bindIcon(File file);
 
     protected abstract void bindName(File file);
 
@@ -55,7 +57,7 @@ public abstract class ViewHolder extends RecyclerView.ViewHolder {
         itemView.setOnClickListener(onClickListener);
         itemView.setOnLongClickListener(onLongClickListener);
         itemView.setSelected(selected);
-        bindIcon(file, selected);
+        bindIcon(file);
         bindName(file);
         bindInfo(file);
     }

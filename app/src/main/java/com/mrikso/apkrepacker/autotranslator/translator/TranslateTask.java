@@ -32,8 +32,8 @@ public class TranslateTask extends AsyncTask<Void, List<TranslateItem>, Boolean>
     @Override
     protected Boolean doInBackground(Void... params) {
         Random r = new Random(System.currentTimeMillis());
-        final int maxItems = 10 + r.nextInt(5);
-        final int maxChars = 900;
+        final int maxItems = 15 + r.nextInt(5);
+        final int maxChars = 1000;
 
         String code = activityRef.get().getGoogleLangCode();
         Translator translator = new Translator(code);

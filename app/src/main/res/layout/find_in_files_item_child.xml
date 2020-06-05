@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:padding="5dp"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="?selectableItemBackground">
 
     <TextView
         android:id="@+id/match_line_text_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="28dp"
         android:layout_centerInParent="true"
-        android:textSize="12sp" />
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/checkbox_margin"
+        android:paddingEnd="@dimen/checkbox_margin"
+        android:textSize="@dimen/text_size_12"
+        android:text="File Name"/>
 
 </RelativeLayout>

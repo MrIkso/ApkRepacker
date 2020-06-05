@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -9,29 +10,43 @@
         android:orientation="vertical"
         android:paddingLeft="24dp"
         android:paddingTop="16dp"
-        android:paddingRight="24dp">
+        android:paddingRight="24dp"
+        tools:ignore="UselessParent">
 
-        <TextView
-            android:text="@string/package_name_hint"
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/TextInputLayout"
+            android:theme="@style/TextInputLayout.OutlinedBox"
+            android:id="@+id/text_input_layout_old"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/md_text_size_medium" />
-        <EditText
-            android:id="@+id/class_package"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:singleLine="true"/>
+            android:hint="@string/package_name_hint"
+            android:layout_marginBottom="@dimen/normal_padding">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/class_name"
-            android:textSize="@dimen/md_text_size_medium" />
-        <EditText
-            android:id="@+id/class_name"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/class_package"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:singleLine="true" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/TextInputLayout"
+            android:theme="@style/TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:singleLine="true" />
+            android:hint="@string/class_name">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/class_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:singleLine="true" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
     </LinearLayout>
 
 </RelativeLayout>

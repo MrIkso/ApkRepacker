@@ -1,14 +1,23 @@
-<resources>
-    <string name="colorPickerDialog_dialogName">Color Picker</string>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2013 The Android Open Source Project
 
-    <string name="colorPickerDialog_red">R</string>
-    <string name="colorPickerDialog_blue">B</string>
-    <string name="colorPickerDialog_green">G</string>
-    <string name="colorPickerDialog_alpha">A</string>
-    <string name="colorPickerDialog_hue">H</string>
-    <string name="colorPickerDialog_saturation">S</string>
-    <string name="colorPickerDialog_brightness">V</string>
-    <string name="colorPickerDialog_rgb">RGB</string>
-    <string name="colorPickerDialog_hsv">HSV</string>
-    <string name="colorPickerDialog_preset">Preset</string>
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+  <!-- Default title for color picker dialog [CHAR LIMIT=30] -->
+  <string name="cpv_default_title">Select a Color</string>
+  <string name="cpv_presets">Presets</string>
+  <string name="cpv_custom">Custom</string>
+  <string name="cpv_select">Select</string>
+  <string name="cpv_transparency">Transparency</string>
 </resources>

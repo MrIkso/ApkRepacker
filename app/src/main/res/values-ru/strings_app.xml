@@ -1,8 +1,9 @@
 <resources>
     <string name="title_activity_about">О программе</string>
-    <string name="about_version">Версия: %s(%s)</string>
+    <string name="about_version">Версия: %s (%s)</string>
     <string name="about_not_found_email">Не найдено приложение электронной почты</string>
     <string name="share_with">Поделиться с</string>
+    <string name="projects_count">Проектов: %d</string>
 
     <string name="settings">Настройки</string>
     <string name="theme_light">Светлая</string>
@@ -11,6 +12,8 @@
 
     <string name="action_delete">Удалить</string>
     <string name="action_rename">Переименовать</string>
+    <string name="action_open_with">Открыть с помощью</string>
+    <string name="action_open_in_editor">Открыть в редакторе</string>
     <string name="action_search">Поиск</string>
     <string name="action_copy">Копировать</string>
     <string name="action_move">Переместить</string>
@@ -25,6 +28,7 @@
     <string name="pref_show_last">Показывать последнее изменение</string>
     <string name="pref_show_file_sizes">Показывать размеры файлов</string>
     <string name="install_app">Установить</string>
+    <string name="dialog_install_app">Установить приложение?</string>
     <string name="decompile_app">Декомпилировать</string>
 
     <string name="output_directory_not_extsts">Выходной каталог \'%1$s\' не существует и не может быть создан!</string>
@@ -36,7 +40,7 @@
     <string name="decompile_dex">Декомпилировать classes.dex</string>
     <string name="app_build">Сборка</string>
     <string name="action_about_project">Информация</string>
-    <string name="project_list_is_empry">Проект пуст</string>
+    <string name="project_list_is_empty">Нет проектов</string>
     <string name="translate_string">Перевести строку</string>
     <string name="text_after_translation">Текст после перевода</string>
     <string name="pref_general_decompiler">Декомпилятор</string>
@@ -57,6 +61,8 @@
     <string name="action_create_folder">Добавить папку</string>
     <string name="action_add_file">Добавить файл</string>
     <string name="action_add_new_lang">Добавить новый язык</string>
+    <string name="action_add_new_color">Добавить новый цвет</string>
+    <string name="action_change_color">Изменить цвет</string>
     <string name="root_path">Root</string>
     <string name="search_request">Поисковый запрос</string>
     <string name="caption_search_options">Параметры поиска</string>
@@ -66,9 +72,9 @@
     <string name="add_ext">Добавить расширение</string>
     <string name="recursively">Рекурсивно</string>
     <string name="cannt_open_directory">Не удалось открыть папку</string>
-    <string name="cannt_open_file">Ошибка! Невозможно открыть файл!</string>
+    <string name="cannt_open_file">У вас нет приложений, которые могут открыть этот тип файла.</string>
     <string name="about_title">О приложении</string>
-    <string name="about_source_licenses">Исходные лицензии</string>
+    <string name="about_source_licenses">Лицензии</string>
     <string name="about_website">Открыть сайт</string>
     <string name="about_git_hub">Открыть GitHub</string>
     <string name="about_email">Отправить письмо</string>
@@ -80,10 +86,12 @@
     <string name="build_run_title">Сборка приложения</string>
     <string name="complete">Завершено</string>
     <string name="toast_deleted_item">Файл %s удален</string>
-    <string name="menu_build_app">Сборка приложения</string>
-    <string name="menu_delete_project">Удалить проект</string>
+    <string name="menu_build_app">Сборка</string>
+    <string name="menu_delete_project">Удалить</string>
     <string name="menu_about_project">О проекте</string>
     <string name="error">Ошибка</string>
+    <string name="enter_color_name">Введите имя цвета</string>
+    <string name="loading">Загрузка, пожалуйста подождите.</string>
 
     <!--Signature-->
     <string name="signature_file">Файл подписи</string>
@@ -131,11 +139,13 @@
     <string name="dialog_add_extensions">Добавить расширения</string>
     <string name="dialog_please_wait">Пожалуйста, подождите…</string>
     <string name="dialog_find">Поиск</string>
+    <string name="dialog_deleting">Удаление</string>
+    <string name="dialog_loading_projects">Загрузка проектов</string>
 
     <string name="common_error">Ошибка</string>
     <string name="signer_permissions_denied">Разрешение отклонено</string>
     <string name="sign_done">Подпись готова</string>
-    <string name="search_apps_hint">Поиск приложений</string>
+<!--    <string name="search_apps_hint">Поиск приложений</string>-->
     <string name="backup_search_splits_only">Только split</string>
     <string name="backup_search_show_system_apps">Системные приложения</string>
     <string name="action_next_panel">Далее</string>
@@ -143,13 +153,15 @@
     <string name="action_all_replace_panel">Все</string>
     <string name="action_prev_panel">Назад</string>
     <string name="open_app_in_settings">Открыть в настройках</string>
-    <string name="about_telegram">Телеграм</string>
+    <string name="about_telegram">Телеграм Канал</string>
 
     <string name="compile_in_progress">Сборка в процессе…</string>
     <string name="uninstall_app">Удалить приложение</string>
-    <string name="lang_code">Код языка</string>
     <string name="language">Язык</string>
+    <string name="lang_code">Код языка</string>
     <string name="lang_code_exapmle">Например: en-rUS</string>
+    <string name="color_name">Имя цвета</string>
+    <string name="color_name_exapmle">На пример: abc_color_name</string>
     <string name="action_open_project">Открыть проект</string>
     <string name="action_copy_log">Скопировать лог</string>
     <string name="error_decompilation_failed">Ошибка декомпиляции</string>
@@ -157,13 +169,14 @@
     <string name="error_build_failed">Ошибка сборки</string>
     <string name="build_successful">Успешная сборка</string>
     <string name="dialog_color_picker">Выбор цвета</string>
-    <string name="action_save_new_lang">Сохранить перевод</string>
+    <string name="action_select_lang">Выбрать язык (%s)</string>
     <string name="toast_files_deleted">%d файлов удалено</string>
     <string name="toast_error_create_new_language">Не удалось создать новый язык</string>
     <string name="toast_error_translate_language">Ошибка при сохранении перевода</string>
     <string name="toast_error_pasring">Ошибка при разборе xml</string>
     <string name="toast_error_empty_find">Поисковый запрос пуст!</string>
     <string name="toast_error_not_selectable">Не удалось выбрать</string>
+
     <string name="selected">%d выбрано</string>
     <string name="search_for">Поиск %s</string>
     <string name="sort_by">Сортировать</string>
@@ -171,7 +184,7 @@
     <string name="sort_by_date">По последнему изменению</string>
     <string name="sort_by_size">По размеру (по убыванию)</string>
     <string name="toast_error_directory_not_exits">Дирректория не существует</string>
-    <string name="toast_error_new_language_is_exits">Выбранный язык является выходящим!</string>
+    <string name="toast_error_new_language_is_exits">Выбранный язык уже существует!</string>
     <string name="toast_error_on_delete_file">Ошибка при удалении!</string>
     <string name="toast_error_on_add_folder">Ошибка при создании папки!</string>
     <string name="toast_error_on_rename">Ошибка при переименовывании!</string>
@@ -185,4 +198,68 @@
     <string name="toast_deleted_dictionary">Папка %s удалена</string>
     <string name="build_apk_saved_to">Файл сохранен в: %s</string>
     <string name="label_path_project">Путь</string>
+
+
+    <string name="action_simple_edit">Простой редактор</string>
+    <string name="app_name_hint">Имя приложения</string>
+    <string name="package_name_hint">Имя пакета</string>
+    <string name="version_code_hint">Код версии</string>
+    <string name="version_name_hint">Название версии</string>
+    <string name="minimum_sdk_version_hint">Минимальная версия SDK</string>
+    <string name="target_sdk_version_hint">Целевая версия SDK</string>
+    <string name="rename_package_in_resource">Переименовать имя пакета в resources.arsc</string>
+    <string name="rename_package_in_dex">Переименовать имя пакета в файле (файлах) dex</string>
+    <string name="simple_edit_app">Простое редактирование</string>
+    <string name="toast_error_in_decompile_installed_app">Ошибка при декомпиляции установленного приложения!</string>
+    <string name="toast_error_in_simple_edit_installed_app">Ошибка при редактировании установленного приложения!</string>
+    <string name="select_icon">Выберите новую иконку</string>
+    <string name="toast_error_cant_parse_apk">Ошибка при разборе apk!</string>
+    <string name="install_location">Место установки</string>
+    <string name="install_location_default">По умолчанию (не задано)</string>
+    <string name="install_location_auto">Авто (по выбору системы)</string>
+    <string name="install_location_internal">Только внутренняя память</string>
+    <string name="install_location_external">Только внешняя память</string>
+
+    <string name="toast_error_sign_failed">Ошибка при подписывании apk!</string>
+    <string name="dialog_sign">Подписывание…</string>
+    <string name="sign_app">Подписать apk</string>
+    <string name="toast_sign_done">Успешно подписан</string>
+    <string name="items">%d items</string>
+    <string name="select_patch">Выберите путь</string>
+    <string name="action_sd_card">Внешняя SD-карта</string>
+    <string name="intenal_sd_card">Внутренняя память</string>
+    <string name="pref_show_hidden_files">Показать скрытые файлы</string>
+    <string name="pref_keep_screen_on">Не выключать экран</string>
+    <string name="toast_error_import_framework_failed">Ошибка при импорте фреймворка!</string>
+    <string name="install_as_framework">Импортировать как framework</string>
+    <string name="toast_import_framework_done">Фреймворк успешно импортирован</string>
+    <string name="dialog_import">Импортирование…</string>
+    <string name="project">Проект:</string>
+    <string name="select_from_storage">Выбрать из хранилища</string>
+    <string name="action_create_xml">Создать xml файл</string>
+    <string name="action_create_class">Создать smali файл</string>
+    <string name="class_name">Имя класса</string>
+    <string name="editor_theme">Тема редактора</string>
+    <string name="selected_editor_theme">Выбрана тема: %s. Перезапустите приложение, чтобы применить тему.</string>
+    <string name="toast_apk_succes_edited" type="id">Apk успешно скомпилирован!</string>
+    <string name="toast_apk_falied_edited" type="id">Не удалось скомпилировать apk!</string>
+    <string name="show_decompile_option_dialog">Показать диалог выбора режима декодирования</string>
+
+
+    <string name="string_name_copied">Имя строки скопировано в буфер обмена: %s</string>
+    <string name="color_name_copied">Имя цвета скопировано в буфер обмена: %s</string>
+    <!--auto translator-->
+    <string name="stop">Стоп</string>
+    <string name="save_and_close">Сохранить и выйти</string>
+    <string name="translating">Перевед &#8230;</string>
+    <string name="translated">Переведенный</string>
+    <string name="translated_format">%d строк переведено</string>
+    <string name="failed_format">%d строк с ошибкой</string>
+    <string name="untranslated_format">%d строк не переведено</string>
+    <string name="error_no_string_totranslate">Строка не должна быть переведена.</string>
+    <string name="save_translation_title">Сохранить перевод?</string>
+    <string name="save_translation_msg">Перевод еще не сохранен. Сохранить его перед дальнейшей операцией?</string>
+    <string name="string_notsaved_msg">%d строк не сохранено.</string>
+    <string name="title_activity_auto_translator">Авто-переводчик</string>
+    <string name="action_auto_translate_lang">Авто-перевод языка</string>
 </resources>

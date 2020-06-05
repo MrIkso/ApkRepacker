@@ -1,10 +1,8 @@
 package com.mrikso.apkrepacker.ui.stringlist;
 
-import android.content.Context;
 import android.util.Log;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

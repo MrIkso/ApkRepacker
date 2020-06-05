@@ -67,6 +67,7 @@ public class FindFragment extends Fragment implements ProgressDialogFragment.Pro
     private MyAdapter myAdapter;
     private int findResultsKeywordColor;
     private List<ParentData> list;
+    private Context mContext;
 
     public FindFragment() {
         // Required empty public constructor
@@ -79,9 +80,9 @@ public class FindFragment extends Fragment implements ProgressDialogFragment.Pro
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_find_list, container, false);
+        mContext = view.getContext();
         //Bundle bundle = this.getArguments();
         recyclerView = view.findViewById(R.id.find_list);
         return view;
@@ -91,8 +92,8 @@ public class FindFragment extends Fragment implements ProgressDialogFragment.Pro
     public void onViewCreated(@NonNull View view, Bundle bundle) {
         super.onViewCreated(view, bundle);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(App.getContext()));
-        new FastScrollerBuilder(recyclerView).build();
+        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        new FastScrollerBuilder(recyclerView).useMd2Style().build();
         task = new SearchTask();
         if (!findFiles) {
             extGrep = StringUtils.extGreps;
@@ -151,7 +152,7 @@ public class FindFragment extends Fragment implements ProgressDialogFragment.Pro
     @SuppressLint("DefaultLocale")
     private List<ParentData> getList(List<ExtGrep.Result> results) {
         File file = null;
-        TypedArray a = App.getContext().obtainStyledAttributes(new int[]{
+        TypedArray a = getContext().obtainStyledAttributes(new int[]{
                 R.attr.findResultsKeyword
         });
 
@@ -298,11 +299,11 @@ public class FindFragment extends Fragment implements ProgressDialogFragment.Pro
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-                adapter = new FilesAdapter(App.getContext(), mFinder.getFileList());
+                adapter = new FilesAdapter(mContext, mFinder.getFileList());
                 if (mFinder != null && adapter != null) {
                     if(!mFinder.getFileList().isEmpty())
                     {
-                        adapter.setOnItemClickListener(new OnItemClickListener(App.getContext()));
+                        adapter.setOnItemClickListener(new OnItemClickListener(mContext));
                         recyclerView.setAdapter(adapter);
                     }
                     else {
@@ -318,7 +319,7 @@ public class FindFragment extends Fragment implements ProgressDialogFragment.Pro
         protected Void doInBackground(String... extGreps) {
             list = getList(extGrep.execute());
 
-            myAdapter = new MyAdapter(App.getContext(), list);
+            myAdapter = new MyAdapter(mContext, list);
 
             //findInFilesAdapter = new FindInFilesAdapter();
             // findInFilesAdapter.setResults(extGrep.execute());

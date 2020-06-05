@@ -3,6 +3,7 @@ package com.sdsmdg.harjot.vectormaster;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Path;
 import android.util.AttributeSet;
@@ -28,30 +29,22 @@ import java.util.Stack;
 
 public class VectorMasterView extends View {
 
-    VectorModel vectorModel;
-    Context context;
-
-    Resources resources;
-    int resID = -1;
-    boolean useLegacyParser = true;
-    private boolean useLightTheme = true;
-
-    XmlPullParser xpp;
-
     String TAG = "VECTOR_MASTER";
-
+    public VectorModel vectorModel;
+    private PathModel pathModel;
+    private Context context;
+    private Resources resources;
+    private int resID = -1;
+    private boolean isVector = false;
+    private boolean useLegacyParser = true;
+    private boolean useLightTheme = true;
     private Matrix scaleMatrix;
-
-    int width = 0, height = 0;
-
-    public int attrWidth = 0, attrHeight = 0;
-
+    private int width = 0, height = 0;
     private float scaleRatio, strokeRatio;
 
     private InputStream vectorStream;
     private File vectorFile;
-
-    private boolean isVector = false;
+//    private String projectPatch;
 
     public VectorMasterView(Context context) {
         this(context, (AttributeSet) null);
@@ -79,10 +72,11 @@ public class VectorMasterView extends View {
         init();
     }
 
-    public VectorMasterView(Context context, File file) {
+    public VectorMasterView(Context context, File file /*String projectPatch*/) {
         this(context);
         this.context = context;
         this.vectorFile = file;
+//        this.projectPatch = projectPatch;
         init();
     }
 
@@ -101,6 +95,7 @@ public class VectorMasterView extends View {
             }
         }
 
+        XmlPullParser xpp;
         if (vectorStream != null) {
             try {
                 XmlPullParserFactory parserFactory = XmlPullParserFactory.newInstance();
@@ -121,7 +116,7 @@ public class VectorMasterView extends View {
             return;
         }
         int tempPosition;
-        PathModel pathModel = new PathModel();
+        pathModel = new PathModel();
         vectorModel = new VectorModel();
         GroupModel groupModel = new GroupModel();
         ClipPathModel clipPathModel = new ClipPathModel();
@@ -146,20 +141,15 @@ public class VectorMasterView extends View {
 
                                 tempPosition = getAttrPosition(xpp, "alpha");
                                 vectorModel.setAlpha((tempPosition != -1) ? Float.parseFloat(xpp.getAttributeValue(tempPosition)) : DefaultValues.VECTOR_ALPHA);
-                                ////////////
-//                                tempPosition = getAttrPosition(xpp, "tint");
-//                                vectorModel.setTint((tempPosition != -1) ? Utils.getColorFromString(xpp.getAttributeValue(tempPosition), useLightTheme) : DefaultValues.VECTOR_TINT);
-                                ////////////
+
                                 tempPosition = getAttrPosition(xpp, "name");
                                 vectorModel.setName((tempPosition != -1) ? xpp.getAttributeValue(tempPosition) : null);
 
                                 tempPosition = getAttrPosition(xpp, "width");
                                 vectorModel.setWidth((tempPosition != -1) ? Utils.getFloatFromDimensionString(xpp.getAttributeValue(tempPosition)) : DefaultValues.VECTOR_WIDTH);
-                                attrWidth = (int) vectorModel.getWidth();
 
                                 tempPosition = getAttrPosition(xpp, "height");
                                 vectorModel.setHeight((tempPosition != -1) ? Utils.getFloatFromDimensionString(xpp.getAttributeValue(tempPosition)) : DefaultValues.VECTOR_HEIGHT);
-                                attrHeight = (int) vectorModel.getHeight();
                                 break;
                             case "path":
                                 pathModel = new PathModel();
@@ -171,27 +161,21 @@ public class VectorMasterView extends View {
                                 pathModel.setFillAlpha((tempPosition != -1) ? Float.parseFloat(xpp.getAttributeValue(tempPosition)) : DefaultValues.PATH_FILL_ALPHA);
 
                                 tempPosition = getAttrPosition(xpp, "fillColor");
-                                pathModel.setFillColor((tempPosition != -1) ? Utils.getColorFromString(xpp.getAttributeValue(tempPosition), useLightTheme) : useLightTheme ? DefaultValues.PATH_FILL_COLOR_BLACK : DefaultValues.PATH_FILL_COLOR_WHITE);
+                                pathModel.setFillColor((tempPosition != -1) ? Utils.getColorFromString(xpp.getAttributeValue(tempPosition), useLightTheme) : DefaultValues.PATH_FILL_COLOR_BLACK);
 
                                 tempPosition = getAttrPosition(xpp, "fillType");
                                 pathModel.setFillType((tempPosition != -1) ? Utils.getFillTypeFromString(xpp.getAttributeValue(tempPosition)) : DefaultValues.PATH_FILL_TYPE);
 
                                 tempPosition = getAttrPosition(xpp, "pathData");
-                                if(tempPosition != -1){
-                                    String patchData = xpp.getAttributeValue(tempPosition);
-                                    if(!patchData.startsWith("@")){
-                                    pathModel.setPathData(patchData);
-                                   }
-                                    else{
-                                        //break;
-                                        pathModel.setPathData("0");
-                                    }
-
+                                if (xpp.getAttributeValue(tempPosition).startsWith("@string/")) {
+//                                    Log.e("AttributeValue", "value = " + xpp.getAttributeValue(tempPosition));
+//                                    pathModel.setPathData((tempPosition != -1) ? Utils.getPatchDataFromStrings(projectPatch, xpp, tempPosition) : null);
+                                    pathModel.setPathData("0");
+                                    isVector = false;
+                                } else {
+//                                    Log.e("AttributeValue", "value = " + xpp.getAttributeValue(tempPosition));
+                                    pathModel.setPathData((tempPosition != -1) ? xpp.getAttributeValue(tempPosition) : null);
                                 }
-                                else {
-                                    pathModel.setPathData(null);
-                                }
-                               // pathModel.setPathData((tempPosition != -1) ? xpp.getAttributeValue(tempPosition) : null);
 
                                 tempPosition = getAttrPosition(xpp, "strokeAlpha");
                                 pathModel.setStrokeAlpha((tempPosition != -1) ? Float.parseFloat(xpp.getAttributeValue(tempPosition)) : DefaultValues.PATH_STROKE_ALPHA);
@@ -258,20 +242,15 @@ public class VectorMasterView extends View {
                                 clipPathModel.setName((tempPosition != -1) ? xpp.getAttributeValue(tempPosition) : null);
 
                                 tempPosition = getAttrPosition(xpp, "pathData");
-                                if(tempPosition != -1){
-                                    String patchData = xpp.getAttributeValue(tempPosition);
-                                    if(!patchData.startsWith("@")){
-                                        clipPathModel.setPathData(patchData);
-                                    }
-                                    else {
-                                        //break;
-                                        clipPathModel.setPathData("0");
-                                    }
+                                if (xpp.getAttributeValue(tempPosition).startsWith("@string/")) {
+//                                    Log.e("AttributeValue", "value = " + xpp.getAttributeValue(tempPosition));
+//                                    clipPathModel.setPathData((tempPosition != -1) ? Utils.getPatchDataFromStrings(projectPatch, xpp, tempPosition) : null);
+                                    clipPathModel.setPathData("0");
+                                    isVector = false;
+                                } else {
+//                                    Log.e("AttributeValue", "value = " + xpp.getAttributeValue(tempPosition));
+                                    clipPathModel.setPathData((tempPosition != -1) ? xpp.getAttributeValue(tempPosition) : null);
                                 }
-                                else {
-                                    clipPathModel.setPathData(null);
-                                }
-                               //clipPathModel.setPathData((tempPosition != -1) ? xpp.getAttributeValue(tempPosition) : null);
 
                                 clipPathModel.buildPath(useLegacyParser);
                                 break;
@@ -286,11 +265,9 @@ public class VectorMasterView extends View {
                                 } else {
                                     groupModelStack.peek().addPathModel(pathModel);
                                 }
-                                //if(pathModel.getPath() != null)
                                 vectorModel.getFullpath().addPath(pathModel.getPath());
                                 break;
                             case "clip-path":
-                                //if(clipPathModel != null)
                                 if (groupModelStack.size() == 0) {
                                     vectorModel.addClipPathModel(clipPathModel);
                                 } else {
@@ -458,7 +435,9 @@ public class VectorMasterView extends View {
         invalidate();
     }
 
-    public boolean isVector() { return isVector; }
+    public boolean isVector() {
+        return isVector;
+    }
 
     public float getScaleRatio() {
         return scaleRatio;
@@ -472,7 +451,11 @@ public class VectorMasterView extends View {
         return scaleMatrix;
     }
 
-    private void setUseLightTheme(boolean useLightTheme) {
+    public void setUseLightTheme(boolean useLightTheme) {
         this.useLightTheme = useLightTheme;
     }
+
+//    public void setProjectPatch(String projectPatch) {
+//        this.projectPatch = projectPatch;
+//    }
 }

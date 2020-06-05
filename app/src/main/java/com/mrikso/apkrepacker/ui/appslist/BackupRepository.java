@@ -93,6 +93,7 @@ public class BackupRepository {
                         .serVersionCode(AppUtils.apiIsAtLeast(Build.VERSION_CODES.P) ? packageInfo.getLongVersionCode() : packageInfo.versionCode)
                         .setVersionName(packageInfo.versionName)
                         .setIcon(applicationInfo.icon)
+                        .setIconDrawable(applicationInfo.loadIcon(pm))
                         .build();
 
                 packages.add(packageMeta);

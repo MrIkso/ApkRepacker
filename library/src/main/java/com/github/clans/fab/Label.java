@@ -3,32 +3,32 @@ package com.github.clans.fab;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.graphics.Canvas;
-import android.graphics.ColorFilter;
-import android.graphics.Outline;
-import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
-import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.graphics.Xfermode;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.RippleDrawable;
-import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.StateListDrawable;
-import android.graphics.drawable.shapes.RoundRectShape;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewOutlineProvider;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class Label extends TextView {
+import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
+import androidx.annotation.StyleRes;
+import androidx.core.content.ContextCompat;
 
-    private static final Xfermode PORTER_DUFF_CLEAR = new PorterDuffXfermode(PorterDuff.Mode.CLEAR);
+import com.google.android.material.card.MaterialCardView;
+
+public class Label extends MaterialCardView {
 
     private int mShadowRadius;
     private int mShadowXOffset;
@@ -47,48 +47,74 @@ public class Label extends TextView {
     private Animation mHideAnimation;
     private boolean mUsingStyle;
     private boolean mHandleVisibilityChanges = true;
+    private TextView mTextView = new TextView(getContext());
+    private String mText;
+    private int mTextColor;
 
     public Label(Context context) {
         super(context);
+        init();
     }
 
     public Label(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init();
     }
 
     public Label(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        init();
     }
 
-    @Override
+    private void init() {
+        int[][] states = new int[][]{new int[]{android.R.attr.state_enabled}, new int[]{android.R.attr.state_pressed}};
+        int[] colors = new int[]{mColorNormal, mColorPressed, mColorRipple};
+
+        ColorStateList colorStateList = new ColorStateList(states, colors);
+        setCardBackgroundColor(colorStateList);
+        setRippleColor(colorStateList);
+
+        int padding = (int) TypedValue.applyDimension(8, 1.0f, getResources().getDisplayMetrics());
+        LinearLayout.LayoutParams layoutParams2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        mTextView.setLayoutParams(layoutParams2);
+        mTextView.setPadding(20, 10, 20, 10);
+
+        addView(mTextView);
+
+        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        setLayoutParams(layoutParams);
+
+    }
+
+/*    @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         setMeasuredDimension(calculateMeasuredWidth(), calculateMeasuredHeight());
-    }
+    }*/
 
-    private int calculateMeasuredWidth() {
+/*    private int calculateMeasuredWidth() {
         if (mRawWidth == 0) {
             mRawWidth = getMeasuredWidth();
         }
         return getMeasuredWidth() + calculateShadowWidth();
-    }
+    }*/
 
-    private int calculateMeasuredHeight() {
+/*    private int calculateMeasuredHeight() {
         if (mRawHeight == 0) {
             mRawHeight = getMeasuredHeight();
         }
         return getMeasuredHeight() + calculateShadowHeight();
-    }
+    }*/
 
-    int calculateShadowWidth() {
+/*    int calculateShadowWidth() {
         return mShowShadow ? (mShadowRadius + Math.abs(mShadowXOffset)) : 0;
-    }
+    }*/
 
-    int calculateShadowHeight() {
+/*    int calculateShadowHeight() {
         return mShowShadow ? (mShadowRadius + Math.abs(mShadowYOffset)) : 0;
-    }
+    }*/
 
-    void updateBackground() {
+/*    void updateBackground() {
         LayerDrawable layerDrawable;
         if (mShowShadow) {
             layerDrawable = new LayerDrawable(new Drawable[]{
@@ -115,9 +141,9 @@ public class Label extends TextView {
         }
 
         setBackgroundCompat(layerDrawable);
-    }
+    }*/
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+/*    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private Drawable createFillDrawable() {
         StateListDrawable drawable = new StateListDrawable();
         drawable.addState(new int[]{android.R.attr.state_pressed}, createRectDrawable(mColorPressed));
@@ -139,9 +165,9 @@ public class Label extends TextView {
 
         mBackgroundDrawable = drawable;
         return drawable;
-    }
+    }*/
 
-    private Drawable createRectDrawable(int color) {
+/*    private Drawable createRectDrawable(int color) {
         RoundRectShape shape = new RoundRectShape(
                 new float[]{
                         mCornerRadius,
@@ -158,7 +184,7 @@ public class Label extends TextView {
         ShapeDrawable shapeDrawable = new ShapeDrawable(shape);
         shapeDrawable.getPaint().setColor(color);
         return shapeDrawable;
-    }
+    }*/
 
     private void setShadow(FloatingActionButton fab) {
         mShadowColor = fab.getShadowColor();
@@ -166,6 +192,8 @@ public class Label extends TextView {
         mShadowXOffset = fab.getShadowXOffset();
         mShadowYOffset = fab.getShadowYOffset();
         mShowShadow = fab.hasShadow();
+
+        setShowShadow(mShowShadow);
     }
 
     @SuppressWarnings("deprecation")
@@ -176,6 +204,10 @@ public class Label extends TextView {
         } else {
             setBackgroundDrawable(drawable);
         }
+    }
+
+    public void setBackgroundColor(@ColorInt int backgroundColor) {
+        super.setCardBackgroundColor(backgroundColor);
     }
 
     private void playShowAnimation() {
@@ -235,16 +267,29 @@ public class Label extends TextView {
 
     void setShowShadow(boolean show) {
         mShowShadow = show;
+
+        if (mShowShadow) {
+            setCardElevation(mShadowRadius);
+        } else {
+            setCardElevation(0);
+        }
     }
 
     void setCornerRadius(int cornerRadius) {
         mCornerRadius = cornerRadius;
+        setRadius(mCornerRadius);
     }
 
     void setColors(int colorNormal, int colorPressed, int colorRipple) {
         mColorNormal = colorNormal;
         mColorPressed = colorPressed;
         mColorRipple = colorRipple;
+
+        int[][] states = new int[][]{new int[]{android.R.attr.state_enabled}, new int[]{android.R.attr.state_pressed}};
+        int[] colors = new int[]{mColorNormal, mColorPressed};
+
+        ColorStateList colorStateList = new ColorStateList(states, colors);
+        setCardBackgroundColor(colorStateList);
     }
 
     void show(boolean animate) {
@@ -259,6 +304,21 @@ public class Label extends TextView {
             playHideAnimation();
         }
         setVisibility(INVISIBLE);
+    }
+
+    @Override
+    public void setVisibility(int visibility) {
+        super.setVisibility(visibility);
+/*        requestLayout();
+        invalidateOutline();
+        requestApplyInsets();
+
+        layoutParams = new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        setLayoutParams(layoutParams);*/
+
+        setClipToOutline(true);
+        setClipToPadding(true);
     }
 
     void setShowAnimation(Animation showAnimation) {
@@ -325,7 +385,59 @@ public class Label extends TextView {
         }
     });
 
-    private class Shadow extends Drawable {
+    public String getText() {
+        return mText;
+    }
+
+    public void setText(String text) {
+        this.mText = text;
+        this.mTextView.setText(text);
+        setClipToOutline(true);
+        setClipToPadding(true);
+    }
+
+    public int getTextColor() {
+        return mTextColor;
+    }
+
+    public void setTextColor(@ColorInt int textColor) {
+        this.mTextColor = textColor;
+        this.mTextView.setTextColor(textColor);
+    }
+
+    public void setTextColor(ColorStateList colors) {
+        this.mTextView.setTextColor(colors);
+    }
+
+    public void setTextColorFromRes(@ColorRes int textColor) {
+        setTextColor(ContextCompat.getColor(getContext(), textColor));
+    }
+
+    public void setTextAppearance(Context context, @StyleRes int resID) {
+        this.mTextView.setTextAppearance(context, resID);
+    }
+
+    public void setMaxLines(int maxLines) {
+        this.mTextView.setMaxLines(maxLines);
+    }
+
+    public void setTextSize(int unit, float size) {
+        this.mTextView.setTextSize(unit, size);
+    }
+
+    public void setSingleLine(boolean singleLine) {
+        this.mTextView.setSingleLine(singleLine);
+    }
+
+    public void setTypeface(Typeface tf) {
+        this.mTextView.setTypeface(tf);
+    }
+
+    public void setEllipsize(TextUtils.TruncateAt where) {
+        this.mTextView.setEllipsize(where);
+    }
+
+/*    private class Shadow extends Drawable {
 
         private Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         private Paint mErase = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -344,9 +456,9 @@ public class Label extends TextView {
             if (!isInEditMode()) {
                 mPaint.setShadowLayer(mShadowRadius, mShadowXOffset, mShadowYOffset, mShadowColor);
             }
-        }
+        }*/
 
-        @Override
+/*        @Override
         public void draw(Canvas canvas) {
             RectF shadowRect = new RectF(
                     mShadowRadius + Math.abs(mShadowXOffset),
@@ -371,7 +483,7 @@ public class Label extends TextView {
 
         @Override
         public int getOpacity() {
-            return 0;
+            return PixelFormat.UNKNOWN;
         }
-    }
+    }*/
 }

@@ -13,14 +13,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.jaredrummler.android.colorpicker.ColorPanelView;
+import com.jecelyin.common.utils.UIUtils;
 import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
+import com.mrikso.apkrepacker.utils.StringUtils;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-
-import me.jfenn.colorpickerdialog.views.CircleColorView;
 
 public class ColorsAdapter extends RecyclerView.Adapter<ColorsAdapter.ViewHolder> {
     public boolean changed;
@@ -38,17 +39,26 @@ public class ColorsAdapter extends RecyclerView.Adapter<ColorsAdapter.ViewHolder
         notifyDataSetChanged();
     }
 
-    public void newValue(int position, String color, String name) {
-        ColorMeta colorMeta = new ColorMeta.Builder(name)
-                .setValue(color)
-                .setIcon(color)
-                .build();
+    public void deleteColor(int position) {
+        mColors.remove(position);
+        notifyDataSetChanged();
+    }
+
+    public void addNewColor(String name, String color) {
+        ColorMeta colorMeta = new ColorMeta.Builder(name).setValue(color).setIcon(color).build();
+        mColors.add(colorMeta);
+        notifyDataSetChanged();
+    }
+
+    public void setNewValue(int position, String name, String color) {
+        ColorMeta colorMeta = new ColorMeta.Builder(name).setValue(color).setIcon(color).build();
         mColors.set(position, colorMeta);
         notifyDataSetChanged();
     }
-/**
- * При фильтре цветов почему-то возвражается null, нужно исправить, но мне как-то уже впадло
- */
+
+    /**
+     * При фильтре цветов почему-то возвражается null, нужно исправить, но мне как-то уже впадло
+     */
     public String getValue(String key) {
         List<ColorMeta> colors = new ArrayList<>(mColors);
         for (ColorMeta colorMeta : colors) {
@@ -95,15 +105,15 @@ public class ColorsAdapter extends RecyclerView.Adapter<ColorsAdapter.ViewHolder
     public int getColor(String colorValue) {
         if (colorValue.startsWith("@color/")) {
             String substring = colorValue.substring(7);
-            Log.d("Color","value: " + substring);
+            Log.d("Color", "value: " + substring);
             Log.d("Color", "color: " + getValue(substring));
-            String rerurnedValue = getValue(substring);
-            if(rerurnedValue != null) {
-                if (rerurnedValue.startsWith("@android:color/") | rerurnedValue.startsWith("@color/")) {
+            String returnedValue = getValue(substring);
+            if (returnedValue != null) {
+                if (returnedValue.startsWith("@android:color/") | returnedValue.startsWith("@color/")) {
                     //да зраствует великая рекурсия
-                    getColor(rerurnedValue);
+                    getColor(returnedValue);
                 } else {
-                    return Color.parseColor(rerurnedValue);
+                    return Color.parseColor(returnedValue);
                 }
             }
         } else if (colorValue.startsWith("@android:color/")) {
@@ -113,8 +123,7 @@ public class ColorsAdapter extends RecyclerView.Adapter<ColorsAdapter.ViewHolder
                     return App.getContext().getColor((Integer) color);
                 }
             }
-        }
-        else {
+        } else if (colorValue.startsWith("#")) {
             return Color.parseColor(colorValue);
         }
         return 0;
@@ -122,12 +131,13 @@ public class ColorsAdapter extends RecyclerView.Adapter<ColorsAdapter.ViewHolder
 
     /**
      * C помощью рефлексии досятаем цвет вида @android:color/white
-     * @param clazz имя класса android.R$color
+     *
+     * @param clazz     имя класса android.R$color
      * @param colorName имя цвета white
      * @return результат #ffffffff
      */
 
-    public  Object getAndroidColor(String clazz, String colorName){
+    public Object getAndroidColor(String clazz, String colorName) {
         Field declaratedField;
         try {
             declaratedField = Class.forName(clazz).getField(colorName);
@@ -146,14 +156,14 @@ public class ColorsAdapter extends RecyclerView.Adapter<ColorsAdapter.ViewHolder
     class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView mColorName;
-        private TextView mcolorValue;
-        private CircleColorView mColorIcon;
+        private TextView mColorValue;
+        private ColorPanelView mColorIcon;
 
         private ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             mColorName = itemView.findViewById(R.id.tv_color_name);
-            mcolorValue = itemView.findViewById(R.id.tv_color_value);
+            mColorValue = itemView.findViewById(R.id.tv_color_value);
             mColorIcon = itemView.findViewById(R.id.tv_color_icon);
 
             itemView.findViewById(R.id.app_item).setOnClickListener((v) -> {
@@ -164,12 +174,18 @@ public class ColorsAdapter extends RecyclerView.Adapter<ColorsAdapter.ViewHolder
                 if (mListener != null)
                     mListener.onColorClicked(mColors.get(adapterPosition), adapterPosition);
             });
+
+            itemView.findViewById(R.id.app_item).setOnLongClickListener(v -> {
+                StringUtils.setClipboard(v.getContext(), mColors.get(getAdapterPosition()).label);
+                UIUtils.toast(v.getContext(), v.getContext().getString(R.string.color_name_copied, mColors.get(getAdapterPosition()).label));
+                return true;
+            });
         }
 
         @SuppressLint("DefaultLocale")
         void bindTo(ColorMeta colorMeta) {
             mColorName.setText(colorMeta.label);
-            mcolorValue.setText(colorMeta.value);
+            mColorValue.setText(colorMeta.value);
             mColorIcon.setColor(getColor(colorMeta.value));
         }
     }

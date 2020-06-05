@@ -2,27 +2,27 @@ package com.mrikso.apkrepacker.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import com.duy.ide.database.SQLHelper;
+import com.github.clans.fab.FloatingActionButton;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.jecelyin.common.utils.UIUtils;
-
 import com.jecelyin.editor.v2.utils.ExtGrep;
 import com.jecelyin.editor.v2.utils.GrepBuilder;
 import com.mrikso.apkrepacker.App;
@@ -50,16 +50,16 @@ public class SearchFragment extends Fragment {
     private CheckBox mFilesCheckBox;
     private AppCompatAutoCompleteTextView findText;
     private GrepBuilder builder;
-    private ImageButton clear;
-    private FloatingActionButton search;
+    private ImageButton clearBtn;
+    private FloatingActionButton searchBtn;
     private boolean filesMode, regex, wordsOnly, matchcase, recursivlu;
-    private CardView searchOptions;
+    private LinearLayout searchOptions;
     private MaterialButton mAddExt;
     private List<String> extList;
     private ChipGroup chipGroup;
     private Context mContext;
     private Preference mPtef;
-    private Map<String, Boolean> extMap =  new HashMap<>();
+    private Map<String, Boolean> extMap = new HashMap<>();
     private CustomAdapter adapter;
     private SQLHelper dbHelper;
 
@@ -73,8 +73,7 @@ public class SearchFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Bundle bundle = this.getArguments();
 
         if (bundle != null) {
@@ -88,19 +87,20 @@ public class SearchFragment extends Fragment {
         chipGroup = view.findViewById(R.id.ext_group);
         mAddExt = view.findViewById(R.id.button_add_ext);
         findText = view.findViewById(R.id.search_text);
-        search = view.findViewById(R.id.fab_go_search);
+        searchBtn = view.findViewById(R.id.fab_go_search);
         mFilesCheckBox = view.findViewById(R.id.search_file_cb);
         mCaseSensitiveCheckBox = view.findViewById(R.id.ignore_case_cb);
         mRegexCheckBox = view.findViewById(R.id.regular_exp_cb);
         mWholeWordsOnlyCheckBox = view.findViewById(R.id.whole_words_only_cb);
         mRecursivelyCheckBox = view.findViewById(R.id.recursively_cb);
-        clear = view.findViewById(R.id.button_clear);
-        searchOptions = view.findViewById(R.id.search_options_card);
+        clearBtn = view.findViewById(R.id.button_clear);
+        searchOptions = view.findViewById(R.id.search_options_layout);
 
         return view;
     }
-    private List<String> getData(){
-     //   List<String> dataList = new ArrayList<String>();
+
+    private List<String> getData() {
+        //   List<String> dataList = new ArrayList<String>();
         List<String> items = SQLHelper.getInstance(mContext).getFindKeywordsAdnFile(filesMode);
         return items;
     }
@@ -118,6 +118,20 @@ public class SearchFragment extends Fragment {
         searchOptions.setVisibility(filesMode ? View.GONE : View.VISIBLE);
         adapter = new CustomAdapter(mContext, getData());
         findText.setAdapter(adapter);
+        findText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                clearBtn.setVisibility(s.toString().isEmpty() ? View.GONE : View.VISIBLE);
+            }
+        });
         mFilesCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 mPtef.setFilesMode(true);
@@ -171,24 +185,23 @@ public class SearchFragment extends Fragment {
             }
         });
         setChipGroup();
-        search.setOnClickListener(v ->
-        {
+        searchBtn.setOnClickListener(v -> {
             if (!com.jecelyin.common.utils.StringUtils.isEmpty(findText.getText().toString()) | !extList.isEmpty()) {
+                StringUtils.hideKeyboard(this);
                 if (filesMode) {
                     adapter.addValue(findText.getText().toString());
                     dbHelper.clearFindKeywordAndFiles(true);
-                    for(String item : adapter.getDataList()){
+                    for (String item : adapter.getDataList()) {
                         dbHelper.addFindKeywordAndFiles(item, true);
                     }
-                    Bundle bundle1 = new Bundle();
-                    bundle1.putString("searchFileName", findText.getText().toString());
-                    bundle1.putStringArrayList("expensions", getCheckedChips());
+                    Bundle parasms = new Bundle();
+                    parasms.putString("searchFileName", findText.getText().toString());
+                    parasms.putStringArrayList("expensions", getCheckedChips());
                     mPtef.setExt(extMap);
-                    bundle1.putString("curDirect", path);
-                    bundle1.putBoolean("findFiles", filesMode);
+                    parasms.putString("curDirect", path);
+                    parasms.putBoolean("findFiles", filesMode);
                     AppEditorActivity appEditorActivity = AppEditorActivity.getInstance();
-                    appEditorActivity.setSearhArguments(bundle1);
-
+                    appEditorActivity.setSearchArguments(parasms);
                     appEditorActivity.mViewPager.setCurrentItem(3);
                 } else {
 
@@ -206,7 +219,7 @@ public class SearchFragment extends Fragment {
                     }
                     adapter.addValue(findText.getText().toString());
                     dbHelper.clearFindKeywordAndFiles(false);
-                    for(String item : adapter.getDataList()){
+                    for (String item : adapter.getDataList()) {
                         dbHelper.addFindKeywordAndFiles(item, false);
                     }
                     mPtef.setExt(extMap);
@@ -229,25 +242,22 @@ public class SearchFragment extends Fragment {
                 }
             });
         });
-        clear.setOnClickListener(v -> findText.setText(""));
+        clearBtn.setOnClickListener(v -> findText.setText(""));
     }
 
     private void addChips(String tagName) {
         //for (int index = 0; index < tagList.size(); index++) {
         // final String tagName = tagList.get(index);
-      //  final ChipGroup chipGroup = view.findViewById(R.id.ext_group);
+        //  final ChipGroup chipGroup = view.findViewById(R.id.ext_group);
         Chip chip = new Chip(mContext);
-        int paddingDp = (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP, 10,
-                getResources().getDisplayMetrics()
-        );
+        int paddingDp = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
         chip.setPadding(paddingDp, paddingDp, paddingDp, paddingDp);
         chip.setText(tagName);
         chip.setCheckable(true);
         chip.setChecked(true);
         chip.setClickable(true);
         chip.setTextColor(getResources().getColor(R.color.white));
-        chip.setChipBackgroundColorResource(ThemeWrapper.isLightTheme() ? R.color.light_accent : R.color.dark_accent);
+        chip.setChipBackgroundColorResource(R.color.light_accent);
         //Added click listener on close icon to remove tag from ChipGroup
         chip.setOnLongClickListener(v -> {
             //tagList.remove(tagName);
@@ -264,7 +274,7 @@ public class SearchFragment extends Fragment {
         getCheckedChips();
         mPtef.setExt(extMap);
         dbHelper.clearFindKeywordAndFiles(filesMode);
-        for(String item : adapter.getDataList()){
+        for (String item : adapter.getDataList()) {
             dbHelper.addFindKeywordAndFiles(item, filesMode);
         }
     }
@@ -285,8 +295,8 @@ public class SearchFragment extends Fragment {
         extMap = mPtef.getExt();
     }
 
-    private void setChipGroup(){
-        for(Map.Entry val : extMap.entrySet()) {
+    private void setChipGroup() {
+        for (Map.Entry val : extMap.entrySet()) {
             Chip chip = new Chip(mContext);
             int paddingDp = (int) TypedValue.applyDimension(
                     TypedValue.COMPLEX_UNIT_DIP, 10,
@@ -312,7 +322,7 @@ public class SearchFragment extends Fragment {
     }
 
     private ArrayList<String> getCheckedChips() {
-     ///   final ChipGroup chipGroup = view.findViewById(R.id.ext_group);
+        ///   final ChipGroup chipGroup = view.findViewById(R.id.ext_group);
         ArrayList<String> arrayList = new ArrayList<>();
         int chipsCount = chipGroup.getChildCount();
         if (chipsCount == 0) {
@@ -321,7 +331,7 @@ public class SearchFragment extends Fragment {
             int i = 0;
             while (i < chipsCount) {
                 Chip chip = (Chip) chipGroup.getChildAt(i);
-                extMap.put(chip.getText().toString(),chip.isChecked());
+                extMap.put(chip.getText().toString(), chip.isChecked());
                 if (chip.isChecked()) {
                     arrayList.add(chip.getText().toString());
                 }
@@ -336,7 +346,7 @@ public class SearchFragment extends Fragment {
         Bundle bundle = new Bundle();
         bundle.putString("curDirect", path);
         AppEditorActivity appEditorActivity = AppEditorActivity.getInstance();
-        appEditorActivity.setSearhArguments(bundle);
+        appEditorActivity.setSearchArguments(bundle);
         appEditorActivity.mViewPager.setCurrentItem(3);
     }
 }

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <style name="MD_Light" parent="@style/Theme.MaterialComponents.Light.Dialog.Alert">
+    <item name="android:windowMinWidthMajor">@dimen/abc_dialog_min_width_major</item>
+    <item name="android:windowMinWidthMinor">@dimen/abc_dialog_min_width_minor</item>
+
+    <item name="md_divider">@color/md_divider_black</item>
+    <item name="md_list_selector">?android:selectableItemBackground</item>
+z    <item name="md_btn_stacked_selector">?android:selectableItemBackground</item>
+    <item name="md_btn_positive_selector">@drawable/md_btn_selector_ripple</item>
+    <item name="md_btn_neutral_selector">@drawable/md_btn_selector_ripple</item>
+    <item name="md_btn_negative_selector">@drawable/md_btn_selector_ripple</item>
+  </style>
+
+  <style name="MD_Dark" parent="@style/Theme.MaterialComponents.Dialog.Alert">
+    <item name="android:windowMinWidthMajor">@dimen/abc_dialog_min_width_major</item>
+    <item name="android:windowMinWidthMinor">@dimen/abc_dialog_min_width_minor</item>
+
+    <item name="md_divider">@color/md_divider_white</item>
+    <item name="md_list_selector">?android:selectableItemBackground</item>
+    <item name="md_btn_stacked_selector">?android:selectableItemBackground</item>
+    <item name="md_btn_positive_selector">@drawable/md_btn_selector_ripple_dark</item>
+    <item name="md_btn_neutral_selector">@drawable/md_btn_selector_ripple_dark</item>
+    <item name="md_btn_negative_selector">@drawable/md_btn_selector_ripple_dark</item>
+  </style>
+
+  <style name="MD_TextButton" parent="@style/Widget.MaterialComponents.Button.TextButton">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+<!--    <item name="android:layout_margin">@dimen/md_button_padding_horizontal"</item>-->
+    <item name="android:textSize">@dimen/md_button_textsize</item>
+    <item name="android:textStyle">bold</item>
+    <item name="android:clickable">true</item>
+    <item name="rippleColor">?colorAccent</item>
+    <item name="android:textAllCaps">false</item>
+  </style>
+
+</resources>

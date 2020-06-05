@@ -29,7 +29,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-            ExceptionHandler.get(this).start();
+        ExceptionHandler.get(this).start();
     }
 
     public static App get() {
@@ -40,7 +40,7 @@ public class App extends Application {
     }
 
     public SharedPreferences getPreferences() {
-        if (preferences == null){
+        if (preferences == null) {
             preferences = PreferenceManager.getDefaultSharedPreferences(this);
         }
         return preferences;

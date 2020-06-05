@@ -4,96 +4,77 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.AppsFragment">
+
     <LinearLayout
-        android:background="?android:windowBackground"
-        android:clickable="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:background="?android:windowBackground"
         android:orientation="vertical"
-        android:paddingStart="8dp"
-        android:paddingTop="8dp"
-        android:paddingEnd="8dp">
-        <androidx.cardview.widget.CardView
-            app:cardBackgroundColor="?attr/cardBackground"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8.0dip">
-        <LinearLayout
-            android:layout_margin="8.0dip"
+        tools:ignore="UselessParent">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:backgroundTint="?colorPrimary"
+            android:stateListAnimator="@animator/appbar_elevation"
+            android:theme="@style/AppTheme.AppBarOverlay">
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="4dp"
-                android:padding="6dp"
-                android:tint="?android:textColorSecondary"
-                app:srcCompat="@drawable/ic_search" />
+            <include
+                layout="@layout/search_view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/checkbox_dimens"
+                android:layout_margin="@dimen/checkbox_margin" />
 
-            <EditText
-                android:id="@+id/et_search"
-                android:layout_width="0dp"
+            <com.google.android.material.chip.ChipGroup
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="4dp"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"
-                android:ems="10"
-                android:hint="@string/search_request"
-                android:inputType="text"
-                android:padding="4dp"
-                android:singleLine="true"
-                android:textColorHint="?android:textColorSecondary"
-                android:textSize="16sp" />
+                android:layout_marginStart="@dimen/normal_padding"
+                android:layout_marginEnd="@dimen/normal_padding">
 
-        </LinearLayout>
-        </androidx.cardview.widget.CardView>
-        <com.google.android.material.chip.ChipGroup
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_filter_splits"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checkable="true"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="@string/backup_search_splits_only"
+                    android:textColor="@color/white"
+                    android:visibility="gone"
+                    app:chipBackgroundColor="?colorAccent" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_filter_system"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checkable="true"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="@string/backup_search_show_system_apps"
+                    android:textColor="@color/white"
+                    app:chipBackgroundColor="?colorAccent" />
+            </com.google.android.material.chip.ChipGroup>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_filter_splits"
-                app:chipBackgroundColor="?colorAccent"
-                android:textColor="@color/white"
+            <include
+                layout="@layout/loading_view"
+                android:id="@+id/loading_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checkable="true"
-                android:visibility="gone"
-                android:text="@string/backup_search_splits_only"
-                android:focusable="true"
-                android:clickable="true"/>
+                android:layout_centerInParent="true" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_filter_system"
-                android:checkable="true"
-                android:clickable="true"
-                android:focusable="true"
-                android:textColor="@color/white"
-                app:chipBackgroundColor="?colorAccent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/backup_search_show_system_apps" />
-        </com.google.android.material.chip.ChipGroup>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/app_packages"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:listitem="@layout/item_apps" />
 
-    </LinearLayout>
-
-       <!-- <ProgressBar
-            android:id="@+id/app_packages_loading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:layout_gravity="center_horizontal"/>-->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/app_packages"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        </RelativeLayout>
     </LinearLayout>
 </FrameLayout>

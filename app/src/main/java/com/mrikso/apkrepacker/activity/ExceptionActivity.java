@@ -2,15 +2,16 @@ package com.mrikso.apkrepacker.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.widget.Toast;
+import android.view.View;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.widget.NestedScrollView;
 
 import com.mrikso.apkrepacker.R;
-import com.mrikso.apkrepacker.utils.Constant;
 
 public class ExceptionActivity extends BaseActivity {
 
@@ -18,16 +19,21 @@ public class ExceptionActivity extends BaseActivity {
     private String mError;
     private AppCompatTextView mErrorView;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mError = getIntent().getStringExtra("mError");
-        setContentView(R.layout.activity_exeption);
+        setContentView(R.layout.activity_exception);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mErrorView = findViewById(R.id.error_view);
         mErrorView.setText(mError);
         sendErrorMail(this, mError);
+        final NestedScrollView scrollView = findViewById(R.id.exception_scrollview);
+        scrollView.setOnScrollChangeListener((View.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            findViewById(R.id.app_bar).setSelected(scrollView.canScrollVertically(-1));
+        });
     }
 
     private void sendErrorMail(Context _context, String errorContent) {

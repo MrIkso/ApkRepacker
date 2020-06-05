@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,12 +30,9 @@ import com.mrikso.apkrepacker.utils.FileUtil;
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
 
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-
-import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
 public class FolderStructureFragment extends Fragment implements ProjectFileContract.View, ProjectFileContract.FileActionListener,
         ProjectFileOptionDialog.ItemClickListener {
@@ -54,7 +50,7 @@ public class FolderStructureFragment extends Fragment implements ProjectFileCont
     private SharedPreferences mPreferences;
     @Nullable
     private File mProject;
-    private MaterialProgressBar materialProgressBar;
+    private android.widget.ProgressBar progressBar;
     private Context mContext;
 
     private TreeNode.TreeNodeClickListener mNodeClickListener = new TreeNode.TreeNodeClickListener() {
@@ -103,17 +99,17 @@ public class FolderStructureFragment extends Fragment implements ProjectFileCont
         super.onViewCreated(view, savedInstanceState);
         mContext = view.getContext();
         mContainerView = view.findViewById(R.id.container);
-        materialProgressBar = view.findViewById(R.id.progress_bar);
+        progressBar = view.findViewById(R.id.progress_bar);
         mTxtProjectName = view.findViewById(R.id.txt_project_name);
         //Runnable frame = () -> new LoadTree().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mProject);
-        view.findViewById(R.id.img_refresh).setOnClickListener(view13 ->{
-            materialProgressBar.setVisibility(View.VISIBLE);
+        view.findViewById(R.id.img_refresh).setOnClickListener(view13 -> {
+            progressBar.setVisibility(View.VISIBLE);
             mContainerView.setVisibility(View.GONE);
-       //     frame.run();
+            //     frame.run();
         });
 
         //Runnable frame = () -> new LoadTree().execute(mProject);
-      //  frame.run();
+        //  frame.run();
         display(mProject, false);
         view.findViewById(R.id.img_expand_all).setOnClickListener(view1 -> {
             if (mTreeView != null) expand(mTreeView.getRoot());
@@ -245,7 +241,6 @@ public class FolderStructureFragment extends Fragment implements ProjectFileCont
         frame.run();
 
 
-
         return root;
     }
 
@@ -315,12 +310,12 @@ public class FolderStructureFragment extends Fragment implements ProjectFileCont
         try {
             FileUtil.deleteFile(file);
             callback.onSuccess(file);
-            if(file.isDirectory()){
-                Toast.makeText(App.getContext(), String.format(getString(R.string.toast_deleted_dictionary),
-                        file.getName()), Toast.LENGTH_LONG).show();
-            }else {
-                Toast.makeText(App.getContext(), String.format(getString(R.string.toast_deleted_item ),
-                        file.getName()), Toast.LENGTH_LONG).show();
+            if (file.isDirectory()) {
+                UIUtils.toast(App.getContext(), String.format(getString(R.string.toast_deleted_dictionary),
+                        file.getName()));
+            } else {
+                UIUtils.toast(App.getContext(), String.format(getString(R.string.toast_deleted_item),
+                        file.getName()));
             }
             if (mParentListener != null) {
                 mParentListener.onFileDeleted(file);
@@ -340,53 +335,53 @@ public class FolderStructureFragment extends Fragment implements ProjectFileCont
     @Override
     public void onFileItemClick(Integer item) {
         if (mProject != null)
-        switch (item) {
-            case R.id.create_class_file:
-                CreateNewClass createNewClass = new CreateNewClass(mContext, mLastSelectedDir,
-                        new CreateNewClass.OnFileCreatedListener() {
-                            @Override
-                            public void onCreateSuccess(File file) {
-                                mParentListener.onFileCreated(file);
-                            }
+            switch (item) {
+                case R.id.create_class_file:
+                    CreateNewClass createNewClass = new CreateNewClass(mContext, mLastSelectedDir,
+                            new CreateNewClass.OnFileCreatedListener() {
+                                @Override
+                                public void onCreateSuccess(File file) {
+                                    mParentListener.onFileCreated(file);
+                                }
 
-                            @Override
-                            public void onCreateFailed(File file, Exception e) {
-                                //callback.onFailed(e);
-                            }
-                        });
-                createNewClass.show();
-                break;
-            case R.id.create_xml_file:
-                UIUtils.showInputDialog(mContext, R.string.action_create_xml, 0, null, EditorInfo.TYPE_CLASS_TEXT,
-                        new UIUtils.OnShowInputCallback() {
-                            @Override
-                            public void onConfirm(CharSequence input) {
-                                try {
-                                    createNewFile(input.toString() + ".xml", mLastSelectedDir);
-                                } catch (Exception e) {
-                                    DLog.e(e);
+                                @Override
+                                public void onCreateFailed(File file, Exception e) {
+                                    //callback.onFailed(e);
                                 }
-                            }
-                        });
-                break;
-            case R.id.add_new_folder:
-                UIUtils.showInputDialog(mContext, R.string.action_create_new_folder, 0, null, EditorInfo.TYPE_CLASS_TEXT,
-                        new UIUtils.OnShowInputCallback() {
-                            @Override
-                            public void onConfirm(CharSequence input) {
-                                try {
-                                    FileUtil.createDirectory(mLastSelectedDir, input.toString());
-                                } catch (Exception e) {
-                                    UIUtils.toast(App.getContext(), R.string.toast_error_on_add_folder);
-                                    DLog.e(e);
+                            });
+                    createNewClass.show();
+                    break;
+                case R.id.create_xml_file:
+                    UIUtils.showInputDialog(mContext, R.string.action_create_xml, 0, null, EditorInfo.TYPE_CLASS_TEXT,
+                            new UIUtils.OnShowInputCallback() {
+                                @Override
+                                public void onConfirm(CharSequence input) {
+                                    try {
+                                        createNewFile(input.toString() + ".xml", mLastSelectedDir);
+                                    } catch (Exception e) {
+                                        DLog.e(e);
+                                    }
                                 }
-                            }
-                        });
-                break;
-            case R.id.select_file:
-                selectNewFile();
-                break;
-        }
+                            });
+                    break;
+                case R.id.add_new_folder:
+                    UIUtils.showInputDialog(mContext, R.string.action_create_new_folder, 0, null, EditorInfo.TYPE_CLASS_TEXT,
+                            new UIUtils.OnShowInputCallback() {
+                                @Override
+                                public void onConfirm(CharSequence input) {
+                                    try {
+                                        FileUtil.createDirectory(mLastSelectedDir, input.toString());
+                                    } catch (Exception e) {
+                                        UIUtils.toast(App.getContext(), R.string.toast_error_on_add_folder);
+                                        DLog.e(e);
+                                    }
+                                }
+                            });
+                    break;
+                case R.id.select_file:
+                    selectNewFile();
+                    break;
+            }
     }
 
     private void selectNewFile() {
@@ -415,6 +410,7 @@ public class FolderStructureFragment extends Fragment implements ProjectFileCont
                 })
                 .show();
     }
+
     private void createNewFile(String fileName, File currentFolder) {
 
         try {
@@ -446,7 +442,7 @@ public class FolderStructureFragment extends Fragment implements ProjectFileCont
             IOUtils.writeFile(xmlFile, content);
             mParentListener.onFileCreated(xmlFile);
         } catch (Exception e) {
-            Toast.makeText(getContext(), "Can not create new file", Toast.LENGTH_SHORT).show();
+            UIUtils.toast(mContext, "Can not create new file");
         }
     }
 
@@ -479,9 +475,10 @@ public class FolderStructureFragment extends Fragment implements ProjectFileCont
             }
             return true;
         }
+
         @Override
         protected void onPostExecute(Boolean result) {
-            materialProgressBar.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
             mContainerView.setVisibility(View.VISIBLE);
             mContainerView.removeAllViews();
             View view = mTreeView.getView();

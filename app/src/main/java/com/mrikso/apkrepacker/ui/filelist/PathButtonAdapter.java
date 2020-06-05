@@ -1,6 +1,6 @@
 package com.mrikso.apkrepacker.ui.filelist;
 
-import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,17 +31,15 @@ public class PathButtonAdapter extends RecyclerView.Adapter<PathButtonAdapter.Vi
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.patch_button_layout, parent, false);
-
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         File path = pathList.get(position);
         String name = path.getName();
-        if ("/".equals(name) || TextUtils.isEmpty(name))
-            name = holder.textView.getContext().getString(R.string.root_path);
         holder.textView.setText(name);
+        holder.textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, position != pathList.size() - 1 ? R.drawable.ic_chevron_right : 0, 0);
         holder.textView.setOnClickListener(v -> {
             if (onItemClickListener != null)
                 onItemClickListener.onItemClick(position, v);
@@ -60,7 +58,13 @@ public class PathButtonAdapter extends RecyclerView.Adapter<PathButtonAdapter.Vi
             pathList.clear();
 
         for (; path != null; ) {
-            pathList.add(path);
+            try {
+                String pathName = path.toString();
+                if (pathName.endsWith(pathName.substring(pathName.indexOf("projects/"))))
+                    pathList.add(path);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             path = path.getParentFile();
         }
 

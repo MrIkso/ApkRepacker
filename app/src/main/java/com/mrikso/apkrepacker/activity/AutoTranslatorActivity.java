@@ -3,15 +3,13 @@ package com.mrikso.apkrepacker.activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,10 +23,7 @@ import com.mrikso.apkrepacker.autotranslator.translator.TranslateItem;
 import com.mrikso.apkrepacker.autotranslator.translator.TranslateStringsAdapter;
 import com.mrikso.apkrepacker.autotranslator.translator.TranslateTask;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
 
@@ -40,7 +35,7 @@ public class AutoTranslatorActivity extends BaseActivity implements View.OnClick
     private TranslateStringsAdapter stringsAdapter;
 
     // All the string views
-    private Map<String, AppCompatEditText> etMap = new HashMap<>();
+    //private Map<String, String> etMap = new HashMap<>();
     private LinearLayout translatingLayout;
     private LinearLayout translatedLayout;
     private AppCompatTextView translatingMsg;
@@ -61,17 +56,15 @@ public class AutoTranslatorActivity extends BaseActivity implements View.OnClick
     private int numFailed = 0;
     private Context mContext;
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
-        Intent intent = getIntent();
         setContentView(R.layout.activity_autotranslate);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        initData(intent);
+        initData(getIntent());
 
         initView(untranslatedList);
 
@@ -82,7 +75,7 @@ public class AutoTranslatorActivity extends BaseActivity implements View.OnClick
     private void initData(Intent intent) {
         if (intent.getExtras() != null) {
             targetLanguageCode = ActivityUtil.getParam(intent, "targetLanguageCode");
-            Log.d("TranslateActivity",targetLanguageCode );
+            Log.d("TranslateActivity", targetLanguageCode);
             untranslatedList = TranslateStringsHelper.getDefaultStrings();
         }
     }
@@ -90,7 +83,7 @@ public class AutoTranslatorActivity extends BaseActivity implements View.OnClick
     private void initView(List<TranslateItem> strings) {
         stringList = findViewById(R.id.translated_list);
         stringList.setLayoutManager(new LinearLayoutManager(mContext));
-        //stringList.setHasFixedSize(true);
+        stringList.setHasFixedSize(true);
         stringsAdapter = new TranslateStringsAdapter(mContext);
         new FastScrollerBuilder(stringList).useMd2Style().build();
         stringList.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -107,6 +100,7 @@ public class AutoTranslatorActivity extends BaseActivity implements View.OnClick
         if (strings != null) {
             stringsAdapter.setItems(strings);
             stringList.setAdapter(stringsAdapter);
+            stringList.setItemViewCacheSize(strings.size());
         }
 
         stopOrSaveBtn = findViewById(R.id.btn_stop_or_save);
@@ -116,7 +110,8 @@ public class AutoTranslatorActivity extends BaseActivity implements View.OnClick
     // Transfer modified files to parent activity
     private void setResult(List<TranslateItem> stringValues) {
         TranslateStringsHelper.setTranslatedStrings(stringValues);
-        setResult(RESULT_OK);
+        setResult(10);
+        finish();
     }
 
     @Override
@@ -142,23 +137,36 @@ public class AutoTranslatorActivity extends BaseActivity implements View.OnClick
     // To save the translation result
     private void saveStringAsResource() {
         // Prepare translated values (collect from the edit text)
-        List<TranslateItem> stringValues = new ArrayList<>();
-        for (Map.Entry<String, AppCompatEditText> entry : etMap.entrySet()) {
+        List<TranslateItem> stringValues = stringsAdapter.getStringItems();
+        // etMap.putAll(stringsAdapter.getTranslatedMap());
+/*        for (Map.Entry<String, String> entry : stringsAdapter.getTranslatedMap().entrySet()) {
             String name = entry.getKey();
-            String translatedVal = entry.getValue().getText().toString();
+            String translatedVal = entry.getValue();
             if (!"".equals(translatedVal)) {
+                DLog.d("translated", String.format("%s : %s", name, translatedVal));
                 stringValues.add(new TranslateItem(name, null, translatedVal));
             }
-        }
+        }*/
+
+/*        for (int i = 0; i < stringValues.size(); i++) {
+            String name = stringValues.get(i).name;
+            String translatedVal = stringValues.get(i).translatedValue;
+            if (!"".equals(translatedVal)) {
+                Log.e("translated", String.format("%s : %s", name, translatedVal));
+//                stringValues.add(new TranslateItem(name, null, translatedVal));
+            }
+        }*/
 
         // No translated string
         if (stringValues.isEmpty()) {
-            //Toast.makeText(this, R.string.error_no_string_tosave,
-            //Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.error_no_string_tosave, Toast.LENGTH_LONG).show();
             return;
         }
 
-        setResult(stringValues);
+//        setResult(stringValues);
+        TranslateStringsHelper.setTranslatedStrings(stringValues);
+        setResult(10);
+        finish();
     }
 
     // Update views
@@ -184,6 +192,8 @@ public class AutoTranslatorActivity extends BaseActivity implements View.OnClick
         translateFinished = true;
         translatingLayout.setVisibility(View.GONE);
         translatedLayout.setVisibility(View.VISIBLE);
+
+        stringsAdapter.setTranslatedFinished(true);
 
         String msg;
         if (numToTranslate == 0) {

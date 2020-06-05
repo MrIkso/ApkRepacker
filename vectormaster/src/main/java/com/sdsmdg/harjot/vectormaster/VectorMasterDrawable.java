@@ -11,6 +11,8 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.sdsmdg.harjot.vectormaster.models.ClipPathModel;
 import com.sdsmdg.harjot.vectormaster.models.GroupModel;
 import com.sdsmdg.harjot.vectormaster.models.PathModel;
@@ -30,7 +32,7 @@ import java.util.Stack;
 
 public class VectorMasterDrawable extends Drawable {
 
-    String TAG = "VECTOR_MASTER";
+    private String TAG = "VECTOR_MASTER";
     private VectorModel vectorModel;
     private Context context;
     private Resources resources;
@@ -40,19 +42,14 @@ public class VectorMasterDrawable extends Drawable {
     private boolean useLightTheme = true;
     private float offsetX = 0.0f, offsetY = 0.0f;
     private float scaleX = 1.0f, scaleY = 1.0f;
-    private XmlPullParser xpp;
     private Matrix scaleMatrix;
-
-    public int width = -1, height = -1;
-    public int attrWidth = -1, attrHeight = -1;
-
+    private int width = -1, height = -1;
     private float scaleRatio, strokeRatio;
-
     private int left = 0, top = 0;
-    private int tempSaveCount;
 
     private InputStream vectorStream;
     private File vectorFile;
+//    private String projectPatch;
 
     public VectorMasterDrawable(Context context) {
         this.context = context;
@@ -68,6 +65,13 @@ public class VectorMasterDrawable extends Drawable {
     public VectorMasterDrawable(Context context, File file) {
         this.context = context;
         this.vectorFile = file;
+        init();
+    }
+
+    public VectorMasterDrawable(Context context, File file, boolean useLightTheme) {
+        this.context = context;
+        this.vectorFile = file;
+        this.useLightTheme = useLightTheme;
         init();
     }
 
@@ -90,8 +94,12 @@ public class VectorMasterDrawable extends Drawable {
     }
 
     private void init() {
-        resources = context.getResources();
-        buildVectorModel();
+        try {
+            resources = context.getResources();
+            buildVectorModel();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void buildVectorModel() {
@@ -104,6 +112,7 @@ public class VectorMasterDrawable extends Drawable {
             }
         }
 
+        XmlPullParser xpp;
         if (vectorStream != null) {
             try {
                 XmlPullParserFactory parserFactory = XmlPullParserFactory.newInstance();
@@ -156,11 +165,9 @@ public class VectorMasterDrawable extends Drawable {
 
                                 tempPosition = getAttrPosition(xpp, "width");
                                 vectorModel.setWidth((tempPosition != -1) ? Utils.getFloatFromDimensionString(xpp.getAttributeValue(tempPosition)) : DefaultValues.VECTOR_WIDTH);
-                                attrWidth = (int) vectorModel.getWidth();
 
                                 tempPosition = getAttrPosition(xpp, "height");
                                 vectorModel.setHeight((tempPosition != -1) ? Utils.getFloatFromDimensionString(xpp.getAttributeValue(tempPosition)) : DefaultValues.VECTOR_HEIGHT);
-                                attrHeight = (int) vectorModel.getHeight();
                                 break;
                             case "path":
                                 pathModel = new PathModel();
@@ -172,30 +179,27 @@ public class VectorMasterDrawable extends Drawable {
                                 pathModel.setFillAlpha((tempPosition != -1) ? Float.parseFloat(xpp.getAttributeValue(tempPosition)) : DefaultValues.PATH_FILL_ALPHA);
 
                                 tempPosition = getAttrPosition(xpp, "fillColor");
-                                pathModel.setFillColor((tempPosition != -1) ? Utils.getColorFromString(xpp.getAttributeValue(tempPosition), useLightTheme): useLightTheme ? DefaultValues.PATH_FILL_COLOR_BLACK : DefaultValues.PATH_FILL_COLOR_WHITE);
+                                pathModel.setFillColor((tempPosition != -1) ? Utils.getColorFromStringTheme(xpp.getAttributeValue(tempPosition), useLightTheme) : DefaultValues.PATH_FILL_COLOR);
 
                                 tempPosition = getAttrPosition(xpp, "fillType");
                                 pathModel.setFillType((tempPosition != -1) ? Utils.getFillTypeFromString(xpp.getAttributeValue(tempPosition)) : DefaultValues.PATH_FILL_TYPE);
 
                                 tempPosition = getAttrPosition(xpp, "pathData");
-                                if(tempPosition != -1){
-                                    String patchData = xpp.getAttributeValue(tempPosition);
-                                    if(!patchData.startsWith("@")){
-                                        pathModel.setPathData(patchData);
-                                    }
-                                    else
-                                        pathModel.setPathData("0");
+                                if (xpp.getAttributeValue(tempPosition).startsWith("@string/")) {
+//                                    Log.e("AttributeValue", "value = " + xpp.getAttributeValue(tempPosition));
+//                                    pathModel.setPathData((tempPosition != -1) ? Utils.getPatchDataFromStrings(projectPatch, xpp, tempPosition) : null);
+                                    pathModel.setPathData("0");
+                                    isVector = false;
+                                } else {
+//                                    Log.e("AttributeValue", "value = " + xpp.getAttributeValue(tempPosition));
+                                    pathModel.setPathData((tempPosition != -1) ? xpp.getAttributeValue(tempPosition) : null);
                                 }
-                                else {
-                                    pathModel.setPathData(null);
-                                }
-                               // pathModel.setPathData((tempPosition != -1) ? xpp.getAttributeValue(tempPosition) : null);
 
                                 tempPosition = getAttrPosition(xpp, "strokeAlpha");
                                 pathModel.setStrokeAlpha((tempPosition != -1) ? Float.parseFloat(xpp.getAttributeValue(tempPosition)) : DefaultValues.PATH_STROKE_ALPHA);
 
                                 tempPosition = getAttrPosition(xpp, "strokeColor");
-                                pathModel.setStrokeColor((tempPosition != -1) ? Utils.getColorFromString(xpp.getAttributeValue(tempPosition), useLightTheme) :  DefaultValues.PATH_STROKE_COLOR);
+                                pathModel.setStrokeColor((tempPosition != -1) ? Utils.getColorFromString(xpp.getAttributeValue(tempPosition), useLightTheme) : DefaultValues.PATH_STROKE_COLOR);
 
                                 tempPosition = getAttrPosition(xpp, "strokeLineCap");
                                 pathModel.setStrokeLineCap((tempPosition != -1) ? Utils.getLineCapFromString(xpp.getAttributeValue(tempPosition)) : DefaultValues.PATH_STROKE_LINE_CAP);
@@ -256,18 +260,15 @@ public class VectorMasterDrawable extends Drawable {
                                 clipPathModel.setName((tempPosition != -1) ? xpp.getAttributeValue(tempPosition) : null);
 
                                 tempPosition = getAttrPosition(xpp, "pathData");
-                                if(tempPosition != -1){
-                                    String patchData = xpp.getAttributeValue(tempPosition);
-                                    if(!patchData.startsWith("@")){
-                                        clipPathModel.setPathData(patchData);
-                                    }
-                                    else
-                                        clipPathModel.setPathData("0");
+                                if (xpp.getAttributeValue(tempPosition).startsWith("@string/")) {
+//                                    Log.e("AttributeValue", "value = " + xpp.getAttributeValue(tempPosition));
+//                                    clipPathModel.setPathData((tempPosition != -1) ? Utils.getPatchDataFromStrings(projectPatch, xpp, tempPosition) : null);
+                                    clipPathModel.setPathData("0");
+                                    isVector = false;
+                                } else {
+                                    Log.e("AttributeValue", "value = " + xpp.getAttributeValue(tempPosition));
+                                    clipPathModel.setPathData((tempPosition != -1) ? xpp.getAttributeValue(tempPosition) : null);
                                 }
-                                else {
-                                    clipPathModel.setPathData(null);
-                                }
-                               // clipPathModel.setPathData((tempPosition != -1) ? xpp.getAttributeValue(tempPosition) : null);
 
                                 clipPathModel.buildPath(useLegacyParser);
                                 break;
@@ -280,7 +281,6 @@ public class VectorMasterDrawable extends Drawable {
                     case XmlPullParser.END_TAG:
                         switch (name) {
                             case "path":
-
                                 if (groupModelStack.size() == 0) {
                                     vectorModel.addPathModel(pathModel);
                                 } else {
@@ -338,7 +338,7 @@ public class VectorMasterDrawable extends Drawable {
         scaleMatrix = null;
     }
 
-    public void setInputStream(InputStream stream){
+    public void setInputStream(InputStream stream) {
         this.vectorStream = stream;
         buildVectorModel();
         scaleMatrix = null;
@@ -373,28 +373,28 @@ public class VectorMasterDrawable extends Drawable {
     }
 
     @Override
-    public void draw( Canvas canvas) {
-            if (vectorModel == null) {
-                return;
-            }
+    public void draw(@NonNull Canvas canvas) {
+        if (vectorModel == null) {
+            return;
+        }
 
-            if (scaleMatrix == null) {
-                int temp1 = Utils.dpToPx((int) vectorModel.getWidth());
-                int temp2 = Utils.dpToPx((int) vectorModel.getHeight());
+        if (scaleMatrix == null) {
+            int temp1 = Utils.dpToPx((int) vectorModel.getWidth());
+            int temp2 = Utils.dpToPx((int) vectorModel.getHeight());
 
-                setBounds(0, 0, temp1, temp2);
-            }
+            setBounds(0, 0, temp1, temp2);
+        }
 
-            setAlpha(Utils.getAlphaFromFloat(vectorModel.getAlpha()));
+        setAlpha(Utils.getAlphaFromFloat(vectorModel.getAlpha()));
 
-            if (left != 0 || top != 0) {
-                tempSaveCount = canvas.save();
-                canvas.translate(left, top);
-                vectorModel.drawPaths(canvas, offsetX, offsetY, scaleX, scaleY);
-                canvas.restoreToCount(tempSaveCount);
-            } else {
-                vectorModel.drawPaths(canvas, offsetX, offsetY, scaleX, scaleY);
-            }
+        if (left != 0 || top != 0) {
+            int tempSaveCount = canvas.save();
+            canvas.translate(left, top);
+            vectorModel.drawPaths(canvas, offsetX, offsetY, scaleX, scaleY);
+            canvas.restoreToCount(tempSaveCount);
+        } else {
+            vectorModel.drawPaths(canvas, offsetX, offsetY, scaleX, scaleY);
+        }
     }
 
     @Override
@@ -500,7 +500,9 @@ public class VectorMasterDrawable extends Drawable {
         invalidateSelf();
     }
 
-    public boolean isVector() { return isVector; }
+    public boolean isVector() {
+        return isVector;
+    }
 
     public float getScaleRatio() {
         return scaleRatio;
@@ -550,7 +552,8 @@ public class VectorMasterDrawable extends Drawable {
         invalidateSelf();
     }
 
-    private void setUseLightTheme(boolean useLightTheme){
+/*    public void setUseLightTheme(boolean useLightTheme) {
         this.useLightTheme = useLightTheme;
-    }
+        buildVectorModel();
+    }*/
 }

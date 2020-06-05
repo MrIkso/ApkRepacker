@@ -21,4 +21,5 @@
     <string name="pref_remember_last_opened_files" translatable="false">pref_remember_last_opened_files</string>
     <string name="pref_keep_screen_on" translatable="false">pref_keep_screen_on</string>
     <string name="pref_screen_orientation" translatable="false">pref_screen_orientation</string>
+    <string name="pref_confirm_exit" translatable="false">pref_confirm_exit</string>
 </resources>

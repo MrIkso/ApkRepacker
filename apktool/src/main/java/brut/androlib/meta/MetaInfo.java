@@ -39,7 +39,9 @@ import java.util.Map;
 
 public class MetaInfo {
     public String version;
+    public String apkFileIcon;
     public String apkFileName;
+    public String apkFilePackageName;
     public String apkFilePatch;
     public boolean isFrameworkApk;
     public UsesFramework usesFramework;
@@ -113,7 +115,9 @@ public class MetaInfo {
     public void save(Writer output) throws JSONException, IOException {
         JSONObject json = new JSONObject();
         putString(json, "version", version);
+        putString(json, "apkFileIcon", apkFileIcon);
         putString(json, "apkFileName", apkFileName);
+        putString(json, "apkFilePackageName", apkFilePackageName);
         putString(json, "apkFilePatch", apkFilePatch);
         json.put("isFrameworkApk", isFrameworkApk);
         json.put("compressionType", compressionType);
@@ -134,6 +138,7 @@ public class MetaInfo {
     private void load(JSONObject json) throws JSONException {
         version = getString(json, "version");
         apkFileName = getString(json, "apkFileName");
+//        apkFileName = getString(json, "apkFilePackageName");
         //  apkFilePatch = getString(json, "apkFilePatch");
         isFrameworkApk = json.getBoolean("isFrameworkApk");
         compressionType = json.getBoolean("compressionType");

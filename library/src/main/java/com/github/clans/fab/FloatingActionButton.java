@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.Outline;
 import android.graphics.Paint;
+import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
@@ -33,10 +34,10 @@ import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageButton;
-import android.widget.TextView;
 
-public class FloatingActionButton extends ImageButton {
+import androidx.appcompat.widget.AppCompatImageButton;
+
+public class FloatingActionButton extends AppCompatImageButton {
 
     public static final int SIZE_NORMAL = 0;
     public static final int SIZE_MINI = 1;
@@ -59,6 +60,7 @@ public class FloatingActionButton extends ImageButton {
     private int mColorRipple;
     private Drawable mIcon;
     private int mIconSize = Util.dpToPx(getContext(), 24f);
+    private int mIconColor = Color.BLACK;
     private Animation mShowAnimation;
     private Animation mHideAnimation;
     private String mLabelText;
@@ -109,11 +111,11 @@ public class FloatingActionButton extends ImageButton {
         init(context, attrs, defStyleAttr);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+/*    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public FloatingActionButton(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context, attrs, defStyleAttr);
-    }
+    }*/
 
     private void init(Context context, AttributeSet attrs, int defStyleAttr) {
         TypedArray attr = context.obtainStyledAttributes(attrs, R.styleable.FloatingActionButton, defStyleAttr, 0);
@@ -122,11 +124,12 @@ public class FloatingActionButton extends ImageButton {
         mColorDisabled = attr.getColor(R.styleable.FloatingActionButton_fab_colorDisabled, 0xFFAAAAAA);
         mColorRipple = attr.getColor(R.styleable.FloatingActionButton_fab_colorRipple, 0x99FFFFFF);
         mShowShadow = attr.getBoolean(R.styleable.FloatingActionButton_fab_showShadow, true);
-        mShadowColor = attr.getColor(R.styleable.FloatingActionButton_fab_shadowColor, 0x66000000);
+        mShadowColor = attr.getColor(R.styleable.FloatingActionButton_fab_shadowColor, 0x60000000);
         mShadowRadius = attr.getDimensionPixelSize(R.styleable.FloatingActionButton_fab_shadowRadius, mShadowRadius);
         mShadowXOffset = attr.getDimensionPixelSize(R.styleable.FloatingActionButton_fab_shadowXOffset, mShadowXOffset);
         mShadowYOffset = attr.getDimensionPixelSize(R.styleable.FloatingActionButton_fab_shadowYOffset, mShadowYOffset);
         mFabSize = attr.getInt(R.styleable.FloatingActionButton_fab_size, SIZE_NORMAL);
+        mIconColor = attr.getColor(R.styleable.FloatingActionButton_fab_iconColor, 0);
         mLabelText = attr.getString(R.styleable.FloatingActionButton_fab_label);
         mShouldProgressIndeterminate = attr.getBoolean(R.styleable.FloatingActionButton_fab_progress_indeterminate, false);
         mProgressColor = attr.getColor(R.styleable.FloatingActionButton_fab_progress_color, 0xFF009688);
@@ -359,6 +362,7 @@ public class FloatingActionButton extends ImageButton {
         int iconWidth = -1;
         int iconHeight = -1;
         if (getIconDrawable() != null) {
+
             iconWidth = getIconDrawable().getIntrinsicWidth();
             iconHeight = getIconDrawable().getIntrinsicHeight();
         }
@@ -385,6 +389,9 @@ public class FloatingActionButton extends ImageButton {
 
     protected Drawable getIconDrawable() {
         if (mIcon != null) {
+            if (mIconColor != 0) {
+                mIcon.setTint(mIconColor);
+            }
             return mIcon;
         } else {
             return new ColorDrawable(Color.TRANSPARENT);
@@ -708,7 +715,7 @@ public class FloatingActionButton extends ImageButton {
 
         @Override
         public int getOpacity() {
-            return 0;
+            return PixelFormat.UNKNOWN;
         }
     }
 
@@ -836,6 +843,17 @@ public class FloatingActionButton extends ImageButton {
 
     public int getButtonSize() {
         return mFabSize;
+    }
+
+    public void setButtonColor(int color) {
+        if (mIconColor != color) {
+            mIconColor = mIconColor;
+            updateBackground();
+        }
+    }
+
+    public int getButtonColor() {
+        return mIconColor;
     }
 
     public void setColorNormal(int color) {
@@ -1071,7 +1089,7 @@ public class FloatingActionButton extends ImageButton {
 
     public void setLabelText(String text) {
         mLabelText = text;
-        TextView labelView = getLabelView();
+        Label labelView = getLabelView();
         if (labelView != null) {
             labelView.setText(text);
         }
@@ -1098,7 +1116,7 @@ public class FloatingActionButton extends ImageButton {
     }
 
     public int getLabelVisibility() {
-        TextView labelView = getLabelView();
+        Label labelView = getLabelView();
         if (labelView != null) {
             return labelView.getVisibility();
         }
@@ -1302,7 +1320,7 @@ public class FloatingActionButton extends ImageButton {
         int bottom = label.getPaddingBottom();
 
         label.setColors(colorNormal, colorPressed, colorRipple);
-        label.updateBackground();
+//        label.updateBackground();
         label.setPadding(left, top, right, bottom);
     }
 

@@ -12,19 +12,22 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.mrikso.apkrepacker.R;
+import com.mrikso.apkrepacker.adapter.RecyclerViewAdapter;
+import com.mrikso.apkrepacker.fragment.AppsFragment;
 import com.mrikso.apkrepacker.utils.PackageMeta;
+import com.mrikso.apkrepacker.utils.ViewUtils;
 
 import java.util.List;
 
-public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.ViewHolder> {
-    private LayoutInflater mInflater;
-    private List<PackageMeta> mPackages;
-    private OnItemInteractionListener mListener;
-    public boolean changed;
+public class AppsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private Context context;
+    private static List<PackageMeta> mPackages;
+    private static OnItemInteractionListener mListener;
 
     public AppsAdapter(Context c) {
-        mInflater = LayoutInflater.from(c);
+        this.context = c;
         setHasStableIds(true);
     }
 
@@ -33,29 +36,25 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
-    public boolean isChanged(){
-        return changed;
-    }
-
     public void setInteractionListener(OnItemInteractionListener listener) {
         mListener = listener;
     }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(mInflater.inflate(R.layout.item_apps, parent, false));
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_apps, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        changed = true;
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        AppsFragment.loadingView.setVisibility(View.GONE);
         PackageMeta packageMeta = mPackages.get(position);
-        holder.bindTo(packageMeta);
-    }
-
-    @Override
-    public void onViewRecycled(@NonNull ViewHolder holder) {
-        holder.recycle();
+        if (holder instanceof ViewHolder) {
+            final ViewHolder recyclerViewHolder = (ViewHolder) holder;
+            recyclerViewHolder.bindTo(packageMeta);
+        }
     }
 
     @Override
@@ -68,8 +67,7 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.ViewHolder> {
         return mPackages.get(position).packageName.hashCode();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
-
+    private static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView mAppName;
         private TextView mAppVersion;
         private TextView mAppPackage;
@@ -77,13 +75,12 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.ViewHolder> {
 
         private ViewHolder(@NonNull View itemView) {
             super(itemView);
-
             mAppName = itemView.findViewById(R.id.tv_app_name);
             mAppVersion = itemView.findViewById(R.id.tv_app_version);
             mAppPackage = itemView.findViewById(R.id.tv_app_package);
             mAppIcon = itemView.findViewById(R.id.tv_app_icon);
 
-            itemView.findViewById(R.id.app_item).setOnClickListener((v) -> {
+            itemView.setOnClickListener((v) -> {
                 int adapterPosition = getAdapterPosition();
                 if (adapterPosition == RecyclerView.NO_POSITION)
                     return;
@@ -99,21 +96,22 @@ public class AppsAdapter extends RecyclerView.Adapter<AppsAdapter.ViewHolder> {
             mAppVersion.setText(String.format("%s (%d)", packageMeta.versionName, packageMeta.versionCode));
             mAppPackage.setText(packageMeta.packageName);
 
-            Glide.with(mAppIcon)
-                    .load(packageMeta.iconUri != null ? packageMeta.iconUri : R.drawable.default_app_icon)
-                    .placeholder(R.drawable.default_app_icon)
+            Glide
+                    .with(mAppIcon)
+                    .load(packageMeta.iconDrawable == null ? R.drawable.default_app_icon : packageMeta.iconDrawable)
+                    .placeholder(android.R.color.transparent)
+                    .transition(DrawableTransitionOptions.withCrossFade(ViewUtils.getShortAnimTime(mAppIcon)))
+                    .centerInside()
                     .into(mAppIcon);
         }
 
         void recycle() {
-            Glide.with(mAppIcon)
-                    .clear(mAppIcon);
+            Glide.with(mAppIcon).clear(mAppIcon);
         }
     }
 
     public interface OnItemInteractionListener {
         void onBackupButtonClicked(PackageMeta packageMeta);
     }
-
 }
 

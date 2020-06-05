@@ -109,8 +109,8 @@ public class IconGenerate {
         HashMap<Integer, Integer> colorMap = new HashMap<>();
         int color = 0;
         Integer count = 0;
-        for (int i = 0; i < pixels.length; i++) {
-            color = pixels[i];
+        for (int pixel : pixels) {
+            color = pixel;
             count = colorMap.get(color);
             if (count == null)
                 count = 0;

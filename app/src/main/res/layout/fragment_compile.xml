@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="?android:windowBackground"
-    android:clickable="true"
     tools:context=".fragment.CompileFragment">
 
     <!--разметка когда собирается apk-->
@@ -24,10 +23,11 @@
             android:orientation="vertical">
 
             <ProgressBar
-                android:id="@+id/progressBar"
                 style="?android:attr/progressBarStyleLarge"
+                android:id="@+id/progressBar"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/normal_padding"/>
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/image_error"
                 android:layout_width="wrap_content"
@@ -40,6 +40,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:text="@string/compile_in_progress"
+                android:textStyle="bold"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
             <ListView
                 android:padding="4dp"
@@ -53,7 +54,7 @@
             style="@style/MD2Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/normal_padding"
             android:text="@string/action_copy_log"
             android:visibility="gone" />
     </LinearLayout>

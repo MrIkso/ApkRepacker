@@ -1,28 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
 
-  <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:orientation="vertical"
-      android:padding="16dp">
-
-    <com.jaredrummler.android.colorpicker.NestedGridView
-        android:id="@+id/gridView"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:cacheColorHint="@android:color/transparent"
-        android:clickable="false"
-        android:columnWidth="@dimen/cpv_column_width"
-        android:horizontalSpacing="0dp"
-        android:listSelector="@android:color/transparent"
-        android:numColumns="auto_fit"
-        android:stretchMode="spacingWidthUniform"
-        android:verticalSpacing="8dp"/>
+        android:layout_height="215dp"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        android:requiresFadingEdge="vertical"
+        android:fadingEdge="vertical"
+        android:fadingEdgeLength="20dp">
+
+        <com.jaredrummler.android.colorpicker.NestedGridView
+            android:id="@+id/gridView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:cacheColorHint="@android:color/transparent"
+            android:clickable="false"
+            android:columnWidth="@dimen/cpv_column_width"
+            android:horizontalSpacing="0dp"
+            android:listSelector="@android:color/transparent"
+            android:numColumns="auto_fit"
+            android:stretchMode="spacingWidthUniform"
+            android:verticalSpacing="8dp" />
+    </ScrollView>
 
     <View
         android:id="@+id/shades_divider"
@@ -30,25 +35,28 @@
         android:layout_height="1dp"
         android:layout_marginBottom="12dp"
         android:layout_marginTop="12dp"
-        android:background="?android:attr/dividerVertical"/>
+        android:background="?android:attr/dividerVertical" />
 
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:overScrollMode="never"
+        android:requiresFadingEdge="horizontal"
+        android:fadingEdge="horizontal"
+        android:fadingEdgeLength="20dp"
         android:scrollbars="none">
 
-      <LinearLayout
-          android:id="@+id/shades_layout"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginLeft="0dp"
-          android:layout_marginRight="0dp"
-          android:orientation="horizontal">
+        <LinearLayout
+            android:id="@+id/shades_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:orientation="horizontal">
 
-        <!-- views added dynamically -->
+            <!-- views added dynamically -->
 
-      </LinearLayout>
+        </LinearLayout>
 
     </HorizontalScrollView>
 
@@ -57,7 +65,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
-        android:text="@string/cpv_transparency"/>
+        android:text="@string/cpv_transparency" />
 
     <LinearLayout
         android:id="@+id/transparency_layout"
@@ -66,25 +74,24 @@
         android:orientation="horizontal"
         android:weightSum="100">
 
-      <SeekBar
-          android:id="@+id/transparency_seekbar"
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center_vertical"
-          android:layout_marginRight="4dp"
-          android:layout_weight="85"/>
+        <SeekBar
+            android:id="@+id/transparency_seekbar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="4dp"
+            android:layout_weight="85" />
 
-      <TextView
-          android:id="@+id/transparency_text"
-          android:layout_width="0dp"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center_vertical"
-          android:layout_weight="15"
-          android:textStyle="bold"
-          android:typeface="monospace"
-          tools:text="100%"/>
+        <TextView
+            android:id="@+id/transparency_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="15"
+            android:textStyle="bold"
+            android:typeface="monospace"
+            tools:text="100%" />
 
     </LinearLayout>
 
-  </LinearLayout>
-</ScrollView>
+</LinearLayout>

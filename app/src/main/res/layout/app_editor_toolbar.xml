@@ -1,86 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?colorPrimaryDark"
+    android:layout_height="?actionBarSize"
+    android:background="?colorPrimary"
     android:orientation="horizontal"
-    android:padding="2.0dip">
-
-    <ImageView
-        android:id="@+id/app_icon"
-        android:layout_width="48.0dip"
-        android:layout_height="48.0dip"
-        android:layout_gravity="center_vertical"
-        android:contentDescription="@android:string/no"
-        android:padding="4.0dip"
-        android:src="@mipmap/ic_launcher" />
+    android:gravity="center">
 
     <LinearLayout
-        android:layout_width="0.0dip"
-        android:layout_height="fill_parent"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:padding="@dimen/checkbox_margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.mrikso.apkrepacker.utils.view.ElevationImageView
+            android:id="@+id/app_icon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center_vertical"
+            android:src="@mipmap/ic_launcher" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
         android:layout_weight="1.0"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
         android:gravity="center"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/app_name"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="marquee"
-            android:padding="2.0dip"
+            android:padding="2dp"
             android:singleLine="true"
-            android:textSize="16.0sp"
+            android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="?attr/textColor"
-            />
+            android:textColor="?attr/textColor" />
 
         <TextView
             android:id="@+id/app_pkg"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="2.0dip"
+            android:layout_marginBottom="2dp"
             android:ellipsize="marquee"
-            android:paddingLeft="2.0dip"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
             android:singleLine="true"
             android:textSize="12.0sp"
             android:textColor="?attr/textColor" />
     </LinearLayout>
 
-    <RelativeLayout
+    <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/patch_app"
-        android:layout_width="48dip"
-        android:layout_height="fill_parent"
-        android:paddingTop="2.0dip"
-        android:paddingBottom="2.0dip"
-        android:clickable="true"
-        android:background="@drawable/btn_pressed"
-        android:focusable="true">
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:scaleType="centerCrop"
+        android:layout_marginStart="@dimen/normal_padding"
+        android:layout_marginEnd="@dimen/checkbox_margin"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:tint="?android:textColorSecondary"
+        android:visibility="gone"
+        app:srcCompat="@drawable/ic_patch" />
 
-        <ImageView
-            android:layout_width="28dip"
-            android:layout_height="28dip"
-            android:layout_centerInParent="true"
-            android:src="@drawable/ic_patch" />
-    </RelativeLayout>
-
-    <RelativeLayout
+    <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/build_app"
-        android:layout_width="48dip"
-        android:layout_height="fill_parent"
-        android:paddingTop="2.0dip"
-        android:paddingBottom="2.0dip"
-        android:clickable="true"
-        android:focusable="true"
-        android:background="@drawable/btn_pressed">
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:scaleType="centerCrop"
+        android:layout_marginStart="@dimen/checkbox_margin"
+        android:layout_marginEnd="@dimen/normal_padding"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:tint="?android:textColorSecondary"
+        app:srcCompat="@drawable/ic_build" />
 
-        <ImageView
-            android:layout_width="28.0dip"
-            android:layout_height="28.0dip"
-            android:layout_centerInParent="true"
-            android:src="@drawable/ic_build" />
-    </RelativeLayout>
 </LinearLayout>

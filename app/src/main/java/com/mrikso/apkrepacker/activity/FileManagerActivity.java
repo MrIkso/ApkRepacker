@@ -17,15 +17,16 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.snackbar.Snackbar;
 import com.jecelyin.common.utils.UIUtils;
 import com.mrikso.apkrepacker.R;
@@ -40,8 +41,10 @@ import com.mrikso.apkrepacker.task.SignTask;
 import com.mrikso.apkrepacker.ui.prererence.Preference;
 import com.mrikso.apkrepacker.utils.AppUtils;
 import com.mrikso.apkrepacker.utils.FileUtil;
+import com.mrikso.apkrepacker.utils.FragmentUtils;
 import com.mrikso.apkrepacker.utils.PreferenceUtils;
 import com.mrikso.apkrepacker.utils.SignUtil;
+import com.mrikso.apkrepacker.utils.StringUtils;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -51,14 +54,6 @@ import java.util.Locale;
 import java.util.Objects;
 
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
-
-import static com.mrikso.apkrepacker.utils.FileUtil.getExternalStorage;
-import static com.mrikso.apkrepacker.utils.FileUtil.getInternalStorage;
-import static com.mrikso.apkrepacker.utils.FileUtil.getName;
-import static com.mrikso.apkrepacker.utils.FileUtil.getPath;
-import static com.mrikso.apkrepacker.utils.StringUtils.EXTRA_NAME;
-import static com.mrikso.apkrepacker.utils.StringUtils.SAVED_DIRECTORY;
-import static com.mrikso.apkrepacker.utils.StringUtils.SAVED_SELECTION;
 
 public class FileManagerActivity extends BaseActivity implements ApkOptionsDialogFragment.ItemClickListener, DecompileOptionsDialogFragment.ItemClickListener {
 
@@ -101,7 +96,7 @@ public class FileManagerActivity extends BaseActivity implements ApkOptionsDialo
             setPath(Objects.requireNonNull(currentDirectory.getParentFile()));
             return;
         }
-
+        MainActivity.getInstance().refreshAdapter(false);
         super.onBackPressed();
     }
 
@@ -127,16 +122,16 @@ public class FileManagerActivity extends BaseActivity implements ApkOptionsDialo
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
-        adapter.select(Objects.requireNonNull(savedInstanceState.getIntegerArrayList(SAVED_SELECTION)));
-        String path = savedInstanceState.getString(SAVED_DIRECTORY, getInternalStorage().getPath());
+        adapter.select(Objects.requireNonNull(savedInstanceState.getIntegerArrayList(StringUtils.SAVED_SELECTION)));
+        String path = savedInstanceState.getString(StringUtils.SAVED_DIRECTORY, FileUtil.getInternalStorage().getPath());
         if (currentDirectory != null) setPath(new File(path));
         super.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putIntegerArrayList(SAVED_SELECTION, adapter.getSelectedPositions());
-        outState.putString(SAVED_DIRECTORY, getPath(currentDirectory));
+        outState.putIntegerArrayList(StringUtils.SAVED_SELECTION, adapter.getSelectedPositions());
+        outState.putString(StringUtils.SAVED_DIRECTORY, FileUtil.getPath(currentDirectory));
         super.onSaveInstanceState(outState);
     }
 
@@ -179,14 +174,13 @@ public class FileManagerActivity extends BaseActivity implements ApkOptionsDialo
     }
 
     private void actionGotoSDCard() {
-        if(flag){
+        if (flag) {
             flag = false;
-            setPath(getInternalStorage());
-        }
-        else {
-            if(sdCard !=null) {
+            setPath(FileUtil.getInternalStorage());
+        } else {
+            if (sdCard != null) {
                 flag = true;
-                setPath(getExternalStorage());
+                setPath(FileUtil.getExternalStorage());
             }
         }
     }
@@ -198,7 +192,7 @@ public class FileManagerActivity extends BaseActivity implements ApkOptionsDialo
 
         if (adapter != null) {
             int count = adapter.getSelectedItemCount();
-            menu.findItem(R.id.action_sd_card).setVisible(sdCard !=null);
+            menu.findItem(R.id.action_sd_card).setVisible(sdCard != null);
             menu.findItem(R.id.action_sd_card).setTitle(flag ? R.string.intenal_sd_card : R.string.action_sd_card);
             menu.findItem(R.id.action_delete).setVisible(count >= 1);
             menu.findItem(R.id.action_rename).setVisible(count >= 1);
@@ -224,8 +218,8 @@ public class FileManagerActivity extends BaseActivity implements ApkOptionsDialo
             adapter.addAll(FileUtil.searchFilesName(context, name));
             return;
         }
-        sdCard = getExternalStorage();
-        setPath(getInternalStorage());
+        sdCard = FileUtil.getExternalStorage();
+        setPath(FileUtil.getInternalStorage());
     }
 
     private void initAppBarLayout() {
@@ -250,13 +244,23 @@ public class FileManagerActivity extends BaseActivity implements ApkOptionsDialo
         });
         adapter.setItemLayout(R.layout.list_item_file);
         adapter.setSpanCount(getResources().getInteger(R.integer.span_count0));
+        DefaultItemAnimator defaultItemAnimator = new DefaultItemAnimator();
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
-
-        if (recyclerView != null)
-            new FastScrollerBuilder(recyclerView).build();
-        if (recyclerView != null) {
-            recyclerView.setAdapter(adapter);
-        }
+        recyclerView.setItemAnimator(defaultItemAnimator);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setDrawingCacheEnabled(true);
+        recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+        recyclerView.setItemViewCacheSize(1000);
+        recyclerView.buildDrawingCache(true);
+        recyclerView.getRecycledViewPool().setMaxRecycledViews(0, 24);
+        new FastScrollerBuilder(recyclerView).useMd2Style().build();
+        recyclerView.setAdapter(adapter);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                findViewById(R.id.app_bar).setSelected(recyclerView.canScrollVertically(-1));
+            }
+        });
     }
 
     private void invalidateTitle() {
@@ -266,10 +270,10 @@ public class FileManagerActivity extends BaseActivity implements ApkOptionsDialo
             toolbar.setTitle(getResources().getString(R.string.selected, selectedItemCount));
         } else if (name != null) {
             toolbar.setTitle(getResources().getString(R.string.search_for, name));
-        } else if (currentDirectory != null && !currentDirectory.equals(getInternalStorage())) {
-            toolbar.setTitle(getName(currentDirectory));
-        } else if (currentDirectory != null && sdCard!=null &&!currentDirectory.equals(sdCard)) {
-            toolbar.setTitle(getName(currentDirectory));
+        } else if (currentDirectory != null && !currentDirectory.equals(FileUtil.getInternalStorage())) {
+            toolbar.setTitle(FileUtil.getName(currentDirectory));
+        } else if (currentDirectory != null && sdCard != null && !currentDirectory.equals(sdCard)) {
+            toolbar.setTitle(FileUtil.getName(currentDirectory));
         } else {
             toolbar.setTitle(getResources().getString(R.string.app_name));
         }
@@ -408,25 +412,24 @@ public class FileManagerActivity extends BaseActivity implements ApkOptionsDialo
     //----------------------------------------------------------------------------------------------
 
     private void actionSort() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         int checkedItem = PreferenceUtils.getInteger(this, "pref_sort", 0);
-        String[] sorting = {getResources().getString(R.string.sort_by_name),
-                getResources().getString(R.string.sort_by_date), getResources().getString(R.string.sort_by_size)};
+        CharSequence[] sorting = {getResources().getString(R.string.sort_by_name), getResources().getString(R.string.sort_by_date), getResources().getString(R.string.sort_by_size)};
         final Context context = this;
-        builder.setSingleChoiceItems(sorting, checkedItem, (dialog, which) -> {
-            adapter.update(which);
-            PreferenceUtils.putInt(context, "pref_sort", which);
-            dialog.dismiss();
-        });
-        builder.setTitle(R.string.sort_by);
-        builder.show();
+
+        UIUtils.showListSingleChoiceDialog(context, R.string.sort_by, 0, sorting, checkedItem, new UIUtils.OnSingleChoiceCallback() {
+            @Override
+            public void onSelect(MaterialDialog dialog, int which) {
+                adapter.update(which);
+                PreferenceUtils.putInt(context, "pref_sort", which);
+            }
+        }, null);
     }
 
     public void showProgress() {
         Bundle args = new Bundle();
-        if(signedMode){
+        if (signedMode) {
             args.putString(ProgressDialogFragment.TITLE, getResources().getString(R.string.dialog_sign));
-        }else {
+        } else {
             args.putString(ProgressDialogFragment.TITLE, getResources().getString(R.string.dialog_import));
         }
         args.putString(ProgressDialogFragment.MESSAGE, getResources().getString(R.string.dialog_please_wait));
@@ -449,11 +452,11 @@ public class FileManagerActivity extends BaseActivity implements ApkOptionsDialo
         dialog.dismiss();
         //setPath(new File(selectedApk.getParent()));
         //int index = adapter.indexOf(selectedApk);
-        if(signedMode){
-            setPath(new File(selectedApk.getParent()));
+        if (signedMode) {
+            setPath(new File(Objects.requireNonNull(selectedApk.getParent())));
             showMessage(this.getResources().getString(R.string.toast_sign_done));
             signedMode = false;
-        }else {
+        } else {
             showMessage(this.getResources().getString(R.string.toast_import_framework_done));
         }
 
@@ -512,7 +515,7 @@ public class FileManagerActivity extends BaseActivity implements ApkOptionsDialo
 
     private void setName(String name) {
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra(EXTRA_NAME, name);
+        intent.putExtra(StringUtils.EXTRA_NAME, name);
         startActivity(intent);
     }
 
@@ -522,17 +525,17 @@ public class FileManagerActivity extends BaseActivity implements ApkOptionsDialo
             case R.id.decompile_app:
                 Preference preference = Preference.getInstance(this);
                 int mode = preference.getDecodingMode();
-                if(mode == 3){
+                if (mode == 3) {
                     DecompileOptionsDialogFragment decompileOptionsDialogFragment = DecompileOptionsDialogFragment.newInstance();
                     decompileOptionsDialogFragment.show(getSupportFragmentManager(), DecompileOptionsDialogFragment.TAG);
-                }else {
-                    decompileFragment = DecompileFragment.newInstance(selectedApk.getAbsolutePath());
+                } else {
+                    decompileFragment = DecompileFragment.newInstance(selectedApk.getAbsolutePath(), mode == 0 ? 3 : mode == 1 ? 2 : mode == 2 ? 1 : 0);
                     getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(android.R.id.content, decompileFragment).commit();
                 }
                 break;
             case R.id.simple_edit_apk:
-                SimpleEditorFragment simpleEditorFragment =  SimpleEditorFragment.newInstance(selectedApk.getAbsolutePath());
-                getSupportFragmentManager().beginTransaction().addToBackStack(null).add(android.R.id.content, simpleEditorFragment).commit();
+                SimpleEditorFragment simpleEditorFragment = SimpleEditorFragment.newInstance(selectedApk.getAbsolutePath());
+                FragmentUtils.add(simpleEditorFragment, getSupportFragmentManager(), android.R.id.content);
                 break;
             case R.id.install_app:
                 showMessage(this.getResources().getString(R.string.install_app));
@@ -561,7 +564,7 @@ public class FileManagerActivity extends BaseActivity implements ApkOptionsDialo
 
     @Override
     public void onModeItemClick(Integer item) {
-        switch (item){
+        switch (item) {
             case R.id.decompile_all:
                 decompileFragment = DecompileFragment.newInstance(selectedApk.getAbsolutePath(), 3);
                 getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(android.R.id.content, decompileFragment).commit();
@@ -655,7 +658,7 @@ public class FileManagerActivity extends BaseActivity implements ApkOptionsDialo
                             startActivity(intent);
                         } catch (Exception e) {
                             Log.d("OPENERR", e.toString());
-                            showMessage(String.format("Cannot open %s", getName(file)));
+                            showMessage(String.format("Cannot open %s", FileUtil.getName(file)));
                         }
                 }
             }

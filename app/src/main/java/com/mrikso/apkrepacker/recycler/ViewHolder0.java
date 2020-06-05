@@ -5,24 +5,22 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.utils.AppUtils;
 import com.mrikso.apkrepacker.utils.FileUtil;
-
+import com.mrikso.apkrepacker.utils.PreferenceUtils;
+import com.mrikso.apkrepacker.utils.ViewUtils;
+import com.mrikso.apkrepacker.utils.view.ElevationImageView;
 
 import java.io.File;
-
-import static com.mrikso.apkrepacker.utils.FileUtil.getColorResource;
-import static com.mrikso.apkrepacker.utils.FileUtil.getImageResource;
-import static com.mrikso.apkrepacker.utils.FileUtil.getLastModified;
-import static com.mrikso.apkrepacker.utils.FileUtil.getSize;
-import static com.mrikso.apkrepacker.utils.PreferenceUtils.getBoolean;
-
 
 public final class ViewHolder0 extends ViewHolder {
 
@@ -51,57 +49,55 @@ public final class ViewHolder0 extends ViewHolder {
     }
 
     @Override
-    protected void bindIcon(File file, Boolean selected) {
-        //String ext = FileUtil.getExtension(file.getName());
-        if (getBoolean(context, "pref_icon", true)) {
-            image.setOnClickListener(onActionClickListener);
-            image.setOnLongClickListener(onActionLongClickListener);
-            if (selected) {
-                int color = ContextCompat.getColor(context, R.color.misc_file);
-                image.setBackground(getBackground(color));
-                Drawable drawable = ContextCompat.getDrawable(context, R.drawable.ic_selected);
-                DrawableCompat.setTint(drawable, Color.rgb(255, 255, 255));
-                image.setImageDrawable(drawable);
-            }
-            else {
-                int color = ContextCompat.getColor(context, getColorResource(file));
-                image.setBackground(getBackground(color));
-                Drawable drawable = ContextCompat.getDrawable(context, getImageResource(file));
-                DrawableCompat.setTint(drawable, Color.rgb(255, 255, 255));
-              //  if(ext.endsWith("apk")) {
-              //      image.setImageDrawable(AppUtils.getApkIcon(context, file.getAbsolutePath()));
-              //  }
-             //   else {
-                    image.setImageDrawable(drawable);
-             //   }
-            }
-        }
-        else {
-            int color = ContextCompat.getColor(context, getColorResource(file));
-            image.setBackground(null);
-            Drawable drawable = ContextCompat.getDrawable(context, getImageResource(file));
-            DrawableCompat.setTint(drawable, color);
-           // if(ext.endsWith("apk")) {
-             //   image.setImageDrawable(AppUtils.getApkIcon(context, file.getAbsolutePath()));
-          ////  }
-           // else {
-                image.setImageDrawable(drawable);
-           // }
-        }
+    protected void bindIcon(File file) {
+        image.setOnClickListener(onActionClickListener);
+        image.setOnLongClickListener(onActionLongClickListener);
+        ((ElevationImageView) image).setClipShadow(true);
+        setFileIcon(file);
     }
 
     @Override
     protected void bindName(File file) {
-        boolean extension = getBoolean(context, "pref_extension", true);
+//        boolean extension = PreferenceUtils.getBoolean(context, "pref_extension", true);
         name.setText(/*extension ? getName(file) :*/ file.getName());
     }
 
     @Override
     protected void bindInfo(File file) {
-        date.setText(getLastModified(file));
-        size.setText(getSize(context, file));
-        setVisibility(date, getBoolean(context, "pref_date", true));
-        setVisibility(size, getBoolean(context, "pref_size", false));
+        date.setText(FileUtil.getLastModified(file));
+        size.setText(FileUtil.getSize(context, file));
+        setVisibility(date, PreferenceUtils.getBoolean(context, "pref_date", true));
+        setVisibility(size, PreferenceUtils.getBoolean(context, "pref_size", false));
+    }
+
+    private void createIconGlide(Drawable icon) {
+        Glide
+                .with(image)
+                .load(icon != null ? icon : R.drawable.default_app_icon)
+                .placeholder(android.R.color.transparent)
+                .transition(DrawableTransitionOptions.withCrossFade(ViewUtils.getShortAnimTime(image)))
+                .centerInside()
+                .into(image);
+    }
+
+    private void setFileIcon(File file) {
+        if (FileUtil.FileType.getFileType(file).equals(FileUtil.FileType.APK)) {
+            image.setBackground(null);
+            ((ElevationImageView) image).setClipShadow(false);
+            createIconGlide(AppUtils.getApkIcon(context, file.getAbsolutePath()));
+        } else {
+            int color = ContextCompat.getColor(context, FileUtil.getColorResource(file));
+            final Drawable drawable = ContextCompat.getDrawable(context, FileUtil.getImageResource(file));
+            if (PreferenceUtils.getBoolean(context, "pref_icon", true)) {
+                DrawableCompat.setTint(drawable, Color.rgb(255, 255, 255));
+                image.setBackground(getBackground(color));
+                image.setImageDrawable(drawable);
+            } else {
+                image.setBackground(null);
+                DrawableCompat.setTint(drawable, color);
+                image.setImageDrawable(drawable);
+            }
+        }
     }
 
     private ShapeDrawable getBackground(int color) {

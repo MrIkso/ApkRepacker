@@ -35,6 +35,7 @@ import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
@@ -105,13 +106,15 @@ public class EditorDelegate implements TextWatcher, IEditorDelegate {
 
     void onLoadStart() {
         loaded = false;
+        assert mEditText != null;
         mEditText.setEnabled(false);
     }
 
     void onLoadFinish() {
+        assert mEditText != null;
         mEditText.setEnabled(true);
         mEditText.post(() -> {
-            if (savedState.cursorOffset < mEditText.getText().length()) {
+            if (savedState.cursorOffset < mEditText.getText().length() && savedState.cursorOffset != -1) {
                 mEditText.setSelection(savedState.cursorOffset);
             }
         });
@@ -738,18 +741,18 @@ public class EditorDelegate implements TextWatcher, IEditorDelegate {
             boolean readOnly = Preferences.getInstance(mContext).isReadOnly();
             boolean selected = mEditText.hasSelection();
             if (selected) {
-                menu.add(0, R.id.action_find_replace, 0, R.string.find).
-                        setIcon(R.drawable.ic_find_replace_white).
+                menu.add(0, R.id.action_find_replace, 6, R.string.find).
+                       // setIcon(R.drawable.ic_find_replace_white).
                         setAlphabeticShortcut('f').
                         setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 
                 if (!readOnly) {
-                    menu.add(0, R.id.action_convert_to_uppercase, 0, R.string.convert_to_uppercase)
+                    menu.add(0, R.id.action_convert_to_uppercase, 6, R.string.convert_to_uppercase)
                          //   .setIcon(R.drawable.m_uppercase)
                             .setAlphabeticShortcut('U')
                             .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 
-                    menu.add(0, R.id.action_convert_to_lowercase, 0, R.string.convert_to_lowercase)
+                    menu.add(0, R.id.action_convert_to_lowercase, 6, R.string.convert_to_lowercase)
                             //.setIcon(R.drawable.m_lowercase)
                             .setAlphabeticShortcut('L')
                             .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
@@ -757,8 +760,8 @@ public class EditorDelegate implements TextWatcher, IEditorDelegate {
             }
 
             if (!readOnly) {
-                menu.add(0, R.id.action_duplicate, 0, selected ? R.string.duplication_text : R.string.duplication_line)
-                        .setIcon(R.drawable.ic_control_point_duplicate_white)
+                menu.add(0, R.id.action_duplicate, 6, selected ? R.string.duplication_text : R.string.duplication_line)
+                       // .setIcon(R.drawable.ic_control_point_duplicate_white)
                         .setAlphabeticShortcut('L')
                         .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
             }

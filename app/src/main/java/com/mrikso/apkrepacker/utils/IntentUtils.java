@@ -6,15 +6,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Parcelable;
 import android.provider.MediaStore;
-import android.provider.Settings;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.IntentCompat;
+
+import java.io.File;
 
 public class IntentUtils {
 
@@ -24,7 +21,8 @@ public class IntentUtils {
     private static final String MIME_TYPE_IMAGE_ANY = "image/*";
     private static final String MIME_TYPE_ANY = "*/*";
 
-    private IntentUtils() {}
+    private IntentUtils() {
+    }
 
     @NonNull
     public static Intent withChooser(@Nullable Intent intent) {
@@ -76,7 +74,7 @@ public class IntentUtils {
 
     @NonNull
     public static Intent makePickFile(@NonNull String mimeType, boolean allowMultiple) {
-        return makePickFile(mimeType, new String[] { mimeType }, allowMultiple);
+        return makePickFile(mimeType, new String[]{mimeType}, allowMultiple);
     }
 
     @NonNull
@@ -116,7 +114,7 @@ public class IntentUtils {
     public static Intent makePickOrCaptureImageWithChooser(boolean allowPickMultiple,
                                                            @NonNull Uri captureOutputUri) {
         return withChooser(makePickImage(allowPickMultiple))
-                .putExtra(Intent.EXTRA_INITIAL_INTENTS, new Parcelable[] {
+                .putExtra(Intent.EXTRA_INITIAL_INTENTS, new Parcelable[]{
                         makeCaptureImage(captureOutputUri)
                 });
     }

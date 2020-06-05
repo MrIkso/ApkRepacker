@@ -1,5 +1,6 @@
 package com.mrikso.apkrepacker.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -58,7 +59,7 @@ public class DimensEditorFragment extends Fragment implements DimensAdapter.OnIt
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            this.dimens = new File(Objects.requireNonNull(getArguments().getString("dimensFile")));
+            this.dimens = new File(requireArguments().getString("dimensFile"));
         }
         setRetainInstance(true);
     }
@@ -67,14 +68,14 @@ public class DimensEditorFragment extends Fragment implements DimensAdapter.OnIt
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dimen_editor, container, false);
         // Inflate the layout for this fragment
-//        Context mContext = view.getContext();
+        Context mContext = view.getContext();
         mViewModel = new ViewModelProvider(this).get(DimensViewModel.class);
         //  loading = view.findViewById(R.id.app_packages_loading);
         mViewModel.setDimensFile(dimens);
         dimensList = view.findViewById(R.id.dimens);
-        dimensList.setLayoutManager(new LinearLayoutManager(App.getContext()));
+        dimensList.setLayoutManager(new LinearLayoutManager(mContext));
         dimensList.getRecycledViewPool().setMaxRecycledViews(0, 24);
-        dimensAdapter = new DimensAdapter(App.getContext());
+        dimensAdapter = new DimensAdapter(mContext);
         // mViewModel.getPackages().observe(getViewLifecycleOwner(), appsAdapter::setData);
 
         dimensAdapter.setInteractionListener(this);

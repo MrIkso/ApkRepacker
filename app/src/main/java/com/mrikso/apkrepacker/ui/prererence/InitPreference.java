@@ -21,7 +21,7 @@ public class InitPreference {
 
     public void init() {
         preference = Preference.getInstance(App.getContext());
-        if(!preference.isToolsInstalled()){
+        if (!preference.isToolsInstalled()) {
             copyFiles(App.getContext().getAssets(), App.getContext().getFilesDir());
             preference.setToolsInstalled(true);
         }
@@ -89,7 +89,7 @@ public class InitPreference {
         preference.setAapt2Path(aapt2Bin.getAbsolutePath());
     }
 
-    private  void loadKey(AssetManager assets, File outDir) throws IOException {
+    private void loadKey(AssetManager assets, File outDir) throws IOException {
         loadPrivateKey(assets, outDir);
         loadCert(assets, outDir);
     }
@@ -104,7 +104,7 @@ public class InitPreference {
         preference.setCertPath(certPem.getAbsolutePath());
     }
 
-    private  void loadPrivateKey(AssetManager assets, File outDir) throws IOException {
+    private void loadPrivateKey(AssetManager assets, File outDir) throws IOException {
         File certPk8 = new File(outDir, "testkey.pk8");
         InputStream key = assets.open("key/testkey.pk8");
         OutputStream outputStream = new FileOutputStream(certPk8);

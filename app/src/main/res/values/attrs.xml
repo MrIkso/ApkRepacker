@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="toolbarShadow" format="reference" />
     <!--ATTRS-->
     <attr name="colorAccentLight"
         format="color|reference" />
@@ -26,9 +25,5 @@
         format="color|reference" />
     <attr name="cardBackground"
         format="color|reference" />
-    <attr name="dividerColor"
-        format="color|reference" />
-
-    <attr name="popupOverlayStyle" format="reference"/>
-
+    <attr name="dividerColor" format="color|reference" />
 </resources>

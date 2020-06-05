@@ -21,8 +21,8 @@
 21
 22    <uses-sdk
 23        android:minSdkVersion="21"
-23-->C:\Users\Yaroslav\Desktop\Project\ApkRepacker\lib-n-ide\src\main\AndroidManifest.xml
+23-->F:\Program Files\Android\AndroidStudioProjects\ApkRepacker\lib-n-ide\src\main\AndroidManifest.xml
 24        android:targetSdkVersion="28" />
-24-->C:\Users\Yaroslav\Desktop\Project\ApkRepacker\lib-n-ide\src\main\AndroidManifest.xml
+24-->F:\Program Files\Android\AndroidStudioProjects\ApkRepacker\lib-n-ide\src\main\AndroidManifest.xml
 25
 26</manifest>

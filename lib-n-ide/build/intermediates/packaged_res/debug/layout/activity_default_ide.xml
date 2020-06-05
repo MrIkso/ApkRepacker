@@ -69,55 +69,50 @@
             android:orientation="vertical"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <FrameLayout
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/editor_view_pager"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1">
+                android:layout_weight="1" />
 
-                <androidx.viewpager.widget.ViewPager
-                    android:id="@+id/editor_view_pager"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+            <LinearLayout
+                android:layout_gravity="bottom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="25dp"
+                android:background="#fff"
+                android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_gravity="bottom"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_gravity="bottom"
+                    android:background="?android:attr/windowBackground">
 
-                    <LinearLayout
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <com.jecelyin.editor.v2.widget.SymbolBarLayout
+                            android:id="@+id/symbolBarLayout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:background="?android:attr/windowBackground"
+                            android:visibility="visible" />
+                    </HorizontalScrollView>
+                    <!--добавляем поисковую панель-->
+                    <include
+                        layout="@layout/search_panel"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
                         android:layout_gravity="bottom"
-                        android:background="?android:attr/windowBackground">
-                        >
-
-                        <HorizontalScrollView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <com.jecelyin.editor.v2.widget.SymbolBarLayout
-                                android:id="@+id/symbolBarLayout"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:background="?android:attr/windowBackground"
-                                android:visibility="visible" />
-                        </HorizontalScrollView>
-                        <!--добавляем поисковую панель-->
-                        <include layout="@layout/search_panel"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="bottom"
-                            android:fillViewport="false"
-                            android:visibility="gone"/>
-
-
-
-                    </LinearLayout>
+                        android:fillViewport="false"
+                        android:visibility="gone" />
 
                 </LinearLayout>
-            </FrameLayout>
+
+            </LinearLayout>
         </LinearLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
@@ -147,7 +142,6 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginBottom="15dp"
                     android:textColor="?android:textColorPrimary"
                     tools:text="16.1.1" />

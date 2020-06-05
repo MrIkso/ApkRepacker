@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:ns1="http://schemas.android.com/tools">
     <string-array name="screen_orientation">
         <item>Auto</item>
         <item>Landscape</item>
@@ -21,6 +21,7 @@
     <color name="textColorInverted">#ff212121</color>
     <color name="white">#FFF</color>
     <dimen name="cab_find_text_width">110dp</dimen>
+    <dimen name="dialog_round">12dp</dimen>
     <dimen name="divider_height">0.5dp</dimen>
     <dimen name="smallest_text_size">12sp</dimen>
     <dimen name="symbol_bar_height">36dp</dimen>
@@ -71,7 +72,10 @@
     <string name="action_next_panel">Next</string>
     <string name="action_prev_panel">Prev</string>
     <string name="action_replace_panel">Replace</string>
-    <string name="auto_capitalize">Auto capitalize</string>
+    <string name="auto_capitalize_summary">Not recommend</string>
+    <string name="auto_capitalize_title">Auto capitalize</string>
+    <string name="auto_complete_summary">Show small popup to suggest code when you typing. It can be not supported current language</string>
+    <string name="auto_complete_title">Auto complete</string>
     <string name="auto_indent">Auto Indent</string>
     <string name="auto_pair">Auto pair</string>
     <string name="auto_save">Auto save file</string>
@@ -86,6 +90,7 @@
     <string name="close">Close</string>
     <string name="close_drawer">Close drawer</string>
     <string name="code_editor">Code Editor</string>
+    <string name="confirm_exit">Confirm of the exit</string>
     <string name="confirm_save">Confirm save</string>
     <string name="confirm_save_msg">Document %s has changed，do you want to save and exit?</string>
     <string name="convert_to_lowercase">Convert to lowercase</string>
@@ -150,6 +155,7 @@
     <string name="pref_auto_indent" translatable="false">pref_auto_indent</string>
     <string name="pref_auto_pair" translatable="false">pref_auto_pair</string>
     <string name="pref_auto_save" translatable="false">pref_auto_save</string>
+    <string name="pref_confirm_exit" translatable="false">pref_confirm_exit</string>
     <string name="pref_desc_auto_pair">Auto add close bracket, e.g.  when you type { editor will be auto add }</string>
     <string name="pref_font_size" translatable="false">pref_font_size</string>
     <string name="pref_highlight_file_size_limit" translatable="false">pref_highlight_file_size_limit</string>
@@ -197,12 +203,16 @@
     <string name="sort_by_name">Sort by Name</string>
     <string name="sort_by_size">Sort by Size</string>
     <string name="tab_size">Tab size</string>
-    <string name="touch_to_adjust_text_size">Touch to change text size</string>
+    <string name="touch_to_adjust_text_size_summary">Change font size (Zoom) with two finger</string>
+    <string name="touch_to_adjust_text_size_title">Touch to change text size</string>
     <string name="undo">Undo</string>
     <string name="use_regex_to_find_tip">Replace keyword support: \\r, \\n, \\t and capturing groups $0 ~ $9</string>
     <string name="view">View</string>
+    <string name="volume_move_summary">Press volume up (+) to move cursor to right, press volume down (-) to move cursor to left</string>
+    <string name="volume_move_title">Volume move</string>
     <string name="whole_words_only">Whole words only</string>
-    <string name="word_wrap_in_editor">Wordwrap</string>
+    <string name="word_wrap_in_editor_summary">Use soft wrap in editor</string>
+    <string name="word_wrap_in_editor_title">Wordwrap</string>
     <string name="word_x">Words: %d</string>
     <string name="yes">Yes</string>
     <style name="ActionModeSubtitle">
@@ -223,18 +233,37 @@
         <item name="height">?attr/actionBarSize</item>
         <item name="titleTextStyle">@style/ActionModeTitle</item>
         <item name="subtitleTextStyle">@style/ActionModeSubtitle</item>
+<!--        <item name="android:popupMenuStyle">@style/OverflowMenu</item>-->
     </style>
     <style name="Light.Toolbar" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
     <style name="TexButton">
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Widget.Button.Borderless.Colored</item>
         <item name="android:textSize">@dimen/text_size</item>
-        <item name="android:textColor">?toolbarTextColor</item>
+        <item name="android:textColor">?attr/colorAccent</item>
         <item name="android:gravity">center</item>
         <item name="android:background">?selectableItemBackground</item>
         <item name="android:focusable">true</item>
         <item name="android:clickable">true</item>
         <item name="android:minWidth">45.0dp</item>
         <item name="android:minHeight">@dimen/text_minHeight</item>
+    </style>
+    <style name="TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxCornerRadiusBottomEnd">@dimen/dialog_round</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/dialog_round</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/dialog_round</item>
+        <item name="boxCornerRadiusTopStart">@dimen/dialog_round</item>
+        <item name="hintTextColor">?colorAccent</item>
+        <item name="boxStrokeColor" ns1:ignore="PrivateResource">@color/mtrl_outlined_stroke_color</item>
+        <item name="boxStrokeWidth">@dimen/divider_height</item>
+    </style>
+    <style name="TextInputLayout.OutlinedBox" parent="Widget.Design.TextInputLayout">
+        <item name="boxCornerRadiusBottomEnd">@dimen/dialog_round</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/dialog_round</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/dialog_round</item>
+        <item name="boxCornerRadiusTopStart">@dimen/dialog_round</item>
+        <item name="hintTextColor">?colorAccent</item>
+        <item name="boxStrokeColor">?colorAccent</item>
+        <item name="colorControlActivated">?colorAccent</item>
     </style>
     <declare-styleable name="Editor">
         <attr format="color" name="textForeground"/>

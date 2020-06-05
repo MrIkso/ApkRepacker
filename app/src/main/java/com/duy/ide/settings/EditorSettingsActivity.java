@@ -19,7 +19,6 @@ package com.duy.ide.settings;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
@@ -29,10 +28,10 @@ import android.preference.PreferenceGroup;
 import android.preference.SwitchPreference;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.ListView;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.Toolbar;
 
 import com.duy.ide.editor.editor.R;
@@ -110,10 +109,7 @@ public class EditorSettingsActivity extends BaseActivity {
                     int index = listPreference.findIndexOfValue(stringValue);
 
                     // Set the summary to reflect the new value.
-                    preference.setSummary(
-                            index >= 0
-                                    ? listPreference.getEntries()[index]
-                                    : null);
+                    preference.setSummary(index >= 0 ? listPreference.getEntries()[index] : null);
                 } else if (preference instanceof SwitchPreference) {
                     ((SwitchPreference) preference).setChecked((boolean) value);
                 } else if ("pref_highlight_file_size_limit".equals(key)) {
@@ -189,14 +185,22 @@ public class EditorSettingsActivity extends BaseActivity {
             dependBindPreference(getPreferenceScreen());
         }
 
-        @RequiresApi(api = Build.VERSION_CODES.M)
         @Override
         public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
             ListView listView = getActivity().findViewById(android.R.id.list);
             listView.setDivider(null);
             listView.setDividerHeight(0);
-            listView.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> getActivity().findViewById(R.id.editor_appbar).setSelected(listView.canScrollVertically(-1)));
+            listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+
+                @Override
+                public void onScrollStateChanged(AbsListView view, int scrollState) {}
+
+                @Override
+                public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                    getActivity().findViewById(R.id.editor_appbar).setSelected(listView.canScrollVertically(-1));
+                }
+            });
         }
 
         @Override

@@ -1,0 +1,23 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <Button
+        android:id="@+id/md_buttonDefaultNeutral"
+        style="@style/MD_TextButton"
+        tools:text="Neutral" />
+
+    <Button
+        android:id="@+id/md_buttonDefaultNegative"
+        style="@style/MD_TextButton"
+        tools:layout_alignParentLeft="true"
+        tools:layout_alignParentStart="true"
+        tools:text="Negative" />
+
+    <Button
+        android:id="@+id/md_buttonDefaultPositive"
+        style="@style/MD_TextButton"
+        tools:layout_alignParentLeft="true"
+        tools:layout_alignParentStart="true"
+        tools:text="Positive" />
+
+</merge>

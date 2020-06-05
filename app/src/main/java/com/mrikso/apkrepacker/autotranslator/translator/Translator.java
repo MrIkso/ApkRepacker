@@ -2,6 +2,8 @@ package com.mrikso.apkrepacker.autotranslator.translator;
 
 import android.util.Log;
 
+import com.mrikso.apkrepacker.BuildConfig;
+
 import org.jsoup.Jsoup;
 
 import java.net.URLEncoder;
@@ -33,6 +35,7 @@ public class Translator {
             if (items.size() == 1) {
                 String content = translateFromGoogle("auto", targetLangCode, items.get(0).originValue);
                 items.get(0).translatedValue = checkIsFormattedValue((content));
+                if(BuildConfig.DEBUG)
                 Log.d("DEBUG", String.format("translated: %s ---> %1s", items.get(0).originValue, items.get(0).translatedValue));
             }
             //extract one value from translated content
@@ -41,6 +44,7 @@ public class Translator {
                     TranslateItem item = items.get(i);
                     String content = translateFromGoogle("auto", targetLangCode, item.originValue);
                     item.translatedValue = checkIsFormattedValue(content);
+                    if(BuildConfig.DEBUG)
                     Log.d("DEBUG", String.format("translated: %s ---> %1s", item.originValue, item.translatedValue));
                 }
             }
@@ -63,9 +67,10 @@ public class Translator {
 
     private String translateFromGoogle(String from, String to, String contentToTranslate) {
         String url = String.format(GOOGLE_TRANSLATE_URL, from, to, encodeToUrl(contentToTranslate));
+        if(BuildConfig.DEBUG)
         Log.d("DEBUG",String.format("url=%s", url));
         try {
-            return Jsoup.connect(url).timeout(15000).get().getElementsByClass("t0").first().text();
+            return Jsoup.connect(url).timeout(20000).get().getElementsByClass("t0").first().text();
         } catch (Exception ex) {
             ex.printStackTrace();
             return "";

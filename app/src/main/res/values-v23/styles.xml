@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="AppTheme" parent="@style/Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/light_primary</item>
         <item name="colorPrimaryDark">@color/light_primary</item>
@@ -10,28 +10,31 @@
 
         <item name="android:textColorPrimary">@color/light_primary_text</item>
         <item name="android:textColorSecondary">@color/light_secondary_text</item>
-        <item name="dividerHorizontal">@color/light_divider</item>
+        <item name="dividerHorizontal">@color/color_divider</item>
         <item name="colorSelected">#80B2EBF2</item>
-        <item name="toolbarShadow">@drawable/shadow</item>
-        <item name="popupOverlayStyle">@style/AppTheme.PopupOverlay</item>
+
+        <item name="popupMenuStyle">@style/PopupMenu</item>
+        <item name="actionOverflowMenuStyle">@style/OverflowMenu</item>
+        <item name="android:dropDownListViewStyle">@style/DropDown.ListView</item>
         <item name="bottomSheetDialogTheme">@style/BottomSheetDialog</item>
         <item name="android:dialogTheme">@style/AlertDialog.AppTheme.Light</item>
         <item name="android:alertDialogTheme">@style/AlertDialog.AppTheme.Light</item>
         <item name="colorBackgroundTint">@color/light_primary</item>
         <item name="colorBackgroundLeft">@color/light_str_left_bg</item>
         <item name="colorBackgroundRight">@color/light_str_right_bg</item>
-        <item name="colorBackgroundBottomMenu">@color/main_background</item>
+        <item name="colorBackgroundBottomMenu">@color/light_primary</item>
         <item name="colorBackgroundIcon_1">#d6e1ea</item>
         <item name="colorBackgroundIcon_2">#fff</item>
         <item name="colorBackgroundIcon_3">#a6caff</item>
         <item name="textColor">@color/light_text_color_primary</item>
         <item name="textColor_1">@color/textColorInverted</item>
-        <item name="cardBackground">@color/light_card_background</item>
-
+        <item name="cardBackground">@color/light_primary</item>
+        <item name="md_background_color">@color/light_primary</item>
 
         <item name="actionModeStyle">@style/ActionMode</item>
         <item name="android:actionModeStyle">@style/ActionMode</item>
         <item name="windowActionModeOverlay">true</item>
+        <item name="android:navigationBarColor">@color/gray_very_light</item>
         <item name="dividerColor">@color/color_divider</item>
 
         <item name="toolbarIconNormalColor">?colorControlNormal</item>
@@ -43,10 +46,13 @@
         <item name="findResultsPath">#0000ff</item>
         <item name="findResultsKeyword">#eaa95e</item>
 
+        <item name="android:windowAnimationStyle">@style/Animation.Activity</item>
+
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+
     </style>
 
-    <style name="AppTheme.Dark" parent="Theme.MaterialComponents.NoActionBar">
+    <style name="AppTheme.Dark" parent="@style/Theme.MaterialComponents.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/dark_primary_dark</item>
         <item name="colorPrimaryDark">@color/dark_primary_dark</item>
@@ -55,10 +61,12 @@
         <item name="android:statusBarColor">@color/dark_primary_dark</item>
         <item name="android:textColorPrimary">@color/dark_primary_text</item>
         <item name="android:textColorSecondary">@color/dark_secondary_text</item>
-        <item name="dividerHorizontal">@color/dark_divider</item>
+        <item name="dividerHorizontal">@color/color_divider_dark</item>
         <item name="colorSelected">#801565C0</item>
-        <item name="toolbarShadow">@drawable/shadow</item>
-        <item name="popupOverlayStyle">@style/AppTheme.PopupOverlay.Dark</item>
+
+        <item name="popupMenuStyle">@style/PopupMenu</item>
+        <item name="actionOverflowMenuStyle">@style/OverflowMenu</item>
+        <item name="android:dropDownListViewStyle">@style/DropDown.ListView</item>
         <item name="bottomSheetDialogTheme">@style/BottomSheetDialog.Dark</item>
         <item name="android:dialogTheme">@style/AlertDialog.AppTheme.Dark</item>
         <item name="android:alertDialogTheme">@style/AlertDialog.AppTheme.Dark</item>
@@ -72,27 +80,38 @@
         <item name="colorBackgroundIcon_3">#faaaaddd</item>
         <item name="textColor">@color/dark_primary_text</item>
         <item name="textColor_1">@color/dark_primary_text</item>
-        <item name="cardBackground">@color/dark_card_background</item>
+        <item name="cardBackground">@color/dark_primary</item>
+        <item name="md_background_color">@color/dark_primary</item>
 
         <item name="actionModeStyle">@style/ActionMode</item>
         <item name="android:actionModeStyle">@style/ActionMode</item>
         <item name="windowActionModeOverlay">true</item>
+        <item name="android:navigationBarColor">@color/dark_primary</item>
         <item name="dividerColor">@color/color_divider_dark</item>
         <item name="actionMenuTextColor">@android:color/white</item>
-
         <item name="toolbarIconNormalColor">#ffffff</item>
         <item name="toolbarIconDisabledColor">#50ffffff</item>
         <item name="toolbarTextColor">#fff</item>
 
         <item name="menuIconNormalColor">#ffffff</item>
         <item name="editorTabBackground">@drawable/drawer_tab_item_background_dark</item>
-
         <item name="findResultsPath">#0000ff</item>
         <item name="findResultsKeyword">#C26509</item>
+
+        <item name="android:windowAnimationStyle">@style/Animation.Activity</item>
 
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
 
     </style>
 
+    <style name="DialogFullscreen" parent="Theme.MaterialComponents.Light.DialogWhenLarge">
+        <item name="colorPrimary">@color/light_primary</item>
+        <item name="colorPrimaryDark">@color/light_primary</item>
+        <item name="colorAccent">@color/light_accent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:statusBarColor">@color/light_primary</item>
+        <item name="android:navigationBarColor">@color/light_primary</item>
+    </style>
 
 </resources>

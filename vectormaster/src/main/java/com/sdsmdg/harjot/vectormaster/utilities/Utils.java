@@ -11,15 +11,24 @@ import java.lang.reflect.Field;
 
 public class Utils {
 
-    public static int getColorFromString(String value, boolean useLightTheme) {
+    public static int getColorFromStringTheme(String value, boolean useLightTheme) {
+        int color = getColorFromString(value, useLightTheme);
 
-        if (value.length() == 4) {
-            return Color.parseColor("#" + value.charAt(1) + value.charAt(1) + value.charAt(2) + value.charAt(2) + value.charAt(3) + value.charAt(3));
-        } else if (value.length() == 7 || value.length() == 9) {
-            return Color.parseColor(value);
-        } else if (value.length() == 2) {
+        if (color == 0xFFFFFFFF || color == 0xFF000000 || value.startsWith("@android:color/white") || value.startsWith("@android:color/black")) {
+            return useLightTheme ? DefaultValues.PATH_FILL_COLOR_BLACK : DefaultValues.PATH_FILL_COLOR_WHITE;
+        }
+
+        return color;
+    }
+
+    public static int getColorFromString(String value, boolean useLightTheme) {
+        if (value.length() == 2) {
             return Color.parseColor("#" + value.charAt(1) + value.charAt(1) + value.charAt(1) + value.charAt(1) + value.charAt(1) + value.charAt(1) + value.charAt(1) + value.charAt(1));
-        } else if (value.startsWith("#")) {
+        } else if (value.length() == 4) {
+            return Color.parseColor("#" + value.charAt(1) + value.charAt(1) + value.charAt(2) + value.charAt(2) + value.charAt(3) + value.charAt(3));
+        } else if (value.length() == 7 || /*value.length() == 9 ||*/ value.startsWith("#")) {
+            return Color.parseColor(value);
+        } else if (value.length() == 9) {
             return Color.parseColor(value);
         } else if (value.startsWith("@android:color/")) {
             Object color = getAndroidColor("android.R$color", value.substring(15));
@@ -33,20 +42,23 @@ public class Utils {
     }
 
     public static Path.FillType getFillTypeFromString(String value) {
-        Path.FillType fillType = Path.FillType.WINDING;
-        if (value.equals("1")) {
-            fillType = Path.FillType.EVEN_ODD;
+        switch (value) {
+            case "nonZero":
+                return Path.FillType.WINDING;
+            case "evenOdd":
+                return Path.FillType.EVEN_ODD;
+            default:
+                return Path.FillType.WINDING;
         }
-        return fillType;
     }
 
     public static Paint.Cap getLineCapFromString(String value) {
         switch (value) {
-            case "0":
+            case "butt":
                 return Paint.Cap.BUTT;
-            case "1":
+            case "round":
                 return Paint.Cap.ROUND;
-            case "2":
+            case "square":
                 return Paint.Cap.SQUARE;
             default:
                 return Paint.Cap.BUTT;
@@ -55,11 +67,11 @@ public class Utils {
 
     public static Paint.Join getLineJoinFromString(String value) {
         switch (value) {
-            case "0":
+            case "miter":
                 return Paint.Join.MITER;
-            case "1":
+            case "round":
                 return Paint.Join.ROUND;
-            case "2":
+            case "bevel":
                 return Paint.Join.BEVEL;
             default:
                 return Paint.Join.MITER;
@@ -99,7 +111,7 @@ public class Utils {
         try {
             declaratedField = Class.forName(clazz).getField(colorName);
             declaratedField.setAccessible(true);
-            return declaratedField.get(null);
+            return declaratedField.get(colorName);
         } catch (NoSuchFieldException | ClassNotFoundException | IllegalAccessException e) {
             e.printStackTrace();
         }

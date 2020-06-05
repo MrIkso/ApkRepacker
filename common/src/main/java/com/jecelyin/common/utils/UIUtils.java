@@ -18,11 +18,14 @@
 
 package com.jecelyin.common.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.TextUtils;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Toast;
 
+import androidx.annotation.ArrayRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.view.menu.MenuPopupHelper;
@@ -33,7 +36,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.lang.reflect.Field;
 
-//import android.view.inputmethod.EditorInfo;
 
 /**
  * @author Jecelyin Peng <jecelyin@gmail.com>
@@ -63,7 +65,7 @@ public class UIUtils {
     }
 
     public static void toast(Context context, String message) {
-        Toast.makeText(context.getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context.getApplicationContext(), message, Toast.LENGTH_LONG).show();
     }
 
     public static void toast(Context context, Throwable t) {
@@ -85,12 +87,14 @@ public class UIUtils {
         showInputDialog(context, titleRes != 0 ? context.getString(titleRes) : null, hintRes != 0 ? context.getString(hintRes) : null, value, inputType, callback);
     }
 
+    @SuppressLint("RestrictedApi")
     public static void showIconInPopup(PopupMenu popupMenu) {
         try {
             Field mPoup = popupMenu.getClass().getDeclaredField("mPopup");
             mPoup.setAccessible(true);
             MenuPopupHelper menuPopupHelper = (MenuPopupHelper) mPoup.get(popupMenu);
-            menuPopupHelper.setForceShowIcon(true);
+            if (menuPopupHelper != null)
+                menuPopupHelper.setForceShowIcon(true);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -112,7 +116,7 @@ public class UIUtils {
                 .inputType(inputType == 0 ? EditorInfo.TYPE_CLASS_TEXT : inputType);
 
         MaterialDialog dlg = dialog.show();
-        dlg.setCanceledOnTouchOutside(false);
+        dlg.setCanceledOnTouchOutside(true);
         dlg.setCancelable(true);
     }
 
@@ -133,11 +137,11 @@ public class UIUtils {
         showConfirmDialog(context, title == 0 ? null : context.getString(title), context.getString(message), callback, context.getString(postiveRes), context.getString(negativeRes));
     }
 
-    public static void showConfirmDialog(Context context, CharSequence title, CharSequence message, final OnClickCallback callback, String postiveStr, String negativeStr) {
+    public static void showConfirmDialog(Context context, CharSequence title, CharSequence message, final OnClickCallback callback, String positiveStr, String negativeStr) {
         MaterialDialog.Builder dialog = new MaterialDialog.Builder(context)
                 .title(title)
                 .content(message)
-                .positiveText(postiveStr)
+                .positiveText(positiveStr)
                 .negativeText(negativeStr)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
@@ -157,15 +161,146 @@ public class UIUtils {
                 });
 
         MaterialDialog dlg = dialog.show();
-        dlg.setCanceledOnTouchOutside(false);
+        dlg.setCanceledOnTouchOutside(true);
         dlg.setCancelable(true);
     }
+
+
+
+    /* SingleChoice Dialog */
+
+    public static void showListSingleChoiceDialog(Context context, @StringRes int messageRes, @ArrayRes int items, int selectedIndex, final OnSingleChoiceCallback singleChoiceCallback, final OnClickCallback callback) {
+        showListSingleChoiceDialog(context, context.getString(messageRes), context.getResources().getTextArray(items), selectedIndex, singleChoiceCallback, callback);
+    }
+
+    public static void showListSingleChoiceDialog(Context context, CharSequence message, CharSequence[] items, int selectedIndex, final OnSingleChoiceCallback singleChoiceCallback, final OnClickCallback callback) {
+        showListSingleChoiceDialog(context, null, message, items, selectedIndex, singleChoiceCallback, callback);
+    }
+
+    public static void showListSingleChoiceDialog(Context context, CharSequence title, CharSequence message, CharSequence[] items, int selectedIndex, final OnSingleChoiceCallback singleChoiceCallback, final OnClickCallback callback) {
+        showListSingleChoiceDialog(context, title, message, items, selectedIndex, singleChoiceCallback, callback, context.getString(android.R.string.ok), context.getString(android.R.string.cancel));
+    }
+
+    public static void showListSingleChoiceDialog(Context context, @StringRes int title, @StringRes int message, CharSequence[] items, int selectedIndex, final OnSingleChoiceCallback singleChoiceCallback, final OnClickCallback callback) {
+        showListSingleChoiceDialog(context, title == 0 ? null : context.getString(title), message == 0 ? null : context.getString(message), items, selectedIndex, singleChoiceCallback, callback, null, null);
+    }
+
+    public static void showListSingleChoiceDialog(Context context, @StringRes int title, @StringRes int message, @ArrayRes int items, int selectedIndex, final OnSingleChoiceCallback singleChoiceCallback, final OnClickCallback callback) {
+        showListSingleChoiceDialog(context, title == 0 ? null : context.getString(title), message == 0 ? null : context.getString(message), context.getResources().getTextArray(items), selectedIndex, singleChoiceCallback, callback, null, null);
+    }
+
+    public static void showListSingleChoiceDialog(Context context, @StringRes int title, @StringRes int message, @ArrayRes int items, int selectedIndex, final OnSingleChoiceCallback singleChoiceCallback, final OnClickCallback callback, @StringRes int postiveRes, @StringRes int negativeRes) {
+        showListSingleChoiceDialog(context, title == 0 ? null : context.getString(title), message == 0 ? null : context.getString(message), context.getResources().getTextArray(items), selectedIndex, singleChoiceCallback, callback, context.getString(postiveRes), context.getString(negativeRes));
+    }
+
+    public static void showListSingleChoiceDialog(Context context, CharSequence title, CharSequence message, CharSequence[] items, int selectedIndex, final OnSingleChoiceCallback singleChoiceCallback, final OnClickCallback callback, String positiveStr, String negativeStr) {
+        new MaterialDialog.Builder(context)
+                .title(title)
+                .content(message)
+                .items(items)
+                .itemsCallbackSingleChoice(selectedIndex, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        if (singleChoiceCallback == null)
+                            return false;
+                        singleChoiceCallback.onSelect(dialog, which);
+                        return true;
+                    }
+                })
+                .positiveText(positiveStr)
+                .negativeText(negativeStr)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        if (callback == null)
+                            return;
+                        callback.onOkClick();
+                    }
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        if (callback == null)
+                            return;
+                        callback.onCancelClick();
+                    }
+                }).show();
+    }
+
+
+    /* SingleChoice Dialog */
+
+    public static void showListDialog(Context context, @StringRes int messageRes, @ArrayRes int items, int selectedIndex, final OnListCallback listCallback, final OnClickCallback callback) {
+        showListDialog(context, context.getString(messageRes), context.getResources().getTextArray(items), selectedIndex, listCallback, callback);
+    }
+
+    public static void showListDialog(Context context, CharSequence message, CharSequence[] items, int selectedIndex, final OnListCallback listCallback, final OnClickCallback callback) {
+        showListDialog(context, null, message, items, selectedIndex, listCallback, callback);
+    }
+
+    public static void showListDialog(Context context, CharSequence title, CharSequence message, CharSequence[] items, int selectedIndex, final OnListCallback listCallback, final OnClickCallback callback) {
+        showListDialog(context, title, message, items, selectedIndex, listCallback, callback, context.getString(android.R.string.ok), context.getString(android.R.string.cancel));
+    }
+
+    public static void showListDialog(Context context, @StringRes int title, @StringRes int message, CharSequence[] items, int selectedIndex, final OnListCallback listCallback, final OnClickCallback callback) {
+        showListDialog(context, title == 0 ? null : context.getString(title), message == 0 ? null : context.getString(message), items, selectedIndex, listCallback, callback, null, null);
+    }
+
+    public static void showListDialog(Context context, @StringRes int title, @StringRes int message, @ArrayRes int items, int selectedIndex, final OnListCallback listCallback, final OnClickCallback callback) {
+        showListDialog(context, title == 0 ? null : context.getString(title), message == 0 ? null : context.getString(message), context.getResources().getTextArray(items), selectedIndex, listCallback, callback, null, null);
+    }
+
+    public static void showListDialog(Context context, @StringRes int title, @StringRes int message, @ArrayRes int items, int selectedIndex, final OnListCallback listCallback, final OnClickCallback callback, @StringRes int postiveRes, @StringRes int negativeRes) {
+        showListDialog(context, title == 0 ? null : context.getString(title), message == 0 ? null : context.getString(message), context.getResources().getTextArray(items), selectedIndex, listCallback, callback, context.getString(postiveRes), context.getString(negativeRes));
+    }
+
+    public static void showListDialog(Context context, CharSequence title, CharSequence message, CharSequence[] items, int selectedIndex, final OnListCallback listCallback, final OnClickCallback callback, String positiveStr, String negativeStr) {
+        new MaterialDialog.Builder(context)
+                .title(title)
+                .content(message)
+                .items(items)
+                .itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        if (listCallback == null)
+                            return;
+                        listCallback.onSelect(dialog, which);
+                    }
+                })
+                .positiveText(positiveStr)
+                .negativeText(negativeStr)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        if (callback == null)
+                            return;
+                        callback.onOkClick();
+                    }
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        if (callback == null)
+                            return;
+                        callback.onCancelClick();
+                    }
+                }).show();
+    }
+
 
     public static abstract class OnClickCallback {
         public abstract void onOkClick();
 
         public void onCancelClick() {
         }
+    }
+
+    public static abstract class OnListCallback {
+        public abstract void onSelect(MaterialDialog dialog, int which);
+    }
+
+    public static abstract class OnSingleChoiceCallback {
+        public abstract void onSelect(MaterialDialog dialog, int which);
     }
 
     public static abstract class OnShowInputCallback {

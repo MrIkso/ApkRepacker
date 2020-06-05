@@ -12,8 +12,8 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,19 +22,22 @@ import com.google.android.material.chip.Chip;
 import com.jecelyin.common.utils.UIUtils;
 import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
+import com.mrikso.apkrepacker.activity.MainActivity;
 import com.mrikso.apkrepacker.fragment.dialogs.AppsOptionsItemDialogFragment;
 import com.mrikso.apkrepacker.fragment.dialogs.DecompileOptionsDialogFragment;
 import com.mrikso.apkrepacker.ui.appslist.AppsAdapter;
 import com.mrikso.apkrepacker.ui.appslist.AppsViewModel;
 import com.mrikso.apkrepacker.ui.prererence.Preference;
 import com.mrikso.apkrepacker.utils.AppUtils;
+import com.mrikso.apkrepacker.utils.FragmentUtils;
 import com.mrikso.apkrepacker.utils.PackageMeta;
 
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
 
 public class AppsFragment extends Fragment implements AppsAdapter.OnItemInteractionListener, AppsOptionsItemDialogFragment.ItemClickListener, DecompileOptionsDialogFragment.ItemClickListener {
 
-    private static final String TAG = "AppsFragment";
+    public static final String TAG = "AppsFragment";
+    public static View loadingView;
     private RecyclerView appsList;
     private AppsViewModel mViewModel;
     private AppsAdapter appsAdapter;
@@ -66,21 +69,31 @@ public class AppsFragment extends Fragment implements AppsAdapter.OnItemInteract
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_apps, container, false);
         context = view.getContext();
         mViewModel = ViewModelProviders.of(this).get(AppsViewModel.class);
-        //  loading = view.findViewById(R.id.app_packages_loading);
+        loadingView = view.findViewById(R.id.loading_view);
         appsList = view.findViewById(R.id.app_packages);
-        appsList.setLayoutManager(new LinearLayoutManager(App.getContext()));
+        appsList.setLayoutManager(new LinearLayoutManager(context));
+        appsList.setHasFixedSize(true);
+        appsList.setDrawingCacheEnabled(true);
+        appsList.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+//        appsList.setItemViewCacheSize(3000);
+        appsList.buildDrawingCache(true);
         appsList.getRecycledViewPool().setMaxRecycledViews(0, 24);
-        appsAdapter = new AppsAdapter(App.getContext());
+        appsAdapter = new AppsAdapter(context);
         // mViewModel.getPackages().observe(getViewLifecycleOwner(), appsAdapter::setData);
-
+        appsAdapter.setHasStableIds(true);
         appsAdapter.setInteractionListener(this);
-        new FastScrollerBuilder(appsList).build();
+        new FastScrollerBuilder(appsList).useMd2Style().build();
+        appsList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                view.findViewById(R.id.app_bar).setSelected(appsList.canScrollVertically(-1));
+            }
+        });
 
         initData();
         setupToolbar(view);
@@ -90,11 +103,6 @@ public class AppsFragment extends Fragment implements AppsAdapter.OnItemInteract
     private void initData() {
         mViewModel.getPackages().observe(getViewLifecycleOwner(), appsAdapter::setData);
         appsList.setAdapter(appsAdapter);
-        // Log.i("df", String.valueOf(appsAdapter.isChanged()));
-    /*if (appsAdapter.isChanged()) {
-        appsList.setVisibility(View.VISIBLE);
-        loading.setVisibility(View.GONE);
-    }*/
     }
 
     @Override
@@ -107,20 +115,18 @@ public class AppsFragment extends Fragment implements AppsAdapter.OnItemInteract
         mEditTextSearch = view.findViewById(R.id.et_search);
         mChipFilterSplitsOnly = view.findViewById(R.id.chip_filter_splits);
         mChipFilterIncludeSystemApps = view.findViewById(R.id.chip_filter_system);
+        view.findViewById(R.id.button_clear).setOnClickListener(v -> mEditTextSearch.setText(""));
 
         mEditTextSearch.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
             @Override
             public void afterTextChanged(Editable s) {
+                view.findViewById(R.id.button_clear).setVisibility(s.toString().isEmpty() ? View.GONE : View.VISIBLE);
                 filterPackages();
             }
         });
@@ -143,6 +149,7 @@ public class AppsFragment extends Fragment implements AppsAdapter.OnItemInteract
     @Override
     public void onDetach() {
         super.onDetach();
+        MainActivity.getInstance().refreshAdapter(false);
     }
 
     @Override
@@ -159,16 +166,16 @@ public class AppsFragment extends Fragment implements AppsAdapter.OnItemInteract
             case R.id.decompile_app:
                 //  File app = FileUtil.createBackupFile(current, preference.getDecodingPath());
                 try {
-                     applicationInfo = context.getPackageManager().getApplicationInfo(current.packageName, 0);
-                    mAppName = current.packageName;
+                    applicationInfo = context.getPackageManager().getApplicationInfo(current.packageName, 0);
+                    mAppName = current.packageName + mAppName;
                     // FileUtils.copyFile(new File(applicationInfo.publicSourceDir), app);
                     int mode = preference.getDecodingMode();
                     if (mode == 3) {
                         DecompileOptionsDialogFragment decompileOptionsDialogFragment = DecompileOptionsDialogFragment.newInstance();
                         decompileOptionsDialogFragment.show(getChildFragmentManager(), DecompileOptionsDialogFragment.TAG);
                     } else {
-                        decompileFragment = DecompileFragment.newInstance(current.label, applicationInfo.publicSourceDir, true);
-                        ((FragmentActivity) context).getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(android.R.id.content, decompileFragment).commit();
+                        decompileFragment = DecompileFragment.newInstance(current.label, applicationInfo.publicSourceDir, true, mode == 0 ? 3 : mode == 1 ? 2 : mode == 2 ? 1 : 0);
+                        FragmentUtils.replace(decompileFragment, getActivity().getSupportFragmentManager(), android.R.id.content, "DecompileFragment");
                     }
                 } catch (Exception e) {
                     UIUtils.toast(App.getContext(), R.string.toast_error_in_decompile_installed_app);
@@ -182,7 +189,7 @@ public class AppsFragment extends Fragment implements AppsAdapter.OnItemInteract
                     ApplicationInfo applicationInfo = context.getPackageManager().getApplicationInfo(current.packageName, 0);
                     //  FileUtils.copyFile(new File(applicationInfo.publicSourceDir), selectedApk);
                     SimpleEditorFragment simpleEditorFragment = SimpleEditorFragment.newInstance(applicationInfo.publicSourceDir);
-                    ((FragmentActivity) context).getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(android.R.id.content, simpleEditorFragment).commit();
+                    FragmentUtils.replace(simpleEditorFragment, getActivity().getSupportFragmentManager(), android.R.id.content, SimpleEditorFragment.TAG);
                 } catch (Exception e) {
                     UIUtils.toast(App.getContext(), R.string.toast_error_in_simple_edit_installed_app);
                     Log.e(TAG, "Error in simple edit installed app");
@@ -202,18 +209,16 @@ public class AppsFragment extends Fragment implements AppsAdapter.OnItemInteract
     public void onModeItemClick(Integer item) {
         switch (item) {
             case R.id.decompile_all:
-                decompileFragment = DecompileFragment.newInstance(mAppName,applicationInfo.publicSourceDir, true, 3);
-                ((FragmentActivity) context).getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(android.R.id.content, decompileFragment).commit();
+                decompileFragment = DecompileFragment.newInstance(mAppName, applicationInfo.publicSourceDir, true, 3);
                 break;
             case R.id.decompile_all_res:
-                decompileFragment = DecompileFragment.newInstance(mAppName,applicationInfo.publicSourceDir, true, 2);
-                ((FragmentActivity) context).getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(android.R.id.content, decompileFragment).commit();
+                decompileFragment = DecompileFragment.newInstance(mAppName, applicationInfo.publicSourceDir, true, 2);
                 break;
             case R.id.decompile_all_dex:
-                decompileFragment = DecompileFragment.newInstance(mAppName,applicationInfo.publicSourceDir, true, 1);
-                ((FragmentActivity) context).getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(android.R.id.content, decompileFragment).commit();
+                decompileFragment = DecompileFragment.newInstance(mAppName, applicationInfo.publicSourceDir, true, 1);
                 break;
         }
+        FragmentUtils.replace(decompileFragment, getActivity().getSupportFragmentManager(), android.R.id.content, "DecompileFragment");
     }
 }
 

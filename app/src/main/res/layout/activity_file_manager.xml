@@ -5,34 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="?actionBarTheme">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?actionBarSize"
-            app:popupTheme="?attr/actionBarPopupTheme" />
-    </com.google.android.material.appbar.AppBarLayout>
+    <include layout="@layout/appbar" />
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:background="?toolbarShadow" />
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipToPadding="false"
-            />
+            android:clipToPadding="false" />
     </FrameLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

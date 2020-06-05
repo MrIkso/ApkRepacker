@@ -1,29 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="?android:windowBackground">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical">
 
-    <LinearLayout
-        android:clickable="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <androidx.cardview.widget.CardView
-            app:cardBackgroundColor="?attr/cardBackground"
-            android:layout_width="fill_parent"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8.0dip">
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_height="@dimen/checkbox_dimens"
+                android:layout_marginTop="@dimen/checkbox_margin"
+                style="@style/Material.CardView">
+
                 <LinearLayout
                     android:layout_margin="8.0dip"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:animateLayoutChanges="true"
                     android:orientation="horizontal">
 
                     <androidx.appcompat.widget.AppCompatImageView
@@ -52,140 +56,142 @@
 
                     <androidx.appcompat.widget.AppCompatImageButton
                         android:id="@+id/button_clear"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:visibility="gone"
                         android:layout_gravity="center_vertical"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:tint="?android:textColorSecondary"
                         app:srcCompat="@drawable/ic_clear" />
                 </LinearLayout>
-        </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
-        <androidx.cardview.widget.CardView
-            app:cardBackgroundColor="?attr/cardBackground"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8.0dip">
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Material.CardView">
 
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dip"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/caption_search_options"
-                    android:textColor="?colorAccent"
-                    android:textSize="14.0sp"
-                    android:textStyle="bold" />
+                    android:animateLayoutChanges="true"
+                    android:orientation="vertical">
 
-                <CheckBox
-                    android:id="@+id/search_file_cb"
-                    android:layout_width="wrap_content"
-                    android:layout_height="28dp"
-                    android:layout_marginTop="8.0dip"
-                    android:text="@string/files" />
-
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:visibility="gone"
-            app:cardBackgroundColor="?attr/cardBackground"
-            android:id="@+id/search_options_card"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dip">
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dip"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/caption_string_search_options"
-                    android:textColor="?colorAccent"
-                    android:textSize="14.0sp"
-                    android:textStyle="bold" />
-
-                <CheckBox
-                    android:id="@+id/regular_exp_cb"
-                    android:layout_width="match_parent"
-                    android:layout_height="28dp"
-                    android:layout_marginTop="8.0dip"
-                    android:text="@string/regex" />
-
-                <CheckBox
-                    android:id="@+id/ignore_case_cb"
-                    android:layout_width="match_parent"
-                    android:layout_height="28dp"
-                    android:text="@string/label_ignore_case" />
-                <CheckBox
-                    android:id="@+id/whole_words_only_cb"
-                    android:layout_width="match_parent"
-                    android:layout_height="28dp"
-                    android:text="@string/whole_words_only" />
-                <CheckBox
-                    android:id="@+id/recursively_cb"
-                    android:layout_width="match_parent"
-                    android:layout_height="28dp"
-                    android:text="@string/recursively" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            app:cardBackgroundColor="?attr/cardBackground"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8.0dip">
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16.0dip"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/label_ext"
-                    android:textColor="?colorAccent"
-                    android:textSize="14.0sp"
-                    android:textStyle="bold" />
-                    <com.google.android.material.chip.ChipGroup
-                        android:id="@+id/ext_group"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginBottom="16dp"
+                        android:layout_margin="@dimen/normal_padding"
+                        android:orientation="vertical">
 
-                        app:singleSelection="false" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/caption_search_options"
+                            android:textColor="?colorAccent"
+                            android:textSize="@dimen/text_size_14"
+                            android:textStyle="bold" />
 
-                <com.google.android.material.button.MaterialButton
-                    style="@style/MD2Button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:text="@string/add_ext"
-                    android:id="@+id/button_add_ext"
-                    android:textAllCaps="false" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+                        <CheckBox
+                            android:id="@+id/search_file_cb"
+                            android:layout_width="match_parent"
+                            android:layout_height="28dp"
+                            android:layout_marginTop="@dimen/checkbox_margin"
+                            android:text="@string/files" />
 
-    </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/search_options_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/normal_padding"
+                        android:layout_marginRight="@dimen/normal_padding"
+                        android:layout_marginBottom="@dimen/normal_padding"
+                        android:visibility="gone"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/caption_string_search_options"
+                            android:textColor="?colorAccent"
+                            android:textSize="@dimen/text_size_14"
+                            android:textStyle="bold" />
+
+                        <CheckBox
+                            android:id="@+id/regular_exp_cb"
+                            android:layout_width="match_parent"
+                            android:layout_height="28dp"
+                            android:layout_marginTop="@dimen/checkbox_margin"
+                            android:text="@string/regex" />
+
+                        <CheckBox
+                            android:id="@+id/ignore_case_cb"
+                            android:layout_width="match_parent"
+                            android:layout_height="28dp"
+                            android:text="@string/label_ignore_case" />
+
+                        <CheckBox
+                            android:id="@+id/whole_words_only_cb"
+                            android:layout_width="match_parent"
+                            android:layout_height="28dp"
+                            android:text="@string/whole_words_only" />
+
+                        <CheckBox
+                            android:id="@+id/recursively_cb"
+                            android:layout_width="match_parent"
+                            android:layout_height="28dp"
+                            android:text="@string/recursively" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/normal_padding"
+                        android:layout_marginRight="@dimen/normal_padding"
+                        android:layout_marginBottom="@dimen/normal_padding"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/label_ext"
+                            android:textColor="?colorAccent"
+                            android:textSize="@dimen/text_size_14"
+                            android:textStyle="bold" />
+
+                        <com.google.android.material.chip.ChipGroup
+                            android:id="@+id/ext_group"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/checkbox_margin"
+                            android:layout_marginBottom="@dimen/checkbox_margin"
+                            android:animateLayoutChanges="true"
+                            app:singleSelection="false" />
+
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/MD2Button"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:text="@string/add_ext"
+                            android:id="@+id/button_add_ext"
+                            android:textAllCaps="false" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
     </ScrollView>
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+
+    <com.github.clans.fab.FloatingActionButton
         android:id="@+id/fab_go_search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom|center"
-        android:layout_margin="16.0dip"
-        app:backgroundTint="?colorAccent"
-        app:tint="@color/white"
+        android:layout_margin="10dp"
+        app:fab_colorRipple="?colorSelected"
+        app:fab_colorNormal="?colorAccent"
+        app:fab_colorPressed="?colorAccent"
         android:src="@drawable/ic_search" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

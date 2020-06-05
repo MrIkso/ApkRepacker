@@ -65,10 +65,12 @@ public class PathModel {
     }
 
     public void buildPath(boolean useLegacyParser) {
-        if (useLegacyParser) {
-            originalPath = com.sdsmdg.harjot.vectormaster.utilities.legacyparser.PathParser.createPathFromPathData(pathData);
-        } else {
-            originalPath = PathParser.doPath(pathData);
+        if (pathData != null) {
+            if (useLegacyParser) {
+                originalPath = com.sdsmdg.harjot.vectormaster.utilities.legacyparser.PathParser.createPathFromPathData(pathData);
+            } else {
+                originalPath = PathParser.doPath(pathData);
+            }
         }
         if (originalPath != null)
             originalPath.setFillType(fillType);

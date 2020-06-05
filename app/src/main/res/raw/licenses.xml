@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<notices>
+
+    <notice>
+        <name>Material Components Android</name>
+        <url>https://material.io/develop/android/</url>
+        <copyright>Copyright (c) 2017 The Android Open Source Project. All rights reserved.</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+
+    <notice>
+        <name>Google Material Design Icons</name>
+        <url>https://material.io/icons/</url>
+        <copyright>Copyright (c) Google, Inc. All rights reserved.</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+
+    <notice>
+        <name>ANTLR v3</name>
+        <url>https://www.antlr3.org/</url>
+        <copyright>Copyright (c) 2010 Terence Parr All rights reserved.</copyright>
+        <license>BSD 3-Clause License</license>
+    </notice>
+
+    <notice>
+        <name>Guava</name>
+        <url>https://github.com/google/guava</url>
+        <copyright>Copyright (c) Google, Inc. All rights reserved.</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+
+    <notice>
+        <name>Apktool</name>
+        <url>https://github.com/iBotPeaches/Apktool</url>
+        <copyright>Copyright (c) 2019 Ryszard Wiśniewski, Copyright (C) 2019 Connor Tumbleson. All rights reserved.</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+
+    <notice>
+        <name>Material Dialogs</name>
+        <url>https://github.com/afollestad/material-dialogs</url>
+        <copyright>Copyright (c) 2018 Aidan Follestad. All rights reserved.</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+
+    <notice>
+        <name>Glide</name>
+        <url>https://github.com/bumptech/glide</url>
+        <copyright>Copyright (c) 2014 Google, Inc. All rights reserved.</copyright>
+        <license>BSD 2-Clause License</license>
+    </notice>
+
+    <notice>
+        <name>Android-SpinKit</name>
+        <url>https://github.com/ybq/Android-SpinKit</url>
+        <copyright>Copyright (c) 2016 ybq. All rights reserved.</copyright>
+        <license>MIT License</license>
+    </notice>
+
+    <notice>
+        <name>PhotoView</name>
+        <url>https://github.com/chrisbanes/PhotoView</url>
+        <copyright>Copyright (c) 2011, 2012 Chris Banes</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+
+    <notice>
+        <name>ColorPicker</name>
+        <url>https://github.com/jaredrummler/ColorPicker/</url>
+        <copyright>Copyright (c) 2017 Jared Rummler</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+
+    <notice>
+        <name>AndroidFastScroll</name>
+        <url>https://github.com/zhanghai/AndroidFastScroll</url>
+        <copyright>Copyright (c) 2019 Google LLC</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+
+    <notice>
+        <name>SystemUiHelper</name>
+        <url>https://github.com/zhanghai/SystemUiHelper</url>
+        <copyright>Copyright (c) 2015 Hai Zhang</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+
+    <notice>
+        <name>Functional</name>
+        <url>https://github.com/zhanghai/Functional/</url>
+        <copyright>Copyright (c) 2018 Hai Zhang</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+
+    <notice>
+        <name>expandable-recycler-view</name>
+        <url>https://github.com/thoughtbot/expandable-recycler-view</url>
+        <copyright>Copyright (c) 2016 Amanda Hill and thoughtbot, inc.</copyright>
+        <license>MIT License</license>
+    </notice>
+
+    <notice>
+        <name>FloatingActionButton</name>
+        <url>https://github.com/Clans/FloatingActionButton</url>
+        <copyright>Copyright (c) 2015 Dmytro Tarianyk</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+
+    <notice>
+        <name>smali</name>
+        <url>https://github.com/JesusFreke/smali</url>
+        <copyright>Copyright (c) 2016, Google Inc. All rights reserved.</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+
+    <notice>
+        <name>SmartTabLayout</name>
+        <url>https://github.com/ogaclejapan/SmartTabLayout/</url>
+        <copyright>Copyright (c) 2015 ogaclejapan</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+
+    <notice>
+        <name>commons-lang</name>
+        <url>https://github.com/apache/commons-lang/</url>
+        <copyright>Copyright (c) 2001-2020 The Apache Software Foundation</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+
+    <notice>
+        <name>commons-io</name>
+        <url>https://github.com/apache/commons-io</url>
+        <copyright>Copyright (c) 2002-2019 The Apache Software Foundation</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+
+    <notice>
+        <name>gson</name>
+        <url>https://github.com/google/gson</url>
+        <copyright>Copyright (c) 2008 Google Inc.</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+
+    <notice>
+        <name>jsoup</name>
+        <url>https://github.com/jhy/jsoup</url>
+        <copyright>Copyright (c) 2009 - 2020 Jonathan Hedley (https://jsoup.org/)</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+
+    <notice>
+        <name>AndroidTreeView</name>
+        <url>https://github.com/bmelnychuk/AndroidTreeView/</url>
+        <copyright>Copyright (c) 2004 The Apache Software Foundation</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+
+    <notice>
+        <name>text_editor</name>
+        <url>https://github.com/tranleduy2000/text_editor</url>
+        <copyright>Copyright (c) 2016 Jecelyin Peng</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+
+</notices>

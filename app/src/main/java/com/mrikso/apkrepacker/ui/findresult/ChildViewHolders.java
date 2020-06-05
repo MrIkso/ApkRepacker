@@ -9,9 +9,11 @@ import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder;
 public class ChildViewHolders extends ChildViewHolder{
 
     public TextView textView_child;
+    public View view;
 
     public ChildViewHolders(View itemView) {
         super(itemView);
+        view = itemView;
         textView_child = itemView.findViewById(R.id.match_line_text_view);
     }
 

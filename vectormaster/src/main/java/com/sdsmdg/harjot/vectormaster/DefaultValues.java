@@ -20,7 +20,7 @@ public class DefaultValues {
             "strokeWidth"};
 
     public final static int PATH_FILL_COLOR = Color.TRANSPARENT;
-    public final static int PATH_FILL_COLOR_BLACK = Color.LTGRAY;
+    public final static int PATH_FILL_COLOR_BLACK = Color.BLACK;
     public final static int PATH_FILL_COLOR_WHITE = Color.WHITE;
     public final static int PATH_STROKE_COLOR = Color.TRANSPARENT;
     public final static float PATH_STROKE_WIDTH = 0.0f;
@@ -41,7 +41,6 @@ public class DefaultValues {
     public final static float VECTOR_WIDTH = 0.0f;
     public final static float VECTOR_HEIGHT = 0.0f;
     public final static float VECTOR_ALPHA = 1.0f;
-//    public final static int VECTOR_TINT = Color.BLACK;
 
     public final static float GROUP_ROTATION = 0.0f;
     public final static float GROUP_PIVOT_X = 0.0f;

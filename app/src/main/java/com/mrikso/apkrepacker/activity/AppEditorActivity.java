@@ -1,14 +1,13 @@
 package com.mrikso.apkrepacker.activity;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
@@ -23,8 +22,10 @@ import com.mrikso.apkrepacker.fragment.FindFragment;
 import com.mrikso.apkrepacker.fragment.OnBackPressedListener;
 import com.mrikso.apkrepacker.fragment.StringsFragment;
 import com.mrikso.apkrepacker.patchengine.ParsePatch;
-import com.mrikso.apkrepacker.utils.AppUtils;
+import com.mrikso.apkrepacker.ui.stringlist.DirectoryScanner;
+import com.mrikso.apkrepacker.ui.stringlist.StringFile;
 import com.mrikso.apkrepacker.utils.FileUtil;
+import com.mrikso.apkrepacker.utils.FragmentUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -36,14 +37,16 @@ public class AppEditorActivity extends BaseActivity {
     final Fragment stringsFragment = new StringsFragment();
     final Fragment filesFragment = new FilesFragment();
     final FindFragment findFragment = new FindFragment();
-    final FragmentManager fm = getSupportFragmentManager();
     public ViewPager mViewPager;
-    FragmentAdapter mFragmentAdapter;
-    private String projectPatch, apkPath;
+    private FragmentAdapter mFragmentAdapter;
+    private String projectPatch;
     private TabLayout mTabLayout;
     private Bundle bundle;
-    private RelativeLayout buildApp;
-    private RelativeLayout patchApp;
+    private AppCompatImageButton buildApp;
+    private AppCompatImageButton patchApp;
+    private List<String> titles;
+    private List<Fragment> fragments;
+    private ArrayList<StringFile> files;
 
     public static AppEditorActivity getInstance() {
         return Intance;
@@ -67,12 +70,11 @@ public class AppEditorActivity extends BaseActivity {
         FileUtil.setProjectPath(projectPatch);
         bundle = new Bundle();
         bundle.putString("prjPatch", projectPatch);
-        apkPath = getIntent().getStringExtra("apkPatch");
         buildApp = findViewById(R.id.build_app);
         patchApp = findViewById(R.id.patch_app);
 
         mViewPager.setOffscreenPageLimit(2);
-        List<String> titles = new ArrayList<>();
+        titles = new ArrayList<>();
         titles.add(getString(R.string.menu_string));
         titles.add(getString(R.string.menu_files));
         titles.add(getString(R.string.menu_find_list));
@@ -81,10 +83,12 @@ public class AppEditorActivity extends BaseActivity {
         mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(2)));
         stringsFragment.setArguments(bundle);
         filesFragment.setArguments(bundle);
-        List<Fragment> fragments = new ArrayList<>();
-        fragments.add(stringsFragment);
+        fragments = new ArrayList<>();
+        if (!stringFilesExists()) {
+            fragments.add(stringsFragment);
+        }
         fragments.add(filesFragment);
-        fragments.add(findFragment);
+//        fragments.add(findFragment);
         mFragmentAdapter = new FragmentAdapter(getSupportFragmentManager(), fragments, titles);
         mViewPager.setAdapter(mFragmentAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
@@ -92,41 +96,43 @@ public class AppEditorActivity extends BaseActivity {
 
         //   navigation = findViewById(R.id.bottom_navigation);
         //  navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        Object[] info = AppUtils.getApkInfo(this, apkPath);
+
+
+        String apkIconDrawableBase64 = getIntent().getStringExtra("apkFileIcon");
+        String apkFileName = getIntent().getStringExtra("apkFileName");
+        String apkPackageName = getIntent().getStringExtra("apkFilePackageName");
+
         TextView appName = findViewById(R.id.app_name);
         TextView appPkg = findViewById(R.id.app_pkg);
         ImageView appIcon = findViewById(R.id.app_icon);
-        if (info != null) {
-            appName.setText(info[1].toString());
-            appPkg.setText(info[2].toString());
-            appIcon.setImageDrawable((Drawable) info[0]);
-        } else {
-            appName.setText("UNKNOWN");
-            appPkg.setText("UNKNOWN");
-            appIcon.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.ic_launcher));
-        }
-        //fm.beginTransaction().remove(stringsFragment);
 
-        //fm.beginTransaction().replace(R.id.container, stringsFragment).commit();
-        // loadFragment(stringsFragment, false);
+        appName.setText(apkFileName);
+        appPkg.setText(apkPackageName);
+        appPkg.setVisibility(apkPackageName == null ? View.GONE : View.VISIBLE);
+        appIcon.setImageDrawable(FileUtil.getProjectIconDrawable(apkIconDrawableBase64));
+
         buildApp.setOnClickListener(v -> buildApp());
         patchApp.setOnClickListener(v -> patchApp());
     }
 
-    /*
-        private void loadFragment(Fragment fragment, boolean addToBackStack) {
-            // load fragment
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.container, fragment);
-            if(addToBackStack){
-                transaction.addToBackStack(null);
-            }
-            transaction.commit();
-        }*/
-    public void setSearhArguments(Bundle bundle) {
+    public void setSearchArguments(Bundle bundle) {
         findFragment.setArguments(bundle);
         mFragmentAdapter.notifyDataSetChanged();
         mViewPager.setAdapter(mFragmentAdapter);
+        if (!fragments.contains(findFragment)) {
+            fragments.add(findFragment);
+            mFragmentAdapter = new FragmentAdapter(getSupportFragmentManager(), fragments, titles);
+            mViewPager.setAdapter(mFragmentAdapter);
+            mTabLayout.setupWithViewPager(mViewPager);
+        }
+    }
+
+    private boolean stringFilesExists() {
+        if (!new File(projectPatch, "resources.arsc").exists() | new File(projectPatch, "res").exists()) {
+            DirectoryScanner scanner = new DirectoryScanner();
+            files = scanner.findStringFiles(projectPatch);
+        }
+        return files.isEmpty();
     }
 
     private void patchApp() {
@@ -144,6 +150,7 @@ public class AppEditorActivity extends BaseActivity {
                             ParsePatch.openPatch(new File(file));
                         }
                     }
+
                     @Override
                     public void onCanceled() {
                     }
@@ -153,11 +160,7 @@ public class AppEditorActivity extends BaseActivity {
 
     private void buildApp() {
         Fragment compileFragment = CompileFragment.newInstance(projectPatch);
-        //  compileFragment.setArguments(bundle);
-        fm.beginTransaction().addToBackStack(null).replace(android.R.id.content, compileFragment).commit();
-        //  Runnable build = () -> SignUtil.loadKey(ctx, signTool -> new BuildTask(ctx, signTool).execute(new File(projectPatch)));
-        // build.run();
-        //new BuildTask(ctx).execute(new File(projectPatch));
+        FragmentUtils.replace(compileFragment, this, android.R.id.content);
     }
 
     @Override
@@ -171,15 +174,20 @@ public class AppEditorActivity extends BaseActivity {
             }
         }
 
-        if (backPressedListener != null) {
+        if (mTabLayout.getSelectedTabPosition() == 2) {
+            removeFindFragment();
+        } else if (backPressedListener != null) {
             backPressedListener.onBackPressed();
         } else {
             super.onBackPressed();
         }
     }
 
-    /*@Override
-    public void onBackPressed(){
-        super.onBackPressed();
-    }*/
+    private void removeFindFragment() {
+        fragments.remove(findFragment);
+        mFragmentAdapter = new FragmentAdapter(getSupportFragmentManager(), fragments, titles);
+        mViewPager.setAdapter(mFragmentAdapter);
+        mTabLayout.setupWithViewPager(mViewPager);
+        mViewPager.setCurrentItem(2);
+    }
 }

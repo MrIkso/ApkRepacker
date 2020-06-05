@@ -1,24 +1,22 @@
 package com.mrikso.apkrepacker.activity;
 
-import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.webkit.WebView;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.widget.NestedScrollView;
 
-import com.google.android.material.button.MaterialButton;
 import com.mrikso.apkrepacker.R;
-import com.mrikso.apkrepacker.fragment.LibraresFragment;
+import com.mrikso.apkrepacker.fragment.dialogs.LicensesDialogFragment;
 import com.mrikso.apkrepacker.utils.AppUtils;
 import com.mrikso.apkrepacker.utils.Constant;
 
@@ -29,80 +27,76 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
 
-        Toolbar toolbar = findViewById(R.id.toolbar_about);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
-        getWindow().setNavigationBarColor(getResources().getColor(R.color.light_primary));
-
+//        getWindow().setNavigationBarColor(getResources().getColor(R.color.light_primary));
         initView();
     }
 
     public void initView() {
-        Animation animation = AnimationUtils.loadAnimation(this, R.anim.anim_about_card_show);
-        ScrollView scroll_about = findViewById(R.id.scroll_about);
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.about_card_show);
+        NestedScrollView scroll_about = findViewById(R.id.scroll_about);
         scroll_about.startAnimation(animation);
 
-        LinearLayout ll_card_about_2_email = findViewById(R.id.ll_card_about_2_email);
-        LinearLayout ll_card_about_2_git_hub = findViewById(R.id.ll_card_about_2_git_hub);
-        LinearLayout ll_card_about_2_website = findViewById(R.id.ll_card_about_2_website);
-        LinearLayout ll_card_about_source_licenses = findViewById(R.id.ll_card_about_source_licenses);
-        LinearLayout telegram = findViewById(R.id.ll_card_about_2_telegram);
-        LinearLayout telegram_easy_apk = findViewById(R.id.ll_card_about_2_easy_apk);
-        LinearLayout telegram_alex_stannik = findViewById(R.id.ll_card_about_2_alex_strannik);
-        telegram_alex_stannik.setOnClickListener(this);
-        telegram.setOnClickListener(this);
-        ll_card_about_2_email.setOnClickListener(this);
-        ll_card_about_2_git_hub.setOnClickListener(this);
-        ll_card_about_2_website.setOnClickListener(this);
-        ll_card_about_source_licenses.setOnClickListener(this);
-        telegram_easy_apk.setOnClickListener(this);
+        findViewById(R.id.ll_card_about_2_email).setOnClickListener(this);
+        findViewById(R.id.ll_card_about_2_git_hub).setOnClickListener(this);
+        findViewById(R.id.ll_card_about_2_website).setOnClickListener(this);
+        findViewById(R.id.ll_card_about_source_licenses).setOnClickListener(this);
+        findViewById(R.id.ll_card_about_2_telegram_channel).setOnClickListener(this);
+        findViewById(R.id.ll_card_about_2_mrikso).setOnClickListener(this);
+        findViewById(R.id.ll_card_about_2_phoenix).setOnClickListener(this);
+        findViewById(R.id.ll_card_about_2_easy_apk).setOnClickListener(this);
+        findViewById(R.id.ll_card_about_2_alex_strannik).setOnClickListener(this);
 
         AlphaAnimation alphaAnimation = new AlphaAnimation(0.0f, 1.0f);
-        alphaAnimation.setDuration(300);
-        alphaAnimation.setStartOffset(600);
+        alphaAnimation.setDuration(200);
+        alphaAnimation.setStartOffset(400);
 
+        try {
+            ((ImageView) findViewById(R.id.tv_about_app_icon)).setImageDrawable(getPackageManager().getApplicationIcon(this.getPackageName()));
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        findViewById(R.id.tv_about_app_name).startAnimation(animation);
         TextView tv_about_version = findViewById(R.id.tv_about_version);
         tv_about_version.setText(AppUtils.getVersionName(this));
         tv_about_version.startAnimation(alphaAnimation);
+        scroll_about.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> findViewById(R.id.app_bar).setSelected(scroll_about.canScrollVertically(-1)));
     }
 
     @Override
     public void onClick(View view) {
-
         Intent intent = new Intent();
         switch (view.getId()) {
-
             case R.id.ll_card_about_2_email:
                 intent.setAction(Intent.ACTION_SENDTO);
                 intent.setData(Uri.parse(Constant.EMAIL + "?subject=" + Uri.encode(getString(R.string.about_email_intent))));
-                //intent.putExtra(Intent.EXTRA_EMAIL, Constant.EMAIL);
-              //  intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.about_email_intent));
-                //intent.putExtra(Intent.EXTRA_TEXT, "Hi,");
                 try {
                     startActivity(intent);
                 } catch (Exception e) {
                     Toast.makeText(AboutActivity.this, getString(R.string.about_not_found_email), Toast.LENGTH_SHORT).show();
                 }
                 break;
-
             case R.id.ll_card_about_source_licenses:
-                LibraresFragment libraresFragment = new LibraresFragment();
-                getSupportFragmentManager().beginTransaction().
-                        addToBackStack(null).replace(android.R.id.content, libraresFragment)
-                        .commit();
+                LicensesDialogFragment.show(this);
                 break;
-
             case R.id.ll_card_about_2_git_hub:
                 openSite(Constant.GIT_HUB);
                 break;
             case R.id.ll_card_about_2_website:
                 openSite(Constant.MY_WEBSITE);
                 break;
-            case R.id.ll_card_about_2_telegram:
+            case R.id.ll_card_about_2_telegram_channel:
                 openSite(Constant.TELEGRAM_CHANNEL);
+                break;
+            case R.id.ll_card_about_2_mrikso:
+                openSite(Constant.MRIKSO);
+                break;
+            case R.id.ll_card_about_2_phoenix:
+                openSite(Constant.PHOENIX);
                 break;
             case R.id.ll_card_about_2_easy_apk:
                 openSite(Constant.EASY_APK);
@@ -112,11 +106,11 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener 
                 break;
         }
     }
-    private void openSite(String url){
+
+    private void openSite(String url) {
         Intent intent = new Intent();
         intent.setData(Uri.parse(url));
         intent.setAction(Intent.ACTION_VIEW);
         startActivity(intent);
     }
-
 }

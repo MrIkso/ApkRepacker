@@ -5,9 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:windowBackground"
-    android:clickable="true"
-    tools:context=".fragment.SimpleEditorFragment"
-   >
+    tools:context=".fragment.SimpleEditorFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,38 +13,44 @@
         android:orientation="vertical">
 
         <com.google.android.material.appbar.AppBarLayout
-            android:clickable="true"
-            android:focusable="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay">
+            android:theme="@style/AppTheme.AppBarOverlay"
+            android:backgroundTint="?colorPrimary"
+            android:elevation="0dp"
+            app:elevation="0dp">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:navigationIcon="@drawable/ic_back"
+                app:navigationIcon="@drawable/ic_close"
                 app:popupTheme="?attr/actionBarPopupTheme"
                 app:theme="?attr/actionBarTheme"
                 app:title="@string/action_simple_edit" />
         </com.google.android.material.appbar.AppBarLayout>
 
         <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="@dimen/drawable_padding">
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/drawable_padding">
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/app_icon_edit"
-                    android:layout_width="55dp"
-                    android:layout_height="55dp"
-                    android:layout_centerHorizontal="true" />
+            <com.mrikso.apkrepacker.utils.view.ElevationImageView
+                android:id="@+id/app_icon_edit"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_centerHorizontal="true"
+                app:srcCompat="@mipmap/ic_launcher" />
 
-            </RelativeLayout>
+        </RelativeLayout>
+
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scrollbars="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -54,8 +58,8 @@
                 android:padding="16dp">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:theme="@style/TextInputLayout.OutlinedBox"
                     style="@style/TextInputLayout"
+                    android:theme="@style/TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/app_name_hint">
@@ -68,8 +72,8 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:theme="@style/TextInputLayout.OutlinedBox"
                     style="@style/TextInputLayout"
+                    android:theme="@style/TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -81,28 +85,31 @@
                         android:layout_height="wrap_content"
                         android:inputType="text" />
                 </com.google.android.material.textfield.TextInputLayout>
+
                 <LinearLayout
                     android:id="@+id/option_clone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:visibility="gone">
-                <androidx.appcompat.widget.AppCompatCheckBox
-                    android:id="@+id/in_resources_cb"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginTop="8dp"
-                    android:text="@string/rename_package_in_resource" />
 
-                <androidx.appcompat.widget.AppCompatCheckBox
-                    android:id="@+id/in_dex_cb"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:text="@string/rename_package_in_dex" />
+                    <androidx.appcompat.widget.AppCompatCheckBox
+                        android:id="@+id/in_resources_cb"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/rename_package_in_resource" />
+
+                    <androidx.appcompat.widget.AppCompatCheckBox
+                        android:id="@+id/in_dex_cb"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:text="@string/rename_package_in_dex" />
                 </LinearLayout>
+
                 <com.google.android.material.textfield.TextInputLayout
-                    android:theme="@style/TextInputLayout.OutlinedBox"
                     style="@style/TextInputLayout"
+                    android:theme="@style/TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -116,8 +123,8 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:theme="@style/TextInputLayout.OutlinedBox"
                     style="@style/TextInputLayout"
+                    android:theme="@style/TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -130,30 +137,32 @@
                         android:inputType="text" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <LinearLayout
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/TextInputLayout"
+                    android:theme="@style/TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
                     android:layout_marginTop="10dp"
-                    android:orientation="vertical">
+                    android:hint="@string/install_location">
 
-                    <androidx.appcompat.widget.AppCompatSpinner
-                        android:id="@+id/install_location_spinner"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_install_location"
                         android:layout_width="match_parent"
-                        android:layout_height="54dp"
-                        android:background="@drawable/spinner_background"
-                        android:paddingStart="4dp"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textSize="16sp" />
-                </LinearLayout>
+                        android:layout_height="@dimen/checkbox_dimens"
+                        android:drawableEnd="@drawable/ic_arrow_drop_down"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:clickable="false"
+                        android:text="" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:theme="@style/TextInputLayout.OutlinedBox"
                     style="@style/TextInputLayout"
+                    android:theme="@style/TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-
                     android:hint="@string/minimum_sdk_version_hint">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -165,8 +174,8 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:theme="@style/TextInputLayout.OutlinedBox"
                     style="@style/TextInputLayout"
+                    android:theme="@style/TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -185,6 +194,7 @@
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        style="@style/MD2TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"

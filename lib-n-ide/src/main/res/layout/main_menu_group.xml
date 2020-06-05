@@ -8,7 +8,7 @@
         android:id="@+id/nameTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
         android:padding="5dp"
         android:text="Name"
         android:textColor="?attr/colorAccent"

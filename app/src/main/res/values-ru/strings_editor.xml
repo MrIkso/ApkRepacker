@@ -9,6 +9,9 @@
     <string name="deleteText">Удалить текст</string>
     <string name="replace">Заменить</string>
     <string name="selectAll">Выбрать все</string>
+    <string name="recent_files">Последние файлы</string>
+    <string name="action_editor_themes">Тема редактора</string>
+    <string name="editor_setting">Настройки редактора</string>
     <string name="find">Найти</string>
     <string name="save">Сохранить</string>
     <string name="undo">Отменить</string>
@@ -17,6 +20,7 @@
     <string name="jump_to_start">Перейти к началу</string>
     <string name="jump_to_end">Перейти к концу</string>
     <string name="goto_line">Перейти к строке</string>
+    <string name="document_info">О документе</string>
     <string name="highlight_language">Подсветка синтаксиса</string>
     <string name="encoding">Кодировка</string>
     <string name="read_only">Только чтение</string>
@@ -51,15 +55,12 @@
     <string name="default_value">По умолчанию</string>
     <string name="font_size">Размер шрифта</string>
     <string name="cursor_width">Ширина курсора</string>
-    <string name="touch_to_adjust_text_size">Ручное масштабирование</string>
-    <string name="word_wrap_in_editor">Авто перенос слов</string>
     <string name="show_linenumber">Показывать номер строки</string>
     <string name="show_whitespace">Показывать пробелы</string>
     <string name="auto_indent">Авто отступ</string>
     <string name="highlight_and_theme">Подсветка и тема</string>
     <string name="highlight_the_file_size_limit">Размер файла для подсветки</string>
     <string name="screen_orientation">Ориентация экрана</string>
-    <string name="auto_capitalize">Авто заглавные буквы</string>
     <string name="enable_highlight">Включить подсветку</string>
     <string name="need_to_enable_read_storage_permissions">Необходимо включить разрешения для чтения для хранилища</string>
     <string name="file_not_exists">Файл не существует</string>
@@ -74,7 +75,7 @@
     <string name="duplication_text">Дублировать текст</string>
     <string name="writing">Writing</string>
     <plurals name="x_text_replaced">
-        <item quantity="zero">0 found</item>
+        <item quantity="zero">0 совпадений</item>
         <item quantity="other">Заменено совпадений: %d</item>
     </plurals>
     <string-array name="screen_orientation">
@@ -94,4 +95,32 @@
     <string name="find_log">Найти лог</string>
     <string name="replace_log">Заменить лог</string>
     <string name="use_regex_to_find_tip">Заменить поддержку ключевых слов: \\r, \\n, \\t и группы $0 ~ $9</string>
+
+<!--    <string name="touch_to_adjust_text_size_title">Touch to change text size</string>-->
+<!--    <string name="touch_to_adjust_text_size_summary">Change font size (Zoom) with two finger</string>-->
+    <string name="touch_to_adjust_text_size_title">Ручное масштабирование</string>
+    <string name="touch_to_adjust_text_size_summary">Изменение размера шрифта (масштабирование) с помощью двух пальцев</string>
+    <string name="word_wrap_in_editor_title">Авто перенос слов</string>
+<!--    <string name="word_wrap_in_editor_summary">Use soft wrap in editor</string>-->
+<!--    <string name="auto_complete_title">Автозаполнение</string>-->
+<!--    <string name="auto_complete_summary">Показать небольшое всплывающее окно, чтобы предложить код при вводе текста. Это может быть не поддерживаемый текущий язык</string>-->
+    <string name="auto_pair">Автоматическая пара</string>
+    <string name="pref_desc_auto_pair">Автоматическое добавление закрывающей скобки, например, при вводе { редактор будет автоматически добавлять }</string>
+    <string name="insert_space_for_tab">Вставлять пробел вместо вкладки</string>
+    <string name="tab_size">Размер вкладки</string>
+    <string name="auto_capitalize_title">Авто заглавные буквы</string>
+    <string name="auto_capitalize_summary">Не рекомендуется</string>
+    <!--    <string name="volume_move_title">Volume move</string>-->
+    <!--    <string name="volume_move_summary">Нажмите кнопку увеличения громкости (+), чтобы переместить курсор вправо, нажмите кнопку уменьшения громкости (-), чтобы переместить курсор влево</string>-->
+    <string name="auto_save">Автосохранение</string>
+<!--    <string name="remember_last_opened_files">Remember last opened files</string>-->
+<!--    <string name="remember_last_opened_files_summary">Auto open last opened files when startup</string>-->
+    <string name="remember_last_opened_files">Запомнить последние открытые файлы</string>
+    <string name="remember_last_opened_files_summary">Автоматическое открытие последних открытых файлов при запуске</string>
+    <string name="keep_screen_on">Не выключать экран</string>
+    <string name="file">Файл</string>
+    <string name="edit">Редактор</string>
+
+    <string name="confirm_exit">Подтверждение выхода</string>
+
 </resources>
