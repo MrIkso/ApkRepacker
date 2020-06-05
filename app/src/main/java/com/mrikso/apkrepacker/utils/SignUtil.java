@@ -10,6 +10,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.android.apksig.ApkSigner;
 import com.google.common.collect.ImmutableList;
+import com.jecelyin.common.utils.DLog;
 import com.jecelyin.common.utils.UIUtils;
 import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
@@ -230,6 +231,7 @@ public class SignUtil {
         catch (Exception e)
         {
             logger.log(Level.WARNING, "Signature failed! ", e);
+            e.printStackTrace();
             return false;
         }
     }

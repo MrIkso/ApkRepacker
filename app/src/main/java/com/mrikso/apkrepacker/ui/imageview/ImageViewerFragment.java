@@ -1,5 +1,6 @@
 package com.mrikso.apkrepacker.ui.imageview;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -175,6 +176,7 @@ public class ImageViewerFragment extends Fragment {
         }
     }
 
+    @SuppressLint("StringFormatMatches")
     private void updateTitle() {
 
         int width = -1;
@@ -182,8 +184,8 @@ public class ImageViewerFragment extends Fragment {
 
         if (getCurrentPath().endsWith(".xml")) {
             VectorMasterView vectorMasterView = new VectorMasterView(getContext(), new File(getCurrentPath()));
-            width = vectorMasterView.attrWidth;
-            height = vectorMasterView.attrHeight;
+            width = vectorMasterView.getWidth();
+            height = vectorMasterView.getHeight();
             ViewUtils.fadeToVisibility(fabEdit, true);
         } else {
             Bitmap bitmap = BitmapFactory.decodeFile(getCurrentPath());

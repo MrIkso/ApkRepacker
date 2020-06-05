@@ -1,5 +1,6 @@
 rootProject.name='Apk Repacker'
-include ':app', ':md-dialog-core'
+include ':app'
+include ':md-dialog-core'
 include ':apktool'
 include ':library'
 include ':common'

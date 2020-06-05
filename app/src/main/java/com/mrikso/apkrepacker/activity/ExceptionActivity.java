@@ -6,7 +6,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.widget.NestedScrollView;
@@ -19,7 +18,7 @@ public class ExceptionActivity extends BaseActivity {
     private String mError;
     private AppCompatTextView mErrorView;
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,9 +30,9 @@ public class ExceptionActivity extends BaseActivity {
         mErrorView.setText(mError);
         sendErrorMail(this, mError);
         final NestedScrollView scrollView = findViewById(R.id.exception_scrollview);
-        scrollView.setOnScrollChangeListener((View.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-            findViewById(R.id.app_bar).setSelected(scrollView.canScrollVertically(-1));
-        });
+        scrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener)
+                (v, scrollX, scrollY, oldScrollX, oldScrollY) ->
+                        findViewById(R.id.app_bar).setSelected(scrollView.canScrollVertically(-1)));
     }
 
     private void sendErrorMail(Context _context, String errorContent) {

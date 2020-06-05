@@ -19,3 +19,15 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+-dontobfuscate
+#-dontshrink
+-keep class com.unnamed.b.atv.**{*;}
+#-keep class sun1.security.**
+-keep public class com.mrikso.apkrepacker.ui.projectview.FolderHolder
+-keep public class com.mrikso.apkrepacker.ui.projectview.FolderHolder$TreeItem
+-keepclassmembers class com.mrikso.apkrepacker.ui.projectview.FolderHolder{
+public *;
+private *;
+}
+-keep class sun1.security.x509.**{*;}
+-keep class com.android.apksig.**{*;}

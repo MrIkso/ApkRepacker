@@ -145,6 +145,7 @@ public class FileUtil {
     }
 
     public static String[] parseNameApk(String name, String suff) {
+
         String filename = "out";
         String extension = "apk";
 
@@ -153,7 +154,7 @@ public class FileUtil {
             filename = name.substring(0, i) + suff;
             extension = name.substring(i + 1);
         }
-        return new String[]{filename, extension};
+        return new String[]{name, extension};
     }
 
     @SuppressLint("WrongConstant")

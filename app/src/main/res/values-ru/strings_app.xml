@@ -44,11 +44,11 @@
     <string name="translate_string">Перевести строку</string>
     <string name="text_after_translation">Текст после перевода</string>
     <string name="pref_general_decompiler">Декомпилятор</string>
-    <string name="pref_decode_folder">Папка декодирования</string>
+    <string name="pref_decode_folder">Папка результата декомпиляции</string>
     <string name="pref_use_aapt2">Использовать AAPT2</string>
-    <string name="pref_decode_mode">Режим декодирования</string>
+    <string name="pref_decode_mode">Режим декомпиляции</string>
     <string name="pref_general_recompile">Рекомпиляция Apk</string>
-    <string name="pref_sign_output_apk">Подписанный выходной Apk</string>
+    <string name="pref_sign_output_apk">Подписывать выходной Apk</string>
     <string name="pref_custom_signature_file">Пользовательский файл подписи</string>
     <string name="pref_custom_signature_file_summary">Использовать пользовательский файл подписи</string>
     <string name="pref_debug_mode">Режим отладки apk</string>
@@ -243,7 +243,7 @@
     <string name="selected_editor_theme">Выбрана тема: %s. Перезапустите приложение, чтобы применить тему.</string>
     <string name="toast_apk_succes_edited" type="id">Apk успешно скомпилирован!</string>
     <string name="toast_apk_falied_edited" type="id">Не удалось скомпилировать apk!</string>
-    <string name="show_decompile_option_dialog">Показать диалог выбора режима декодирования</string>
+    <string name="show_decompile_option_dialog">Показать диалог выбора режима декомпиляции</string>
 
 
     <string name="string_name_copied">Имя строки скопировано в буфер обмена: %s</string>
@@ -251,8 +251,8 @@
     <!--auto translator-->
     <string name="stop">Стоп</string>
     <string name="save_and_close">Сохранить и выйти</string>
-    <string name="translating">Перевед &#8230;</string>
-    <string name="translated">Переведенный</string>
+    <string name="translating">Перевод &#8230;</string>
+    <string name="translated">Переведено</string>
     <string name="translated_format">%d строк переведено</string>
     <string name="failed_format">%d строк с ошибкой</string>
     <string name="untranslated_format">%d строк не переведено</string>

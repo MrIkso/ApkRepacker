@@ -3,9 +3,7 @@ package com.mrikso.apkrepacker.task;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import androidx.fragment.app.Fragment;
-
-import com.mrikso.apkrepacker.R;
+import com.jecelyin.common.utils.DLog;
 import com.mrikso.apkrepacker.fragment.CompileFragment;
 import com.mrikso.apkrepacker.ui.prererence.Preference;
 import com.mrikso.apkrepacker.utils.FileUtil;
@@ -74,6 +72,7 @@ public class BuildTask extends AsyncTask<File, CharSequence, Boolean> implements
     public void warning(int id, Object... args)
     {
         publishProgress(String.format("W: %s", getText(id, args)));
+       // DLog.w(getText(id, args));
     }
 
     @Override
@@ -92,6 +91,7 @@ public class BuildTask extends AsyncTask<File, CharSequence, Boolean> implements
     public void error(int id, Object... args)
     {
         publishProgress(String.format("E: %s", getText(id, args)));
+        DLog.e(getText(id, args));
     }
 
     @Override
@@ -163,6 +163,7 @@ public class BuildTask extends AsyncTask<File, CharSequence, Boolean> implements
             return true;
         } catch (Exception e) {
             log(Level.WARNING, e.getMessage(), e);
+            e.printStackTrace();
             return false;
         }
     }
