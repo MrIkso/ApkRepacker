@@ -67,7 +67,7 @@ public class Preference implements SharedPreferences.OnSharedPreferenceChangeLis
         map.put(KEY_USE_AAPT2, false);
         map.put(KEY_DECODING_FOLDER, Environment.getExternalStorageDirectory().getPath() + "/ApkRepacker");
         map.put(KEY_DECODING_MODE, 0);
-        map.put(KEY_SIGN_OUT_APK, false);
+        map.put(KEY_SIGN_OUT_APK, true);
         map.put(KEY_USE_CUSTOM_SIGN, false);
         map.put(KEY_DEBUG_MODE, false);
         map.put(KEY_VERBOSE_MODE, false);
@@ -384,10 +384,10 @@ public class Preference implements SharedPreferences.OnSharedPreferenceChangeLis
     private String initExt(){
         VALUE_EXT.put("smali", true);
         VALUE_EXT.put("xml", true);
+        VALUE_EXT.put("jpg", true);
         VALUE_EXT.put("png", true);
         VALUE_EXT.put("txt", true);
         JSONObject jsonObject = new JSONObject(VALUE_EXT);
-        String jsonString = jsonObject.toString();
-        return jsonString;
+        return jsonObject.toString();
     }
 }

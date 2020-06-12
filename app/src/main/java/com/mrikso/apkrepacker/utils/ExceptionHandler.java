@@ -1,6 +1,5 @@
 package com.mrikso.apkrepacker.utils;
 
-import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
@@ -10,8 +9,6 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 import android.util.Log;
-
-import androidx.annotation.NonNull;
 
 import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.activity.ExceptionActivity;
@@ -29,6 +26,7 @@ public class ExceptionHandler implements Thread.UncaughtExceptionHandler {
     private static final String TAG = ExceptionHandler.class.getSimpleName();
     private static final boolean DEBUGABLE = false;
     private String versionName;
+    private String versionBuild;
     private String packageName;
     private String phoneModel;
     private String androidVersion;
@@ -96,6 +94,7 @@ public class ExceptionHandler implements Thread.UncaughtExceptionHandler {
             // Version
             pi = pm.getPackageInfo(context.getPackageName(), 0);
             versionName = pi.versionName;
+            versionBuild = String.valueOf(AppUtils.apiIsAtLeast(Build.VERSION_CODES.P) ? pi.getLongVersionCode() : pi.versionCode);
             //buildNumber = currentVersionNumber(context);
             // Package name
             packageName = pi.packageName;
@@ -109,7 +108,7 @@ public class ExceptionHandler implements Thread.UncaughtExceptionHandler {
             brand = Build.BRAND;
             device = Build.DEVICE;
             display = Build.DISPLAY;
-            fingerPrint = Build.FINGERPRINT;
+            //fingerPrint = Build.FINGERPRINT;
             host = Build.HOST;
             id = Build.ID;
             model = Build.MODEL;
@@ -128,7 +127,7 @@ public class ExceptionHandler implements Thread.UncaughtExceptionHandler {
     private String createInformationString() {
         recordInformations(application);
         StringBuilder infoStringBuffer = new StringBuilder();
-        infoStringBuffer.append("\nVERSION		: ").append(versionName);
+        infoStringBuffer.append("\nVERSION		: ").append(String.format("%1s(%2s)", versionName, versionBuild));
         infoStringBuffer.append("\nPACKAGE      : ").append(packageName);
         //  infoStringBuffer.append("\nFILE-PATH    : ").append(filePath);
         infoStringBuffer.append("\nPHONE-MODEL  : ").append(phoneModel);
@@ -137,7 +136,7 @@ public class ExceptionHandler implements Thread.UncaughtExceptionHandler {
         infoStringBuffer.append("\nBRAND        : ").append(brand);
         infoStringBuffer.append("\nDEVICE       : ").append(device);
         infoStringBuffer.append("\nTYPE         : ").append(display);
-        infoStringBuffer.append("\nFINGER-PRINT : ").append(fingerPrint);
+        //infoStringBuffer.append("\nFINGER-PRINT : ").append(fingerPrint);
         infoStringBuffer.append("\nHOST         : ").append(host);
         infoStringBuffer.append("\nID           : ").append(id);
         infoStringBuffer.append("\nMODEL        : ").append(model);

@@ -31,3 +31,5 @@ private *;
 }
 -keep class sun1.security.x509.**{*;}
 -keep class com.android.apksig.**{*;}
+-keep class com.google.common.**{*;}
+-keep class org.jf.dexlib2.**{*;}

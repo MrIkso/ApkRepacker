@@ -106,8 +106,8 @@
 <!--    <string name="auto_complete_summary">Показать небольшое всплывающее окно, чтобы предложить код при вводе текста. Это может быть не поддерживаемый текущий язык</string>-->
     <string name="auto_pair">Автоматическая пара</string>
     <string name="pref_desc_auto_pair">Автоматическое добавление закрывающей скобки, например, при вводе { редактор будет автоматически добавлять }</string>
-    <string name="insert_space_for_tab">Вставлять пробел вместо вкладки</string>
-    <string name="tab_size">Размер вкладки</string>
+    <string name="insert_space_for_tab">Вставлять пробел вместо TAB</string>
+    <string name="tab_size">Размер TAB</string>
     <string name="auto_capitalize_title">Авто заглавные буквы</string>
     <string name="auto_capitalize_summary">Не рекомендуется</string>
     <!--    <string name="volume_move_title">Volume move</string>-->
@@ -122,5 +122,6 @@
     <string name="edit">Редактор</string>
 
     <string name="confirm_exit">Подтверждение выхода</string>
-
+    <string name="attention_title">Внимание!</string>
+    <string name="jadx_doesnt_support_on_this_prone">К сожалению, Jadx не поддерживатеся на вашем устройстве. Минимальная версия для поддежки это Android 8(Oreo)</string>
 </resources>

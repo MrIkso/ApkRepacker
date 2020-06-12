@@ -60,6 +60,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.duy.ide.database.ITabDatabase;
 import com.duy.ide.database.SQLHelper;
 import com.duy.ide.editor.EditorDelegate;
@@ -95,6 +96,7 @@ import com.mrikso.apkrepacker.activity.BaseActivity;
 import com.mrikso.apkrepacker.activity.ThemeEditorActivity;
 import com.mrikso.apkrepacker.task.Smali2JavaTask;
 import com.mrikso.apkrepacker.ui.autocompleteeidttext.CustomAdapter;
+import com.mrikso.apkrepacker.utils.AppUtils;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 
 import org.apache.commons.io.IOUtils;
@@ -153,11 +155,13 @@ public abstract class IdeActivity extends BaseActivity implements MenuItem.OnMen
     private boolean mRegex, mReplaceMode;
     private CustomAdapter searchAdapter;
     private CustomAdapter replaceAdapter;
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getRootLayoutId());
+        mContext = this;
         initToolbar();
         MenuManager.init(this);
 
@@ -413,6 +417,7 @@ public abstract class IdeActivity extends BaseActivity implements MenuItem.OnMen
             //saveAll(0);
 
         } else if (id == R.id.action_smali_java) {
+            if(AppUtils.apiIsAtLeast(Build.VERSION_CODES.O)){
             String smali = getCurrentEditorDelegate().getPath();
             if (smali != null) {
                 if (smali.toLowerCase().endsWith(".smali")) {
@@ -423,6 +428,10 @@ public abstract class IdeActivity extends BaseActivity implements MenuItem.OnMen
                 } else {
                     UIUtils.toast(this, "Works only smali files!");
                 }
+            }
+            }
+            else {
+                UIUtils.alert(mContext,getString(R.string.attention_title), getString(R.string.jadx_doesnt_support_on_this_prone));
             }
         } else if (id == R.id.m_fullscreen) {
             boolean fullscreenMode = mPreferences.isFullScreenMode();

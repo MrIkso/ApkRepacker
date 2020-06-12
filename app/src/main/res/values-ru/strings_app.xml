@@ -243,6 +243,7 @@
     <string name="selected_editor_theme">Выбрана тема: %s. Перезапустите приложение, чтобы применить тему.</string>
     <string name="toast_apk_succes_edited" type="id">Apk успешно скомпилирован!</string>
     <string name="toast_apk_falied_edited" type="id">Не удалось скомпилировать apk!</string>
+    <string name="toast_error_decompile_smali_to_java">Ошибка при декомпиляции smali в java!</string>
     <string name="show_decompile_option_dialog">Показать диалог выбора режима декомпиляции</string>
 
 

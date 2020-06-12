@@ -8,7 +8,7 @@ android {
         applicationId "com.mrikso.apkrepacker"
         minSdkVersion project.minSdkVersion
         targetSdkVersion project.targetSdkVersion
-        versionCode 31
+        versionCode 33
         versionName "1.0.3"
         archivesBaseName = "ApkRepacker-v${versionName}(${versionCode})"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -43,6 +43,7 @@ dependencies {
     implementation project(':treeview')
     implementation project(":photoview")
     implementation project(":vectormaster")
+   // implementation project(":jadx-core")
     implementation project(path: ':md-dialog-core')
 //    implementation 'com.afollestad.material-dialogs:commons:0.9.6.0'
 //    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
@@ -54,7 +55,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'com.google.android.material:material:1.2.0-beta01'
-    implementation 'com.google.guava:guava:29.0-jre'
+    implementation 'com.google.guava:guava:29.0-android'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'org.smali:baksmali:2.4.0'
     implementation 'org.smali:smali:2.4.0'

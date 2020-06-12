@@ -128,7 +128,7 @@ public class DecompileFragment extends Fragment {
         listView.setDivider(null);
         listView.setDividerHeight(0);
         Preference preference = Preference.getInstance(mContext);
-        String decodeAppName = AppUtils.getApkName(mContext, selectedApk.getAbsolutePath());
+        String decodeAppName = AppUtils.getApkName(mContext, selectedApk.getAbsolutePath()).replace("/", "_");
         if (!apkMode) {
             if (mMode != -1) {
                 switch (mMode) {

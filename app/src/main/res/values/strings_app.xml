@@ -283,6 +283,7 @@
     <string name="selected_editor_theme">Selected %s. Restart app to apply theme.</string>
     <string name="toast_apk_succes_edited">Apk successful builded!</string>
     <string name="toast_apk_falied_edited">Apk falied edited!</string>
+    <string name="toast_error_decompile_smali_to_java">Error on decompile smali to java!</string>
     <string name="show_decompile_option_dialog">Show dialog for choosing decompilation mode</string>
     <string name="string_name_copied">String name copied: %s</string>
     <string name="color_name_copied">Color name copied: %s</string>

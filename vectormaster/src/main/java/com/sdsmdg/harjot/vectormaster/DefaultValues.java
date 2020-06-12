@@ -36,10 +36,10 @@ public class DefaultValues {
     public final static float PATH_TRIM_PATH_END = 1.0f;
     public final static float PATH_TRIM_PATH_OFFSET = 0.0f;
 
-    public final static float VECTOR_VIEWPORT_WIDTH = 0.0f;
-    public final static float VECTOR_VIEWPORT_HEIGHT = 0.0f;
-    public final static float VECTOR_WIDTH = 0.0f;
-    public final static float VECTOR_HEIGHT = 0.0f;
+    public final static float VECTOR_VIEWPORT_WIDTH = 24.0f;
+    public final static float VECTOR_VIEWPORT_HEIGHT = 24.0f;
+    public final static float VECTOR_WIDTH = 24.0f;
+    public final static float VECTOR_HEIGHT = 24.0f;
     public final static float VECTOR_ALPHA = 1.0f;
 
     public final static float GROUP_ROTATION = 0.0f;

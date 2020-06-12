@@ -1,6 +1,5 @@
 package com.mrikso.apkrepacker.ui.filelist;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,8 +58,10 @@ public class PathButtonAdapter extends RecyclerView.Adapter<PathButtonAdapter.Vi
 
         for (; path != null; ) {
             try {
-                String pathName = path.toString();
-                if (pathName.endsWith(pathName.substring(pathName.indexOf("projects/"))))
+                String pathName = path.getAbsolutePath();
+                int index = pathName.indexOf("projects/");
+                if(index != -1)
+                if (pathName.endsWith(pathName.substring(index)))
                     pathList.add(path);
             } catch (Exception e) {
                 e.printStackTrace();

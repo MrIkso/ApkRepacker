@@ -63,7 +63,6 @@
         android:layout_above="@id/footer"
         android:layout_below="@id/header"
         android:layout_gravity="center_horizontal"
-        android:fastScrollEnabled="true"
         tools:listitem="@layout/dialog_file_list_item" />
 
     <LinearLayout

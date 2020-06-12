@@ -113,24 +113,25 @@ public class AppUtils {
             return null;
     }
 
-    public static Object[] getApkInfo(Context c, String n) {
+    public static Object[] getApkInfo(Context c, String apk) {
         Object[] res = new Object[8];
         try {
+            Manifest mf = new Manifest(apk);
             PackageManager pm = c.getPackageManager();
-            PackageInfo packageInfo = pm.getPackageArchiveInfo(n, PackageManager.GET_ACTIVITIES);
+            PackageInfo packageInfo = pm.getPackageArchiveInfo(apk, PackageManager.GET_ACTIVITIES);
             if (packageInfo != null) {
                 ApplicationInfo appInfo = packageInfo.applicationInfo;
-                appInfo.sourceDir = n;
-                appInfo.publicSourceDir = n;
+                appInfo.sourceDir = apk;
+                appInfo.publicSourceDir = apk;
                 res[0] = appInfo.loadIcon(pm);
                 res[1] = appInfo.loadLabel(pm);
                 res[2] = packageInfo.packageName;
                 res[3] = packageInfo.versionName;
                 res[4] = packageInfo.versionCode;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                if (apiIsAtLeast(Build.VERSION_CODES.N)) {
                     res[5] = appInfo.minSdkVersion;
                 } else {
-                    res[5] = null;//мне впадло писать метод
+                    res[5] = mf.getMinSdkVersion();//мне впадло писать метод
                 }
                 res[6] = appInfo.targetSdkVersion;
                 res[7] = packageInfo.installLocation;
@@ -139,6 +140,7 @@ public class AppUtils {
                 return null;
             }
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }

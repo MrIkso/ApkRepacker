@@ -14,7 +14,6 @@ import org.antlr.runtime.Token;
 import org.antlr.runtime.TokenSource;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.CommonTreeNodeStream;
-import org.jf.dexlib2.Opcodes;
 import org.jf.dexlib2.writer.builder.DexBuilder;
 import org.jf.smali.LexerErrorInterface;
 import org.jf.smali.SmaliOptions;
@@ -108,7 +107,7 @@ public class Smali2JavaTask extends AsyncTask<File, CharSequence, Boolean> {
         editorActivity.openJavaText(javaCode, FileUtil.getNameVithoutExt(smali));
         //dialog.hideProgress();
         if (!result)
-            UIUtils.toast(App.getContext(), R.string.toast_error_import_framework_failed);
+            UIUtils.toast(App.getContext(), R.string.toast_error_decompile_smali_to_java);
 
     }
 
