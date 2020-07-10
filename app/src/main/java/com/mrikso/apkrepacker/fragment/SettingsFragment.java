@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
@@ -12,7 +13,11 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
 
+import com.jecelyin.common.utils.UIUtils;
 import com.mrikso.apkrepacker.R;
+import com.mrikso.apkrepacker.fragment.dialogs.DarkLightThemeSelectionDialogFragment;
+import com.mrikso.apkrepacker.fragment.dialogs.ThemeSelectionDialogFragment;
+import com.mrikso.apkrepacker.fragment.dialogs.base.BaseBottomSheetDialogFragment;
 import com.mrikso.apkrepacker.ui.keydialog.KeystorePreference;
 import com.mrikso.apkrepacker.ui.keydialog.KeystorePreferenceFragmentDialog;
 import com.mrikso.apkrepacker.ui.prererence.PreferenceHelper;
@@ -20,12 +25,13 @@ import com.mrikso.apkrepacker.ui.prererence.PreferenceKeys;
 import com.mrikso.apkrepacker.utils.AppUtils;
 import com.mrikso.apkrepacker.utils.Theme;
 
-public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class SettingsFragment extends PreferenceFragmentCompat implements BaseBottomSheetDialogFragment.OnDismissListener, DarkLightThemeSelectionDialogFragment.OnDarkLightThemesChosenListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private PreferenceHelper mHelper;
-    private ListPreference mThemePref;
+    private Preference mThemePref;
 
     private Preference mHomeDirPref;
+    private Preference mAutoThemePicker;
     private ListPreference mDecodeModePref;
     private SwitchPreference mAutoThemeSwitch;
     private SwitchPreference mUseCustomKeySwitch;
@@ -45,17 +51,25 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         mHelper = PreferenceHelper.getInstance(requireContext());
         mThemePref = findPreference(PreferenceKeys.KEY_THEME);
         updateThemeSummary();
+        mThemePref.setOnPreferenceClickListener(p -> {
+            ThemeSelectionDialogFragment.newInstance(requireContext()).show(getChildFragmentManager(), "theme");
+            return true;
+        });
         if (Theme.getInstance(requireContext()).getThemeMode() != Theme.Mode.CONCRETE) {
             mThemePref.setVisible(false);
         }
+
         mAutoThemeSwitch = findPreference(PreferenceKeys.KEY_AUTO_THEME);
+        mAutoThemePicker = findPreference(PreferenceKeys.KEY_AUTO_THEME_PICKER);
+        updateAutoThemePickerSummary();
+
         mAutoThemeSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
             boolean value = (boolean) newValue;
             if (value) {
                 if (!AppUtils.apiIsAtLeast(Build.VERSION_CODES.Q))
-                    Theme.getInstance(requireContext()).setLightTheme(0);
-                    Theme.getInstance(requireContext()).setDarkTheme(1);
-                   // SimpleAlertDialogFragment.newInstance(requireContext(), R.string.settings_main_auto_theme, R.string.settings_main_auto_theme_pre_q_warning).show(getChildFragmentManager(), null);
+                    //Theme.getInstance(requireContext()).setLightTheme(0);
+                   // Theme.getInstance(requireContext()).setDarkTheme(1);
+                   UIUtils.toast(requireContext(),R.string.settings_main_auto_theme_pre_q_warning);
 
                 Theme.getInstance(requireContext()).setMode(Theme.Mode.AUTO_LIGHT_DARK);
             } else {
@@ -66,6 +80,15 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             requireActivity().recreate();
             return true;
         });
+
+        mAutoThemePicker.setOnPreferenceClickListener(pref -> {
+            DarkLightThemeSelectionDialogFragment.newInstance().show(getChildFragmentManager(), null);
+            return true;
+        });
+
+        if (Theme.getInstance(requireContext()).getThemeMode() != Theme.Mode.AUTO_LIGHT_DARK) {
+            mAutoThemePicker.setVisible(false);
+        }
 
         mDecodeModePref = findPreference(PreferenceKeys.KEY_DECODING_MODE);
         updateDecodeModePrefSummary();
@@ -120,8 +143,13 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
     }
 
-    private void updateThemeSummary(){
+    private void updateThemeSummary() {
         mThemePref.setSummary(Theme.getInstance(requireContext()).getConcreteTheme().getName(requireContext()));
+    }
+
+    private void updateAutoThemePickerSummary() {
+        Theme theme = Theme.getInstance(requireContext());
+        mAutoThemePicker.setSummary(getString(R.string.settings_main_auto_theme_picker_summary, theme.getLightTheme().getName(requireContext()), theme.getDarkTheme().getName(requireContext())));
     }
 
     private void updateHomeDirPrefSummary() {
@@ -135,10 +163,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         switch (key) {
-            case PreferenceKeys.KEY_THEME:
+           /* case PreferenceKeys.KEY_THEME:
                 Theme.getInstance(requireContext()).setConcreteTheme(mThemePref.findIndexOfValue(mThemePref.getValue()));
                 updateThemeSummary();
-                break;
+                break;*/
             case PreferenceKeys.KEY_DECODING_MODE:
                 updateDecodeModePrefSummary();
                 break;
@@ -159,4 +187,21 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             super.onDisplayPreferenceDialog(preference);
         }
     }
+
+    @Override
+    public void onDialogDismissed(@NonNull String dialogTag) {
+        switch (dialogTag) {
+            case "theme":
+                updateThemeSummary();
+                break;
+        }
+    }
+
+    @Override
+    public void onThemesChosen(@Nullable String tag, Theme.ThemeDescriptor lightTheme, Theme.ThemeDescriptor darkTheme) {
+        Theme theme = Theme.getInstance(requireContext());
+        theme.setLightTheme(lightTheme);
+        theme.setDarkTheme(darkTheme);
+    }
+
 }

@@ -667,4 +667,10 @@ public class ViewUtils {
     public static void setVisibleOrInvisible(@NonNull View view, boolean visible) {
         view.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
     }
+
+    public static int getThemeColor(Context c, @AttrRes int attribute) {
+        TypedValue typedValue = new TypedValue();
+        c.getTheme().resolveAttribute(attribute, typedValue, true);
+        return typedValue.data;
+    }
 }

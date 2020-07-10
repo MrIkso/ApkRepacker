@@ -111,7 +111,9 @@
         <item name="titleTextColor">?attr/simpleThemeTextPrimaryColor</item>
         <item name="android:textColorPrimary">?attr/simpleThemeTextPrimaryColor</item>
         <item name="android:textColorSecondary">?attr/simpleThemeTextSecondaryColor</item>
-        <item name="alertDialogTheme">@style/AlertDialog.AppTheme.Light</item>
+        <item name="alertDialogTheme">@style/AlertDialog.AppTheme.Simple.Light</item>
+        <item name="cardBackground">?attr/colorPrimary</item>
+        <item name="md_background_color">?attr/colorPrimary</item>
     </style>
 
     <style name="AppTheme.Simple.Dark" parent="AppTheme.Dark">
@@ -122,7 +124,9 @@
         <item name="titleTextColor">?attr/simpleThemeTextPrimaryColor</item>
         <item name="android:textColorPrimary">?attr/simpleThemeTextPrimaryColor</item>
         <item name="android:textColorSecondary">?attr/simpleThemeTextSecondaryColor</item>
-        <item name="alertDialogTheme">@style/AlertDialog.AppTheme.Dark</item>
+        <item name="alertDialogTheme">@style/AlertDialog.AppTheme.Simple.Dark</item>
+        <item name="cardBackground">?attr/colorPrimary</item>
+        <item name="md_background_color">?attr/colorPrimary</item>
     </style>
 
     <style name="AppTheme.Rena" parent="AppTheme.Simple.Dark">
@@ -209,10 +213,10 @@
         <item name="android:windowBackground">#00000000</item>
         <item name="android:statusBarColor">#00000000</item>
         <item name="android:windowFullscreen">false</item>
-        <item name="android:colorBackground">@color/dark_background</item>
+        <item name="android:colorBackground">?attr/colorPrimary</item>
         <item name="android:windowIsFloating">false</item>
         <item name="android:windowSoftInputMode">adjustResize</item>
-        <item name="android:navigationBarColor">@color/dark_primary</item>
+        <item name="android:navigationBarColor">?attr/colorPrimary</item>
         <item name="bottomSheetStyle">@style/BottomSheetDialogStyle</item>
     </style>
 
@@ -224,11 +228,9 @@
 
     <!--CustomDialog-->
     <style name="AlertDialog.AppTheme.Light" parent="@style/Theme.MaterialComponents.Light.Dialog.Alert">
-        <item name="colorPrimary">@color/light_accent</item>
-        <item name="colorAccent">@color/light_accent</item>
-        <item name="android:textColorSecondary">@color/light_secondary_text</item>
         <item name="dialogCornerRadius">@dimen/dialog_round</item>
         <item name="buttonBarButtonStyle">@style/MD2TextButton</item>
+        <item name="android:backgroundTint">?attr/colorPrimary</item>
         <item name="android:buttonBarButtonStyle">@style/MD2TextButton</item>
         <item name="android:windowAnimationStyle">@style/WindowAnimationDialog</item>
         <item name="android:windowMinWidthMajor">@android:dimen/dialog_min_width_major</item>
@@ -236,10 +238,11 @@
     </style>
 
     <style name="AlertDialog.AppTheme.Dark" parent="@style/Theme.MaterialComponents.Dialog.Alert">
-        <item name="android:windowBackground">@drawable/action_popup_bg</item>
-        <item name="backgroundTint">@color/dark_primary</item>
         <item name="colorPrimary">@color/dark_accent</item>
         <item name="colorAccent">@color/dark_accent</item>
+        <item name="android:windowBackground">@drawable/action_popup_bg</item>
+        <item name="backgroundTint">@color/dark_primary</item>
+        <item name="android:backgroundTint">@color/dark_primary</item>
         <item name="dialogCornerRadius">@dimen/dialog_round</item>
         <item name="buttonBarButtonStyle">@style/MD2TextButton</item>
         <item name="android:buttonBarButtonStyle">@style/MD2TextButton</item>
@@ -248,31 +251,21 @@
         <item name="android:windowMinWidthMinor">@android:dimen/dialog_min_width_minor</item>
     </style>
 
+    <style name="AlertDialog.AppTheme.Simple.Light" parent="AlertDialog.AppTheme.Light">
+        <item name="android:textColorPrimary">?attr/simpleThemeTextSecondaryColor</item>
+        <item name="android:textColorSecondary">?attr/simpleThemeTextPrimaryColor</item>
+    </style>
+
+    <style name="AlertDialog.AppTheme.Simple.Dark" parent="AlertDialog.AppTheme.Dark">
+        <item name="android:textColorPrimary">?attr/simpleThemeTextSecondaryColor</item>
+        <item name="android:textColorSecondary">?attr/simpleThemeTextPrimaryColor</item>
+    </style>
+
     <style name="WindowAnimationDialog" parent="@android:style/Animation.Dialog">
         <item name="android:windowEnterAnimation">@anim/fade_in_dialog</item>
         <item name="android:windowExitAnimation">@anim/fade_out_dialog</item>
     </style>
 
-    <style name="DialogFullscreen" parent="Theme.MaterialComponents.Light.DialogWhenLarge">
-        <item name="colorPrimary">@color/light_primary</item>
-        <item name="colorPrimaryDark">@color/light_primary</item>
-        <item name="colorAccent">@color/light_accent</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
-        <item name="android:statusBarColor">@color/gray_very_light</item>
-        <item name="android:navigationBarColor">@color/gray_very_light</item>
-    </style>
-
-    <style name="DialogFullscreen.Dark" parent="Theme.MaterialComponents.DialogWhenLarge">
-        <item name="colorPrimary">@color/dark_primary</item>
-        <item name="colorPrimaryDark">@color/dark_primary</item>
-        <item name="colorAccent">@color/dark_accent</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:statusBarColor">@color/dark_primary</item>
-        <item name="android:colorBackground">@color/dark_primary</item>
-        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
-        <item name="android:navigationBarColor">@color/dark_primary</item>
-    </style>
 
     <!--MaterialCardView-->
     <style name="Material.CardView" parent="@style/Widget.MaterialComponents.CardView">
@@ -311,16 +304,16 @@
     </style>
 
     <style name="ColorPickerDialog.Dark" parent="Theme.MaterialComponents.Dialog">
-        <item name="colorPrimary">@color/dark_accent</item>
-        <item name="colorAccent">@color/dark_accent</item>
+        <item name="colorPrimary">?attr/colorPrimary</item>
+        <item name="colorAccent">?attr/colorAccent</item>
         <item name="dialogCornerRadius">@dimen/dialog_round</item>
         <item name="buttonBarButtonStyle">@style/MD2TextButton</item>
         <item name="android:buttonBarButtonStyle">@style/MD2TextButton</item>
     </style>
 
     <style name="ColorPickerDialog" parent="Theme.MaterialComponents.Light.Dialog">
-        <item name="colorPrimary">@color/light_accent</item>
-        <item name="colorAccent">@color/light_accent</item>
+        <item name="colorPrimary">?attr/colorPrimary</item>
+        <item name="colorAccent">?attr/colorAccent</item>
         <item name="dialogCornerRadius">@dimen/dialog_round</item>
         <item name="buttonBarButtonStyle">@style/MD2TextButton</item>
         <item name="android:buttonBarButtonStyle">@style/MD2TextButton</item>
@@ -468,6 +461,17 @@
         <item name="android:paddingLeft">12dp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="ThemeView.Normal.Interactive" parent="Widget.MaterialComponents.CardView">
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:minHeight">88dp</item>
+        <item name="cardCornerRadius">12dp</item>
+        <item name="cardElevation">0dp</item>
+        <item name="cardUseCompatPadding">true</item>
+        <item name="contentPadding">8dp</item>
+        <item name="strokeWidth">2dp</item>
     </style>
 
 </resources>

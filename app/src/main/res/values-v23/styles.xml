@@ -114,7 +114,7 @@
         <item name="titleTextColor">?attr/simpleThemeTextPrimaryColor</item>
         <item name="android:textColorPrimary">?attr/simpleThemeTextPrimaryColor</item>
         <item name="android:textColorSecondary">?attr/simpleThemeTextSecondaryColor</item>
-        <item name="alertDialogTheme">@style/AlertDialog.AppTheme.Dark</item>
+        <item name="alertDialogTheme">@style/AlertDialog.AppTheme.Simple.Dark</item>
     </style>
 
     <style name="AppTheme.Simple.Light" parent="AppTheme.Light">
@@ -126,7 +126,7 @@
         <item name="titleTextColor">?attr/simpleThemeTextPrimaryColor</item>
         <item name="android:textColorPrimary">?attr/simpleThemeTextPrimaryColor</item>
         <item name="android:textColorSecondary">?attr/simpleThemeTextSecondaryColor</item>
-        <item name="alertDialogTheme">@style/AlertDialog.AppTheme.Light</item>
+        <item name="alertDialogTheme">@style/AlertDialog.AppTheme.Simple.Light</item>
     </style>
 
     <style name="AppTheme.Rena" parent="AppTheme.Simple.Dark">
@@ -143,16 +143,6 @@
         <item name="simpleThemeAccentColor">@color/colorAccentRenaLight</item>
         <item name="simpleThemeTextPrimaryColor">@color/colorTextPrimaryRenaLight</item>
         <item name="simpleThemeTextSecondaryColor">@color/colorTextSecondaryRenaLight</item>
-    </style>
-
-    <style name="DialogFullscreen" parent="Theme.MaterialComponents.Light.DialogWhenLarge">
-        <item name="colorPrimary">@color/light_primary</item>
-        <item name="colorPrimaryDark">@color/light_primary</item>
-        <item name="colorAccent">@color/light_accent</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
-        <item name="android:statusBarColor">@color/light_primary</item>
-        <item name="android:navigationBarColor">@color/light_primary</item>
     </style>
 
 </resources>

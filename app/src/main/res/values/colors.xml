@@ -20,7 +20,7 @@
     <color name="dark_primary_text">#e1e1e1e1</color>
     <color name="dark_secondary_text">#a5a5a5</color>
 <!--    <color name="dark_divider">#BDBDBD</color>-->
-    <color name="dark_background">#282828</color>
+    <color name="dark_background">@color/dark_primary_dark</color>
 
     <color name="colorPureWhite">#ffffff</color>
 

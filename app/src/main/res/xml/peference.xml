@@ -3,16 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <PreferenceCategory
         android:title="@string/pref_appearance">
-        <ListPreference
-            android:defaultValue="0"
-            android:entries="@array/theme_names"
-            android:entryValues="@array/theme_values"
+        <Preference
             android:key="pref_ui_theme"
             android:title="@string/pref_app_theme" />
         <SwitchPreference
             android:defaultValue="false"
             android:key="pref_auto_theme_mode"
             android:title="@string/pref_use_auto_theme" />
+        <Preference
+            android:key="pref_auto_theme_picker"
+            android:title="@string/settings_main_auto_theme_picker"
+            android:summary="@string/settings_main_auto_theme_picker_summary" />
         <SwitchPreference
             android:defaultValue="true"
             android:key="pref_icon"

@@ -306,4 +306,21 @@
     <string name="pref_confirm_build">Build Confirmation</string>
     <string name="confirm_build_title">Build this app?</string>
     <string name="pref_use_auto_theme">Auto Theme</string>
+    <string name="dialog_select_theme">Select Theme</string>
+
+    <string name="theme_rena">Rena</string>
+    <string name="theme_rena_light">Rena Light</string>
+    <string name="theme_mint">Mint</string>
+
+    <string name="auto_theme_title">Select dark and light themes</string>
+    <string name="auto_theme_light_theme">Light theme</string>
+    <string name="auto_theme_dark_theme">Dark theme</string>
+    <string name="auto_theme_selection_hint">Tap to change</string>
+
+    <string name="settings_main_auto_theme">Auto theme</string>
+    <string name="settings_main_auto_theme_summary">Automatically switch between selected light and dark themes depending on system theme</string>
+    <string name="settings_main_auto_theme_picker">Choose themes</string>
+    <string name="settings_main_auto_theme_picker_summary">Current light theme: %s\nCurrent dark theme: %s</string>
+    <string name="settings_main_auto_theme_pre_q_warning">Please note that following the system theme may not work correctly on Android versions lower than Q</string>
+
 </resources>

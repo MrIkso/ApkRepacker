@@ -110,6 +110,19 @@
 
     </style>
 
+    <style name="AppTheme.Simple.Dark" parent="AppTheme.Dark">
+        <item name="colorPrimary">?attr/simpleThemePrimaryColor</item>
+        <item name="colorPrimaryDark">?attr/simpleThemePrimaryColor</item>
+        <item name="colorAccent">?attr/simpleThemeAccentColor</item>
+        <item name="android:statusBarColor">?attr/simpleThemePrimaryColor</item>
+        <item name="android:windowBackground">?attr/simpleThemePrimaryColor</item>
+        <item name="titleTextColor">?attr/simpleThemeTextPrimaryColor</item>
+        <item name="android:textColorPrimary">?attr/simpleThemeTextPrimaryColor</item>
+        <item name="android:textColorSecondary">?attr/simpleThemeTextSecondaryColor</item>
+        <item name="alertDialogTheme">@style/AlertDialog.AppTheme.Simple.Dark</item>
+        <item name="android:navigationBarColor">?attr/simpleThemePrimaryColor</item>
+    </style>
+
     <style name="AppTheme.Simple.Light" parent="AppTheme.Light">
         <item name="colorPrimary">?attr/simpleThemePrimaryColor</item>
         <item name="colorPrimaryDark">?attr/simpleThemePrimaryColor</item>
@@ -119,8 +132,10 @@
         <item name="titleTextColor">?attr/simpleThemeTextPrimaryColor</item>
         <item name="android:textColorPrimary">?attr/simpleThemeTextPrimaryColor</item>
         <item name="android:textColorSecondary">?attr/simpleThemeTextSecondaryColor</item>
-        <item name="alertDialogTheme">@style/AlertDialog.AppTheme.Light</item>
+        <item name="alertDialogTheme">@style/AlertDialog.AppTheme.Simple.Light</item>
+        <item name="android:navigationBarColor">?attr/simpleThemePrimaryColor</item>
     </style>
+
 
     <style name="AppTheme.Rena" parent="AppTheme.Simple.Dark">
         <item name="simpleThemePrimaryColor">@color/colorPrimaryRena</item>

@@ -230,4 +230,16 @@ public class FragmentUtils {
     public static void executePendingTransactions(@NonNull Fragment fragment) {
         fragment.getFragmentManager().executePendingTransactions();
     }
+
+    @Nullable
+    public static <T> T getParentAs(Fragment fragment, Class<T> asClass) {
+        Object parent = fragment.getParentFragment();
+        if (parent == null)
+            parent = fragment.getActivity();
+
+        if (asClass.isInstance(parent))
+            return asClass.cast(parent);
+
+        return null;
+    }
 }

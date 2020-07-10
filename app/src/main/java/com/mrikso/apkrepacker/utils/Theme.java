@@ -68,8 +68,8 @@ public class Theme {
         mThemes = new ArrayList<>();
         mThemes.add(new ThemeDescriptor(0, R.style.AppTheme_Light,R.string.theme_light , false));
         mThemes.add(new ThemeDescriptor(1, R.style.AppTheme_Dark,R.string.theme_dark, true));
-        mThemes.add(new ThemeDescriptor(2, R.style.AppTheme_RenaLight,R.string.theme_dark, false));
-        mThemes.add(new ThemeDescriptor(3, R.style.AppTheme_Rena,R.string.theme_dark, true));
+        mThemes.add(new ThemeDescriptor(2, R.style.AppTheme_RenaLight,R.string.theme_rena_light, false));
+        mThemes.add(new ThemeDescriptor(3, R.style.AppTheme_Rena,R.string.theme_rena, true));
 
         invalidateLiveTheme();
 
