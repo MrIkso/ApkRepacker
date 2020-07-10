@@ -25,6 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.mrikso.apkrepacker.ide.editor.theme.model.EditorTheme;
+import com.mrikso.apkrepacker.utils.AppExecutor;
 import com.mrikso.codeeditor.view.ColorScheme;
 
 public class CodeEditor extends HighlightEditorView {
@@ -33,6 +34,8 @@ public class CodeEditor extends HighlightEditorView {
      */
     @Nullable
     private EditorTheme mEditorTheme;
+
+    private AppExecutor mAppExecutor;
 
     public CodeEditor(Context context) {
         super(context);
@@ -57,26 +60,30 @@ public class CodeEditor extends HighlightEditorView {
     public void setTheme(@NonNull EditorTheme editorTheme) {
         mEditorTheme = editorTheme;
 
-        setBackgroundColor(getColor(editorTheme.getThemeModel().getViewBackgroundColor()));
-        setTextColor(getColor(editorTheme.getThemeModel().getViewDefault()));
-        setTextHighlightColor(getColor(editorTheme.getThemeModel().getViewSelectionColor()));
-        setGutterBackgroundColor(getColor(editorTheme.getThemeModel().getViewGutterBackgroundColor()));
-        setLineNumberTextColor(getColor(editorTheme.getThemeModel().getViewGutterForegroundColor()));
-       // setLineHighlightColor(editorTheme.getLineHighlightColor());
-        setWhiteSpaceColor(getColor(editorTheme.getThemeModel().getViewWhitespaceColor()));
+        mAppExecutor = AppExecutor.getInstance();
+        mAppExecutor.getDiskIO().execute(() -> {
+            setBackgroundColor(getColor(editorTheme.getThemeModel().getViewBackgroundColor()));
+            setTextColor(getColor(editorTheme.getThemeModel().getViewDefault()));
+            setTextHighlightColor(getColor(editorTheme.getThemeModel().getViewSelectionColor()));
+            setGutterBackgroundColor(getColor(editorTheme.getThemeModel().getViewGutterBackgroundColor()));
+            setLineNumberTextColor(getColor(editorTheme.getThemeModel().getViewGutterForegroundColor()));
+            // setLineHighlightColor(editorTheme.getLineHighlightColor());
+            setWhiteSpaceColor(getColor(editorTheme.getThemeModel().getViewWhitespaceColor()));
 
-        //syntax
-        setKeywordColor(getColor(editorTheme.getThemeModel().getViewKeyword()));
-        setBaseWordColor(getColor(editorTheme.getThemeModel().getViewName()));
-        setCommentColor(getColor(editorTheme.getThemeModel().getViewComment()));
-        setLiteralColor(getColor(editorTheme.getThemeModel().getViewLiteral()));
-        setOperatorColor(getColor(editorTheme.getThemeModel().getViewOperator()));
-        setTypeColor(getColor(editorTheme.getThemeModel().getViewOperator()));
-        setSeparatorColor(getColor(editorTheme.getThemeModel().getViewSeparator()));
-        setPackageColor(getColor(editorTheme.getThemeModel().getViewPackage()));
-        setErrorColor(getColor(editorTheme.getThemeModel().getViewError()));
+            //syntax
+            setKeywordColor(getColor(editorTheme.getThemeModel().getViewKeyword()));
+            setBaseWordColor(getColor(editorTheme.getThemeModel().getViewName()));
+            setCommentColor(getColor(editorTheme.getThemeModel().getViewComment()));
+            setLiteralColor(getColor(editorTheme.getThemeModel().getViewLiteral()));
+            setOperatorColor(getColor(editorTheme.getThemeModel().getViewOperator()));
+            setTypeColor(getColor(editorTheme.getThemeModel().getViewOperator()));
+            setSeparatorColor(getColor(editorTheme.getThemeModel().getViewSeparator()));
+            setPackageColor(getColor(editorTheme.getThemeModel().getViewPackage()));
+            setErrorColor(getColor(editorTheme.getThemeModel().getViewError()));
 
-        postInvalidate();
+            postInvalidate();
+        });
+
     }
 
     @Override
