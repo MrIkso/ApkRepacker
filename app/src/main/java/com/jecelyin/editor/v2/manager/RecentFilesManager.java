@@ -16,13 +16,15 @@
 
 package com.jecelyin.editor.v2.manager;
 
-import android.app.AlertDialog;
+
 import android.content.Context;
 
-import com.duy.ide.database.ITabDatabase;
-import com.duy.ide.database.RecentFileItem;
-import com.duy.ide.database.SQLHelper;
-import com.duy.ide.editor.editor.R;
+import androidx.appcompat.app.AlertDialog;
+
+import com.mrikso.apkrepacker.R;
+import com.mrikso.apkrepacker.database.ITabDatabase;
+import com.mrikso.apkrepacker.database.JsonDatabase;
+import com.mrikso.apkrepacker.database.entity.RecentFileItem;
 
 import java.util.ArrayList;
 
@@ -32,14 +34,14 @@ import java.util.ArrayList;
 public class RecentFilesManager {
     private final ITabDatabase dbHelper;
     private OnFileItemClickListener onFileItemClickListener;
-    private ArrayList<RecentFileItem> list;
+    private ArrayList<RecentFileItem> list = new ArrayList<>();
 
     public RecentFilesManager(Context context) {
-        dbHelper = SQLHelper.getInstance(context.getApplicationContext());
+        dbHelper = JsonDatabase.getInstance(context.getApplicationContext());
     }
 
     public void show(Context context) {
-        list = dbHelper.getRecentFiles();
+        list.addAll(dbHelper.getRecentFiles(true));
         String[] items = new String[list.size()];
         for (int i = list.size() - 1; i >= 0; i--) {
             items[i] = list.get(i).path;

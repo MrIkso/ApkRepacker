@@ -24,7 +24,7 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.widget.TextView;
 
-import com.jecelyin.editor.v2.Preferences;
+import com.jecelyin.editor.v2.EditorPreferences;
 import com.jecelyin.editor.v2.adapter.RangeAdapter;
 
 
@@ -44,7 +44,7 @@ public class FontSizePreference extends JecListPreference {
     }
 
     public void init() {
-        ItemAdapter adapter = new ItemAdapter(Preferences.DEF_MIN_FONT_SIZE, Preferences.DEF_MAX_FONT_SIZE, "%d sp");
+        ItemAdapter adapter = new ItemAdapter(EditorPreferences.DEF_MIN_FONT_SIZE, EditorPreferences.DEF_MAX_FONT_SIZE, "%d sp");
         setEntries(adapter.getItems());
         setEntryValues(adapter.getValues());
         setAdapter(adapter);

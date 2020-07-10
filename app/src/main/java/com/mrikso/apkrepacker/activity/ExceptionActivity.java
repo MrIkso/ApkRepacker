@@ -10,6 +10,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.widget.NestedScrollView;
 
+import com.mrikso.apkrepacker.BuildConfig;
 import com.mrikso.apkrepacker.R;
 
 public class ExceptionActivity extends BaseActivity {
@@ -28,7 +29,9 @@ public class ExceptionActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         mErrorView = findViewById(R.id.error_view);
         mErrorView.setText(mError);
-        sendErrorMail(this, mError);
+        if(!BuildConfig.DEBUG) {
+            sendErrorMail(this, mError);
+        }
         final NestedScrollView scrollView = findViewById(R.id.exception_scrollview);
         scrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener)
                 (v, scrollX, scrollY, oldScrollX, oldScrollY) ->

@@ -17,31 +17,31 @@ import java.io.OutputStream;
 import brut.androlib.ApkOptions;
 
 public class InitPreference {
-    private Preference preference;
+    private PreferenceHelper preferenceHelper;
 
     public void init() {
-        preference = Preference.getInstance(App.getContext());
-        if (!preference.isToolsInstalled()) {
+        preferenceHelper = PreferenceHelper.getInstance(App.getContext());
+        if (!preferenceHelper.isToolsInstalled()) {
             copyFiles(App.getContext().getAssets(), App.getContext().getFilesDir());
-            preference.setToolsInstalled(true);
+            preferenceHelper.setToolsInstalled(true);
         }
         loadApkOptions();
     }
 
     private void loadApkOptions() {
         ApkOptions o = ApkOptions.INSTANCE;
-        if (preference.isUseAAPT2()) {
-            o.aaptPath = preference.getAapt2Path();
+        if (preferenceHelper.isUseAAPT2()) {
+            o.aaptPath = preferenceHelper.getAapt2Path();
             o.aaptVersion = 2;
             o.useAapt2 = true;
         } else {
-            o.aaptPath = preference.getAaptPath();
+            o.aaptPath = preferenceHelper.getAaptPath();
             o.aaptVersion = 1;
         }
-        o.copyOriginalFiles = preference.isCopyOriginalFiles();
-        o.debugMode = preference.isDebugModeApk();
-        o.verbose = preference.isVerboseModeApk();
-        o.frameworkFolderLocation = preference.getFrameworkPath();
+        o.copyOriginalFiles = preferenceHelper.isCopyOriginalFiles();
+        o.debugMode = preferenceHelper.isDebugModeApk();
+        o.verbose = preferenceHelper.isVerboseModeApk();
+        o.frameworkFolderLocation = preferenceHelper.getFrameworkPath();
     }
 
     private void copyFiles(AssetManager assets, File outDir) {
@@ -64,7 +64,7 @@ public class InitPreference {
         IOUtils.copy(framework_in, framework_out);
         framework_in.close();
         framework_out.close();
-        preference.setFrameworkPath(dir.getAbsolutePath());
+        preferenceHelper.setFrameworkPath(dir.getAbsolutePath());
     }
 
     private void installAapt(AssetManager assets, File outDir) throws IOException {
@@ -75,7 +75,7 @@ public class InitPreference {
         inputStream.close();
         outputStream.close();
         aaptBin.setExecutable(true);
-        preference.setAaptPath(aaptBin.getAbsolutePath());
+        preferenceHelper.setAaptPath(aaptBin.getAbsolutePath());
     }
 
     private void installAapt2(AssetManager assets, File outDir) throws IOException {
@@ -86,7 +86,7 @@ public class InitPreference {
         inputStream.close();
         outputStream.close();
         aapt2Bin.setExecutable(true);
-        preference.setAapt2Path(aapt2Bin.getAbsolutePath());
+        preferenceHelper.setAapt2Path(aapt2Bin.getAbsolutePath());
     }
 
     private void loadKey(AssetManager assets, File outDir) throws IOException {
@@ -101,7 +101,7 @@ public class InitPreference {
         IOUtils.copy(cert, outputStream);
         outputStream.close();
         cert.close();
-        preference.setCertPath(certPem.getAbsolutePath());
+        preferenceHelper.setCertPath(certPem.getAbsolutePath());
     }
 
     private void loadPrivateKey(AssetManager assets, File outDir) throws IOException {
@@ -111,6 +111,6 @@ public class InitPreference {
         IOUtils.copy(key, outputStream);
         key.close();
         outputStream.close();
-        preference.setPrivateKeyPath(certPk8.getAbsolutePath());
+        preferenceHelper.setPrivateKeyPath(certPk8.getAbsolutePath());
     }
 }

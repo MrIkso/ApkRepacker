@@ -1,7 +1,5 @@
 package com.mrikso.apkrepacker.ui.imageviewer;
 
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,10 +20,8 @@ import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
 import com.github.chrisbanes.photoview.PhotoView;
-import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.utils.FileUtil;
-import com.mrikso.apkrepacker.utils.ThemeWrapper;
 import com.mrikso.apkrepacker.utils.ViewUtils;
 import com.sdsmdg.harjot.vectormaster.VectorMasterView;
 

@@ -1,0 +1,37 @@
+{
+  "theme_name": "Mt Manager Dark",
+  "theme_type": "dark",
+
+  "dropdown_background": "#fafafa",
+  "dropdown_border": "#fafafa",
+  "dropdown_foreground": "#555555",
+  
+  "view_background_color": "#2b2b2b",
+  "view_caret_color": "#373737",
+
+  "view_gutter_background_color": "#36383a",
+  "view_gutter_foreground_color": "#888888",
+
+  "view_selection_color": "#00b1d2f2",
+
+  "view_comment": "#7f7f80",
+  "view_keyword": "#ffff80",
+  "view_name": "#9f7f50",
+  "view_literal": "#7f8000",
+  "view_operator": "#dfafa0",
+  "view_separator": "#8faf20",
+  "view_package": "#8faf20",
+  "view_type": "#7f8000",
+  "view_error": "#ffff01",
+  "view_string": "#ff8000",
+  "view_default": "#a9b7c6",
+  "view_constant": "#7f8000",
+
+  
+
+
+
+
+  
+  "view_whitespace_color": "#e6e6e6"
+}

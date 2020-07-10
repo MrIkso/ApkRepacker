@@ -36,9 +36,9 @@ public class LocalFileWriter {
         this.encoding = encoding;
     }
 
-    public void writeToFile(GetChars content) throws IOException {
+    public void writeToFile(String  content) throws IOException {
         FileOutputStream output = new FileOutputStream(file);
-        IOUtils.write(content.toString(), output, encoding);
+        IOUtils.write(content, output, encoding);
         output.close();
     }
 }

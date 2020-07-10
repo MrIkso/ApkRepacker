@@ -20,59 +20,48 @@ package com.jecelyin.editor.v2.dialog;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 
-import com.duy.ide.editor.editor.R;
+
 import com.jecelyin.editor.v2.common.Command;
-
-import org.gjt.sp.jedit.Catalog;
+import com.mrikso.apkrepacker.R;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.Set;
 
 /**
  * @author Jecelyin Peng <jecelyin@gmail.com>
  */
 public class LangListDialog extends AbstractDialog {
-    private String[] scopeList;
     private String[] langList;
     private int currentLangIndex = -1;
 
     public LangListDialog(Context context) {
         super(context);
-
         initGrammarInfo();
     }
 
     private void initGrammarInfo() {
-        Set<String> strings = Catalog.modes.keySet();
-        ArrayList<Grammar> list = new ArrayList<Grammar>(strings.size());
-        Grammar g;
-        for (String name : strings) {
-            list.add(new Grammar(name, name));
-        }
-
-        Collections.sort(list, new Comparator<Grammar>() {
-            @Override
-            public int compare(Grammar lhs, Grammar rhs) {
-                return lhs.name.compareToIgnoreCase(rhs.name);
-            }
-        });
+        ArrayList<String> list = new ArrayList<>();
+        list.add("C++");
+        list.add("Java");
+        list.add("Smali");
+        list.add("Html");
+        list.add("Json");
+        list.add("Xml");
+        list.add("Css");
+        list.add("None");
+        Collections.sort(list, String::compareToIgnoreCase);
 
         String currLang = getMainActivity().getCurrentLang();
 
         int size = list.size();
         langList = new String[size];
-        scopeList = new String[size];
 
         for (int i = 0; i < size; i++) {
-            g = list.get(i);
-            langList[i] = g.name;
-            scopeList[i] = g.scope;
+            String name = list.get(i);
+            langList[i] = name;
 
-            if (currLang != null && currLang.equals(g.scope)) {
+            if (currLang != null && currLang.equals(name)) {
                 currentLangIndex = i;
             }
         }
@@ -82,32 +71,14 @@ public class LangListDialog extends AbstractDialog {
     public void show() {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(R.string.select_lang_to_highlight)
-                .setSingleChoiceItems(langList, currentLangIndex, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Command command = new Command(Command.CommandEnum.HIGHLIGHT);
-                        command.object = scopeList[which];
-                        getMainActivity().doCommand(command);
-                    }
+                .setSingleChoiceItems(langList, currentLangIndex, (dialog, which) -> {
+                    Command command = new Command(Command.CommandEnum.HIGHLIGHT);
+                    command.object = langList[which];
+                    getMainActivity().doCommand(command);
                 })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
+                .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.cancel());
         AlertDialog dlg = builder.create();
         dlg.show();
         handleDialog(dlg);
-    }
-
-    private static class Grammar {
-        String name;
-        String scope;
-
-        public Grammar(String scope, String name) {
-            this.name = name;
-            this.scope = scope;
-        }
     }
 }

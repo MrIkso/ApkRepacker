@@ -18,7 +18,7 @@
 
 package com.jecelyin.editor.v2.io;
 
-import com.duy.ide.editor.text.CharsetDetector;
+import com.mrikso.apkrepacker.ide.editor.text.CharsetDetector;
 import android.text.TextUtils;
 
 import com.jecelyin.common.utils.DLog;

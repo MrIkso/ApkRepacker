@@ -3,10 +3,9 @@ package com.jecelyin.editor.v2.utils;
 import android.annotation.SuppressLint;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.text.Editable;
 
-import com.duy.ide.editor.editor.R;
-import com.duy.ide.editor.view.IEditAreaView;
+import com.mrikso.apkrepacker.R;
+import com.mrikso.apkrepacker.ide.editor.view.IEditAreaView;
 import com.jecelyin.common.task.JecAsyncTask;
 import com.jecelyin.common.task.TaskListener;
 import com.jecelyin.common.task.TaskResult;
@@ -14,7 +13,10 @@ import com.jecelyin.common.utils.DLog;
 import com.jecelyin.common.utils.UIUtils;
 import com.jecelyin.editor.v2.io.FileEncodingDetector;
 
+
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.DirectoryFileFilter;
+import org.jf.util.CollectionUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -27,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -100,7 +103,7 @@ public class ExtGrep implements Parcelable {
         this.beforeContext = in.readInt();
         this.afterContext = in.readInt();
         this.regex = in.readString();
-        this.filesToProcess = new ArrayList<File>();
+        this.filesToProcess = new ArrayList<>();
         in.readList(this.filesToProcess, List.class.getClassLoader());
     }
 
@@ -169,12 +172,12 @@ public class ExtGrep implements Parcelable {
     }
 
     private List<Result> grepFiles() {
-        ArrayList<Result> results = new ArrayList<Result>();
+        ArrayList<Result> results = new ArrayList<>();
         // at this point the list was expanded into file names
         for (final File f : filesToProcess) {
             if (!f.exists() || !f.canRead())
                 continue;
-            results.addAll(grepFile(f));
+            results.addAll(Objects.requireNonNull(grepFile(f)));
         }
         return results;
     }
@@ -220,25 +223,25 @@ public class ExtGrep implements Parcelable {
     }
 
     private Result printMatch(final File file, final String line, final int lineNumber,
-                              final int startOffset, final int endOffset, final int lineStartOffset, final List<String> beforeContextLines,
+                              final int startOffset, final int endOffset, final int lineStartOffset, final int matchStart, final int matchEnd, final List<String> beforeContextLines,
                               final List<String> afterContextLines) {
-        int maxText = 20;
-        int start = lineStartOffset - maxText < 0 ? 0 : lineStartOffset - maxText;
-        int end = lineStartOffset + maxText >= line.length() ? line.length() : lineStartOffset + maxText;
+        //int maxText = 20;
+        //int start = Math.max(lineStartOffset - maxText, 0);
+       // int end = Math.min(lineStartOffset + maxText, line.length());
         Result result = new Result();
         result.file = file;
         //не обзезать найденую строку
-        //   result.line = line;//.substring((int) start, (int) end);
-        result.line = line.substring((int) start, (int) end);//строка будет обрезаться
+         result.line = line;//.substring((int) start, (int) end);
+      //  result.line = line.substring((int) start, (int) end);//строка будет обрезаться
         result.lineNumber = lineNumber;
         result.startOffset = startOffset;
         result.endOffset = endOffset;
         result.lineStartOffset = lineStartOffset;
-        result.matchStart = lineStartOffset - start;
-        result.matchEnd = result.matchStart + endOffset - startOffset;
-        if (result.matchEnd > end - start) {
-            result.matchEnd = end - start;
-        }
+        result.matchStart = matchStart;
+        result.matchEnd = matchEnd;
+       // if (result.matchEnd > end - start) {
+        //    result.matchEnd = end - start;
+      //  }
         return result;
     }
 
@@ -344,11 +347,11 @@ public class ExtGrep implements Parcelable {
 
     private boolean excludeDir(final File f) {
 
-        //String dir = "original";
+      //  String dir = "original";
         // return DirectoryFileFilter.DIRECTORY.accept(f,dir );
         //   if( CollectionUtils.exists( excludeDirPatterns, wildcardMatcher( f ) ) ) {
-        //       return true;
-        // }
+              // return true;
+       //  }
         return false;
     }
 
@@ -367,7 +370,7 @@ public class ExtGrep implements Parcelable {
     }
 
     public void replaceAll(IEditAreaView text, String replaceText) {
-        Matcher m = grepPattern.matcher(text.getEditableText());
+        Matcher m = grepPattern.matcher(text.getText());
         ArrayList<Integer> array = new ArrayList<>();
         // 从头开始搜索获取所有位置
         while (m.find()) {
@@ -382,7 +385,7 @@ public class ExtGrep implements Parcelable {
         int count = 0;
         for (int i = size - 2; i >= 0; i -= 2) {
             count++;
-            text.getEditableText().replace(array.get(i), array.get(i + 1), replaceText);
+            //text.getText().replace(array.get(i), array.get(i + 1), replaceText);
         }
         UIUtils.toast(text.getContext(), text.getContext().getResources().getQuantityString(R.plurals.x_text_replaced, count, count));
     }
@@ -423,7 +426,7 @@ public class ExtGrep implements Parcelable {
                         match = m.group();
                     }
 //                    printMatch(file, match, lineNumber, count, (byteOffset + m.start()), beforeContextLines,
-                    results.add(printMatch(file, match, lineNumber, byteOffset + m.start(), byteOffset + m.end(), m.start(), beforeContextLines,
+                    results.add(printMatch(file, match, lineNumber, byteOffset + m.start(), byteOffset+ m.end(), m.start(), m.start(), m.end(), beforeContextLines,
                             afterContextLines));
                     if (printFileNameOnly) {
                         return null;
@@ -431,7 +434,7 @@ public class ExtGrep implements Parcelable {
                     //
                 } else if ((m == null) && invertMatch) {
                     count++;
-                    results.add(printMatch(file, line, lineNumber, byteOffset, byteOffset, byteOffset, beforeContextLines,
+                    results.add(printMatch(file, line, lineNumber, byteOffset, byteOffset, byteOffset,byteOffset, byteOffset, beforeContextLines,
                             afterContextLines));
                     // TODO: this has a slightly different meaning
                     if (printFileNameOnly) {
@@ -487,7 +490,7 @@ public class ExtGrep implements Parcelable {
                 int index = params[0];
                 Matcher m = grepPattern.matcher(line);
                 if (direct == GrepDirect.NEXT) {
-                    for (int tryCount = 0; tryCount < 2; tryCount++) {
+                    for (; true; ) {
                         if (m.find(index)) {
                             results = new MatcherResult(m);
                             break;
@@ -559,6 +562,7 @@ public class ExtGrep implements Parcelable {
         filesToProcess.add(new File(name));
     }
 
+    @SuppressLint("StaticFieldLeak")
     public void execute(TaskListener<List<Result>> listener) {
         new JecAsyncTask<Void, Void, List<Result>>() {
 
@@ -571,11 +575,11 @@ public class ExtGrep implements Parcelable {
             }
         }.setTaskListener(listener).execute();
     }
+
     public  List<Result> execute(){
         compilePattern();
         verifyFileList();
-        List<Result> results = grepFiles();
-        return  results;
+        return grepFiles();
     }
     @Override
     public int describeContents() {
@@ -634,11 +638,11 @@ public class ExtGrep implements Parcelable {
 
     class FileFilterCriteria implements FileFilter {
 
-        private final String[] fileExtension = new String[]{".xml", ".txt", ".json", ".smali"};
+   //     private final String[] fileExtension = new String[]{".xml", ".txt", ".json", ".smali"};
 
         public boolean accept(File file) {
             // System.out.println("File from directory:- " + file.getName());
-            for (String extension : fileExtension) {
+            for (String extension : mExtensions) {
                 if (file.getName().toLowerCase().endsWith(extension)) {
                     return true;
                 }

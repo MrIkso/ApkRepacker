@@ -10,11 +10,8 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.android.apksig.ApkSigner;
 import com.google.common.collect.ImmutableList;
-import com.jecelyin.common.utils.DLog;
-import com.jecelyin.common.utils.UIUtils;
-import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
-import com.mrikso.apkrepacker.ui.prererence.Preference;
+import com.mrikso.apkrepacker.ui.prererence.PreferenceHelper;
 
 import org.apache.commons.io.IOUtils;
 
@@ -38,21 +35,21 @@ import brut.util.Logger;
 import sun1.security.pkcs.PKCS8Key;
 
 public class SignUtil {
-    private static Preference preference;
+    private static PreferenceHelper preferenceHelper;
 
     public static void loadKey(Context context, LoadKeyCallback callback)
     {
-        preference = Preference.getInstance(context);
+        preferenceHelper = PreferenceHelper.getInstance(context);
         msgId = 0;
         msgObj = null;
-        boolean custom = preference.isCustomSign();
+        boolean custom = preferenceHelper.isCustomSign();
         if (custom)
         {
-            int type = preference.getKeyType();
-            String keyPath = preference.getPrivateKeyPath();
-            String cert_or_alias = preference.getCertPath();
-            String store_pass = preference.getStoreKey();
-            String key_pass = preference.getPrivateKey();
+            int type = preferenceHelper.getKeyType();
+            String keyPath = preferenceHelper.getPrivateKeyPath();
+            String cert_or_alias = preferenceHelper.getCertPath();
+            String store_pass = preferenceHelper.getStoreKey();
+            String key_pass = preferenceHelper.getPrivateKey();
             try
             {
                 if (type == 3)
@@ -69,8 +66,8 @@ public class SignUtil {
         {
             try {
                 SignUtil st = new SignUtil();
-                InputStream cert = new FileInputStream(preference.getCertPath());
-                InputStream key = new FileInputStream(preference.getPrivateKeyPath());
+                InputStream cert = new FileInputStream(preferenceHelper.getCertPath());
+                InputStream key = new FileInputStream(preferenceHelper.getPrivateKeyPath());
                 PKCS8Key pkcs8 = new PKCS8Key();
                 pkcs8.decode(key);
 
@@ -219,7 +216,7 @@ public class SignUtil {
         apksigner.setCreatedBy("ApkRepacker by Mr Ikso");
         apksigner.setMinSdkVersion(minSdk);
         apksigner.setV1SigningEnabled(true);
-        apksigner.setV2SigningEnabled(preference.isV2SignatureEnabled());
+        apksigner.setV2SigningEnabled(preferenceHelper.isV2SignatureEnabled());
         ApkSigner signer = apksigner.build();
         logger.info(R.string.log_text, String.format("Signing Apk: %s", in));
         try
@@ -250,7 +247,7 @@ public class SignUtil {
         apksigner.setCreatedBy("Apk Repacker by Mr Ikso");
         apksigner.setMinSdkVersion(minSdk);
         apksigner.setV1SigningEnabled(true);
-        apksigner.setV2SigningEnabled(preference.isV2SignatureEnabled());
+        apksigner.setV2SigningEnabled(preferenceHelper.isV2SignatureEnabled());
         ApkSigner signer = apksigner.build();
         //logger.info(R.string.log_text, String.format("Signing Apk: %s", in));
         try

@@ -25,11 +25,11 @@ import com.jecelyin.common.utils.UIUtils;
 import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.adapter.ProjectItem;
-import com.mrikso.apkrepacker.adapter.RecyclerViewAdapter;
+import com.mrikso.apkrepacker.adapter.ProjectViewAdapter;
 import com.mrikso.apkrepacker.fragment.AppsFragment;
 import com.mrikso.apkrepacker.fragment.dialogs.ProgressDialogFragment;
 import com.mrikso.apkrepacker.ui.prererence.InitPreference;
-import com.mrikso.apkrepacker.ui.prererence.Preference;
+import com.mrikso.apkrepacker.ui.prererence.PreferenceHelper;
 import com.mrikso.apkrepacker.utils.AppUtils;
 import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.FragmentUtils;
@@ -43,10 +43,10 @@ import java.util.List;
 public class MainActivity extends BaseActivity {
     public static MainActivity Instance;
     private static RecyclerView mRecyclerView;
-    private static RecyclerViewAdapter adapter;
+    private static ProjectViewAdapter adapter;
     private static View empty;
     private static List<ProjectItem> data;
-    private static Preference preference;
+    private static PreferenceHelper preferenceHelper;
     private static File[] projects;
     private static File root;
     private static DialogFragment loadingDialog;
@@ -62,8 +62,8 @@ public class MainActivity extends BaseActivity {
 
     public static void initData() throws IOException {
         data = new ArrayList<>();
-        root = new File(preference.getDecodingPath() + "/projects");
-        new File(preference.getDecodingPath() + "/.nomedia").createNewFile();
+        root = new File(preferenceHelper.getDecodingPath() + "/projects");
+        new File(preferenceHelper.getDecodingPath() + "/.nomedia").createNewFile();
         if (!root.exists() && !root.mkdirs()) {
             return;
         }
@@ -122,7 +122,7 @@ public class MainActivity extends BaseActivity {
         Instance = this;
         setContentView(R.layout.activity_main);
         App.setContext(this);
-        preference = Preference.getInstance(this);
+        preferenceHelper = PreferenceHelper.getInstance(this);
         empty = findViewById(R.id.empty_view);
         fab = findViewById(R.id.fab_bottom_appbar);
         mRecyclerView = findViewById(R.id.recycler_view_bottom_appbar);
@@ -149,7 +149,7 @@ public class MainActivity extends BaseActivity {
         } else {
             mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         }
-        adapter = new RecyclerViewAdapter(this);
+        adapter = new ProjectViewAdapter(this);
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout_recycler_view);
         swipeRefreshLayout.setColorSchemeResources(R.color.google_blue, R.color.google_green, R.color.google_red, R.color.google_yellow);
         swipeRefreshLayout.setOnRefreshListener(() -> refreshAdapter(false));

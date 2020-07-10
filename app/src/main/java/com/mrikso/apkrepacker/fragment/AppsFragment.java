@@ -14,6 +14,7 @@ import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,11 +28,13 @@ import com.mrikso.apkrepacker.fragment.dialogs.AppsOptionsItemDialogFragment;
 import com.mrikso.apkrepacker.fragment.dialogs.DecompileOptionsDialogFragment;
 import com.mrikso.apkrepacker.ui.appslist.AppsAdapter;
 import com.mrikso.apkrepacker.ui.appslist.AppsViewModel;
-import com.mrikso.apkrepacker.ui.prererence.Preference;
+import com.mrikso.apkrepacker.ui.prererence.PreferenceHelper;
 import com.mrikso.apkrepacker.utils.AppUtils;
 import com.mrikso.apkrepacker.utils.FragmentUtils;
 import com.mrikso.apkrepacker.utils.PackageMeta;
+import com.mrikso.apkrepacker.utils.ScrollingViewOnApplyWindowInsetsListener;
 
+import me.zhanghai.android.fastscroll.FastScroller;
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
 
 public class AppsFragment extends Fragment implements AppsAdapter.OnItemInteractionListener, AppsOptionsItemDialogFragment.ItemClickListener, DecompileOptionsDialogFragment.ItemClickListener {
@@ -73,7 +76,7 @@ public class AppsFragment extends Fragment implements AppsAdapter.OnItemInteract
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_apps, container, false);
         context = view.getContext();
-        mViewModel = ViewModelProviders.of(this).get(AppsViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(AppsViewModel.class);
         loadingView = view.findViewById(R.id.loading_view);
         appsList = view.findViewById(R.id.app_packages);
         appsList.setLayoutManager(new LinearLayoutManager(context));
@@ -87,7 +90,8 @@ public class AppsFragment extends Fragment implements AppsAdapter.OnItemInteract
         // mViewModel.getPackages().observe(getViewLifecycleOwner(), appsAdapter::setData);
         appsAdapter.setHasStableIds(true);
         appsAdapter.setInteractionListener(this);
-        new FastScrollerBuilder(appsList).useMd2Style().build();
+        FastScroller fastScroller = new FastScrollerBuilder(appsList).useMd2Style().build();
+        appsList.setOnApplyWindowInsetsListener(new ScrollingViewOnApplyWindowInsetsListener(appsList, fastScroller));
         appsList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -161,7 +165,7 @@ public class AppsFragment extends Fragment implements AppsAdapter.OnItemInteract
 
     @Override
     public void onAppsItemClick(Integer item) {
-        Preference preference = Preference.getInstance(context);
+        PreferenceHelper preferenceHelper = PreferenceHelper.getInstance(context);
         switch (item) {
             case R.id.decompile_app:
                 //  File app = FileUtil.createBackupFile(current, preference.getDecodingPath());
@@ -169,7 +173,7 @@ public class AppsFragment extends Fragment implements AppsAdapter.OnItemInteract
                     applicationInfo = context.getPackageManager().getApplicationInfo(current.packageName, 0);
                     mAppName = current.packageName + mAppName;
                     // FileUtils.copyFile(new File(applicationInfo.publicSourceDir), app);
-                    int mode = preference.getDecodingMode();
+                    int mode = preferenceHelper.getDecodingMode();
                     if (mode == 3) {
                         DecompileOptionsDialogFragment decompileOptionsDialogFragment = DecompileOptionsDialogFragment.newInstance();
                         decompileOptionsDialogFragment.show(getChildFragmentManager(), DecompileOptionsDialogFragment.TAG);

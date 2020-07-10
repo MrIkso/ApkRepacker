@@ -1,19 +1,15 @@
 package com.mrikso.apkrepacker.activity;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
-import com.duy.ide.editor.theme.EditorThemeFragment;
-import com.duy.ide.editor.theme.model.EditorTheme;
-import com.jecelyin.editor.v2.Preferences;
+import com.jecelyin.editor.v2.EditorPreferences;
 import com.mrikso.apkrepacker.R;
 
-public class ThemeEditorActivity extends BaseActivity
-        implements EditorThemeFragment.EditorThemeAdapter.OnThemeSelectListener, SharedPreferences.OnSharedPreferenceChangeListener {
-    private Preferences mPreferences;
+public class ThemeEditorActivity extends BaseActivity{
+     //   implements EditorThemeFragment.EditorThemeAdapter.OnThemeSelectListener, SharedPreferences.OnSharedPreferenceChangeListener {
+    private EditorPreferences mEditorPreferences;
 
 
     @Override
@@ -24,15 +20,16 @@ public class ThemeEditorActivity extends BaseActivity
         getSupportActionBar().setTitle(R.string.editor_theme);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mPreferences = Preferences.getInstance(this);
+        mEditorPreferences = EditorPreferences.getInstance(this);
 
-        mPreferences.registerOnSharedPreferenceChangeListener(this);
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.content, new EditorThemeFragment())
-                .commit();
+     //   mPreferences.registerOnSharedPreferenceChangeListener(this);
+       // getSupportFragmentManager()
+        //        .beginTransaction()
+               // .replace(R.id.content, new EditorThemeFragment())
+          //      .commit();
     }
 
+    /*
     @Override
     public void onEditorThemeSelected(EditorTheme theme) {
             mPreferences.setEditorTheme(theme.getFileName());
@@ -41,15 +38,14 @@ public class ThemeEditorActivity extends BaseActivity
             setResult(RESULT_OK);
     }
 
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-       // super.onSharedPreferenceChanged(sharedPreferences, key);
-    }
+
+     */
+
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mPreferences.unregisterOnSharedPreferenceChangeListener(this);
+       // mPreferences.unregisterOnSharedPreferenceChangeListener(this);
     }
 
 }

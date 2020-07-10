@@ -24,14 +24,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
-import com.bumptech.glide.load.resource.bitmap.BitmapDrawableDecoder;
-import com.bumptech.glide.load.resource.bitmap.BitmapDrawableEncoder;
-import com.bumptech.glide.load.resource.bitmap.BitmapDrawableResource;
-import com.duy.common.DLog;
+import com.mrikso.apkrepacker.utils.common.DLog;
 import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.filepicker.Utility;
-import com.mrikso.apkrepacker.ui.prererence.Preference;
+import com.mrikso.apkrepacker.ui.prererence.PreferenceHelper;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
@@ -429,6 +426,33 @@ public class FileUtil {
         return String.format("%s used of %s", use, tot);
     }
 
+    public static boolean isSameFile(File file1, File file2) {
+        final boolean file1Exists = file1.exists();
+        if (file1Exists != file2.exists()) {
+            return false;
+        }
+
+        if (!file1Exists) {
+            // two not existing files are equal
+            return true;
+        }
+
+        if (file1.length() != file2.length()) {
+            // lengths differ, cannot be equal
+            return false;
+        }
+
+        try {
+            if (file1.getCanonicalFile().equals(file2.getCanonicalFile())) {
+                // same file
+                return true;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public static String getTitle(File file) {
         try {
             MediaMetadataRetriever retriever = new MediaMetadataRetriever();
@@ -579,8 +603,7 @@ public class FileUtil {
     }
 
     private static boolean showIsHidden() {
-        boolean show = Preference.getInstance(App.getContext()).isShowHiddenFiles();
-        return show;
+        return PreferenceHelper.getInstance(App.getContext()).isShowHiddenFiles();
     }
     //----------------------------------------------------------------------------------------------
 
@@ -711,9 +734,9 @@ public class FileUtil {
         return null;
     }
 
-    public static Drawable getProjectIconDrawable(String appIconBase64) {
-        Drawable icon = (decodeBase64(appIconBase64) != null) ? new BitmapDrawable(getContext().getResources(), decodeBase64(appIconBase64)) : null;
-        return appIconBase64 != null ? icon : ContextCompat.getDrawable(getContext(), R.drawable.default_app_icon);
+    public static Drawable getProjectIconDrawable(String appIconBase64, Context context) {
+        Drawable icon = (decodeBase64(appIconBase64) != null) ? new BitmapDrawable(context.getResources(), decodeBase64(appIconBase64)) : null;
+        return appIconBase64 != null ? icon : ContextCompat.getDrawable(context, R.drawable.default_app_icon);
     }
 
     private static Bitmap decodeBase64(String input) {

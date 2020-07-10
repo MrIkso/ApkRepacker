@@ -1,7 +1,6 @@
 package com.mrikso.apkrepacker.ui.autocompleteeidttext;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +37,7 @@ public class CustomAdapter extends BaseAdapter implements Filterable {
 
     @Override
     public String getItem(int position) {
-        Log.d("CustomListAdapter", dataList.get(position));
+       // Log.d("CustomListAdapter", dataList.get(position));
         return dataList.get(position);
     }
 
@@ -66,6 +65,7 @@ public class CustomAdapter extends BaseAdapter implements Filterable {
     public List<String> getDataList() {
         return dataList;
     }
+
     public void addValue(String value){
         dataList.add(value);
         notifyDataSetChanged();
@@ -111,7 +111,7 @@ public class CustomAdapter extends BaseAdapter implements Filterable {
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 if (results.values != null) {
-                    dataList = (ArrayList<String>) results.values;
+                    dataList = (List<String>) results.values;
                 } else {
                     dataList = null;
                 }

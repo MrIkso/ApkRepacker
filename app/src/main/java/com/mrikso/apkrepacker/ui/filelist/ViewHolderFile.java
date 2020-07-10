@@ -22,7 +22,7 @@ import com.mrikso.apkrepacker.recycler.OnItemClickListener;
 import com.mrikso.apkrepacker.recycler.ViewHolder;
 import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.PreferenceUtils;
-import com.mrikso.apkrepacker.utils.ThemeWrapper;
+import com.mrikso.apkrepacker.utils.Theme;
 import com.mrikso.apkrepacker.utils.ViewUtils;
 import com.sdsmdg.harjot.vectormaster.VectorMasterDrawable;
 
@@ -31,11 +31,13 @@ import java.io.File;
 public final class ViewHolderFile extends ViewHolder {
 
     private TextView name;
+    private boolean isLight;
     // private TextView date;
     // private TextView size;
 
     public ViewHolderFile(Context context, OnItemClickListener listener, View view) {
         super(context, listener, view);
+        isLight = !Theme.getInstance(context).getCurrentTheme().isDark();
     }
 
     @Override
@@ -89,9 +91,9 @@ public final class ViewHolderFile extends ViewHolder {
             image.setBackground(null);
             createGlide(file);
 
-        } else if (fileType.equals(FileUtil.FileType.XML) && new VectorMasterDrawable(context, file, ThemeWrapper.isLightTheme()).isVector()) {
+        } else if (fileType.equals(FileUtil.FileType.XML) && new VectorMasterDrawable(context, file, isLight).isVector()) {
             image.setBackground(null);
-            VectorMasterDrawable vectorDrawable = new VectorMasterDrawable(context, file, ThemeWrapper.isLightTheme());
+            VectorMasterDrawable vectorDrawable = new VectorMasterDrawable(context, file, isLight);
             createGlide(vectorDrawable);
 
         } else if (fileType.equals(FileUtil.FileType.TTF)) {
@@ -116,7 +118,7 @@ public final class ViewHolderFile extends ViewHolder {
     private Bitmap textToBitmap(File file) {
         TextView tv = new TextView(context);
         tv.setText("Aa");
-        tv.setTextColor(ThemeWrapper.isLightTheme() ? Color.BLACK : Color.LTGRAY);
+        tv.setTextColor(isLight ? Color.BLACK : Color.LTGRAY);
         tv.setTypeface(Typeface.createFromFile(file));
         tv.setGravity(Gravity.CENTER);
         tv.setTextSize(20);

@@ -1,13 +1,14 @@
 package com.mrikso.apkrepacker.activity;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
+import androidx.preference.PreferenceFragmentCompat;
 
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.fragment.SettingsFragment;
@@ -21,11 +22,11 @@ public class SettingsActivity extends BaseActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FragmentManager fm = getFragmentManager();
-        Fragment f = fm.findFragmentById(R.id.content);
-        if (f == null) {
-            fm.beginTransaction().replace(R.id.content, new SettingsFragment()).commit();
-        }
+        // Display the fragment as the main content.
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.content, new SettingsFragment())
+                .commit();
         //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle(R.string.settings);
@@ -33,8 +34,8 @@ public class SettingsActivity extends BaseActivity {
 
     private void setResultAndFinish() {
         Intent data = new Intent();
-        FragmentManager fm = getFragmentManager();
-        SettingsFragment f = (SettingsFragment) fm.findFragmentById(R.id.content);
+        FragmentManager fm = getSupportFragmentManager();
+        PreferenceFragmentCompat f = (PreferenceFragmentCompat) fm.findFragmentById(R.id.content);
       //  data.putExtra("bufferChanged", f.getBufferChanged());
         setResult(RESULT_OK, data);
         finish();

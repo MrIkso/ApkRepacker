@@ -22,7 +22,10 @@ public class Utils {
     }
 
     public static int getColorFromString(String value, boolean useLightTheme) {
-        if (value.length() == 2) {
+        if(isAttributeInValid(value)){
+            return useLightTheme ? DefaultValues.PATH_FILL_COLOR_BLACK : DefaultValues.PATH_FILL_COLOR_WHITE;
+        }
+        else if (value.length() == 2) {
             return Color.parseColor("#" + value.charAt(1) + value.charAt(1) + value.charAt(1) + value.charAt(1) + value.charAt(1) + value.charAt(1) + value.charAt(1) + value.charAt(1));
         } else if (value.length() == 4) {
             return Color.parseColor("#" + value.charAt(1) + value.charAt(1) + value.charAt(2) + value.charAt(2) + value.charAt(3) + value.charAt(3));
@@ -39,6 +42,10 @@ public class Utils {
             return useLightTheme ? DefaultValues.PATH_FILL_COLOR_BLACK : DefaultValues.PATH_FILL_COLOR_WHITE;
         }
         return useLightTheme ? DefaultValues.PATH_FILL_COLOR_BLACK : DefaultValues.PATH_FILL_COLOR_WHITE;
+    }
+
+    public static boolean isAttributeInValid(String value){
+        return value.startsWith("@/") || value.startsWith("?");
     }
 
     public static Path.FillType getFillTypeFromString(String value) {

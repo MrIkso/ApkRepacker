@@ -263,4 +263,6 @@
     <string name="string_notsaved_msg">%d строк не сохранено.</string>
     <string name="title_activity_auto_translator">Авто-переводчик</string>
     <string name="action_auto_translate_lang">Авто-перевод языка</string>
+    <string name="pref_confirm_build">Подтверждение сборки</string>
+    <string name="confirm_build_title">Собрать это приложение?</string>
 </resources>

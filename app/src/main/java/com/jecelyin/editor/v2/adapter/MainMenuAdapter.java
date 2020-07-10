@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -12,13 +11,12 @@ import android.widget.TextView;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.duy.ide.editor.editor.R;
 import com.jecelyin.editor.v2.common.Command;
 import com.jecelyin.editor.v2.manager.MenuManager;
-import com.jecelyin.editor.v2.widget.menu.MenuDef;
 import com.jecelyin.editor.v2.widget.menu.MenuFactory;
 import com.jecelyin.editor.v2.widget.menu.MenuGroup;
 import com.jecelyin.editor.v2.widget.menu.MenuItemInfo;
+import com.mrikso.apkrepacker.R;
 
 
 import java.util.ArrayList;

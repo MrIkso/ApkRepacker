@@ -20,7 +20,8 @@ package com.jecelyin.editor.v2.widget.menu;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.IdRes;
 
-import com.duy.ide.editor.editor.R;
+import com.mrikso.apkrepacker.R;
+
 
 /**
  * @author Jecelyin Peng <jecelyin@gmail.com>

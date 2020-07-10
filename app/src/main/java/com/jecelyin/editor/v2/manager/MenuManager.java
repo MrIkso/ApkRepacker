@@ -21,8 +21,9 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import androidx.core.content.ContextCompat;
 
-import com.duy.ide.core.api.IdeActivity;
-import com.duy.ide.editor.editor.R;
+import com.mrikso.apkrepacker.R;
+import com.mrikso.apkrepacker.activity.IdeActivity;
+
 import com.jecelyin.common.utils.DrawableUtils;
 import com.jecelyin.editor.v2.adapter.MainMenuAdapter;
 

@@ -1,76 +1,103 @@
 package com.mrikso.apkrepacker.fragment;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
-import android.preference.EditTextPreference;
-import android.preference.ListPreference;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceGroup;
 import android.view.View;
-import android.widget.AbsListView;
-import android.widget.ListView;
 
 import androidx.annotation.Nullable;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
+import androidx.preference.SwitchPreference;
 
 import com.mrikso.apkrepacker.R;
-import com.mrikso.apkrepacker.ui.prererence.Preference;
+import com.mrikso.apkrepacker.ui.keydialog.KeystorePreference;
+import com.mrikso.apkrepacker.ui.keydialog.KeystorePreferenceFragmentDialog;
+import com.mrikso.apkrepacker.ui.prererence.PreferenceHelper;
+import com.mrikso.apkrepacker.ui.prererence.PreferenceKeys;
+import com.mrikso.apkrepacker.utils.AppUtils;
+import com.mrikso.apkrepacker.utils.Theme;
 
-import static com.mrikso.apkrepacker.ui.prererence.PreferenceKeys.KEY_DECODING_FOLDER;
-import static com.mrikso.apkrepacker.ui.prererence.PreferenceKeys.KEY_DECODING_MODE;
+public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+    private PreferenceHelper mHelper;
+    private ListPreference mThemePref;
 
-    private static void dependBindPreference(PreferenceGroup pg) {
-        int count = pg.getPreferenceCount();
-        android.preference.Preference preference;
-        String key;
-        Object value;
-
-        Preference pref = Preference.getInstance(pg.getContext());
-
-        for (int i = 0; i < count; i++) {
-            preference = pg.getPreference(i);
-            key = preference.getKey();
-
-            if (preference instanceof PreferenceGroup) {
-                dependBindPreference((PreferenceGroup) preference);
-                continue;
-            }
-
-            Class<? extends android.preference.Preference> cls = preference.getClass();
-            if (cls.equals(android.preference.Preference.class))
-                continue;
-
-            value = pref.getValue(key);
-
-            if (preference instanceof EditTextPreference) {
-                ((EditTextPreference) preference).setText(String.valueOf(value));
-            } else if (preference instanceof CheckBoxPreference) {
-                ((CheckBoxPreference) preference).setChecked((boolean) value);
-            }
-
-        }
-    }
+    private Preference mHomeDirPref;
+    private ListPreference mDecodeModePref;
+    private SwitchPreference mAutoThemeSwitch;
+    private SwitchPreference mUseCustomKeySwitch;
+    private KeystorePreference mKeystorePref;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        //Inject current auto theme status since it isn't managed by PreferencesKeys.AUTO_THEME key
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(requireContext());
+        prefs.edit().putBoolean(PreferenceKeys.KEY_AUTO_THEME, Theme.getInstance(requireContext()).getThemeMode() == Theme.Mode.AUTO_LIGHT_DARK).apply();
         super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.peference);
-        dependBindPreference(getPreferenceScreen());
-        getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
-        setCurrentValue((ListPreference) findPreference("ui_theme"));
-        setCurrentValue((ListPreference) findPreference(KEY_DECODING_MODE));
-        setCurrentValue((EditTextPreference) findPreference(KEY_DECODING_FOLDER));
+    }
+
+    @Override
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        setPreferencesFromResource(R.xml.peference, rootKey);
+        mHelper = PreferenceHelper.getInstance(requireContext());
+        mThemePref = findPreference(PreferenceKeys.KEY_THEME);
+        updateThemeSummary();
+        if (Theme.getInstance(requireContext()).getThemeMode() != Theme.Mode.CONCRETE) {
+            mThemePref.setVisible(false);
+        }
+        mAutoThemeSwitch = findPreference(PreferenceKeys.KEY_AUTO_THEME);
+        mAutoThemeSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
+            boolean value = (boolean) newValue;
+            if (value) {
+                if (!AppUtils.apiIsAtLeast(Build.VERSION_CODES.Q))
+                    Theme.getInstance(requireContext()).setLightTheme(0);
+                    Theme.getInstance(requireContext()).setDarkTheme(1);
+                   // SimpleAlertDialogFragment.newInstance(requireContext(), R.string.settings_main_auto_theme, R.string.settings_main_auto_theme_pre_q_warning).show(getChildFragmentManager(), null);
+
+                Theme.getInstance(requireContext()).setMode(Theme.Mode.AUTO_LIGHT_DARK);
+            } else {
+                Theme.getInstance(requireContext()).setMode(Theme.Mode.CONCRETE);
+            }
+
+            //Hack to not mess with hiding/showing preferences manually
+            requireActivity().recreate();
+            return true;
+        });
+
+        mDecodeModePref = findPreference(PreferenceKeys.KEY_DECODING_MODE);
+        updateDecodeModePrefSummary();
+
+        mHomeDirPref = findPreference(PreferenceKeys.KEY_DECODING_FOLDER);
+        updateHomeDirPrefSummary();
+
+        mKeystorePref = findPreference(PreferenceKeys.KEY_KEYSTORE_FILE);
+        mKeystorePref.setVisible(mHelper.isCustomSign());
+
+        mUseCustomKeySwitch = findPreference(PreferenceKeys.KEY_USE_CUSTOM_SIGN);
+        mUseCustomKeySwitch.setOnPreferenceChangeListener((preference, newValue) -> {
+                    boolean value = (boolean) newValue;
+                    if (value) {
+                        mKeystorePref.setVisible(true);
+                    } else {
+                        mKeystorePref.setVisible(false);
+                    }
+                    return true;
+                });
+
+        getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ListView listView = getActivity().findViewById(android.R.id.list);
-        listView.setDivider(null);
+       setDividerHeight(0);
+        setDivider(null);
+       /*
+       ListView listView = getActivity().findViewById(android.R.id.list);
+       // listView.setDivider(null);
         listView.setDividerHeight(0);
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -83,6 +110,8 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 getActivity().findViewById(R.id.app_bar).setSelected(listView.canScrollVertically(-1));
             }
         });
+
+        */
     }
 
     @Override
@@ -91,28 +120,43 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
     }
 
-    private void setCurrentValue(ListPreference listPreference) {
-        listPreference.setSummary(listPreference.getEntry());
+    private void updateThemeSummary(){
+        mThemePref.setSummary(Theme.getInstance(requireContext()).getConcreteTheme().getName(requireContext()));
     }
 
-    private void setCurrentValue(EditTextPreference listPreference) {
-        listPreference.setSummary(listPreference.getText());
+    private void updateHomeDirPrefSummary() {
+        mHomeDirPref.setSummary(mHelper.getDecodingPath());
+    }
+
+    private void updateDecodeModePrefSummary() {
+        mDecodeModePref.setSummary(mDecodeModePref.getEntry());
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         switch (key) {
-            case "ui_theme":
-                setCurrentValue((ListPreference) findPreference(key));
-                LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(new Intent("org.openintents.action.REFRESH_THEME"));
+            case PreferenceKeys.KEY_THEME:
+                Theme.getInstance(requireContext()).setConcreteTheme(mThemePref.findIndexOfValue(mThemePref.getValue()));
+                updateThemeSummary();
                 break;
-            case KEY_DECODING_MODE:
-                setCurrentValue((ListPreference) findPreference(KEY_DECODING_MODE));
+            case PreferenceKeys.KEY_DECODING_MODE:
+                updateDecodeModePrefSummary();
                 break;
-            case KEY_DECODING_FOLDER:
-                setCurrentValue((EditTextPreference) findPreference(KEY_DECODING_FOLDER));
+            case PreferenceKeys.KEY_DECODING_FOLDER:
+                updateHomeDirPrefSummary();
                 break;
         }
     }
-}
 
+    @Override
+    public void onDisplayPreferenceDialog(Preference preference){
+        if(preference instanceof KeystorePreference){
+          KeystorePreferenceFragmentDialog keystorePreferenceFragmentDialog = KeystorePreferenceFragmentDialog.newInstance(preference.getKey());
+          keystorePreferenceFragmentDialog.setTargetFragment(this, 0);
+          keystorePreferenceFragmentDialog.show(getParentFragmentManager(), null);
+        }
+        else {
+            super.onDisplayPreferenceDialog(preference);
+        }
+    }
+}

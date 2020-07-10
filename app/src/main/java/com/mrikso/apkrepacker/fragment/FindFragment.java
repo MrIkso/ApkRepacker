@@ -12,23 +12,18 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
-import android.text.TextPaint;
-import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.UpdateAppearance;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.duy.ide.editor.EditorDelegate;
 import com.jecelyin.common.utils.UIUtils;
 import com.jecelyin.editor.v2.utils.ExtGrep;
 import com.mrikso.apkrepacker.App;
@@ -38,7 +33,6 @@ import com.mrikso.apkrepacker.fragment.dialogs.ProgressDialogFragment;
 import com.mrikso.apkrepacker.model.SearchFinder;
 import com.mrikso.apkrepacker.ui.findresult.ChildData;
 import com.mrikso.apkrepacker.ui.findresult.FilesAdapter;
-//import com.mrikso.apkrepacker.ui.findresult.FindInFilesAdapter;
 import com.mrikso.apkrepacker.ui.findresult.MyAdapter;
 import com.mrikso.apkrepacker.ui.findresult.ParentData;
 import com.mrikso.apkrepacker.utils.FileUtil;
@@ -54,7 +48,6 @@ import me.zhanghai.android.fastscroll.FastScrollerBuilder;
 public class FindFragment extends Fragment implements ProgressDialogFragment.ProgressDialogFragmentListener {
 
     private RecyclerView recyclerView;
- //   private FindInFilesAdapter findInFilesAdapter;
     private ExtGrep extGrep;
     private boolean findFiles;
     private String path, searchText;
@@ -173,15 +166,8 @@ public class FindFragment extends Fragment implements ProgressDialogFragment.Pro
             int start = ssb.length();
             ssb.append(res.line);
 
-            ssb.setSpan(new ForegroundColorSpan(findResultsKeywordColor), start + res.matchStart, start + res.matchEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            // if (!childDataList.contains(new ChildData(ssb, file.getAbsolutePath()))) {
-            childDataList.add(new ChildData(ssb, file.getAbsolutePath(), res.startOffset));
-            // } else {
-            //   childDataList.remove(new ChildData(ssb, file.getAbsolutePath()));
-            ///     ssb = null;
-            // }
-            //    }
-            //parentDataList.add(new ParentData(file.getName(), childDataList));
+            ssb.setSpan(new ForegroundColorSpan(findResultsKeywordColor), start+ res.matchStart, start + res.matchEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            childDataList.add(new ChildData(ssb, file.getAbsolutePath(), res.lineNumber));
         }
 
         return parentDataList;
@@ -211,8 +197,7 @@ public class FindFragment extends Fragment implements ProgressDialogFragment.Pro
     }
 
     private ProgressDialogFragment getProgressDialogFragment() {
-        assert getFragmentManager() != null;
-        Fragment fragment = getFragmentManager().findFragmentByTag(ProgressDialogFragment.TAG);
+        Fragment fragment = getChildFragmentManager().findFragmentByTag(ProgressDialogFragment.TAG);
         return (ProgressDialogFragment) fragment;
     }
 
@@ -320,9 +305,6 @@ public class FindFragment extends Fragment implements ProgressDialogFragment.Pro
             list = getList(extGrep.execute());
 
             myAdapter = new MyAdapter(mContext, list);
-
-            //findInFilesAdapter = new FindInFilesAdapter();
-            // findInFilesAdapter.setResults(extGrep.execute());
             return null;
         }
 

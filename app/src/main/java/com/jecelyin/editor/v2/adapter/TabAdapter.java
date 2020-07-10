@@ -24,7 +24,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.duy.ide.editor.editor.R;
+import com.mrikso.apkrepacker.R;
 
 
 /**

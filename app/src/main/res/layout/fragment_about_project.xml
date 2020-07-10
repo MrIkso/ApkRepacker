@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:windowBackground">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="?colorPrimary"
+        android:elevation="0dp"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:elevation="0dp">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:navigationIcon="@drawable/ic_close"
+            app:popupTheme="?attr/actionBarPopupTheme"
+            app:theme="?attr/actionBarTheme"
+            app:title="@string/action_about_project" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include layout="@layout/card_about_header" />
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Material.CardView"
+                android:clickable="false"
+                android:focusable="false">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/label_path_project"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/label_path_prj"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:text="/storage/emulated/0/ApkRepacker/projects/Apk Repacker_src" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/label_package_app"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/label_app_pkg_prj"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:text="com.mrikso.apkrepacker" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/label_last_date_write"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/label_date_write"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:text="28 февр. 2020, 14:56" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/label_size_prj"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/label_project_size"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:text="106 MB" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/card_title_margin"
+                android:layout_marginTop="@dimen/card_title_margin"
+                android:layout_marginRight="@dimen/card_title_margin"
+                android:hint="@string/menu_note_project"
+                android:theme="@style/TextInputLayout.OutlinedBox">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/note_project"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:maxLines="8"
+                    android:typeface="monospace" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_save_notes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom|center"
+        android:layout_margin="16.0dip"
+        app:backgroundTint="?colorAccent"
+        app:tint="@color/white"
+        android:fitsSystemWindows="true"
+        android:src="@drawable/ic_save" />
+
+</FrameLayout>

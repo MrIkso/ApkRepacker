@@ -68,7 +68,7 @@ public class FindInFilesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             int start = ssb.length();
             ssb.append(item.line);
 
-            ssb.setSpan(new ForegroundColorSpan(findResultsKeywordColor), start + item.matchStart, start + item.matchEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ssb.setSpan(new ForegroundColorSpan(findResultsKeywordColor),  start + item.matchStart,  start +item.matchEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             ((RecyclerViewHolder) holder).mFileTextView.setText(item.file.getPath());
             ((RecyclerViewHolder) holder).mMatchLineTextView.setText(ssb, TextView.BufferType.SPANNABLE);
             ((RecyclerViewHolder)holder).mFindItem.setOnClickListener(v -> {

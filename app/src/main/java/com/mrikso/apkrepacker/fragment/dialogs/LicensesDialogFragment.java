@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment;
 
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.utils.BundleUtils;
-import com.mrikso.apkrepacker.utils.ThemeWrapper;
+import com.mrikso.apkrepacker.utils.Theme;
 
 import de.psdev.licensesdialog.LicensesDialog;
 import de.psdev.licensesdialog.NoticesXmlParser;
@@ -76,9 +76,10 @@ public class LicensesDialogFragment extends AppCompatDialogFragment {
         for (Notice notice : mNotices.getNotices()) {
             notices.addNotice(notice);
         }
-        int htmlStyleRes = ThemeWrapper.isLightTheme() ? R.string.about_licenses_html_style_light : R.string.about_licenses_html_style_dark;
+        boolean isLight = !Theme.getInstance(requireContext()).getCurrentTheme().isDark();
+        int htmlStyleRes = isLight ? R.string.about_licenses_html_style_light : R.string.about_licenses_html_style_dark;
         return new LicensesDialog.Builder(requireContext())
-                .setThemeResourceId(ThemeWrapper.isLightTheme() ? R.style.ColorPickerDialog : R.style.ColorPickerDialog_Dark)
+                .setThemeResourceId(isLight ? R.style.ColorPickerDialog : R.style.ColorPickerDialog_Dark)
                 .setTitle(R.string.about_source_licenses)
                 .setNotices(notices)
                 .setIncludeOwnLicense(true)

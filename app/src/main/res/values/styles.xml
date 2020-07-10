@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="@style/Theme.MaterialComponents.Light.NoActionBar">
+    <style name="AppTheme.Light" parent="@style/Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/light_primary</item>
         <item name="colorPrimaryDark">@color/light_primary</item>
@@ -21,6 +21,7 @@
         <item name="bottomSheetDialogTheme">@style/BottomSheetDialog</item>
         <item name="android:dialogTheme">@style/AlertDialog.AppTheme.Light</item>
         <item name="android:alertDialogTheme">@style/AlertDialog.AppTheme.Light</item>
+        <item name="alertDialogTheme">@style/AlertDialog.AppTheme.Light</item>
         <item name="colorBackgroundTint">@color/light_primary</item>
         <item name="colorBackgroundLeft">@color/light_str_left_bg</item>
         <item name="colorBackgroundRight">@color/light_str_right_bg</item>
@@ -43,7 +44,6 @@
         <item name="toolbarTextColor">@color/light_text_color_primary</item>
         <item name="menuIconNormalColor">?colorControlNormal</item>
         <item name="editorTabBackground">@drawable/drawer_tab_item_background_light</item>
-        <item name="findResultsPath">#0000ff</item>
         <item name="findResultsKeyword">#eaa95e</item>
 
         <item name="android:windowAnimationStyle">@style/Animation.Activity</item>
@@ -70,6 +70,7 @@
         <item name="bottomSheetDialogTheme">@style/BottomSheetDialog.Dark</item>
         <item name="android:dialogTheme">@style/AlertDialog.AppTheme.Dark</item>
         <item name="android:alertDialogTheme">@style/AlertDialog.AppTheme.Dark</item>
+        <item name="alertDialogTheme">@style/AlertDialog.AppTheme.Dark</item>
         <item name="colorBackgroundTint">@color/dark_primary</item>
         <item name="colorBackgroundLeft">@color/dark_str_left_bg</item>
         <item name="colorBackgroundRight">@color/dark_str_right_bg</item>
@@ -94,13 +95,50 @@
         <item name="toolbarTextColor">#fff</item>
         <item name="menuIconNormalColor">#ffffff</item>
         <item name="editorTabBackground">@drawable/drawer_tab_item_background_dark</item>
-        <item name="findResultsPath">#0000ff</item>
         <item name="findResultsKeyword">#C26509</item>
 
         <item name="android:windowAnimationStyle">@style/Animation.Activity</item>
 
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
 
+    </style>
+
+    <style name="AppTheme.Simple.Light" parent="AppTheme.Light">
+        <item name="colorPrimary">?attr/simpleThemePrimaryColor</item>
+        <item name="colorPrimaryDark">?attr/simpleThemePrimaryColor</item>
+        <item name="colorAccent">?attr/simpleThemeAccentColor</item>
+        <item name="android:windowBackground">?attr/simpleThemePrimaryColor</item>
+        <item name="titleTextColor">?attr/simpleThemeTextPrimaryColor</item>
+        <item name="android:textColorPrimary">?attr/simpleThemeTextPrimaryColor</item>
+        <item name="android:textColorSecondary">?attr/simpleThemeTextSecondaryColor</item>
+        <item name="alertDialogTheme">@style/AlertDialog.AppTheme.Light</item>
+    </style>
+
+    <style name="AppTheme.Simple.Dark" parent="AppTheme.Dark">
+        <item name="colorPrimary">?attr/simpleThemePrimaryColor</item>
+        <item name="colorPrimaryDark">?attr/simpleThemePrimaryColor</item>
+        <item name="colorAccent">?attr/simpleThemeAccentColor</item>
+        <item name="android:windowBackground">?attr/simpleThemePrimaryColor</item>
+        <item name="titleTextColor">?attr/simpleThemeTextPrimaryColor</item>
+        <item name="android:textColorPrimary">?attr/simpleThemeTextPrimaryColor</item>
+        <item name="android:textColorSecondary">?attr/simpleThemeTextSecondaryColor</item>
+        <item name="alertDialogTheme">@style/AlertDialog.AppTheme.Dark</item>
+    </style>
+
+    <style name="AppTheme.Rena" parent="AppTheme.Simple.Dark">
+        <item name="simpleThemePrimaryColor">@color/colorPrimaryRena</item>
+        <item name="simpleThemePrimaryLightColor">@color/colorPrimaryLightRena</item>
+        <item name="simpleThemeAccentColor">@color/colorAccentRena</item>
+        <item name="simpleThemeTextPrimaryColor">@color/colorTextPrimaryRena</item>
+        <item name="simpleThemeTextSecondaryColor">@color/colorTextSecondaryRena</item>
+    </style>
+
+    <style name="AppTheme.RenaLight" parent="AppTheme.Simple.Light">
+        <item name="simpleThemePrimaryColor">@color/colorPrimaryRenaLight</item>
+        <item name="simpleThemePrimaryLightColor">@color/colorPrimaryLightRenaLight</item>
+        <item name="simpleThemeAccentColor">@color/colorAccentRenaLight</item>
+        <item name="simpleThemeTextPrimaryColor">@color/colorTextPrimaryRenaLight</item>
+        <item name="simpleThemeTextSecondaryColor">@color/colorTextSecondaryRenaLight</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.ActionBar" />

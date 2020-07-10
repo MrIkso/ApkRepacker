@@ -39,21 +39,23 @@ dependencies {
     implementation project(':common')
     implementation project(':colorpicker')
     implementation project(':expandablerecyclerview')
-    implementation project(':lib-n-ide')
     implementation project(':treeview')
     implementation project(":photoview")
     implementation project(":vectormaster")
-   // implementation project(":jadx-core")
+    implementation project(":codeeditor")
     implementation project(path: ':md-dialog-core')
 //    implementation 'com.afollestad.material-dialogs:commons:0.9.6.0'
 //    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
     implementation 'androidx.preference:preference:1.1.1'
-    implementation 'androidx.fragment:fragment:1.2.4'
+    implementation 'androidx.fragment:fragment:1.2.5'
     implementation 'androidx.appcompat:appcompat:1.3.0-alpha01'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta6'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta7'
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0-alpha01'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+   // implementation "androidx.room:room-runtime:2.2.5"
+   // annotationProcessor "androidx.room:room-compiler:2.2.5" // For Kotlin use kapt instead of annotationProcessor
+    implementation "androidx.work:work-runtime:2.3.4"
     implementation 'com.google.android.material:material:1.2.0-beta01'
     implementation 'com.google.guava:guava:29.0-android'
     implementation 'com.google.code.gson:gson:2.8.6'
@@ -70,6 +72,6 @@ dependencies {
     implementation 'me.zhanghai.android.systemuihelper:library:1.0.0'
     implementation 'de.psdev.licensesdialog:licensesdialog:2.1.0'
     implementation 'org.jsoup:jsoup:1.13.1'
-    implementation 'org.jetbrains:annotations:15.0'
+    implementation 'org.jetbrains:annotations:19.0.0'
     // implementation 'me.jfenn.ColorPickerDialog:base:0.2.1'
 }

@@ -19,15 +19,15 @@ package com.jecelyin.editor.v2.dialog;
 import android.content.Context;
 import android.view.inputmethod.EditorInfo;
 
-import com.duy.ide.editor.Document;
-import com.duy.ide.editor.EditorDelegate;
-import com.duy.ide.editor.editor.R;
+import com.mrikso.apkrepacker.R;
+import com.mrikso.apkrepacker.ide.editor.Document;
+import com.mrikso.apkrepacker.ide.editor.EditorDelegate;
+
 import com.jecelyin.common.utils.DLog;
 import com.jecelyin.common.utils.StringUtils;
 import com.jecelyin.common.utils.UIUtils;
 import com.jecelyin.editor.v2.common.Command;
 
-import org.gjt.sp.jedit.LineManager;
 
 /**
  * @author Jecelyin Peng <jecelyin@gmail.com>
@@ -46,8 +46,8 @@ public class GotoLineDialog extends AbstractDialog {
         if (editorDelegate != null) {
             Document document = editorDelegate.getDocument();
             if (document != null) {
-                LineManager lineManager = document.getBuffer().getLineManager();
-                lineCount = lineManager.getLineCount();
+               // LineManager lineManager = document.getBuffer().getLineManager();
+               // lineCount = lineManager.getLineCount();
             }
         }
         UIUtils.showInputDialog(

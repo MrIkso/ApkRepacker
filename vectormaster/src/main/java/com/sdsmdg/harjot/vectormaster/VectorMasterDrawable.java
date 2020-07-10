@@ -49,7 +49,6 @@ public class VectorMasterDrawable extends Drawable {
 
     private InputStream vectorStream;
     private File vectorFile;
-    private String resourcePrefix = "@/";
 //    private String projectPatch;
 
     public VectorMasterDrawable(Context context) {
@@ -153,43 +152,13 @@ public class VectorMasterDrawable extends Drawable {
                                 isVector = true;
 
                                 tempPosition = getAttrPosition(xpp, "viewportWidth");
-                                if((tempPosition != -1)){
-                                    String viewportWith = xpp.getAttributeValue(tempPosition);
-                                    if(viewportWith.startsWith(resourcePrefix)){
-                                        vectorModel.setViewportWidth(DefaultValues.VECTOR_VIEWPORT_WIDTH);
-                                    }else
-                                        vectorModel.setViewportWidth(Float.parseFloat(viewportWith));
-                                }
-                                else{
-                                    vectorModel.setViewportWidth(DefaultValues.VECTOR_VIEWPORT_WIDTH);
-                                }
-                                //vectorModel.setViewportWidth((tempPosition != -1) ? Float.parseFloat(xpp.getAttributeValue(tempPosition)) : DefaultValues.VECTOR_VIEWPORT_WIDTH);
+                                vectorModel.setViewportWidth((tempPosition != -1) ? Float.parseFloat(xpp.getAttributeValue(tempPosition)) : DefaultValues.VECTOR_VIEWPORT_WIDTH);
 
                                 tempPosition = getAttrPosition(xpp, "viewportHeight");
-                                if((tempPosition != -1)){
-                                    String viewportHeight = xpp.getAttributeValue(tempPosition);
-                                    if(viewportHeight.startsWith(resourcePrefix)){
-                                        vectorModel.setViewportHeight(DefaultValues.VECTOR_VIEWPORT_HEIGHT);
-                                    }else
-                                        vectorModel.setViewportHeight(Float.parseFloat(viewportHeight));
-                                }
-                                else{
-                                    vectorModel.setViewportHeight(DefaultValues.VECTOR_VIEWPORT_HEIGHT);
-                                }
-                                //    vectorModel.setViewportHeight((tempPosition != -1) ? Float.parseFloat(xpp.getAttributeValue(tempPosition)) : DefaultValues.VECTOR_VIEWPORT_HEIGHT);
+                                vectorModel.setViewportHeight((tempPosition != -1) ? Float.parseFloat(xpp.getAttributeValue(tempPosition)) : DefaultValues.VECTOR_VIEWPORT_HEIGHT);
 
                                 tempPosition = getAttrPosition(xpp, "alpha");
-                                if((tempPosition != -1)){
-                                    String alpha = xpp.getAttributeValue(tempPosition);
-                                    if(alpha.startsWith(resourcePrefix)){
-                                        vectorModel.setAlpha(DefaultValues.VECTOR_ALPHA);
-                                    }else
-                                        vectorModel.setAlpha(Float.parseFloat(alpha));
-                                }
-                                else{
-                                    vectorModel.setAlpha(DefaultValues.VECTOR_ALPHA);
-                                }
-                                // vectorModel.setAlpha((tempPosition != -1) ? Float.parseFloat(xpp.getAttributeValue(tempPosition)) : DefaultValues.VECTOR_ALPHA);
+                                vectorModel.setAlpha((tempPosition != -1) ? Float.parseFloat(xpp.getAttributeValue(tempPosition)) : DefaultValues.VECTOR_ALPHA);
 
                                 tempPosition = getAttrPosition(xpp, "name");
                                 vectorModel.setName((tempPosition != -1) ? xpp.getAttributeValue(tempPosition) : null);
@@ -207,21 +176,10 @@ public class VectorMasterDrawable extends Drawable {
                                 pathModel.setName((tempPosition != -1) ? xpp.getAttributeValue(tempPosition) : null);
 
                                 tempPosition = getAttrPosition(xpp, "fillAlpha");
-                                if((tempPosition != -1)){
-                                    String alpha = xpp.getAttributeValue(tempPosition);
-                                    if(alpha.startsWith(resourcePrefix)){
-                                        pathModel.setFillAlpha(DefaultValues.PATH_FILL_ALPHA);
-                                    }
-                                    else
-                                        pathModel.setFillAlpha(Float.parseFloat(alpha));
-                                }
-                                else {
-                                    pathModel.setFillAlpha(DefaultValues.PATH_FILL_ALPHA);
-                                }
-                                // pathModel.setFillAlpha((tempPosition != -1) ? Float.parseFloat(xpp.getAttributeValue(tempPosition)) : DefaultValues.PATH_FILL_ALPHA);
+                                pathModel.setFillAlpha((tempPosition != -1) ? Float.parseFloat(xpp.getAttributeValue(tempPosition)) : DefaultValues.PATH_FILL_ALPHA);
 
                                 tempPosition = getAttrPosition(xpp, "fillColor");
-                                pathModel.setFillColor((tempPosition != -1) ? Utils.getColorFromString(xpp.getAttributeValue(tempPosition), useLightTheme) : DefaultValues.PATH_FILL_COLOR_BLACK);
+                                pathModel.setFillColor((tempPosition != -1) ? Utils.getColorFromStringTheme(xpp.getAttributeValue(tempPosition), useLightTheme) : DefaultValues.PATH_FILL_COLOR);
 
                                 tempPosition = getAttrPosition(xpp, "fillType");
                                 pathModel.setFillType((tempPosition != -1) ? Utils.getFillTypeFromString(xpp.getAttributeValue(tempPosition)) : DefaultValues.PATH_FILL_TYPE);
@@ -238,17 +196,7 @@ public class VectorMasterDrawable extends Drawable {
                                 }
 
                                 tempPosition = getAttrPosition(xpp, "strokeAlpha");
-                                if((tempPosition != -1)){
-                                    String alpha = xpp.getAttributeValue(tempPosition);
-                                    if(alpha.startsWith(resourcePrefix)){
-                                        pathModel.setStrokeAlpha(DefaultValues.PATH_STROKE_ALPHA);
-                                    }else
-                                        pathModel.setStrokeAlpha(Float.parseFloat(alpha));
-                                }
-                                else{
-                                    pathModel.setStrokeAlpha(DefaultValues.PATH_STROKE_ALPHA);
-                                }
-                                // pathModel.setStrokeAlpha((tempPosition != -1) ? Float.parseFloat(xpp.getAttributeValue(tempPosition)) : DefaultValues.PATH_STROKE_ALPHA);
+                                pathModel.setStrokeAlpha((tempPosition != -1) ? Float.parseFloat(xpp.getAttributeValue(tempPosition)) : DefaultValues.PATH_STROKE_ALPHA);
 
                                 tempPosition = getAttrPosition(xpp, "strokeColor");
                                 pathModel.setStrokeColor((tempPosition != -1) ? Utils.getColorFromString(xpp.getAttributeValue(tempPosition), useLightTheme) : DefaultValues.PATH_STROKE_COLOR);
@@ -260,70 +208,19 @@ public class VectorMasterDrawable extends Drawable {
                                 pathModel.setStrokeLineJoin((tempPosition != -1) ? Utils.getLineJoinFromString(xpp.getAttributeValue(tempPosition)) : DefaultValues.PATH_STROKE_LINE_JOIN);
 
                                 tempPosition = getAttrPosition(xpp, "strokeMiterLimit");
-                                if((tempPosition != -1)){
-                                    String strokeMiterLimit = xpp.getAttributeValue(tempPosition);
-                                    if(strokeMiterLimit.startsWith(resourcePrefix)){
-                                        pathModel.setStrokeMiterLimit(DefaultValues.PATH_STROKE_MITER_LIMIT);
-                                    }else
-                                        pathModel.setStrokeMiterLimit(Float.parseFloat(strokeMiterLimit));
-                                }
-                                else{
-                                    pathModel.setStrokeMiterLimit(DefaultValues.PATH_STROKE_MITER_LIMIT);
-                                }
-                                //pathModel.setStrokeMiterLimit((tempPosition != -1) ? Float.parseFloat(xpp.getAttributeValue(tempPosition)) : DefaultValues.PATH_STROKE_MITER_LIMIT);
+                                pathModel.setStrokeMiterLimit((tempPosition != -1) ? Float.parseFloat(xpp.getAttributeValue(tempPosition)) : DefaultValues.PATH_STROKE_MITER_LIMIT);
 
                                 tempPosition = getAttrPosition(xpp, "strokeWidth");
-                                if((tempPosition != -1)){
-                                    String strokeWidth = xpp.getAttributeValue(tempPosition);
-                                    if(strokeWidth.startsWith(resourcePrefix)){
-                                        pathModel.setStrokeWidth(DefaultValues.PATH_STROKE_WIDTH);
-                                    }else
-                                        pathModel.setStrokeWidth(Float.parseFloat(strokeWidth));
-                                }
-                                else{
-                                    pathModel.setStrokeWidth(DefaultValues.PATH_STROKE_WIDTH);
-                                }
-
-                                //pathModel.setStrokeWidth((tempPosition != -1) ? Float.parseFloat(xpp.getAttributeValue(tempPosition)) : DefaultValues.PATH_STROKE_WIDTH);
+                                pathModel.setStrokeWidth((tempPosition != -1) ? Float.parseFloat(xpp.getAttributeValue(tempPosition)) : DefaultValues.PATH_STROKE_WIDTH);
 
                                 tempPosition = getAttrPosition(xpp, "trimPathEnd");
-                                if((tempPosition != -1)){
-                                    String trimPathEnd = xpp.getAttributeValue(tempPosition);
-                                    if(trimPathEnd.startsWith(resourcePrefix)){
-                                        pathModel.setTrimPathEnd(DefaultValues.PATH_TRIM_PATH_OFFSET);
-                                    }else
-                                        pathModel.setTrimPathEnd(Float.parseFloat(trimPathEnd));
-                                }
-                                else{
-                                    pathModel.setTrimPathEnd(DefaultValues.PATH_TRIM_PATH_OFFSET);
-                                }
-                                //pathModel.setTrimPathEnd((tempPosition != -1) ? Float.parseFloat(xpp.getAttributeValue(tempPosition)) : DefaultValues.PATH_TRIM_PATH_END);
+                                pathModel.setTrimPathEnd((tempPosition != -1) ? Float.parseFloat(xpp.getAttributeValue(tempPosition)) : DefaultValues.PATH_TRIM_PATH_END);
 
                                 tempPosition = getAttrPosition(xpp, "trimPathOffset");
-                                if((tempPosition != -1)){
-                                    String trimPathOffset = xpp.getAttributeValue(tempPosition);
-                                    if(trimPathOffset.startsWith(resourcePrefix)){
-                                        pathModel.setTrimPathOffset(DefaultValues.PATH_TRIM_PATH_OFFSET);
-                                    }else
-                                        pathModel.setTrimPathOffset(Float.parseFloat(trimPathOffset));
-                                }
-                                else{
-                                    pathModel.setTrimPathOffset(DefaultValues.PATH_TRIM_PATH_OFFSET);
-                                }
-                                // pathModel.setTrimPathOffset((tempPosition != -1) ? Float.parseFloat(xpp.getAttributeValue(tempPosition)) : DefaultValues.PATH_TRIM_PATH_OFFSET);
+                                pathModel.setTrimPathOffset((tempPosition != -1) ? Float.parseFloat(xpp.getAttributeValue(tempPosition)) : DefaultValues.PATH_TRIM_PATH_OFFSET);
 
                                 tempPosition = getAttrPosition(xpp, "trimPathStart");
-                                if((tempPosition != -1)){
-                                    String trimPathStart = xpp.getAttributeValue(tempPosition);
-                                    if(trimPathStart.startsWith(resourcePrefix)){
-                                        pathModel.setTrimPathStart(DefaultValues.PATH_TRIM_PATH_START);
-                                    }else
-                                        pathModel.setTrimPathStart(Float.parseFloat(trimPathStart));
-                                }
-                                else{
-                                    pathModel.setTrimPathStart(DefaultValues.PATH_TRIM_PATH_START);
-                                }
-                                //   pathModel.setTrimPathStart((tempPosition != -1) ? Float.parseFloat(xpp.getAttributeValue(tempPosition)) : DefaultValues.PATH_TRIM_PATH_START);
+                                pathModel.setTrimPathStart((tempPosition != -1) ? Float.parseFloat(xpp.getAttributeValue(tempPosition)) : DefaultValues.PATH_TRIM_PATH_START);
 
                                 pathModel.buildPath(useLegacyParser);
                                 break;
@@ -334,95 +231,25 @@ public class VectorMasterDrawable extends Drawable {
                                 groupModel.setName((tempPosition != -1) ? xpp.getAttributeValue(tempPosition) : null);
 
                                 tempPosition = getAttrPosition(xpp, "pivotX");
-                                if((tempPosition != -1)){
-                                    String pivotX = xpp.getAttributeValue(tempPosition);
-                                    if(pivotX.startsWith(resourcePrefix)){
-                                        groupModel.setPivotX(DefaultValues.GROUP_PIVOT_X);
-                                    }else
-                                        groupModel.setPivotX(Float.parseFloat(pivotX));
-                                }
-                                else{
-                                    groupModel.setPivotX(DefaultValues.GROUP_PIVOT_X);
-                                }
-                                //groupModel.setPivotX((tempPosition != -1) ? Float.parseFloat(xpp.getAttributeValue(tempPosition)) : DefaultValues.GROUP_PIVOT_X);
+                                groupModel.setPivotX((tempPosition != -1) ? Float.parseFloat(xpp.getAttributeValue(tempPosition)) : DefaultValues.GROUP_PIVOT_X);
 
                                 tempPosition = getAttrPosition(xpp, "pivotY");
-                                if((tempPosition != -1)){
-                                    String pivotY = xpp.getAttributeValue(tempPosition);
-                                    if(pivotY.startsWith(resourcePrefix)){
-                                        groupModel.setPivotY(DefaultValues.GROUP_PIVOT_Y);
-                                    }else
-                                        groupModel.setPivotY(Float.parseFloat(pivotY));
-                                }
-                                else{
-                                    groupModel.setPivotY(DefaultValues.GROUP_PIVOT_Y);
-                                }
-                                //  groupModel.setPivotY((tempPosition != -1) ? Float.parseFloat(xpp.getAttributeValue(tempPosition)) : DefaultValues.GROUP_PIVOT_Y);
+                                groupModel.setPivotY((tempPosition != -1) ? Float.parseFloat(xpp.getAttributeValue(tempPosition)) : DefaultValues.GROUP_PIVOT_Y);
 
                                 tempPosition = getAttrPosition(xpp, "rotation");
-                                if((tempPosition != -1)){
-                                    String rotation = xpp.getAttributeValue(tempPosition);
-                                    if(rotation.startsWith(resourcePrefix)){
-                                        groupModel.setRotation(DefaultValues.GROUP_ROTATION);
-                                    }else
-                                        groupModel.setRotation(Float.parseFloat(rotation));
-                                }
-                                else{
-                                    groupModel.setRotation(DefaultValues.GROUP_ROTATION);
-                                }
-                                //groupModel.setRotation((tempPosition != -1) ? Float.parseFloat(xpp.getAttributeValue(tempPosition)) : DefaultValues.GROUP_ROTATION);
+                                groupModel.setRotation((tempPosition != -1) ? Float.parseFloat(xpp.getAttributeValue(tempPosition)) : DefaultValues.GROUP_ROTATION);
 
                                 tempPosition = getAttrPosition(xpp, "scaleX");
-                                if((tempPosition != -1)){
-                                    String scaleX = xpp.getAttributeValue(tempPosition);
-                                    if(scaleX.startsWith(resourcePrefix)){
-                                        groupModel.setScaleX(DefaultValues.GROUP_SCALE_X);
-                                    }else
-                                        groupModel.setScaleX(Float.parseFloat(scaleX));
-                                }
-                                else{
-                                    groupModel.setScaleX(DefaultValues.GROUP_SCALE_X);
-                                }
-                                //groupModel.setScaleX((tempPosition != -1) ? Float.parseFloat(xpp.getAttributeValue(tempPosition)) : DefaultValues.GROUP_SCALE_X);
+                                groupModel.setScaleX((tempPosition != -1) ? Float.parseFloat(xpp.getAttributeValue(tempPosition)) : DefaultValues.GROUP_SCALE_X);
 
                                 tempPosition = getAttrPosition(xpp, "scaleY");
-                                if((tempPosition != -1)){
-                                    String scaleY = xpp.getAttributeValue(tempPosition);
-                                    if(scaleY.startsWith(resourcePrefix)){
-                                        groupModel.setScaleY(DefaultValues.GROUP_SCALE_Y);
-                                    }else
-                                        groupModel.setScaleY(Float.parseFloat(scaleY));
-                                }
-                                else{
-                                    groupModel.setScaleY(DefaultValues.GROUP_SCALE_Y);
-                                }
-                                //groupModel.setScaleY((tempPosition != -1) ? Float.parseFloat(xpp.getAttributeValue(tempPosition)) : DefaultValues.GROUP_SCALE_Y);
+                                groupModel.setScaleY((tempPosition != -1) ? Float.parseFloat(xpp.getAttributeValue(tempPosition)) : DefaultValues.GROUP_SCALE_Y);
 
                                 tempPosition = getAttrPosition(xpp, "translateX");
-                                if((tempPosition != -1)){
-                                    String translateX = xpp.getAttributeValue(tempPosition);
-                                    if(translateX.startsWith(resourcePrefix)){
-                                        groupModel.setTranslateX(DefaultValues.GROUP_TRANSLATE_X);
-                                    }else
-                                        groupModel.setTranslateX(Float.parseFloat(translateX));
-                                }
-                                else{
-                                    groupModel.setTranslateX(DefaultValues.GROUP_TRANSLATE_X);
-                                }
-                                //groupModel.setTranslateX((tempPosition != -1) ? Float.parseFloat(xpp.getAttributeValue(tempPosition)) : DefaultValues.GROUP_TRANSLATE_X);
+                                groupModel.setTranslateX((tempPosition != -1) ? Float.parseFloat(xpp.getAttributeValue(tempPosition)) : DefaultValues.GROUP_TRANSLATE_X);
 
                                 tempPosition = getAttrPosition(xpp, "translateY");
-                                if((tempPosition != -1)){
-                                    String translateY = xpp.getAttributeValue(tempPosition);
-                                    if(translateY.startsWith(resourcePrefix)){
-                                        groupModel.setTranslateY(DefaultValues.GROUP_TRANSLATE_Y);
-                                    }else
-                                        groupModel.setTranslateY(Float.parseFloat(translateY));
-                                }
-                                else{
-                                    groupModel.setTranslateY(DefaultValues.GROUP_TRANSLATE_Y);
-                                }
-                                //groupModel.setTranslateY((tempPosition != -1) ? Float.parseFloat(xpp.getAttributeValue(tempPosition)) : DefaultValues.GROUP_TRANSLATE_Y);
+                                groupModel.setTranslateY((tempPosition != -1) ? Float.parseFloat(xpp.getAttributeValue(tempPosition)) : DefaultValues.GROUP_TRANSLATE_Y);
 
                                 groupModelStack.push(groupModel);
                                 break;
@@ -439,7 +266,7 @@ public class VectorMasterDrawable extends Drawable {
                                     clipPathModel.setPathData("0");
                                     isVector = false;
                                 } else {
-//                                    Log.e("AttributeValue", "value = " + xpp.getAttributeValue(tempPosition));
+                                    Log.e("AttributeValue", "value = " + xpp.getAttributeValue(tempPosition));
                                     clipPathModel.setPathData((tempPosition != -1) ? xpp.getAttributeValue(tempPosition) : null);
                                 }
 

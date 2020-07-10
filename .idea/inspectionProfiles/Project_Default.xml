@@ -12,6 +12,16 @@
     </inspection_tool>
     <inspection_tool class="ReturnOfInnerClass" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ReturnThis" enabled="true" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="StaticImport" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="StaticImport" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="allowedClasses">
+        <set>
+          <option value="com.a4455jkjh.lexer.JavaScriptLexer" />
+          <option value="com.a4455jkjh.lexer.ObjectiveCLexer" />
+          <option value="com.a4455jkjh.lexer.SmaliLexer" />
+          <option value="com.a4455jkjh.lexer.XMLLexer" />
+          <option value="com.jecelyin.editor.v2.common.Command.CommandEnum" />
+        </set>
+      </option>
+    </inspection_tool>
   </profile>
 </component>

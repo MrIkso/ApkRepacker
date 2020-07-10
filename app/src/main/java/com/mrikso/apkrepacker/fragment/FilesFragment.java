@@ -1,22 +1,15 @@
 package com.mrikso.apkrepacker.fragment;
 
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.StrictMode;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.webkit.MimeTypeMap;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -36,12 +29,12 @@ import com.mrikso.apkrepacker.ui.filelist.PathButtonAdapter;
 import com.mrikso.apkrepacker.ui.imageviewer.ImageViewerActivity;
 import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.FragmentUtils;
+import com.mrikso.apkrepacker.utils.IntegerArray;
+import com.mrikso.apkrepacker.utils.IntentUtils;
+import com.mrikso.apkrepacker.utils.StringUtils;
 import com.sdsmdg.harjot.vectormaster.VectorMasterDrawable;
 
-import org.gjt.sp.jedit.util.IntegerArray;
-
 import java.io.File;
-import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -67,19 +60,11 @@ public class FilesFragment extends Fragment implements FileOptionsDialogFragment
     }
 
     private static String downDir(int levels, String oldPath) {
-        // String oldPath = System.getProperty("user.dir");
         String[] splitterPathArray = oldPath.split("/");
         levels = splitterPathArray.length - levels;
         List<String> splitedPathList = Arrays.asList(splitterPathArray);
         splitedPathList = splitedPathList.subList(0, levels);
-        String newPath = null;
-        // if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-        //     newPath = String.join("/", splitedPathList);
-        // }
-        // else {
-        newPath = TextUtils.join("/", splitedPathList);
-        //}
-        return newPath;
+        return TextUtils.join("/", splitedPathList);
     }
 
     @Override
@@ -282,38 +267,11 @@ public class FilesFragment extends Fragment implements FileOptionsDialogFragment
         }
     }*/
 
-    private void openFileWithIntent(@NonNull File file) {
-        if (Build.VERSION.SDK_INT >= 24) {
-            try {
-                Method m = StrictMode.class.getMethod("disableDeathOnFileUriExposure");
-                m.invoke(null);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        String extension = file.getName().substring(file.getName().lastIndexOf(".") + 1);
-
-        MimeTypeMap mime = MimeTypeMap.getSingleton();
-        String type = mime.getMimeTypeFromExtension(extension);
-
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.fromFile(file), type);
-        try {
-            startActivity(intent);
-        } catch (ActivityNotFoundException | IllegalArgumentException e) {
-            UIUtils.toast(App.getContext(), R.string.cannt_open_file);
-            Log.d("OPEN_ERROR", e.toString());
-            // showMessage(String.format("Cannot open %s", getName(file)));
-        }
-    }
-
     @Override
     public void onFileItemClick(Integer item) {
         switch (item) {
             case R.id.open_with:
-                openFileWithIntent(new File(selectedFile.getAbsolutePath()));
+                startActivity(IntentUtils.openFileWithIntent(new File(selectedFile.getAbsolutePath())));
                 break;
             case R.id.open_in_editor:
                 Intent intent = new Intent(getActivity(), CodeEditorActivity.class);
@@ -460,7 +418,7 @@ public class FilesFragment extends Fragment implements FileOptionsDialogFragment
                             startActivity(new Intent(getActivity(), ImageViewerActivity.class));
                             break;
                         default:
-                            openFileWithIntent(file);
+                            startActivity(IntentUtils.openFileWithIntent(file));
                             break;
                     }
                 }

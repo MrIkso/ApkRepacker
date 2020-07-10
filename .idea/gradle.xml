@@ -13,10 +13,10 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/apktool" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/codeeditor" />
             <option value="$PROJECT_DIR$/colorpicker" />
             <option value="$PROJECT_DIR$/common" />
             <option value="$PROJECT_DIR$/expandablerecyclerview" />
-            <option value="$PROJECT_DIR$/lib-n-ide" />
             <option value="$PROJECT_DIR$/library" />
             <option value="$PROJECT_DIR$/md-dialog-core" />
             <option value="$PROJECT_DIR$/photoview" />

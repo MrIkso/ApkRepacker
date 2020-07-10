@@ -3,10 +3,10 @@ package com.mrikso.apkrepacker.task;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.duy.common.DLog;
+import com.mrikso.apkrepacker.utils.common.DLog;
 import com.mrikso.apkrepacker.fragment.SimpleEditorFragment;
 import com.mrikso.apkrepacker.model.QickEdit;
-import com.mrikso.apkrepacker.ui.prererence.Preference;
+import com.mrikso.apkrepacker.ui.prererence.PreferenceHelper;
 import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.SignUtil;
 
@@ -19,7 +19,7 @@ public class SimpleEditTask extends AsyncTask<File, Integer, Boolean> {
     private static SignUtil signTool;
     private File resultFile;
     private Context mContext;
-    private Preference preference;
+    private PreferenceHelper preferenceHelper;
     private SimpleEditorFragment simpleEditorFragment;
 
     public SimpleEditTask(Context mContext, SimpleEditorFragment simpleEditorFragment, SignUtil signTool) {
@@ -54,17 +54,17 @@ public class SimpleEditTask extends AsyncTask<File, Integer, Boolean> {
     }
 
     protected boolean process(File input) {
-        preference = Preference.getInstance(mContext);
+        preferenceHelper = PreferenceHelper.getInstance(mContext);
         String outApk;
         try {
             File tmp = File.createTempFile("temp", ".apk");
             try {
-                if (preference.isSignResultApk()) {
+                if (preferenceHelper.isSignResultApk()) {
                     outApk = FileUtil.genNameApk(mContext, input.getAbsolutePath(), input.getName(), "_signed", 0);
                 } else {
                     outApk = FileUtil.genNameApk(mContext, input.getAbsolutePath(), input.getName(), "_unsigned", 0);
                 }
-                File buildApkPath = new File(preference.getDecodingPath() + "/output");
+                File buildApkPath = new File(preferenceHelper.getDecodingPath() + "/output");
                 if (!buildApkPath.exists() && !buildApkPath.mkdirs()) {
                     return false;
                 }
@@ -73,7 +73,7 @@ public class SimpleEditTask extends AsyncTask<File, Integer, Boolean> {
                 QickEdit qickEdit = new QickEdit();
                 qickEdit.build(input, tmp);
                 DLog.i("edited done");
-                if (preference.isSignResultApk()) {
+                if (preferenceHelper.isSignResultApk()) {
                     DLog.i("start sign apk");
                     signTool.sign(tmp, out, 14);
                     DLog.i("temp file: " + tmp.getAbsolutePath());

@@ -24,8 +24,9 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.duy.ide.editor.editor.R;
-import com.jecelyin.editor.v2.Preferences;
+
+import com.jecelyin.editor.v2.EditorPreferences;
+import com.mrikso.apkrepacker.R;
 
 /**
  * @author Jecelyin Peng <jecelyin@gmail.com>
@@ -53,9 +54,9 @@ public class SymbolBarLayout extends LinearLayout implements View.OnClickListene
         setOrientation(HORIZONTAL);
         String symbol;
         if (isInEditMode()) {
-            symbol = Preferences.VALUE_SYMBOL;
+            symbol = EditorPreferences.VALUE_SYMBOL;
         } else {
-            symbol = Preferences.getInstance(getContext()).getSymbol();
+            symbol = EditorPreferences.getInstance(getContext()).getSymbol();
         }
         charList = TextUtils.split(symbol, "\n");
 

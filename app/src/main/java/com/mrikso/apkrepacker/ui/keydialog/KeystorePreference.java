@@ -1,232 +1,24 @@
 package com.mrikso.apkrepacker.ui.keydialog;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.res.ColorStateList;
-import android.content.res.TypedArray;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.RippleDrawable;
-import android.os.Environment;
-import android.preference.DialogPreference;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import androidx.appcompat.widget.AppCompatImageButton;
-
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.android.material.shape.MaterialShapeDrawable;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
-import com.jecelyin.common.utils.UIUtils;
-import com.mrikso.apkrepacker.R;
-import com.mrikso.apkrepacker.filepicker.FilePickerDialog;
-import com.mrikso.apkrepacker.ui.prererence.Preference;
+import androidx.preference.DialogPreference;
 
 public class KeystorePreference extends DialogPreference {
-    private EditText key_path;
-    private TextInputLayout cert;
-    private TextInputEditText fx_type;
-    private EditText alias;
-    private LinearLayout password;
-    private EditText storePass;
-    private EditText keyPass;
-    private AppCompatImageButton selectKey, selectCert;
-    private Preference mPref;
-
-    public KeystorePreference(Context ctx, AttributeSet a) {
-        super(ctx, a);
-        mPref = Preference.getInstance(ctx);
-        setDialogLayoutResource(R.layout.keystore);
+    public KeystorePreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
     }
 
-    @Override
-    protected void onBindDialogView(View view) {
-        super.onBindDialogView(view);
-        key_path = view.findViewById(R.id.key_path);
-        fx_type = view.findViewById(R.id.et_type);
-        cert = view.findViewById(R.id.cert);
-        alias = view.findViewById(R.id.alias);
-        password = view.findViewById(R.id.password);
-        storePass = view.findViewById(R.id.storePass);
-        keyPass = view.findViewById(R.id.keyPass);
-        selectKey = view.findViewById(R.id.button_select_key);
-        selectCert = view.findViewById(R.id.button_select_cert);
-        selectCert.setOnClickListener(v -> {
-                    Log.i("sdv", "starterd");
-                    new FilePickerDialog(getContext())
-                            .setTitleText(view.getContext().getResources().getString(R.string.select_key))
-                            .setSelectMode(FilePickerDialog.MODE_SINGLE)
-                            .setSelectType(FilePickerDialog.TYPE_FILE)
-                            //.setExtensions(new String[]{"jks", "bks"})
-                            .setRootDir(Environment.getExternalStorageDirectory().getAbsolutePath())
-                            .setBackCancelable(true)
-                            .setOutsideCancelable(true)
-                            .setDialogListener(view.getContext().getResources().getString(R.string.choose_button_label),
-                                    view.getContext().getResources().getString(R.string.cancel_button_label), new FilePickerDialog.FileDialogListener() {
-                                        @Override
-                                        public void onSelectedFilePaths(String[] filePaths) {
-                                            for (String dir : filePaths) {
-                                                try {
-                                                    alias.setText(dir);
-                                                    //FileUtil.copyFile(new File(dir), new File(currentDirectory.getAbsolutePath()));
-                                                } catch (Exception e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }
-                                            // setPath(new File(currentDirectory.getAbsolutePath()));
-                                        }
-
-                                        @Override
-                                        public void onCanceled() {
-                                        }
-                                    })
-                            .show();
-                }
-        );
-        selectKey.setOnClickListener(v -> {
-                    //  Log.i("sdv", "starterd");
-                    new FilePickerDialog(getContext())
-                            .setTitleText(view.getContext().getResources().getString(R.string.select_key))
-                            .setSelectMode(FilePickerDialog.MODE_SINGLE)
-                            .setSelectType(FilePickerDialog.TYPE_FILE)
-                            //.setExtensions(new String[]{"jks", "bks"})
-                            .setRootDir(Environment.getExternalStorageDirectory().getAbsolutePath())
-                            .setBackCancelable(true)
-                            .setOutsideCancelable(true)
-                            .setDialogListener(view.getContext().getResources().getString(R.string.choose_button_label),
-                                    view.getContext().getResources().getString(R.string.cancel_button_label), new FilePickerDialog.FileDialogListener() {
-                                        @Override
-                                        public void onSelectedFilePaths(String[] filePaths) {
-                                            for (String dir : filePaths) {
-                                                try {
-                                                    key_path.setText(dir);
-                                                    //FileUtil.copyFile(new File(dir), new File(currentDirectory.getAbsolutePath()));
-                                                } catch (Exception e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }
-                                            // setPath(new File(currentDirectory.getAbsolutePath()));
-                                        }
-
-                                        @Override
-                                        public void onCanceled() {
-                                        }
-                                    })
-                            .show();
-                }
-        );
-
-        if (fx_type.getBackground() instanceof MaterialShapeDrawable) {
-            fx_type.setBackground(addRippleEffect((MaterialShapeDrawable) fx_type.getBackground()));
-        }
-        fx_type.setOnClickListener(v -> {
-            showListDialog(view.getContext(), view.getContext().getResources().getStringArray(R.array.key_format), mPref.getKeyType());
-        });
+    public KeystorePreference(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
     }
 
-    @Override
-    public void onClick(DialogInterface dialog, int which) {
-        if (which == DialogInterface.BUTTON_POSITIVE) {
-            // SharedPreferences.Editor editor = getSharedPreferences().edit();
-//            mPref.setKeyType(format.getSelectedItemPosition());
-            mPref.setPrivateKeyPath(key_path.getText().toString());
-            mPref.setCertPath(alias.getText().toString());
-            //  editor.putInt("key_type", format.getSelectedItemPosition());
-            //  editor.putString("key_path", key_path.getText().toString());
-            // editor.putString("cert_or_alias", alias.getText().toString());
-            /// String store_pass = preference.getStoreKey();
-            // String key_pass = preference.getPrivateKey();
-            mPref.setStoreKey(storePass.getText().toString());
-            mPref.setPrivateKey(keyPass.getText().toString());
-            //editor.putString("store_pass", storePass.getText().toString());
-            //editor.putString("key_pass", keyPass.getText().toString());
-            //editor.apply();
-        } else if (which == DialogInterface.BUTTON_NEUTRAL) {
-            mPref.setStoreKey("");
-            mPref.setPrivateKey("");
-            // SharedPreferences.Editor editor = getSharedPreferences().edit();
-            // editor.putString("store_pass", "");
-            // editor.putString("key_pass", "");
-            // editor.apply();
-        }
+    public KeystorePreference(Context context, AttributeSet attrs) {
+        super(context, attrs);
     }
 
-    @Override
-    protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
-        super.onPrepareDialogBuilder(builder);
-        //  SharedPreferences sp = getSharedPreferences();
-
-        int type = mPref.getKeyType();
-        //sp.getInt("key_type", 0);
-//        format.setSelection(type);
-
-        String[] array = builder.getContext().getResources().getStringArray(R.array.key_format);
-        fx_type.setText(array[type]);
-
-        if (type == 3) {
-            selectCert.setVisibility(View.VISIBLE);
-            password.setVisibility(View.GONE);
-            cert.setHint(getContext().getResources().getString(R.string.cert_path));
-        } else {
-            selectCert.setVisibility(View.GONE);
-            password.setVisibility(View.VISIBLE);
-            cert.setHint(getContext().getResources().getString(R.string.key_alias));
-        }
-
-        String keyPath = mPref.getPrivateKeyPath();
-        //sp.getString("key_path", "");
-        key_path.setText(keyPath);
-        String cert_or_alias = mPref.getCertPath();
-        // sp.getString("cert_or_alias", "");
-        alias.setText(cert_or_alias);
-        String store_pass = mPref.getStoreKey();
-        storePass.setText(store_pass);
-        String key_pass = mPref.getPrivateKey();
-        //sp.getString("key_pass", "");
-        keyPass.setText(key_pass);
-    }
-
-    private void showListDialog(Context context, String[] list, int checkedItem) {
-        UIUtils.showListDialog(context, 0, 0, list, checkedItem, new UIUtils.OnListCallback() {
-
-            @Override
-            public void onSelect(MaterialDialog dialog, int which) {
-                String[] array = dialog.getContext().getResources().getStringArray(R.array.key_format);
-                fx_type.setText(array[which]);
-                mPref.setKeyType(which);
-                if (which == 3) {
-                    selectCert.setVisibility(View.VISIBLE);
-                    password.setVisibility(View.GONE);
-                    cert.setHint(getContext().getResources().getString(R.string.cert_path));
-                } else {
-                    selectCert.setVisibility(View.GONE);
-                    password.setVisibility(View.VISIBLE);
-                    cert.setHint(getContext().getResources().getString(R.string.key_alias));
-                }
-            }
-        }, null);
-    }
-
-    @Override
-    protected void onBindView(View view) {
-        super.onBindView(view);
-        TextView title = view.findViewById(android.R.id.title);
-        TextView summary = view.findViewById(android.R.id.summary);
-    }
-
-    private Drawable addRippleEffect(MaterialShapeDrawable boxBackground) {
-        int[] attrs = new int[]{R.attr.colorControlHighlight};
-        TypedArray ta = getContext().obtainStyledAttributes(attrs);
-        ColorStateList rippleColor = ta.getColorStateList(0);
-        ta.recycle();
-        Drawable mask = new MaterialShapeDrawable(boxBackground.getShapeAppearanceModel());
-        mask.setTint(Color.WHITE);
-        return new RippleDrawable(rippleColor, boxBackground, mask);
+    public KeystorePreference(Context context) {
+        super(context);
     }
 }

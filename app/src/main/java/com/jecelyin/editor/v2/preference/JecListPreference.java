@@ -20,7 +20,7 @@ package com.jecelyin.editor.v2.preference;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.preference.ListPreference;
+import androidx.preference.ListPreference;
 import android.util.AttributeSet;
 import android.widget.BaseAdapter;
 

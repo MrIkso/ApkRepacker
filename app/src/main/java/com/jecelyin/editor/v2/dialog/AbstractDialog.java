@@ -21,7 +21,7 @@ import android.app.Dialog;
 import android.content.Context;
 
 
-import com.duy.ide.core.api.IdeActivity;
+import com.mrikso.apkrepacker.activity.IdeActivity;
 
 /**
  * @author Jecelyin Peng <jecelyin@gmail.com>

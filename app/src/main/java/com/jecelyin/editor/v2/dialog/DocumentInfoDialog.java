@@ -22,9 +22,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
-import com.duy.ide.editor.editor.R;
-import com.duy.ide.editor.view.IEditAreaView;
-import com.duy.ide.editor.Document;
+
+import com.mrikso.apkrepacker.R;
+import com.mrikso.apkrepacker.ide.editor.view.IEditAreaView;
+import com.mrikso.apkrepacker.ide.editor.Document;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

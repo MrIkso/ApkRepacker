@@ -26,4 +26,11 @@
     <attr name="cardBackground"
         format="color|reference" />
     <attr name="dividerColor" format="color|reference" />
+
+    <attr name="simpleThemePrimaryColor" format="color" />
+    <attr name="simpleThemePrimaryLightColor" format="color" />
+    <attr name="simpleThemeAccentColor" format="color" />
+    <attr name="simpleThemeTextPrimaryColor" format="color" />
+    <attr name="simpleThemeTextSecondaryColor" format="color" />
+
 </resources>

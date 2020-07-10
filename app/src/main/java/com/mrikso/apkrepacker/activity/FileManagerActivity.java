@@ -38,7 +38,7 @@ import com.mrikso.apkrepacker.fragment.dialogs.ProgressDialogFragment;
 import com.mrikso.apkrepacker.recycler.Adapter;
 import com.mrikso.apkrepacker.task.ImportFrameworkTask;
 import com.mrikso.apkrepacker.task.SignTask;
-import com.mrikso.apkrepacker.ui.prererence.Preference;
+import com.mrikso.apkrepacker.ui.prererence.PreferenceHelper;
 import com.mrikso.apkrepacker.utils.AppUtils;
 import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.FragmentUtils;
@@ -523,8 +523,8 @@ public class FileManagerActivity extends BaseActivity implements ApkOptionsDialo
     public void onApkItemClick(Integer item) {
         switch (item) {
             case R.id.decompile_app:
-                Preference preference = Preference.getInstance(this);
-                int mode = preference.getDecodingMode();
+                PreferenceHelper preferenceHelper = PreferenceHelper.getInstance(this);
+                int mode = preferenceHelper.getDecodingMode();
                 if (mode == 3) {
                     DecompileOptionsDialogFragment decompileOptionsDialogFragment = DecompileOptionsDialogFragment.newInstance();
                     decompileOptionsDialogFragment.show(getSupportFragmentManager(), DecompileOptionsDialogFragment.TAG);

@@ -21,7 +21,7 @@ import com.jaredrummler.android.colorpicker.ColorPickerDialog;
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener;
 import com.jaredrummler.android.colorpicker.ColorShape;
 import com.mrikso.apkrepacker.R;
-import com.mrikso.apkrepacker.utils.ThemeWrapper;
+import com.mrikso.apkrepacker.utils.Theme;
 
 import java.util.Objects;
 
@@ -34,6 +34,7 @@ public class AddColorDialogFragment extends BottomSheetDialogFragment implements
 
     private ItemClickListener mListener;
     private int colorValue;
+    private Context mContext;
 
     public static AddColorDialogFragment newInstance() {
         return new AddColorDialogFragment();
@@ -43,6 +44,7 @@ public class AddColorDialogFragment extends BottomSheetDialogFragment implements
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.bottom_sheet_add_new_color, container, false);
+        mContext = view.getContext();
         colorNameEditText = view.findViewById(R.id.color_name);
         selectColorBtn = view.findViewById(R.id.select_color);
         addColorBtn = view.findViewById(R.id.add_color);
@@ -69,10 +71,10 @@ public class AddColorDialogFragment extends BottomSheetDialogFragment implements
                     .setShowColorShades(true)
                     .setColor(Color.BLACK)
                     .setDialogWidth(0.95f)
-                    .setDialogTheme(ThemeWrapper.isLightTheme() ? R.style.ColorPickerDialog : R.style.ColorPickerDialog_Dark)
+                    .setDialogTheme(!Theme.getInstance(mContext).getCurrentTheme().isDark() ? R.style.ColorPickerDialog : R.style.ColorPickerDialog_Dark)
                     .create();
             dialog.setColorPickerDialogListener(this);
-            ((AppCompatActivity) Objects.requireNonNull(getContext())).getSupportFragmentManager().beginTransaction().add(dialog, "color_picker_dialog").commitAllowingStateLoss();
+            ((AppCompatActivity) requireContext()).getSupportFragmentManager().beginTransaction().add(dialog, "color_picker_dialog").commitAllowingStateLoss();
         });
     }
 

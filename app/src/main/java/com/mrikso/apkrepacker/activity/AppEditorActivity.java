@@ -1,5 +1,6 @@
 package com.mrikso.apkrepacker.activity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
@@ -13,6 +14,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
+import com.jecelyin.common.utils.UIUtils;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.adapter.FragmentAdapter;
 import com.mrikso.apkrepacker.filepicker.FilePickerDialog;
@@ -21,11 +23,12 @@ import com.mrikso.apkrepacker.fragment.FilesFragment;
 import com.mrikso.apkrepacker.fragment.FindFragment;
 import com.mrikso.apkrepacker.fragment.OnBackPressedListener;
 import com.mrikso.apkrepacker.fragment.StringsFragment;
-import com.mrikso.apkrepacker.patchengine.ParsePatch;
+import com.mrikso.apkrepacker.ui.prererence.PreferenceHelper;
 import com.mrikso.apkrepacker.ui.stringlist.DirectoryScanner;
 import com.mrikso.apkrepacker.ui.stringlist.StringFile;
 import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.FragmentUtils;
+import com.mrikso.apkrepacker.utils.StringUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -47,6 +50,7 @@ public class AppEditorActivity extends BaseActivity {
     private List<String> titles;
     private List<Fragment> fragments;
     private ArrayList<StringFile> files;
+    private Context mContext;
 
     public static AppEditorActivity getInstance() {
         return Intance;
@@ -63,6 +67,7 @@ public class AppEditorActivity extends BaseActivity {
     }
 
     private void initView() {
+        mContext = this;
         mTabLayout = findViewById(R.id.tabs);
         mViewPager = findViewById(R.id.tab_pager);
 
@@ -75,28 +80,30 @@ public class AppEditorActivity extends BaseActivity {
 
         mViewPager.setOffscreenPageLimit(2);
         titles = new ArrayList<>();
-        titles.add(getString(R.string.menu_string));
-        titles.add(getString(R.string.menu_files));
-        titles.add(getString(R.string.menu_find_list));
-        mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(0)));
-        mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(1)));
-        mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(2)));
-        stringsFragment.setArguments(bundle);
-        filesFragment.setArguments(bundle);
         fragments = new ArrayList<>();
+        /* проверяем ли есть строки в проекте и тогда добавляем фрагмент */
         if (!stringFilesExists()) {
+            titles.add(getString(R.string.menu_string));
+            titles.add(getString(R.string.menu_files));
+            titles.add(getString(R.string.menu_find_list));
+            mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(0)));
+            mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(1)));
+            mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(2)));
+            stringsFragment.setArguments(bundle);
             fragments.add(stringsFragment);
+        } else {
+            titles.add(getString(R.string.menu_files));
+            titles.add(getString(R.string.menu_find_list));
+            mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(0)));
+            mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(1)));
         }
+
+        filesFragment.setArguments(bundle);
         fragments.add(filesFragment);
 //        fragments.add(findFragment);
         mFragmentAdapter = new FragmentAdapter(getSupportFragmentManager(), fragments, titles);
         mViewPager.setAdapter(mFragmentAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
-        //  mViewPager.addOnPageChangeListener(pageChangeListener);
-
-        //   navigation = findViewById(R.id.bottom_navigation);
-        //  navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
 
         String apkIconDrawableBase64 = getIntent().getStringExtra("apkFileIcon");
         String apkFileName = getIntent().getStringExtra("apkFileName");
@@ -109,7 +116,7 @@ public class AppEditorActivity extends BaseActivity {
         appName.setText(apkFileName);
         appPkg.setText(apkPackageName);
         appPkg.setVisibility(apkPackageName == null ? View.GONE : View.VISIBLE);
-        appIcon.setImageDrawable(FileUtil.getProjectIconDrawable(apkIconDrawableBase64));
+        appIcon.setImageDrawable(FileUtil.getProjectIconDrawable(apkIconDrawableBase64, this));
 
         buildApp.setOnClickListener(v -> buildApp());
         patchApp.setOnClickListener(v -> patchApp());
@@ -136,6 +143,7 @@ public class AppEditorActivity extends BaseActivity {
     }
 
     private void patchApp() {
+        StringUtils.hideKeyboard(this);
         new FilePickerDialog(this)
                 .setTitleText(this.getResources().getString(R.string.select_patch))
                 .setSelectMode(FilePickerDialog.MODE_SINGLE)
@@ -147,7 +155,7 @@ public class AppEditorActivity extends BaseActivity {
                     @Override
                     public void onSelectedFilePaths(String[] filePaths) {
                         for (String file : filePaths) {
-                            ParsePatch.openPatch(new File(file));
+                            //ParsePatch.openPatch(new File(file));
                         }
                     }
 
@@ -159,6 +167,21 @@ public class AppEditorActivity extends BaseActivity {
     }
 
     private void buildApp() {
+        StringUtils.hideKeyboard(this);
+        if (PreferenceHelper.getInstance(mContext).isConfirmBuild()) {
+            UIUtils.showConfirmDialog(mContext, getString(R.string.confirm_build_title), new UIUtils.OnClickCallback() {
+                @Override
+                public void onOkClick() {
+                    showCompileFragment();
+                }
+            });
+        } else {
+            showCompileFragment();
+        }
+
+    }
+
+    private void showCompileFragment() {
         Fragment compileFragment = CompileFragment.newInstance(projectPatch);
         FragmentUtils.replace(compileFragment, this, android.R.id.content);
     }

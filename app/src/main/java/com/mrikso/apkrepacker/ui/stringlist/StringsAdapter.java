@@ -18,11 +18,8 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.common.collect.Iterables;
 import com.jecelyin.common.utils.UIUtils;
 import com.mrikso.apkrepacker.R;
-import com.mrikso.apkrepacker.activity.MainActivity;
-import com.mrikso.apkrepacker.adapter.RecyclerViewAdapter;
 import com.mrikso.apkrepacker.utils.StringUtils;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 

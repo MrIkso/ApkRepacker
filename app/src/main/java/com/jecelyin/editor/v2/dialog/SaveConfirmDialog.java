@@ -20,7 +20,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 
-import com.duy.ide.editor.editor.R;
+import com.mrikso.apkrepacker.R;
+
 
 /**
  * @author Jecelyin Peng <jecelyin@gmail.com>

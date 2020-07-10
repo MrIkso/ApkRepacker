@@ -79,7 +79,7 @@ public class FragmentUtils {
                 .commit();
     }
 
-    @Deprecated
+   // @Deprecated
     public static void add(@NonNull Fragment fragment, @NonNull FragmentManager fragmentManager, @IdRes int containerViewId) {
         //noinspection deprecation
         add(fragment, fragmentManager, containerViewId, null, null, enter, exit, popEnter, popExit);
@@ -129,12 +129,14 @@ public class FragmentUtils {
     }
 
     public static void remove(@NonNull Fragment fragment) {
-        if (fragment.isRemoving()) {
+        /*if (fragment.isRemoving()) {
             return;
         }
 
-        fragment.getFragmentManager().beginTransaction().remove(fragment).commit();
+        fragment.getParentFragmentManager().beginTransaction().remove(fragment).commit()*/;
+        fragment.getActivity().getSupportFragmentManager().popBackStack();
     }
+
 
     @Deprecated
     public static void replace(@NonNull Fragment fragment, @NonNull FragmentManager fragmentManager, @IdRes int containerViewId, @Nullable String tag, String back_stack, @AnimRes int enter, @AnimRes int exit, @AnimRes int popEnter, @AnimRes int popExit) {

@@ -16,8 +16,8 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 
-import com.duy.ide.database.SQLHelper;
 import com.github.clans.fab.FloatingActionButton;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
@@ -28,10 +28,15 @@ import com.jecelyin.editor.v2.utils.GrepBuilder;
 import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.activity.AppEditorActivity;
+import com.mrikso.apkrepacker.database.ITabDatabase;
+import com.mrikso.apkrepacker.database.JsonDatabase;
+import com.mrikso.apkrepacker.database.entity.FindKeywordsAndFilesItem;
 import com.mrikso.apkrepacker.ui.autocompleteeidttext.CustomAdapter;
-import com.mrikso.apkrepacker.ui.prererence.Preference;
+import com.mrikso.apkrepacker.ui.prererence.PreferenceHelper;
+import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.StringUtils;
-import com.mrikso.apkrepacker.utils.ThemeWrapper;
+import com.mrikso.apkrepacker.utils.Theme;
+import com.mrikso.apkrepacker.utils.common.DLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,10 +63,10 @@ public class SearchFragment extends Fragment {
     private List<String> extList;
     private ChipGroup chipGroup;
     private Context mContext;
-    private Preference mPtef;
+    private PreferenceHelper mPtef;
     private Map<String, Boolean> extMap = new HashMap<>();
     private CustomAdapter adapter;
-    private SQLHelper dbHelper;
+    private ITabDatabase dbHelper;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -81,9 +86,9 @@ public class SearchFragment extends Fragment {
         }
         View view = inflater.inflate(R.layout.fragment_search_settings, container, false);
         mContext = view.getContext();
-        mPtef = Preference.getInstance(mContext);
+        mPtef = PreferenceHelper.getInstance(mContext);
         loadPrefs();
-        dbHelper = new SQLHelper(mContext);
+        dbHelper =  JsonDatabase.getInstance(mContext);
         chipGroup = view.findViewById(R.id.ext_group);
         mAddExt = view.findViewById(R.id.button_add_ext);
         findText = view.findViewById(R.id.search_text);
@@ -99,10 +104,17 @@ public class SearchFragment extends Fragment {
         return view;
     }
 
+    //getting all searched data string
     private List<String> getData() {
-        //   List<String> dataList = new ArrayList<String>();
-        List<String> items = SQLHelper.getInstance(mContext).getFindKeywordsAdnFile(filesMode);
-        return items;
+        List<String> dataList = new ArrayList<>();
+        /*LiveData<List<FindKeywordsAndFilesItem>> items = dbHelper.getFindKeywordsAndFilesDao().getFindKeywords(filesMode);
+        for (FindKeywordsAndFilesItem item : items.getValue()){
+           // if(item.isFiles() == filesMode)
+            String key = item.getKeyword();
+            DLog.d(TAG, key);
+            dataList.add(item.getKeyword());
+        }*/
+        return dbHelper.getFindKeywordsAdnFile(filesMode);
     }
 
     @Override
@@ -189,11 +201,7 @@ public class SearchFragment extends Fragment {
             if (!com.jecelyin.common.utils.StringUtils.isEmpty(findText.getText().toString()) | !extList.isEmpty()) {
                 StringUtils.hideKeyboard(this);
                 if (filesMode) {
-                    adapter.addValue(findText.getText().toString());
-                    dbHelper.clearFindKeywordAndFiles(true);
-                    for (String item : adapter.getDataList()) {
-                        dbHelper.addFindKeywordAndFiles(item, true);
-                    }
+                    addSearchText(findText.getText().toString(), true);
                     Bundle parasms = new Bundle();
                     parasms.putString("searchFileName", findText.getText().toString());
                     parasms.putStringArrayList("expensions", getCheckedChips());
@@ -217,11 +225,7 @@ public class SearchFragment extends Fragment {
                     if (recursivlu) {
                         builder.recurseDirectories();
                     }
-                    adapter.addValue(findText.getText().toString());
-                    dbHelper.clearFindKeywordAndFiles(false);
-                    for (String item : adapter.getDataList()) {
-                        dbHelper.addFindKeywordAndFiles(item, false);
-                    }
+                    addSearchText(findText.getText().toString(), false);
                     mPtef.setExt(extMap);
                     builder.setExeption(getCheckedChips());
                     builder.addFile(path);
@@ -268,15 +272,22 @@ public class SearchFragment extends Fragment {
         chipGroup.addView(chip);
     }
 
+    private void addSearchText(String text, boolean mode){
+        //add text to temp adapter
+        adapter.addValue(text);
+        //add text to database
+        dbHelper.addFindKeywordAndFiles(text, mode);
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         getCheckedChips();
         mPtef.setExt(extMap);
-        dbHelper.clearFindKeywordAndFiles(filesMode);
-        for (String item : adapter.getDataList()) {
-            dbHelper.addFindKeywordAndFiles(item, filesMode);
-        }
+        //dbHelper.findKeywordsAndFilesDao().clearFindKeywordAndFiles(filesMode);
+       // for (String item : adapter.getDataList()) {
+       //     dbHelper.findKeywordsAndFilesDao().addFindKeyword(item.getKeyword(), filesMode, System.currentTimeMillis());
+       // }
     }
 
     @Override
@@ -308,7 +319,7 @@ public class SearchFragment extends Fragment {
             chip.setChecked((boolean) val.getValue());
             chip.setClickable(true);
             chip.setTextColor(getResources().getColor(R.color.white));
-            chip.setChipBackgroundColorResource(ThemeWrapper.isLightTheme() ? R.color.light_accent : R.color.dark_accent);
+            chip.setChipBackgroundColorResource(!Theme.getInstance(mContext).getCurrentTheme().isDark() ? R.color.light_accent : R.color.dark_accent);
             chip.setOnLongClickListener(v -> {
                 //tagList.remove(tagName);
                 extMap.remove(val.getKey().toString());

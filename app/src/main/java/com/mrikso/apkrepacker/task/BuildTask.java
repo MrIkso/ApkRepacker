@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 
 import com.jecelyin.common.utils.DLog;
 import com.mrikso.apkrepacker.fragment.CompileFragment;
-import com.mrikso.apkrepacker.ui.prererence.Preference;
+import com.mrikso.apkrepacker.ui.prererence.PreferenceHelper;
 import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.SignUtil;
 
@@ -26,7 +26,7 @@ public class BuildTask extends AsyncTask<File, CharSequence, Boolean> implements
     private final SignUtil signTool;
     private Context mContext;
     public File resultFile;
-    private Preference preference;
+    private PreferenceHelper preferenceHelper;
     private CompileFragment compileFragment;
 
     public BuildTask(Context mContext, SignUtil signTool, CompileFragment compileFragment)
@@ -118,7 +118,7 @@ public class BuildTask extends AsyncTask<File, CharSequence, Boolean> implements
     }
 
     protected boolean process(File f) {
-        preference = Preference.getInstance(mContext);
+        preferenceHelper = PreferenceHelper.getInstance(mContext);
         ApkOptions options = ApkOptions.INSTANCE;
         String outApk;
         Androlib androlib = new Androlib(options, this);
@@ -126,13 +126,13 @@ public class BuildTask extends AsyncTask<File, CharSequence, Boolean> implements
             File tmp = File.createTempFile("APKTOOL", null);
             try {
                 MetaInfo meta = androlib.build(f, tmp);
-                if (preference.isSignResultApk()) {
+                if (preferenceHelper.isSignResultApk()) {
                     outApk = FileUtil.genNameApk(mContext, f.getAbsolutePath(), meta.apkFileName, "_signed", 0);
                 }
                 else {
                     outApk = FileUtil.genNameApk(mContext, f.getAbsolutePath(), meta.apkFileName, "_unsigned", 0);
                 }
-                File buildApkPath = new File(preference.getDecodingPath() + "/output");
+                File buildApkPath = new File(preferenceHelper.getDecodingPath() + "/output");
                 if (!buildApkPath.exists() && !buildApkPath.mkdirs()) {
                     return false;
                 }
@@ -142,7 +142,7 @@ public class BuildTask extends AsyncTask<File, CharSequence, Boolean> implements
                     min = Integer.parseInt(Objects.requireNonNull(meta.sdkInfo.get("minSdkVersion")));
                 else
                     min = 14;
-                if (preference.isSignResultApk()) {
+                if (preferenceHelper.isSignResultApk()) {
                     signTool.sign(tmp, out, min, this);
                     setResult(out);
                 } else {

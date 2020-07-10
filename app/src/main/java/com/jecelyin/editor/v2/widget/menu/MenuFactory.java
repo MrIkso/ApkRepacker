@@ -18,9 +18,9 @@ package com.jecelyin.editor.v2.widget.menu;
 
 import android.content.Context;
 
-import com.duy.ide.editor.editor.R;
-import com.jecelyin.editor.v2.Preferences;
+import com.jecelyin.editor.v2.EditorPreferences;
 import com.jecelyin.editor.v2.common.Command;
+import com.mrikso.apkrepacker.R;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -28,12 +28,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.jecelyin.editor.v2.common.Command.CommandEnum.DOC_INFO;
 import static com.jecelyin.editor.v2.common.Command.CommandEnum.FIND;
 import static com.jecelyin.editor.v2.common.Command.CommandEnum.GOTO_END;
 import static com.jecelyin.editor.v2.common.Command.CommandEnum.GOTO_INDEX;
 import static com.jecelyin.editor.v2.common.Command.CommandEnum.GOTO_TOP;
 import static com.jecelyin.editor.v2.common.Command.CommandEnum.NONE;
+import static com.jecelyin.editor.v2.common.Command.CommandEnum.READONLY_MODE;
 import static com.jecelyin.editor.v2.common.Command.CommandEnum.REDO;
 import static com.jecelyin.editor.v2.common.Command.CommandEnum.SAVE;
 import static com.jecelyin.editor.v2.common.Command.CommandEnum.UNDO;
@@ -52,7 +52,7 @@ public class MenuFactory {
         groups = new EnumMap<>(MenuGroup.class);
         List<MenuItemInfo> topList = new ArrayList<>();
         groups.put(MenuGroup.TOP, topList);
-        Integer[] toolbarIcons = Preferences.getInstance(context).getToolbarIcons();
+        Integer[] toolbarIcons = EditorPreferences.getInstance(context).getToolbarIcons();
         if (toolbarIcons == null) {
             toolbarIcons = new Integer[]{R.id.action_save,R.id.action_undo, R.id.action_redo};
         }
@@ -93,11 +93,11 @@ public class MenuFactory {
 
     public static boolean isChecked(Context context, int id) {
         if (id == R.id.m_readonly) {
-            return Preferences.getInstance(context).isReadOnly();
+            return EditorPreferences.getInstance(context).isReadOnly();
         } else if (id == R.id.m_fullscreen) {
-            return Preferences.getInstance(context).isFullScreenMode();
+            return EditorPreferences.getInstance(context).isFullScreenMode();
         } else if (id == R.id.m_hide_symbol_panel) {
-            return Preferences.getInstance(context).isHidePanel();
+            return EditorPreferences.getInstance(context).isHidePanel();
         }
         return false;
     }
@@ -126,10 +126,10 @@ public class MenuFactory {
 
         menuItemInfos.add(new MenuItemInfo(MenuGroup.VIEW, R.id.action_editor_theme, NONE, R.drawable.ic_themes, R.string.action_editor_themes));
         menuItemInfos.add(new MenuItemInfo(MenuGroup.VIEW, R.id.action_highlight, NONE, R.drawable.ic_highlight_white, R.string.highlight_language));
-        menuItemInfos.add(new MenuItemInfo(MenuGroup.VIEW, R.id.m_readonly, Command.CommandEnum.READONLY_MODE, R.drawable.ic_read_mode, R.string.read_only));
-        menuItemInfos.add(new MenuItemInfo(MenuGroup.VIEW, R.id.m_hide_symbol_panel, Command.CommandEnum.NONE, R.drawable.ic_read_mode, R.string.hide_symbol_panel));
+        menuItemInfos.add(new MenuItemInfo(MenuGroup.VIEW, R.id.m_readonly, READONLY_MODE, R.drawable.ic_read_mode, R.string.read_only));
+        menuItemInfos.add(new MenuItemInfo(MenuGroup.VIEW, R.id.m_hide_symbol_panel, NONE, R.drawable.ic_read_mode, R.string.hide_symbol_panel));
         menuItemInfos.add(new MenuItemInfo(MenuGroup.VIEW, R.id.action_encoding, NONE, R.drawable.ic_encoding, R.string.encoding));
-        menuItemInfos.add(new MenuItemInfo(MenuGroup.VIEW, R.id.m_info, DOC_INFO, R.drawable.ic_info_white, R.string.document_info));
+        menuItemInfos.add(new MenuItemInfo(MenuGroup.VIEW, R.id.m_info, Command.CommandEnum.DOC_INFO, R.drawable.ic_info_white, R.string.document_info));
         menuItemInfos.add(new MenuItemInfo(MenuGroup.OTHER, R.id.action_editor_setting, NONE, R.drawable.ic_settings_white, R.string.editor_setting));
        // menuItemInfos.add(new MenuItemInfo(MenuGroup.OTHER, R.id.action_share, NONE, R.drawable.baseline_share_24, R.string.share_this_app));
        // menuItemInfos.add(new MenuItemInfo(MenuGroup.OTHER, R.id.action_rate, NONE, R.drawable.baseline_rate_review_24, R.string.rate_this_app));

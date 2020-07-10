@@ -1,11 +1,9 @@
 package com.mrikso.apkrepacker.model;
 
 import android.graphics.Bitmap;
-import android.os.Environment;
 
-import com.duy.common.DLog;
+import com.mrikso.apkrepacker.utils.common.DLog;
 import com.mrikso.apkrepacker.utils.QickEditParams;
-import com.mrikso.apkrepacker.utils.ZipUtils;
 import com.mrikso.apkrepacker.utils.qickedit.IconGenerate;
 import com.mrikso.apkrepacker.utils.qickedit.ManifestEditor;
 
@@ -114,7 +112,7 @@ public class QickEdit {
         {
             String ename = entry.getName();
             //add new icon
-            if (type != null && name != null && ename.startsWith("res/" + type) && ename.endsWith(name + ".png"))
+            if (type != null && name != null && ename.startsWith("res/" + type) && ename.startsWith(name + ".png"))
             {
                 int length;
                 File ic = null;

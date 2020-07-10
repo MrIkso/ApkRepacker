@@ -18,33 +18,32 @@ package com.jecelyin.editor.v2.manager;
 
 import android.content.DialogInterface;
 import android.database.DataSetObserver;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.util.Pair;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
-//import com.duy.file.explorer.util.FileUtils;
-import com.duy.file.explorer.util.FileUtils;
-import com.duy.ide.core.api.IdeActivity;
-import com.duy.ide.database.ITabDatabase;
-import com.duy.ide.database.RecentFileItem;
-import com.duy.ide.database.SQLHelper;
-import com.duy.ide.editor.EditorDelegate;
-import com.duy.ide.editor.IEditorDelegate;
-import com.duy.ide.editor.editor.R;
-import com.duy.ide.editor.pager.EditorFragmentPagerAdapter;
-import com.duy.ide.editor.pager.EditorPageDescriptor;
-import com.duy.ide.editor.task.SaveAllTask;
-import com.duy.ide.file.SaveListener;
-import com.jecelyin.editor.v2.Preferences;
+import com.jecelyin.editor.v2.EditorPreferences;
 import com.jecelyin.editor.v2.common.TabCloseListener;
 import com.jecelyin.editor.v2.dialog.SaveConfirmDialog;
+import com.mrikso.apkrepacker.R;
+import com.mrikso.apkrepacker.activity.IdeActivity;
+import com.mrikso.apkrepacker.database.ITabDatabase;
+import com.mrikso.apkrepacker.database.JsonDatabase;
+import com.mrikso.apkrepacker.database.entity.RecentFileItem;
+import com.mrikso.apkrepacker.ide.editor.EditorDelegate;
+import com.mrikso.apkrepacker.ide.editor.IEditorDelegate;
+import com.mrikso.apkrepacker.ide.editor.pager.EditorFragmentPagerAdapter;
+import com.mrikso.apkrepacker.ide.editor.pager.EditorPageDescriptor;
+import com.mrikso.apkrepacker.ide.editor.task.SaveAllTask;
+import com.mrikso.apkrepacker.ide.file.SaveListener;
+import com.mrikso.apkrepacker.utils.FileUtil;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 
 import java.io.File;
@@ -75,8 +74,8 @@ public class TabManager implements ViewPager.OnPageChangeListener, SmartTabLayou
         mPagerAdapter = new EditorFragmentPagerAdapter(mActivity);
         mViewPager.setAdapter(mPagerAdapter);
 
-        if (Preferences.getInstance(mActivity).isOpenLastFiles()) {
-            ITabDatabase database = SQLHelper.getInstance(mActivity);
+        if (EditorPreferences.getInstance(mActivity).isOpenLastFiles()) {
+            ITabDatabase database = JsonDatabase.getInstance(mActivity);
             ArrayList<RecentFileItem> recentFiles = database.getRecentFiles(true);
             ArrayList<EditorPageDescriptor> descriptors = new ArrayList<>();
             File file;
@@ -93,7 +92,7 @@ public class TabManager implements ViewPager.OnPageChangeListener, SmartTabLayou
             mViewPager.setOffscreenPageLimit(mPagerAdapter.getCount());
             updateTabList();
 
-            int lastTab = Preferences.getInstance(mActivity).getLastTab();
+            int lastTab = EditorPreferences.getInstance(mActivity).getLastTab();
             setCurrentTab(lastTab);
 
 //            if (descriptors.isEmpty()) {
@@ -170,7 +169,7 @@ public class TabManager implements ViewPager.OnPageChangeListener, SmartTabLayou
         mPagerAdapter.removeEditor(position, new TabCloseListener() {
             @Override
             public void onClose(String path, String encoding, int offset) {
-                SQLHelper.getInstance(mActivity).updateRecentFile(path, false);
+                JsonDatabase.getInstance(mActivity).updateRecentFile(path, false);
                 int currentTab = getCurrentTab();
                 if (getTabCount() != 0) {
                     setCurrentTab(currentTab);
@@ -226,10 +225,10 @@ public class TabManager implements ViewPager.OnPageChangeListener, SmartTabLayou
 
     public boolean onDestroy() {
         if (mViewPager != null) {
-            Preferences.getInstance(mActivity).setLastTab(getCurrentTab());
+            EditorPreferences.getInstance(mActivity).setLastTab(getCurrentTab());
         }
         ArrayList<File> needSaveFiles = new ArrayList<>();
-        ITabDatabase database = SQLHelper.getInstance(mActivity);
+        ITabDatabase database = JsonDatabase.getInstance(mActivity);
         ArrayList<IEditorDelegate> allEditor = mPagerAdapter.getAllEditor();
         for (IEditorDelegate editorDelegate : allEditor) {
             String path = editorDelegate.getPath();
@@ -307,7 +306,7 @@ public class TabManager implements ViewPager.OnPageChangeListener, SmartTabLayou
         for (int i = 0, allEditorSize = allEditor.size(); i < allEditorSize; i++) {
             IEditorDelegate delegate = allEditor.get(i);
             File editFile = delegate.getDocument().getFile();
-            if (FileUtils.isSameFile(file, editFile)) {
+            if (FileUtil.isSameFile(file, editFile)) {
                 return new Pair<>(i, delegate);
             }
         }

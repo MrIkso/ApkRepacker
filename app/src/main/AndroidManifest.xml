@@ -20,7 +20,7 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
+        android:theme="@style/AppTheme.Light"
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="q">
         <activity
@@ -53,8 +53,8 @@
         <activity android:name=".activity.CodeEditorActivity"
             android:parentActivityName=".activity.MainActivity"/>
         <activity android:name=".activity.ThemeEditorActivity" />
-        <activity android:name="com.duy.ide.settings.EditorSettingsActivity" />
-        <activity android:name="com.duy.ide.core.api.IdeActivity"/>
+        <activity android:name=".activity.EditorSettingsActivity" />
+        <activity android:name=".activity.IdeActivity"/>
         <activity android:name=".ui.imageviewer.ImageViewerActivity"/>
         <activity android:name=".activity.AutoTranslatorActivity"
             android:label="@string/title_activity_auto_translator"/>

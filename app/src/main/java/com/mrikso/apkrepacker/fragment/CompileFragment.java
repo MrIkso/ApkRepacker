@@ -23,9 +23,10 @@ import com.mrikso.apkrepacker.adapter.LogAdapter;
 import com.mrikso.apkrepacker.task.BuildTask;
 import com.mrikso.apkrepacker.utils.AppUtils;
 import com.mrikso.apkrepacker.utils.FileUtil;
+import com.mrikso.apkrepacker.utils.FragmentUtils;
 import com.mrikso.apkrepacker.utils.SignUtil;
 import com.mrikso.apkrepacker.utils.StringUtils;
-import com.mrikso.apkrepacker.utils.ThemeWrapper;
+import com.mrikso.apkrepacker.utils.Theme;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -95,7 +96,7 @@ public class CompileFragment extends Fragment {
         super.onViewCreated(view, bundle);
         CubeGrid cubeGrid = new CubeGrid();
         cubeGrid.setBounds(0, 0, 100, 100);
-        cubeGrid.setColor(ThemeWrapper.isLightTheme() ? mContext.getResources().getColor(R.color.light_accent) : mContext.getResources().getColor(R.color.dark_accent));
+        cubeGrid.setColor(!Theme.getInstance(mContext).getCurrentTheme().isDark() ? mContext.getResources().getColor(R.color.light_accent) : mContext.getResources().getColor(R.color.dark_accent));
         cubeGrid.setAlpha(0);
         progressBar.setIndeterminateDrawable(cubeGrid);
         logarray = new ArrayList<>();
@@ -156,6 +157,6 @@ public class CompileFragment extends Fragment {
             progressTip.setText(R.string.error_build_failed);
             progressTip.setTextColor(mContext.getResources().getColor(R.color.google_red));
         }
-        closeFragment.setOnClickListener(v -> getActivity().onBackPressed());
+        closeFragment.setOnClickListener(v -> FragmentUtils.remove(this));
     }
 }

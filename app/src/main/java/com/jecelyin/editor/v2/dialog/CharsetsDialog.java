@@ -18,10 +18,10 @@ package com.jecelyin.editor.v2.dialog;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 
-import com.duy.ide.editor.editor.R;
 import com.jecelyin.editor.v2.common.Command;
+import com.mrikso.apkrepacker.R;
+
 
 import java.nio.charset.Charset;
 import java.util.Iterator;
@@ -57,21 +57,13 @@ public class CharsetsDialog extends AbstractDialog {
     public void show() {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(R.string.reopen_with_encoding)
-                .setItems(names, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Command command = new Command(Command.CommandEnum.RELOAD_WITH_ENCODING);
-                        command.object = names[which];
-                        getMainActivity().doCommand(command);
-                        dialog.dismiss();
-                    }
+                .setItems(names, (dialog, which) -> {
+                    Command command = new Command(Command.CommandEnum.RELOAD_WITH_ENCODING);
+                    command.object = names[which];
+                    getMainActivity().doCommand(command);
+                    dialog.dismiss();
                 })
-                .setPositiveButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
+                .setPositiveButton(R.string.cancel, (dialog, which) -> dialog.cancel());
         AlertDialog dlg = builder.create();
         dlg.show();
         handleDialog(dlg);

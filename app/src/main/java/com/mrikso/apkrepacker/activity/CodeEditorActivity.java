@@ -1,6 +1,5 @@
 package com.mrikso.apkrepacker.activity;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.ViewGroup;
 
@@ -9,21 +8,17 @@ import androidx.annotation.Nullable;
 import androidx.core.util.Pair;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.duy.ide.core.api.IdeActivity;
-import com.duy.ide.editor.EditorDelegate;
-import com.duy.ide.editor.IEditorDelegate;
+import com.mrikso.apkrepacker.ide.editor.EditorDelegate;
+import com.mrikso.apkrepacker.ide.editor.IEditorDelegate;
 import com.google.android.material.navigation.NavigationView;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.ui.projectview.FileChangeListener;
 import com.mrikso.apkrepacker.ui.projectview.FolderStructureFragment;
 import com.mrikso.apkrepacker.ui.projectview.ProjectFileContract;
 import com.mrikso.apkrepacker.ui.projectview.ProjectFilePresenter;
-import com.mrikso.apkrepacker.utils.CodeEditUtils;
 import com.mrikso.apkrepacker.utils.FileUtil;
 
 import java.io.File;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class CodeEditorActivity  extends IdeActivity implements FileChangeListener {
     protected ProjectFileContract.Presenter mFilePresenter;
@@ -35,7 +30,7 @@ public class CodeEditorActivity  extends IdeActivity implements FileChangeListen
 
     @Override
     protected int getRootLayoutId() {
-        return R.layout.activity_default_ide;
+        return R.layout.activity_code_editor;
     }
 
     @Override
@@ -54,14 +49,14 @@ public class CodeEditorActivity  extends IdeActivity implements FileChangeListen
 
     @Override
     public void doOpenFile(File toEdit) {
-        if (CodeEditUtils.canEdit(toEdit)) {
+       // if (CodeEditUtils.canEdit(toEdit)) {
             //save current file
             openFile(toEdit.getPath());
             //close drawer
             closeDrawers();
-        } else {
+      //  } else {
 
-        }
+       // }
     }
     /**
      * @return current file selected

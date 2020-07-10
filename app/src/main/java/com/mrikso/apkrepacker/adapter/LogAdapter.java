@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.utils.StringUtils;
-import com.mrikso.apkrepacker.utils.ThemeWrapper;
+import com.mrikso.apkrepacker.utils.Theme;
 import com.mrikso.apkrepacker.utils.view.Colors;
 
 import java.util.List;
@@ -44,7 +44,7 @@ public class LogAdapter extends ArrayAdapter<String> {
 
     private int getLogColor(String s) {
         int color;
-        boolean lt = ThemeWrapper.isLightTheme();
+        boolean lt = !Theme.getInstance(mContext).getCurrentTheme().isDark();
         switch (s.charAt(0)) {
             case 'I':
                 color = (lt ? Colors.VERY_DARK_GREEN : Colors.VERY_LIGHT_GREEN);

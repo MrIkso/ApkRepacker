@@ -4,45 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.SpannableStringBuilder;
 
-public class ChildData implements Parcelable{
+public class ChildData implements Parcelable {
 
-    private String name;
-    private SpannableStringBuilder spannableStringBuilder;
-    private String path;
-    private int offset;
-
-    public ChildData(Parcel parcel) { name = parcel.readString();}
-
-    public ChildData(String name) {
-        this.name = name;
-    }
-    public ChildData(SpannableStringBuilder name, String path, int offset) {
-        this.spannableStringBuilder = name;
-        this.offset= offset;
-        this.path = path;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public SpannableStringBuilder getSpannableName() {
-        return spannableStringBuilder;
-    }
-
-    public String getPath(){
-        return path;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-public int getOffset(){
-        return offset;
-}
-    public void setOffset(int offset){
-        this.offset= offset;
-    }
     public static final Creator<ChildData> CREATOR = new Creator<ChildData>() {
         @Override
         public ChildData createFromParcel(Parcel in) {
@@ -54,6 +17,48 @@ public int getOffset(){
             return new ChildData[size];
         }
     };
+    private String name;
+    private SpannableStringBuilder spannableStringBuilder;
+    private String path;
+    private int offset;
+
+    public ChildData(Parcel parcel) {
+        name = parcel.readString();
+    }
+
+    public ChildData(String name) {
+        this.name = name;
+    }
+
+    public ChildData(SpannableStringBuilder name, String path, int offset) {
+        this.spannableStringBuilder = name;
+        this.offset = offset;
+        this.path = path;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public SpannableStringBuilder getSpannableName() {
+        return spannableStringBuilder;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public int getOffset() {
+        return offset;
+    }
+
+    public void setOffset(int offset) {
+        this.offset = offset;
+    }
 
     @Override
     public int describeContents() {
@@ -62,6 +67,6 @@ public int getOffset(){
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-         parcel.writeString(name);
+        parcel.writeString(name);
     }
 }

@@ -1,17 +1,26 @@
 package com.mrikso.apkrepacker.utils;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Parcelable;
+import android.os.StrictMode;
 import android.provider.MediaStore;
+import android.util.Log;
+import android.webkit.MimeTypeMap;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.IntentCompat;
 
+import com.jecelyin.common.utils.UIUtils;
+import com.mrikso.apkrepacker.App;
+import com.mrikso.apkrepacker.R;
+
 import java.io.File;
+import java.lang.reflect.Method;
 
 public class IntentUtils {
 
@@ -24,9 +33,38 @@ public class IntentUtils {
     private IntentUtils() {
     }
 
+
     @NonNull
     public static Intent withChooser(@Nullable Intent intent) {
         return Intent.createChooser(intent, null);
+    }
+
+    public static Intent openFileWithIntent(@NonNull File file) {
+        if (Build.VERSION.SDK_INT >= 24) {
+            try {
+                Method m = StrictMode.class.getMethod("disableDeathOnFileUriExposure");
+                m.invoke(null);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        String extension = file.getName().substring(file.getName().lastIndexOf(".") + 1);
+
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        String type = mime.getMimeTypeFromExtension(extension);
+
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setDataAndType(Uri.fromFile(file), type);
+        try {
+            return intent;
+        } catch (ActivityNotFoundException | IllegalArgumentException e) {
+            UIUtils.toast(App.getContext(), R.string.cannt_open_file);
+            Log.d("OPEN_ERROR", e.toString());
+            // showMessage(String.format("Cannot open %s", getName(file)));
+        }
+        return null;
     }
 
     @NonNull

@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.mrikso.apkrepacker.R;
-import com.mrikso.apkrepacker.adapter.RecyclerViewAdapter;
 import com.mrikso.apkrepacker.fragment.AppsFragment;
 import com.mrikso.apkrepacker.utils.PackageMeta;
 import com.mrikso.apkrepacker.utils.ViewUtils;

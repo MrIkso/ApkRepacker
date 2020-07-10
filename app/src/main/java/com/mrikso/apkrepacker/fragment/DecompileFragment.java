@@ -20,11 +20,12 @@ import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.activity.AppEditorActivity;
 import com.mrikso.apkrepacker.adapter.LogAdapter;
 import com.mrikso.apkrepacker.task.DecodeTask;
-import com.mrikso.apkrepacker.ui.prererence.Preference;
+import com.mrikso.apkrepacker.ui.prererence.PreferenceHelper;
 import com.mrikso.apkrepacker.utils.AppUtils;
 import com.mrikso.apkrepacker.utils.FileUtil;
+import com.mrikso.apkrepacker.utils.FragmentUtils;
 import com.mrikso.apkrepacker.utils.StringUtils;
-import com.mrikso.apkrepacker.utils.ThemeWrapper;
+import com.mrikso.apkrepacker.utils.Theme;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -118,7 +119,7 @@ public class DecompileFragment extends Fragment {
         super.onViewCreated(view, bundle);
         CubeGrid cubeGrid = new CubeGrid();
         cubeGrid.setBounds(0, 0, 100, 100);
-        cubeGrid.setColor(ThemeWrapper.isLightTheme() ? mContext.getResources().getColor(R.color.light_accent) :
+        cubeGrid.setColor(!Theme.getInstance(mContext).getCurrentTheme().isDark() ? mContext.getResources().getColor(R.color.light_accent) :
                 mContext.getResources().getColor(R.color.dark_accent));
         cubeGrid.setAlpha(0);
         mProgress.setIndeterminateDrawable(cubeGrid);
@@ -127,7 +128,7 @@ public class DecompileFragment extends Fragment {
         listView.setAdapter(adapter);
         listView.setDivider(null);
         listView.setDividerHeight(0);
-        Preference preference = Preference.getInstance(mContext);
+        PreferenceHelper preferenceHelper = PreferenceHelper.getInstance(mContext);
         String decodeAppName = AppUtils.getApkName(mContext, selectedApk.getAbsolutePath()).replace("/", "_");
         if (!apkMode) {
             if (mMode != -1) {
@@ -143,7 +144,7 @@ public class DecompileFragment extends Fragment {
                         break;
                 }
             } else {
-                switch (preference.getDecodingMode()) {
+                switch (preferenceHelper.getDecodingMode()) {
                     case 0://Decompile all
                         new DecodeTask(mContext, 3, decodeAppName, this).execute(selectedApk);
                         break;
@@ -169,7 +170,7 @@ public class DecompileFragment extends Fragment {
                         break;
                 }
             } else {
-                switch (preference.getDecodingMode()) {
+                switch (preferenceHelper.getDecodingMode()) {
                     case 0://Decompile all
                         new DecodeTask(mContext, 3, decodeAppName, this).execute(selectedApk);
                         break;
@@ -245,7 +246,7 @@ public class DecompileFragment extends Fragment {
             mTextProgress.setTextColor(mContext.getResources().getColor(R.color.google_red));
         }
         mClose.setOnClickListener(v -> {
-            requireActivity().onBackPressed();
+            FragmentUtils.remove(this);
         });
     }
 }

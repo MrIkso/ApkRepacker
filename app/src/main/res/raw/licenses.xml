@@ -23,6 +23,13 @@
     </notice>
 
     <notice>
+        <name>ANTLR v4</name>
+        <url>https://www.antlr4.org/</url>
+        <copyright>Copyright (c) 2010 Terence Parr All rights reserved.</copyright>
+        <license>BSD 3-Clause License</license>
+    </notice>
+
+    <notice>
         <name>Guava</name>
         <url>https://github.com/google/guava</url>
         <copyright>Copyright (c) Google, Inc. All rights reserved.</copyright>

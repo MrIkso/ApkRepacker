@@ -120,8 +120,7 @@ public class ColorsViewModel extends AndroidViewModel {
         }
 
         String serializeToString() {
-            return new StringBuilder()
-                    .append(query).toString();
+            return query;
         }
     }
 

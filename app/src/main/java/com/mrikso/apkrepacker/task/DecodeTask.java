@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.fragment.DecompileFragment;
-import com.mrikso.apkrepacker.ui.prererence.Preference;
+import com.mrikso.apkrepacker.ui.prererence.PreferenceHelper;
 import com.mrikso.apkrepacker.utils.FileUtil;
 
 import java.io.File;
@@ -157,7 +157,7 @@ public class DecodeTask extends AsyncTask<File, CharSequence, Boolean> implement
     }
 
     public ExtFile getOutDir(File f, String name) {
-        Preference preference = Preference.getInstance(mContext);
+        PreferenceHelper preferenceHelper = PreferenceHelper.getInstance(mContext);
         String dir = f.getParent();
         if (name == null)
             name = f.getName();
@@ -170,7 +170,7 @@ public class DecodeTask extends AsyncTask<File, CharSequence, Boolean> implement
         //boolean noaccess = false;//(Settings.isKitKat() && !f.getAbsolutePath().startsWith(Environment.getExternalStorageDirectory().getAbsolutePath()));
         //if (allToOut || inst)
         //  {
-        dir = preference.getDecodingPath() + "/projects";//Environment.getExternalStorageDirectory().getAbsolutePath() + "/Test";//Settings.output_directory;
+        dir = preferenceHelper.getDecodingPath() + "/projects";//Environment.getExternalStorageDirectory().getAbsolutePath() + "/Test";//Settings.output_directory;
         if (dir == null) {
             warning(R.string.output_directory_not_set);
             return null;

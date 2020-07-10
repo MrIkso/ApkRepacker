@@ -3,11 +3,15 @@
     <string-array name="theme_values" translatable="false">
         <item>0</item>
         <item>1</item>
+        <item>2</item>
+        <item>3</item>
     </string-array>
 
     <string-array name="theme_names">
         <item>@string/theme_light</item>
         <item>@string/theme_dark</item>
+        <item>Rena Light</item>
+        <item>Rena</item>
     </string-array>
 
     <string-array name="decoding_values" translatable="false">
@@ -36,5 +40,11 @@
         <item>@string/pkcs12</item>
         <item>@string/bks</item>
         <item>@string/pk8</item>
+    </string-array>
+
+    <string-array name="screen_orientation_values" translatable="false">
+        <item>auto</item>
+        <item>landscape</item>
+        <item>portrait</item>
     </string-array>
 </resources>

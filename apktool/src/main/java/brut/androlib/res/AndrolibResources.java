@@ -499,6 +499,7 @@ final public class AndrolibResources {
         }
 
         try {
+            LOGGER.info(R.string.log_text,"Using aapt2 for compilation resources");
             OS.exec(cmd,LOGGER);
             LOGGER.fine(R.string.log_text,"aapt2 link command ran: ");
             LOGGER.fine(R.string.log_text,cmd.toString());
@@ -616,6 +617,7 @@ final public class AndrolibResources {
             cmd.add(rawDir.getAbsolutePath());
         }
         try {
+            LOGGER.info(R.string.log_text,"Using aapt for compilation resources");
             OS.exec(cmd, LOGGER);
             LOGGER.fine(R.string.log_text,"command ran: ");
             LOGGER.fine(R.string.log_text,cmd.toString());
@@ -885,6 +887,7 @@ final public class AndrolibResources {
             crc.update(data);
             entry = new ZipEntry("resources.arsc");
             entry.setSize(data.length);
+            entry.setMethod(ZipEntry.STORED);
             entry.setCrc(crc.getValue());
             out.putNextEntry(entry);
             out.write(data);

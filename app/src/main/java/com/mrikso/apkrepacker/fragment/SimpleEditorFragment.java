@@ -37,6 +37,7 @@ import com.mrikso.apkrepacker.fragment.dialogs.ProgressDialogFragment;
 import com.mrikso.apkrepacker.task.SimpleEditTask;
 import com.mrikso.apkrepacker.utils.AppUtils;
 import com.mrikso.apkrepacker.utils.FileUtil;
+import com.mrikso.apkrepacker.utils.FragmentUtils;
 import com.mrikso.apkrepacker.utils.QickEditParams;
 import com.mrikso.apkrepacker.utils.SignUtil;
 import com.mrikso.apkrepacker.utils.qickedit.AppInfo;
@@ -116,7 +117,7 @@ public class SimpleEditorFragment extends Fragment implements TextWatcher, Progr
             installLocation = (int) info[7];
             bmp[0] = null;
             buildValues();
-            toolbar.setNavigationOnClickListener(v -> getActivity().onBackPressed());
+            toolbar.setNavigationOnClickListener(v -> FragmentUtils.remove(this));
             mAppIcon.setOnClickListener(v -> selectIcon());
             mAppPackage.addTextChangedListener(this);
             mSave.setOnClickListener(v -> buildApp());
@@ -271,8 +272,7 @@ public class SimpleEditorFragment extends Fragment implements TextWatcher, Progr
     }
 
     private ProgressDialogFragment getProgressDialogFragment() {
-        assert getFragmentManager() != null;
-        Fragment fragment = getFragmentManager().findFragmentByTag(ProgressDialogFragment.TAG);
+        Fragment fragment = getChildFragmentManager().findFragmentByTag(ProgressDialogFragment.TAG);
         return (ProgressDialogFragment) fragment;
     }
 

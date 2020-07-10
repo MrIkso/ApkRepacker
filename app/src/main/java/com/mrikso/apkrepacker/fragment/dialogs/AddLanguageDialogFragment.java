@@ -5,13 +5,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
-import androidx.appcompat.widget.AppCompatSpinner;
+import androidx.annotation.StringRes;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.fragment.app.Fragment;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -29,6 +27,7 @@ public class AddLanguageDialogFragment extends BottomSheetDialogFragment impleme
 
     public static final String TAG = "AddLanguageDialogFragment";
     private TextInputEditText languageCode, et_lang;
+    private AppCompatTextView title;
     private MaterialButton addLang;
     private String[] langCodes;
     private String[] langNames;
@@ -43,6 +42,7 @@ public class AddLanguageDialogFragment extends BottomSheetDialogFragment impleme
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.bottom_sheet_add_new_language, container, false);
+        title = view.findViewById(R.id.bottom_sheet_dialog_title);
         addLang = view.findViewById(R.id.btn_add_lang_ok);
         languageCode = view.findViewById(R.id.language_code);
         et_lang = view.findViewById(R.id.et_lang);
@@ -72,7 +72,7 @@ public class AddLanguageDialogFragment extends BottomSheetDialogFragment impleme
             et_lang.setText(selected);
             languageCode.setText(this.langCodes[selectedCode]);
         }
-
+        title.setText(mListener.setTitle());
         et_lang.setOnClickListener(v -> showListDialog(v.getContext(), langNames));
     }
 
@@ -134,6 +134,7 @@ public class AddLanguageDialogFragment extends BottomSheetDialogFragment impleme
 
     public interface ItemClickListener {
         void onAddLangClick(String code);
+        @StringRes int setTitle();
     }
 }
 

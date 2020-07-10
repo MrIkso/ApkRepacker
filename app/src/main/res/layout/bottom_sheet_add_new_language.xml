@@ -11,13 +11,13 @@
         android:orientation="vertical">
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/bottom_sheet_dialog_title"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:text="@string/action_add_new_lang"
             android:textStyle="bold"
             android:textSize="18sp"
             android:textAppearance="?attr/textAppearanceSubtitle1"

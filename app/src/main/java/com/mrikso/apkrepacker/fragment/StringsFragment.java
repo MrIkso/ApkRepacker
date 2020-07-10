@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -30,6 +31,7 @@ import com.mrikso.apkrepacker.fragment.dialogs.AddLanguageDialogFragment;
 import com.mrikso.apkrepacker.ui.stringlist.DirectoryScanner;
 import com.mrikso.apkrepacker.ui.stringlist.StringFile;
 import com.mrikso.apkrepacker.ui.stringlist.StringsAdapter;
+import com.mrikso.apkrepacker.utils.ScrollingViewOnApplyWindowInsetsListener;
 import com.mrikso.apkrepacker.utils.StringUtils;
 
 import org.apache.commons.io.FileUtils;
@@ -59,6 +61,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import me.zhanghai.android.fastscroll.FastScroller;
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
 
 public class StringsFragment extends Fragment implements AddLanguageDialogFragment.ItemClickListener, StringsAdapter.OnItemClickListener {
@@ -74,16 +77,17 @@ public class StringsFragment extends Fragment implements AddLanguageDialogFragme
     private ArrayList<StringFile> files;
     private String projectPatch;
     private FloatingActionButton fabAddLanguage, fabSelectLanguage, fabAutoTranslate;
-    ;
+
     private FloatingActionMenu fabMenu;
     private AppCompatEditText searchText;
-    private boolean isnoFullApk;
+    private boolean mIsNoFullApk;
     private Map<String, String> dataTranslated = new HashMap<>();
     private List<String> strArr = new ArrayList<>();
     private List<String> langFiles = new ArrayList<>();
     private String[] arrayOfList;
     private Context mContext;
     private String mTargetLang;
+    private boolean mIsAddLanguage;
 
     public StringsFragment() {
         // Required empty public constructor
@@ -109,46 +113,23 @@ public class StringsFragment extends Fragment implements AddLanguageDialogFragme
         fabSelectLanguage = view.findViewById(R.id.fab_select_language);
         fabAddLanguage = view.findViewById(R.id.fab_add_language);
         fabAutoTranslate = view.findViewById(R.id.fab_auto_translate_language);
-        if (!isnoFullApk) {
+        return view;
+    }
+
+    public void onViewCreated(@NonNull View view, Bundle bundle) {
+        super.onViewCreated(view, bundle);
+        if (!mIsNoFullApk) {
             fabAddLanguage.setOnClickListener(v -> {
+                mIsAddLanguage = true;
                 fabMenu.close(true);
                 AddLanguageDialogFragment fragment = AddLanguageDialogFragment.newInstance();
                 fragment.show(getChildFragmentManager(), AddLanguageDialogFragment.TAG);
             });
             fabAutoTranslate.setOnClickListener(v -> {
+                mIsAddLanguage = false;
                 fabMenu.close(true);
-                List<TranslateItem> stringValues = new ArrayList();
-                if (selectedLanguage.equals("default")) {
-                    mTargetLang = "-auto";
-                } else {
-                    mTargetLang = "-" + selectedLanguage;
-                }
-                DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-                try {
-                    //get default language strings
-                    DocumentBuilder documentBuilder = builderFactory.newDocumentBuilder();
-                    Document doc = documentBuilder.parse(new File(langFiles.get(0)));
-                    doc.getDocumentElement().normalize();
-                    NodeList nodeList = doc.getElementsByTagName("string");
-                    for (int i = 0; i < nodeList.getLength(); i++) {
-                        Node node = nodeList.item(i);
-                        if (node.getNodeType() == Node.ELEMENT_NODE) {
-                            Element element = (Element) node;
-                            String key = element.getAttribute("name");
-                            String value = element.getTextContent();
-                            strings.put(key, value);
-                            stringValues.add(new TranslateItem(key, value, null));
-                        }
-                    }
-                } catch (IOException | SAXException | ParserConfigurationException e) {
-                    UIUtils.toast(App.getContext(), getResources().getString(R.string.toast_error_pasring));
-                    e.printStackTrace();
-                }
-                // Fragment fragment = this;
-                TranslateStringsHelper.setDefaultStrings(stringValues);
-                Intent intent = new Intent(mContext, AutoTranslatorActivity.class);
-                intent.putExtra("targetLanguageCode", mTargetLang);
-                startActivityForResult(intent, 10);
+                AddLanguageDialogFragment fragment = AddLanguageDialogFragment.newInstance();
+                fragment.show(getChildFragmentManager(), AddLanguageDialogFragment.TAG);
             });
             fabSelectLanguage.setOnClickListener(v -> {
                 fabMenu.close(true);
@@ -160,22 +141,20 @@ public class StringsFragment extends Fragment implements AddLanguageDialogFragme
         }
         fabMenu.setClosedOnTouchOutside(true);
 
-        if (!isnoFullApk && !files.isEmpty()) {
+        if (!mIsNoFullApk && !files.isEmpty()) {
             initList(view);
         }
-
-        return view;
     }
 
     private void findStringFiles() {
         if (new File(projectPatch, "resources.arsc").exists() | !new File(projectPatch, "res").exists()) {
-            isnoFullApk = true;
+            mIsNoFullApk = true;
         } else {
             DirectoryScanner scanner = new DirectoryScanner();
             files = scanner.findStringFiles(projectPatch);
         }
 
-        if (!isnoFullApk && !files.isEmpty()) {
+        if (!mIsNoFullApk && !files.isEmpty()) {
             strArr.clear();
             langFiles.clear();
             for (StringFile a : files) {
@@ -197,10 +176,9 @@ public class StringsFragment extends Fragment implements AddLanguageDialogFragme
         stringsAdapter.setInteractionListener(this);
         recyclerView.setAdapter(stringsAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        new FastScrollerBuilder(recyclerView).useMd2Style().build();
 
-//        arrayOfList = new String[strArr.size()];
-//        strArr.toArray(arrayOfList);
+        FastScroller fastScroller = new FastScrollerBuilder(recyclerView).useMd2Style().build();
+        recyclerView.setOnApplyWindowInsetsListener(new ScrollingViewOnApplyWindowInsetsListener(recyclerView, fastScroller));
 
         fabSelectLanguage.setLabelText(getString(R.string.action_select_lang, selectedLanguage));
 
@@ -277,27 +255,77 @@ public class StringsFragment extends Fragment implements AddLanguageDialogFragme
     @SuppressLint({"StringFormatMatches", "StringFormatInvalid"})
     @Override
     public void onAddLangClick(String item) {
+        if(mIsAddLanguage)
+            addNewLang(item);
+        else
+            autoTranslate(item);
+    }
+
+    private void addNewLang(String lang){
         try {
-            File newLang = new File(projectPatch + "/res/values" + item, "strings.xml");
+            File newLang = new File(projectPatch + "/res/values" + lang, "strings.xml");
             if (!newLang.exists()) {
                 // File newLang = new File(projectPatch+ "/res/values"+item, "strings.xml");
                 FileUtils.copyFile(new File(projectPatch + "/res/values", "strings.xml"), newLang);
                 strings.clear();
-                strArr.add(item.substring(1));
+                strArr.add(lang.substring(1));
                 langFiles.add(newLang.getCanonicalPath());
                 parseStings(newLang);
                 stringsAdapter.notifyDataSetChanged();
-                int position = strArr.indexOf(item.substring(1));
+                int position = strArr.indexOf(lang.substring(1));
                 selectedLanguage = strArr.get(position);
                 fabSelectLanguage.setLabelText(getString(R.string.action_select_lang, strArr.get(position)));
                 reloadAdapter();
             } else {
-                UIUtils.toast(App.getContext(), R.string.toast_error_new_language_is_exits);
+                UIUtils.toast(mContext, R.string.toast_error_new_language_is_exits);
             }
         } catch (IOException e) {
-            UIUtils.toast(App.getContext(), getResources().getString(R.string.toast_error_create_new_language));
+            UIUtils.toast(mContext, getString(R.string.toast_error_create_new_language));
             e.printStackTrace();
         }
+    }
+
+    private void autoTranslate(String lang){
+        List<TranslateItem> stringValues = new ArrayList();
+        /*if (selectedLanguage.equals("default")) {
+            mTargetLang = "-auto";
+        } else {
+            mTargetLang = "-" + selectedLanguage;
+        }*/
+        mTargetLang = lang;
+        DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+        try {
+            //get default language strings
+            DocumentBuilder documentBuilder = builderFactory.newDocumentBuilder();
+            Document doc = documentBuilder.parse(new File(langFiles.get(0)));
+            doc.getDocumentElement().normalize();
+            NodeList nodeList = doc.getElementsByTagName("string");
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                Node node = nodeList.item(i);
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    Element element = (Element) node;
+                    String key = element.getAttribute("name");
+                    String value = element.getTextContent();
+                    strings.put(key, value);
+                    stringValues.add(new TranslateItem(key, value, null));
+                }
+            }
+        } catch (IOException | SAXException | ParserConfigurationException e) {
+            UIUtils.toast(mContext, getString(R.string.toast_error_pasring));
+            e.printStackTrace();
+        }
+        TranslateStringsHelper.setDefaultStrings(stringValues);
+        Intent intent = new Intent(mContext, AutoTranslatorActivity.class);
+        intent.putExtra("targetLanguageCode", mTargetLang);
+        startActivityForResult(intent, 10);
+    }
+
+    @Override
+    public int setTitle() {
+        if(mIsAddLanguage)
+        return R.string.action_add_new_lang;
+        else
+            return R.string.action_auto_translate_lang;
     }
 
     private void translateValue(String key, String value) {

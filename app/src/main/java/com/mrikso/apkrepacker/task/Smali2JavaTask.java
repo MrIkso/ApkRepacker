@@ -2,7 +2,7 @@ package com.mrikso.apkrepacker.task;
 
 import android.os.AsyncTask;
 
-import com.duy.ide.core.api.IdeActivity;
+import com.mrikso.apkrepacker.activity.IdeActivity;
 import com.jecelyin.common.utils.UIUtils;
 import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;

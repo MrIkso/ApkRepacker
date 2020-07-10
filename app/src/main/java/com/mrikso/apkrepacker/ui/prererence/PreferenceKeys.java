@@ -16,6 +16,7 @@ public class PreferenceKeys {
     public static final String KEY_TOOLS_INSTALLED = "pref_tools_installed";
     public static final String KEY_USE_V2_SIGNATURE = "pref_use_v2_signature";
 
+    public static final String KEY_KEYSTORE_FILE = "pref_keystore_file";
     public static final String KEY_STORE_KEY = "pref_key_password";
     public static final String KEY_PRIVATE_KEY = "pref_private_password";
     public static final String KEY_KEY_TYPE = "pref_key_type";
@@ -29,4 +30,10 @@ public class PreferenceKeys {
     public static final String KEY_FILES_MODE = "pref_key_files_mode";
     public static final String KEY_EXTENSIONS = "pref_key_extensions";
     public static final String KEY_KEEP_SCREEN_ON = "pref_keep_screen_on";
+    public static final String KEY_CONFIRM_BUILD = "pref_confirm_build";
+    public static final String KEY_THEME = "pref_ui_theme";
+    public static final String KEY_CURRENT_THEME = "current_theme";
+    public static final String KEY_THEME_MODE = "theme_mode";
+    public static final String KEY_AUTO_THEME = "pref_auto_theme_mode";
+
 }
