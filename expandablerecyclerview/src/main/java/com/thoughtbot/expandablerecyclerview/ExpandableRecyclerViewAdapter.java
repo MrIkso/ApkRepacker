@@ -121,7 +121,7 @@ public abstract class ExpandableRecyclerViewAdapter<GVH extends GroupViewHolder,
   public void onGroupExpanded(int positionStart, int itemCount) {
     //update header
     int headerPosition = positionStart - 1;
-    notifyItemChanged(headerPosition);
+   // notifyItemChanged(headerPosition);
 
     // only insert if there items to insert
     if (itemCount > 0) {
@@ -143,7 +143,7 @@ public abstract class ExpandableRecyclerViewAdapter<GVH extends GroupViewHolder,
   public void onGroupCollapsed(int positionStart, int itemCount) {
     //update header
     int headerPosition = positionStart - 1;
-    notifyItemChanged(headerPosition);
+   // notifyItemChanged(headerPosition);
 
     // only remote if there items to remove
     if (itemCount > 0) {

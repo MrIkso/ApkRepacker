@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.IntegerRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -52,7 +53,7 @@ public class FileOptionsDialogFragment extends BottomSheetDialogFragment impleme
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         final Fragment parent = getParentFragment();
         if (parent != null) {
@@ -81,6 +82,6 @@ public class FileOptionsDialogFragment extends BottomSheetDialogFragment impleme
     }
 
     public interface FileItemClickListener {
-        void onFileItemClick(Integer item);
+        void onFileItemClick(@IntegerRes int item);
     }
 }

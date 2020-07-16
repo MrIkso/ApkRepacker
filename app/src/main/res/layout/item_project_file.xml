@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="46dp"
-    android:background="?selectableItemBackground" >
+    android:background="@drawable/selectable_background" >
 
     <ImageView
         android:id="@+id/list_item_image"

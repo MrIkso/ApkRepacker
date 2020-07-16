@@ -97,9 +97,7 @@ public class Document implements ReadFileListener {
     }
 
     void onRestoreInstanceState(@NonNull EditorDelegate.SavedState ss) {
-        if (ss.modeName != null) {
-            setMode(ss.modeName);
-        }
+
         if (ss.lineNumber > 0) {
             mLineCount = ss.lineNumber;
         }
@@ -155,9 +153,6 @@ public class Document implements ReadFileListener {
         mEditorDelegate.onLoadFinish();
     }
 
-    void setMode(String name) {
-
-    }
 
     public String getModeName() {
         return mModeName;

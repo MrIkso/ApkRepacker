@@ -669,5 +669,10 @@ public class FileManagerActivity extends BaseActivity implements ApkOptionsDialo
             adapter.toggle(position);
             return true;
         }
+
+        @Override
+        public boolean onItemActionClick(int position) {
+            return true;
+        }
     }
 }

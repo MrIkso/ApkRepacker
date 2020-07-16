@@ -3,6 +3,7 @@ package com.jecelyin.editor.v2.utils;
 import android.annotation.SuppressLint;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.Editable;
 
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.ide.editor.view.IEditAreaView;
@@ -369,9 +370,11 @@ public class ExtGrep implements Parcelable {
         return null;
     }
 
-    public void replaceAll(IEditAreaView text, String replaceText) {
-        Matcher m = grepPattern.matcher(text.getText());
-        ArrayList<Integer> array = new ArrayList<>();
+    public String replaceAll(String text, String replaceText) {
+        compilePattern();
+        Matcher m = grepPattern.matcher(text);
+        return m.replaceAll(replaceText);
+        /*ArrayList<Integer> array = new ArrayList<>();
         // 从头开始搜索获取所有位置
         while (m.find()) {
             array.add(m.start());
@@ -379,15 +382,15 @@ public class ExtGrep implements Parcelable {
         }
         int size = array.size();
         if (size == 0) {
-            UIUtils.toast(text.getContext(), text.getContext().getResources().getQuantityString(R.plurals.x_text_replaced, 0));
+           // UIUtils.toast(text.getContext(), text.getContext().getResources().getQuantityString(R.plurals.x_text_replaced, 0));
             return;
         }
         int count = 0;
         for (int i = size - 2; i >= 0; i -= 2) {
             count++;
-            //text.getText().replace(array.get(i), array.get(i + 1), replaceText);
-        }
-        UIUtils.toast(text.getContext(), text.getContext().getResources().getQuantityString(R.plurals.x_text_replaced, count, count));
+            text.(array.get(i), array.get(i + 1), replaceText);
+        }*/
+      //  UIUtils.toast(text.getContext(), text.getContext().getResources().getQuantityString(R.plurals.x_text_replaced, count, count));
     }
 
     private List<Result> grepFile(final File file) {

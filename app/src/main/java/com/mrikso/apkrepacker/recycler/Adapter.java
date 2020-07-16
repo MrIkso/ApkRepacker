@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SortedList;
 
-
 import com.mrikso.apkrepacker.R;
 
 import java.io.File;
@@ -23,12 +22,10 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
     private final SortedList<File> items;
     private final SparseBooleanArray selectedItems;
     private final Callback callback;
-    private Integer itemLayout;
-    private Integer spanCount;
+    private int itemLayout;
+    private int spanCount;
     private OnItemClickListener onItemClickListener;
     private OnItemSelectedListener onItemSelectedListener;
-
-    //----------------------------------------------------------------------------------------------
 
     public Adapter(Context context) {
         this.context = context;
@@ -36,8 +33,6 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
         this.items = new SortedList<>(File.class, callback);
         this.selectedItems = new SparseBooleanArray();
     }
-
-    //----------------------------------------------------------------------------------------------
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -61,8 +56,6 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
         return items.size();
     }
 
-    //----------------------------------------------------------------------------------------------
-
     public void setItemLayout(int itemLayout) {
         this.itemLayout = itemLayout;
     }
@@ -78,8 +71,6 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
     public void setSpanCount(int spanCount) {
         this.spanCount = spanCount;
     }
-
-    //----------------------------------------------------------------------------------------------
 
     public void add(File file) {
         items.add(file);
@@ -110,8 +101,6 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
     public void updateItemAt(int index, File file) {
         items.updateItemAt(index, file);
     }
-
-    //----------------------------------------------------------------------------------------------
 
     public void clearSelection() {
         ArrayList<Integer> selectedPositions = getSelectedPositions();
@@ -144,8 +133,6 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
         onItemSelectedListener.onItemSelected();
     }
 
-    //----------------------------------------------------------------------------------------------
-
     public boolean anySelected() {
         return selectedItems.size() > 0;
     }
@@ -154,8 +141,6 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
         return selectedItems.get(position);
     }
 
-    //----------------------------------------------------------------------------------------------
-
     public int getSelectedItemCount() {
         return selectedItems.size();
     }
@@ -163,8 +148,6 @@ public class Adapter extends RecyclerView.Adapter<ViewHolder> {
     public int indexOf(File file) {
         return items.indexOf(file);
     }
-
-    //----------------------------------------------------------------------------------------------
 
     public ArrayList<File> getSelectedItems() {
         ArrayList<File> list = new ArrayList<>();

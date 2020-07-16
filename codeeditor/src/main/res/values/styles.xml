@@ -37,44 +37,4 @@
         <item name="android:textColor">#ffffff</item>
     </style>
 
-    <style name="TexButton">
-        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Widget.Button.Borderless.Colored</item>
-        <item name="android:textSize">@dimen/text_size</item>
-        <item name="android:textColor">?attr/colorAccent</item>
-        <item name="android:gravity">center</item>
-        <item name="android:background">?selectableItemBackground</item>
-        <item name="android:focusable">true</item>
-        <item name="android:clickable">true</item>
-        <item name="android:minWidth">45.0dp</item>
-        <item name="android:minHeight">@dimen/text_minHeight</item>
-    </style>
-
-    <style name="TextInputLayout.OutlinedBox" parent="Widget.Design.TextInputLayout">
-        <item name="boxCornerRadiusBottomEnd">@dimen/dialog_round</item>
-        <item name="boxCornerRadiusBottomStart">@dimen/dialog_round</item>
-        <item name="boxCornerRadiusTopEnd">@dimen/dialog_round</item>
-        <item name="boxCornerRadiusTopStart">@dimen/dialog_round</item>
-        <item name="hintTextColor">?colorAccent</item>
-        <item name="boxStrokeColor">?colorAccent</item>
-        <item name="colorControlActivated">?colorAccent</item>
-    </style>
-
-    <style name="TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
-        <item name="boxCornerRadiusBottomEnd">@dimen/dialog_round</item>
-        <item name="boxCornerRadiusBottomStart">@dimen/dialog_round</item>
-        <item name="boxCornerRadiusTopEnd">@dimen/dialog_round</item>
-        <item name="boxCornerRadiusTopStart">@dimen/dialog_round</item>
-        <item name="hintTextColor">?colorAccent</item>
-        <item name="boxStrokeColor" tools:ignore="PrivateResource">@color/mtrl_outlined_stroke_color</item>
-        <item name="boxStrokeWidth">@dimen/divider_height</item>
-    </style>
-
-<!--    <style name="OverflowMenu" parent="Widget.AppCompat.PopupMenu">
-        <item name="overlapAnchor">false</item>
-        <item name="android:popupElevation">4dp</item>
-        <item name="android:dropDownVerticalOffset">0dp</item>
-        <item name="android:dropDownHorizontalOffset">0dp</item>
-        <item name="android:popupBackground">@drawable/action_popup_bg</item>
-    </style>-->
-
 </resources>

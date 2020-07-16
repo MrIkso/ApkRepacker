@@ -1,14 +1,17 @@
 package com.mrikso.apkrepacker.activity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
 import com.jecelyin.editor.v2.EditorPreferences;
 import com.mrikso.apkrepacker.R;
+import com.mrikso.apkrepacker.fragment.EditorThemeFragment;
+import com.mrikso.apkrepacker.ide.editor.theme.model.EditorTheme;
 
-public class ThemeEditorActivity extends BaseActivity{
-     //   implements EditorThemeFragment.EditorThemeAdapter.OnThemeSelectListener, SharedPreferences.OnSharedPreferenceChangeListener {
+public class ThemeEditorActivity extends BaseActivity implements EditorThemeFragment.EditorThemeAdapter.OnThemeSelectListener{
     private EditorPreferences mEditorPreferences;
 
 
@@ -22,30 +25,26 @@ public class ThemeEditorActivity extends BaseActivity{
 
         mEditorPreferences = EditorPreferences.getInstance(this);
 
-     //   mPreferences.registerOnSharedPreferenceChangeListener(this);
-       // getSupportFragmentManager()
-        //        .beginTransaction()
-               // .replace(R.id.content, new EditorThemeFragment())
-          //      .commit();
+//        mEditorPreferences.registerOnSharedPreferenceChangeListener(this);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.content, new EditorThemeFragment())
+               .commit();
     }
 
-    /*
+
     @Override
     public void onEditorThemeSelected(EditorTheme theme) {
-            mPreferences.setEditorTheme(theme.getFileName());
+        mEditorPreferences.setEditorTheme(theme.getFileName());
             String text = getString(R.string.selected_editor_theme, theme.getName());
             Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
             setResult(RESULT_OK);
     }
 
-
-     */
-
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
-       // mPreferences.unregisterOnSharedPreferenceChangeListener(this);
+       // mEditorPreferences.unregisterOnSharedPreferenceChangeListener(this);
     }
 
 }

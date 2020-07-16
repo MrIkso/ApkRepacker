@@ -103,7 +103,7 @@ public class DarkLightThemeSelectionDialogFragment extends BaseBottomSheetDialog
         mViewModel.getLightTheme().observe(this, lightThemeView::setTheme);
         mViewModel.getDarkTheme().observe(this, darkThemeView::setTheme);
 
-        view.requestFocus();
+        //view.requestFocus();
 
         revealBottomSheet();
     }

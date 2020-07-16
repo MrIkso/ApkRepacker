@@ -464,7 +464,7 @@ public class FolderStructureFragment extends Fragment implements ProjectFileCont
                 saveState = mTreeView.getSaveState();
             }
 
-            mTreeView = new AndroidTreeView(getContext(), root[0]);
+            mTreeView = new AndroidTreeView(mContext, root[0]);
             mTreeView.setDefaultAnimation(false);
             mTreeView.setDefaultContainerStyle(R.style.TreeNodeStyleCustom);
             mTreeView.setDefaultViewHolder(FolderHolder.class);

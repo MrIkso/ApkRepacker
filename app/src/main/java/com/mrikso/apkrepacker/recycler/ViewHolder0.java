@@ -8,12 +8,22 @@ import android.graphics.drawable.shapes.OvalShape;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.work.WorkManager;
+import androidx.work.Worker;
+import androidx.work.WorkerParameters;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.Request;
+import com.bumptech.glide.request.target.SizeReadyCallback;
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
 import com.mrikso.apkrepacker.R;
+import com.mrikso.apkrepacker.utils.AppExecutor;
 import com.mrikso.apkrepacker.utils.AppUtils;
 import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.PreferenceUtils;
@@ -71,8 +81,7 @@ public final class ViewHolder0 extends ViewHolder {
     }
 
     private void createIconGlide(Drawable icon) {
-        Glide
-                .with(image)
+        Glide.with(image)
                 .load(icon != null ? icon : R.drawable.default_app_icon)
                 .placeholder(android.R.color.transparent)
                 .transition(DrawableTransitionOptions.withCrossFade(ViewUtils.getShortAnimTime(image)))

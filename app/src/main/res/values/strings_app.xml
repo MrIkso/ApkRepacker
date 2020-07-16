@@ -322,5 +322,9 @@
     <string name="settings_main_auto_theme_picker">Choose themes</string>
     <string name="settings_main_auto_theme_picker_summary">Current light theme: %s\nCurrent dark theme: %s</string>
     <string name="settings_main_auto_theme_pre_q_warning">Please note that following the system theme may not work correctly on Android versions lower than Q</string>
+    <string name="action_copy_path">Copy path</string>
+    <string name="replace_request">Replace request</string>
+    <string name="replace_in_file_title">Replace in File</string>
+    <string name="replaced_successful">Replaced in File!</string>
 
 </resources>

@@ -31,6 +31,7 @@ import com.mrikso.apkrepacker.ide.editor.theme.ThemeLoader;
 import com.mrikso.apkrepacker.ide.editor.theme.model.EditorTheme;
 import com.jecelyin.common.utils.DLog;
 import com.jecelyin.common.utils.StringUtils;
+import com.mrikso.apkrepacker.utils.AppExecutor;
 
 import java.util.HashMap;
 import java.util.Map;

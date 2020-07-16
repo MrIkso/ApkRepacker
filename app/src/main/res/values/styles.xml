@@ -150,7 +150,7 @@
     <style name="AppTheme.AppBarOverlay.Dark" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
 
     <style name="Animation.Activity" parent="@android:style/Animation.Activity">
-        <item name="android:activityOpenEnterAnimation">@anim/activity_open_enter</item>
+       <item name="android:activityOpenEnterAnimation">@anim/activity_open_enter</item>
         <item name="android:activityOpenExitAnimation">@anim/activity_open_exit</item>
         <item name="android:activityCloseEnterAnimation">@anim/activity_close_enter</item>
         <item name="android:activityCloseExitAnimation">@anim/activity_close_exit</item>
@@ -190,25 +190,26 @@
         <item name="android:padding">@dimen/normal_padding</item>
     </style>
 
+    <!-- BottomSheet styles-->
     <style name="BottomSheetDialog" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
-        <item name="colorPrimary">@color/light_accent</item>
-        <item name="colorPrimaryDark">@color/light_accent</item>
-        <item name="colorAccent">@color/light_accent</item>
+      <!--  <item name="colorPrimary">?attr/simpleThemePrimaryColor</item>
+        <item name="colorPrimaryDark">?attr/simpleThemePrimaryColor</item>
+        <item name="colorAccent">?attr/simpleThemeAccentColor</item>-->
         <item name="android:colorBackgroundCacheHint">@null</item>
         <item name="android:windowBackground">#00000000</item>
         <item name="android:statusBarColor">#00000000</item>
         <item name="android:windowFullscreen">false</item>
-        <item name="android:colorBackground">@color/white</item>
+        <item name="android:colorBackground">?attr/simpleThemePrimaryColor</item>
         <item name="android:windowIsFloating">false</item>
         <item name="android:windowSoftInputMode">adjustResize</item>
-        <item name="android:navigationBarColor">@color/gray_very_light</item>
+        <item name="android:navigationBarColor">?attr/simpleThemePrimaryColor</item>
         <item name="bottomSheetStyle">@style/BottomSheetDialogStyle</item>
     </style>
 
     <style name="BottomSheetDialog.Dark" parent="Theme.MaterialComponents.BottomSheetDialog">
-        <item name="colorPrimary">@color/dark_accent</item>
-        <item name="colorPrimaryDark">@color/dark_accent</item>
-        <item name="colorAccent">@color/dark_accent</item>
+     <!--   <item name="colorPrimary">?attr/simpleThemePrimaryColor</item>
+        <item name="colorPrimaryDark">?attr/simpleThemePrimaryColor</item>
+        <item name="colorAccent">?attr/simpleThemeAccentColor</item>-->
         <item name="android:colorBackgroundCacheHint">@null</item>
         <item name="android:windowBackground">#00000000</item>
         <item name="android:statusBarColor">#00000000</item>
@@ -227,7 +228,9 @@
     </style>
 
     <!--CustomDialog-->
-    <style name="AlertDialog.AppTheme.Light" parent="@style/Theme.MaterialComponents.Light.Dialog.Alert">
+    <style name="AlertDialog.AppTheme.Light" parent="@style/ThemeOverlay.MaterialComponents.Dialog.Alert">
+      <!--  <item name="colorPrimary">?attr/simpleThemePrimaryColor</item>
+        <item name="colorAccent">?attr/simpleThemeAccentColor</item>-->
         <item name="dialogCornerRadius">@dimen/dialog_round</item>
         <item name="buttonBarButtonStyle">@style/MD2TextButton</item>
         <item name="android:backgroundTint">?attr/colorPrimary</item>
@@ -237,12 +240,12 @@
         <item name="android:windowMinWidthMinor">@android:dimen/dialog_min_width_minor</item>
     </style>
 
-    <style name="AlertDialog.AppTheme.Dark" parent="@style/Theme.MaterialComponents.Dialog.Alert">
-        <item name="colorPrimary">@color/dark_accent</item>
-        <item name="colorAccent">@color/dark_accent</item>
+    <style name="AlertDialog.AppTheme.Dark" parent="@style/ThemeOverlay.MaterialComponents.Dialog.Alert">
+<!--        <item name="colorPrimary">?attr/simpleThemePrimaryColor</item>
+        <item name="colorAccent">?attr/simpleThemeAccentColor</item>-->
         <item name="android:windowBackground">@drawable/action_popup_bg</item>
-        <item name="backgroundTint">@color/dark_primary</item>
-        <item name="android:backgroundTint">@color/dark_primary</item>
+        <item name="backgroundTint">?attr/colorPrimary</item>
+        <item name="android:backgroundTint">?attr/colorPrimary</item>
         <item name="dialogCornerRadius">@dimen/dialog_round</item>
         <item name="buttonBarButtonStyle">@style/MD2TextButton</item>
         <item name="android:buttonBarButtonStyle">@style/MD2TextButton</item>
@@ -303,17 +306,17 @@
         <item name="cornerSizeBottomLeft">0dp</item>
     </style>
 
-    <style name="ColorPickerDialog.Dark" parent="Theme.MaterialComponents.Dialog">
-        <item name="colorPrimary">?attr/colorPrimary</item>
-        <item name="colorAccent">?attr/colorAccent</item>
+    <style name="ColorPickerDialog.Dark" parent="@style/ThemeOverlay.MaterialComponents.Dialog">
+        <!--<item name="colorPrimary">?attr/simpleThemePrimaryColor</item>
+        <item name="colorAccent">?attr/simpleThemeAccentColor</item>-->
         <item name="dialogCornerRadius">@dimen/dialog_round</item>
         <item name="buttonBarButtonStyle">@style/MD2TextButton</item>
         <item name="android:buttonBarButtonStyle">@style/MD2TextButton</item>
     </style>
 
-    <style name="ColorPickerDialog" parent="Theme.MaterialComponents.Light.Dialog">
-        <item name="colorPrimary">?attr/colorPrimary</item>
-        <item name="colorAccent">?attr/colorAccent</item>
+    <style name="ColorPickerDialog" parent="@style/ThemeOverlay.MaterialComponents.Dialog">
+      <!--  <item name="colorPrimary">?attr/simpleThemePrimaryColor</item>
+        <item name="colorAccent">?attr/simpleThemeAccentColor</item>-->
         <item name="dialogCornerRadius">@dimen/dialog_round</item>
         <item name="buttonBarButtonStyle">@style/MD2TextButton</item>
         <item name="android:buttonBarButtonStyle">@style/MD2TextButton</item>

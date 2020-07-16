@@ -58,9 +58,8 @@ public final class ViewHolderFile extends ViewHolder {
 
     @Override
     protected void bindIcon(File file) {
-            image.setOnClickListener(onActionClickListener);
-            image.setOnLongClickListener(onActionLongClickListener);
-            setFileIcon(file);
+        image.setOnClickListener(onActionClickListener);
+        setFileIcon(file);
     }
 
     void recycle() {
@@ -69,15 +68,20 @@ public final class ViewHolderFile extends ViewHolder {
 
     @Override
     protected void bindName(File file) {
-        name.setText(file.getName());
+        if (isFind()) {
+            name.setText(file.getAbsolutePath().substring((FileUtil.getProjectPath() + "/").length()));
+        } else {
+            name.setText(file.getName());
+        }
     }
 
+
     @Override
-    protected void bindInfo(File file) {}
+    protected void bindInfo(File file) {
+    }
 
     private void createGlide(Object loadObject) {
-        Glide
-                .with(image)
+        Glide.with(image)
                 .load(loadObject instanceof File ? ((File) loadObject).getPath() : loadObject)
 //                .placeholder(android.R.color.transparent)
                 .transition(DrawableTransitionOptions.withCrossFade(ViewUtils.getShortAnimTime(image)))
@@ -87,31 +91,41 @@ public final class ViewHolderFile extends ViewHolder {
 
     private void setFileIcon(File file) {
         FileUtil.FileType fileType = FileUtil.FileType.getFileType(file);
-        if (fileType.equals(FileUtil.FileType.IMAGE)) {
-            image.setBackground(null);
-            createGlide(file);
-
-        } else if (fileType.equals(FileUtil.FileType.XML) && new VectorMasterDrawable(context, file, isLight).isVector()) {
-            image.setBackground(null);
-            VectorMasterDrawable vectorDrawable = new VectorMasterDrawable(context, file, isLight);
-            createGlide(vectorDrawable);
-
-        } else if (fileType.equals(FileUtil.FileType.TTF)) {
-            image.setBackground(null);
-            createGlide(textToBitmap(file));
-
-        } else {
-            int color = ContextCompat.getColor(context, FileUtil.getColorResource(file));
-            final Drawable drawable = ContextCompat.getDrawable(context, FileUtil.getImageResource(file));
-            if (PreferenceUtils.getBoolean(context, "pref_icon", true)) {
-                DrawableCompat.setTint(drawable, Color.rgb(255, 255, 255));
-                image.setBackground(getBackground(color));
-                image.setImageDrawable(drawable);
-            } else {
+        switch (fileType) {
+            case IMAGE:
                 image.setBackground(null);
-                DrawableCompat.setTint(drawable, color);
-                image.setImageDrawable(drawable);
-            }
+                createGlide(file);
+                break;
+            case XML:
+                VectorMasterDrawable vectorDrawable = new VectorMasterDrawable(context, file, isLight);
+                if (vectorDrawable.isVector()) {
+                    image.setBackground(null);
+                    createGlide(vectorDrawable);
+                } else {
+                    defaultIcon(file);
+                }
+                break;
+            case TTF:
+                image.setBackground(null);
+                createGlide(textToBitmap(file));
+                break;
+            default:
+                defaultIcon(file);
+                break;
+        }
+    }
+
+    private void defaultIcon(File file) {
+        int color = ContextCompat.getColor(context, FileUtil.getColorResource(file));
+        final Drawable drawable = ContextCompat.getDrawable(context, FileUtil.getImageResource(file));
+        if (PreferenceUtils.getBoolean(context, "pref_icon", true)) {
+            DrawableCompat.setTint(drawable, Color.rgb(255, 255, 255));
+            image.setBackground(getBackground(color));
+            image.setImageDrawable(drawable);
+        } else {
+            image.setBackground(null);
+            DrawableCompat.setTint(drawable, color);
+            image.setImageDrawable(drawable);
         }
     }
 

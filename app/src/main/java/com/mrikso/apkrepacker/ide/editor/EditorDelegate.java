@@ -31,6 +31,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
 import com.mrikso.apkrepacker.R;
+import com.mrikso.apkrepacker.ide.editor.lexer.CssLexTask;
 import com.mrikso.apkrepacker.utils.common.ShareUtil;
 import com.mrikso.apkrepacker.activity.IdeActivity;
 
@@ -261,17 +262,6 @@ public class EditorDelegate implements  IEditorDelegate, HighlightEditorView.OnE
         }
     }
 
-    public void addHighlight(int start, int end) {
-        //mEditText.hasFocus();
-
-        //mEditText.getText().setSpan(new BackgroundColorSpan(findResultsKeywordColor), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        mEditText.requestFocus();
-        // mEditText.hasFocus();
-        // mEditText.requestFocus();
-        mEditText.setSelection(start, end);
-        //mEditText.set(end);
-    }
-
     public int getCursorOffset() {
         if (mEditText == null) {
             return -1;
@@ -466,7 +456,7 @@ public class EditorDelegate implements  IEditorDelegate, HighlightEditorView.OnE
                 mEditText.setLexTask(new XmlLexTask());
             break;
             case"Css":
-                mEditText.setLexTask(NonProgLexTask.instance);
+                mEditText.setLexTask(new CssLexTask());
             break;
             case "None":
                 mEditText.setLexTask(NonProgLexTask.instance);

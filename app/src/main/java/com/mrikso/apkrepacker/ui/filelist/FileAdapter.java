@@ -6,18 +6,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SortedList;
 
-import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.recycler.Callback;
 import com.mrikso.apkrepacker.recycler.OnItemClickListener;
 import com.mrikso.apkrepacker.recycler.OnItemSelectedListener;
-import com.mrikso.apkrepacker.recycler.ViewHolder;
-import com.mrikso.apkrepacker.ui.appslist.AppsAdapter;
-//import com.mrikso.apkrepacker.recycler.ViewHolder0;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -29,12 +26,13 @@ public class FileAdapter extends RecyclerView.Adapter<ViewHolderFile> {
     private final SortedList<File> items;
     private final SparseBooleanArray selectedItems;
     private final Callback callback;
-    private Integer itemLayout;
-    private Integer spanCount;
+    @LayoutRes
+    private int itemLayout;
+
+    private int spanCount;
     private OnItemClickListener onItemClickListener;
     private OnItemSelectedListener onItemSelectedListener;
-
-    //----------------------------------------------------------------------------------------------
+    private boolean mFind;
 
     public FileAdapter(Context context) {
         this.context = context;
@@ -43,12 +41,10 @@ public class FileAdapter extends RecyclerView.Adapter<ViewHolderFile> {
         this.selectedItems = new SparseBooleanArray();
     }
 
-    //----------------------------------------------------------------------------------------------
-
     @NonNull
     @Override
     public ViewHolderFile onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(context).inflate(R.layout.item_project_file, parent, false);
+        View itemView = LayoutInflater.from(context).inflate(itemLayout, parent, false);
         return new ViewHolderFile(parent.getContext(), onItemClickListener, itemView);
     }
 
@@ -60,6 +56,7 @@ public class FileAdapter extends RecyclerView.Adapter<ViewHolderFile> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderFile holder, int position) {
+        holder.setFind(mFind);
         holder.setData(get(position), getSelected(position));
     }
 
@@ -72,8 +69,6 @@ public class FileAdapter extends RecyclerView.Adapter<ViewHolderFile> {
     public int getItemCount() {
         return items.size();
     }
-
-    //----------------------------------------------------------------------------------------------
 
     public void setItemLayout(int itemLayout) {
         this.itemLayout = itemLayout;
@@ -91,7 +86,9 @@ public class FileAdapter extends RecyclerView.Adapter<ViewHolderFile> {
         this.spanCount = spanCount;
     }
 
-    //----------------------------------------------------------------------------------------------
+    public void setIsFind(boolean find){
+        mFind = find;
+    }
 
     public void add(File file) {
         items.add(file);
@@ -100,8 +97,7 @@ public class FileAdapter extends RecyclerView.Adapter<ViewHolderFile> {
     public void addAll(File... files) {
         try {
             items.addAll(files);
-        }
-        catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
@@ -111,8 +107,8 @@ public class FileAdapter extends RecyclerView.Adapter<ViewHolderFile> {
     }
 
     public void clear() {
-        if(items != null)
-        while (items.size() > 0) items.removeItemAt(items.size() - 1);
+        if (items != null)
+            while (items.size() > 0) items.removeItemAt(items.size() - 1);
     }
 
     public void refresh() {
@@ -133,7 +129,14 @@ public class FileAdapter extends RecyclerView.Adapter<ViewHolderFile> {
         items.removeItemAt(index);
     }
 
-    //----------------------------------------------------------------------------------------------
+    public void selectAll() {
+        selectedItems.clear();
+        for (int i = 0; i < getItemCount(); i++) {
+            selectedItems.append(i, true);
+            notifyItemChanged(i);
+        }
+        onItemSelectedListener.onItemSelected();
+    }
 
     public void clearSelection() {
         ArrayList<Integer> selectedPositions = getSelectedPositions();
@@ -166,8 +169,6 @@ public class FileAdapter extends RecyclerView.Adapter<ViewHolderFile> {
         onItemSelectedListener.onItemSelected();
     }
 
-    //----------------------------------------------------------------------------------------------
-
     public boolean anySelected() {
         return selectedItems.size() > 0;
     }
@@ -176,8 +177,6 @@ public class FileAdapter extends RecyclerView.Adapter<ViewHolderFile> {
         return selectedItems.get(position);
     }
 
-    //----------------------------------------------------------------------------------------------
-
     public int getSelectedItemCount() {
         return selectedItems.size();
     }
@@ -185,8 +184,6 @@ public class FileAdapter extends RecyclerView.Adapter<ViewHolderFile> {
     public int indexOf(File file) {
         return items.indexOf(file);
     }
-
-    //----------------------------------------------------------------------------------------------
 
     public ArrayList<File> getSelectedItems() {
         ArrayList<File> list = new ArrayList<>();

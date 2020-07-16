@@ -14,12 +14,11 @@ public abstract class ViewHolder extends RecyclerView.ViewHolder {
     public final Context context;
 
     public ImageView image;
+    private boolean mFind = false;
     public View.OnClickListener onActionClickListener;
     public View.OnLongClickListener onActionLongClickListener;
     public View.OnClickListener onClickListener;
     public View.OnLongClickListener onLongClickListener;
-
-    //----------------------------------------------------------------------------------------------
 
     public ViewHolder(Context context, OnItemClickListener listener, View view) {
         super(view);
@@ -29,8 +28,6 @@ public abstract class ViewHolder extends RecyclerView.ViewHolder {
         loadName();
         loadInfo();
     }
-
-    //----------------------------------------------------------------------------------------------
 
     protected abstract void loadIcon();
 
@@ -44,10 +41,8 @@ public abstract class ViewHolder extends RecyclerView.ViewHolder {
 
     protected abstract void bindInfo(File file);
 
-    //----------------------------------------------------------------------------------------------
-
     private void setClickListener(final OnItemClickListener listener) {
-        this.onActionClickListener = v -> listener.onItemLongClick(getAdapterPosition());
+        this.onActionClickListener = v -> listener.onItemActionClick(getAdapterPosition());
         this.onActionLongClickListener = v -> listener.onItemLongClick(getAdapterPosition());
         this.onClickListener = v -> listener.onItemClick(getAdapterPosition());
         this.onLongClickListener = v -> listener.onItemLongClick(getAdapterPosition());
@@ -60,6 +55,14 @@ public abstract class ViewHolder extends RecyclerView.ViewHolder {
         bindIcon(file);
         bindName(file);
         bindInfo(file);
+    }
+
+    public void setFind(boolean isFind){
+        mFind = isFind;
+    }
+
+    public boolean isFind(){
+        return mFind;
     }
 
     void setVisibility(View view, Boolean visibility) {

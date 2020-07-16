@@ -18,6 +18,7 @@
 
             <!--верхняя панель-->
             <LinearLayout
+                android:id="@+id/container_path"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -47,6 +48,53 @@
                     android:fadingEdgeLength="20dp"
                     tools:listitem="@layout/patch_button_layout"/>
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/container_selection_bar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                android:orientation="horizontal">
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/ib_clear_selection"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:scaleType="center"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/card_title_margin"
+                    android:layout_marginEnd="@dimen/checkbox_margin"
+                    android:layout_marginTop="@dimen/checkbox_margin"
+                    android:layout_marginBottom="@dimen/checkbox_margin"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:tint="?android:textColorSecondary"
+                    fab:srcCompat="@drawable/ic_clear" />
+
+                <TextView
+                    android:id="@+id/tv_selection_status"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="4dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:gravity="start|center_vertical"
+                    android:includeFontPadding="false"
+                    android:padding="4dp"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="16sp" />
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/ib_select_all"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/card_title_margin"
+                    android:layout_marginEnd="@dimen/checkbox_margin"
+                    android:layout_marginTop="@dimen/checkbox_margin"
+                    android:layout_marginBottom="@dimen/checkbox_margin"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:tint="?android:textColorSecondary"
+                    fab:srcCompat="@drawable/ic_select_all" />
             </LinearLayout>
         </FrameLayout>
 
@@ -101,4 +149,15 @@
 
     </com.github.clans.fab.FloatingActionMenu>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_delete"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom|center"
+        android:layout_margin="16.0dip"
+        fab:backgroundTint="?colorAccent"
+        fab:tint="@color/white"
+        android:fitsSystemWindows="true"
+        android:src="@drawable/ic_delete" />
 </FrameLayout>

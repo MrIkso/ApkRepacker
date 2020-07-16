@@ -53,15 +53,15 @@ public class CodeEditor extends HighlightEditorView {
     }
 
     private void init(Context context) {
-        setTheme(mEditorPreferences.getEditorTheme());
+        mAppExecutor = AppExecutor.getInstance();
+        mAppExecutor.getDiskIO().execute(() -> {
+            setTheme(mEditorPreferences.getEditorTheme());
+        });
     }
 
     @Override
     public void setTheme(@NonNull EditorTheme editorTheme) {
         mEditorTheme = editorTheme;
-
-        mAppExecutor = AppExecutor.getInstance();
-        mAppExecutor.getDiskIO().execute(() -> {
             setBackgroundColor(getColor(editorTheme.getThemeModel().getViewBackgroundColor()));
             setTextColor(getColor(editorTheme.getThemeModel().getViewDefault()));
             setTextHighlightColor(getColor(editorTheme.getThemeModel().getViewSelectionColor()));
@@ -82,8 +82,7 @@ public class CodeEditor extends HighlightEditorView {
             setErrorColor(getColor(editorTheme.getThemeModel().getViewError()));
 
             postInvalidate();
-        });
-
+        //});
     }
 
     @Override

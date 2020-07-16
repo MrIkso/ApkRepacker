@@ -9,9 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import androidx.annotation.IntegerRes;
 import androidx.appcompat.widget.AppCompatImageButton;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,6 +29,7 @@ import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.activity.CodeEditorActivity;
 import com.mrikso.apkrepacker.filepicker.FilePickerDialog;
 import com.mrikso.apkrepacker.fragment.dialogs.FileOptionsDialogFragment;
+import com.mrikso.apkrepacker.recycler.OnItemClickListener;
 import com.mrikso.apkrepacker.ui.filelist.FileAdapter;
 import com.mrikso.apkrepacker.ui.filelist.PathButtonAdapter;
 import com.mrikso.apkrepacker.ui.imageviewer.ImageViewerActivity;
@@ -31,7 +37,7 @@ import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.FragmentUtils;
 import com.mrikso.apkrepacker.utils.IntegerArray;
 import com.mrikso.apkrepacker.utils.IntentUtils;
-import com.mrikso.apkrepacker.utils.StringUtils;
+import com.mrikso.apkrepacker.utils.ViewUtils;
 import com.sdsmdg.harjot.vectormaster.VectorMasterDrawable;
 
 import java.io.File;
@@ -41,7 +47,7 @@ import java.util.Objects;
 
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
 
-public class FilesFragment extends Fragment implements FileOptionsDialogFragment.FileItemClickListener, OnBackPressedListener {
+public class FilesFragment extends Fragment implements FileOptionsDialogFragment.FileItemClickListener, OnItemClickListener, OnBackPressedListener {
     private File currentDirectory;
     private Context mContext;
     private FileAdapter adapter;
@@ -54,6 +60,13 @@ public class FilesFragment extends Fragment implements FileOptionsDialogFragment
     private IntegerArray integerArray = new IntegerArray();
     private int lastFirstVisiblePosition = 0;
     private int selectedPosition = RecyclerView.NO_POSITION;
+    private LinearLayout mContainerSelection;
+    private LinearLayout mContainerPath;
+    private AppCompatImageButton mClearSelection;
+    private AppCompatImageButton mSelectAll;
+    private TextView mSelectedCount;
+    private com.google.android.material.floatingactionbutton.FloatingActionButton mFabDelete;
+    private FilesFragmentViewModel mViewModel;
 
     public FilesFragment() {
         // Required empty public constructor
@@ -78,7 +91,7 @@ public class FilesFragment extends Fragment implements FileOptionsDialogFragment
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // DataBindingUtil binding = DataBindingUtil.inflate(inflater, R.layout.file_explorer_fragment, container, false);
+        mViewModel = new ViewModelProvider(this).get(FilesFragmentViewModel.class);
         View result = inflater.inflate(R.layout.fragment_files, container, false);
         mContext = result.getContext();
         initViews(result);
@@ -154,28 +167,34 @@ public class FilesFragment extends Fragment implements FileOptionsDialogFragment
             }
         });
         patchRecyclerView.setAdapter(pathAdapter);
-        adapter.setOnItemClickListener(new OnItemClickListener(getContext()));
+        adapter.setOnItemClickListener(this);
+        adapter.setOnItemSelectedListener(() -> {
+            invalidateFab();
+            invalidatePathAdapter();
+        });
         adapter.setItemLayout(R.layout.item_project_file);
         adapter.setSpanCount(getResources().getInteger(R.integer.span_count0));
 
         if (recyclerView != null) {
             recyclerView.setHasFixedSize(true);
-//            recyclerView.buildDrawingCache(true);
-//            recyclerView.setDrawingCacheEnabled(true);
-//            recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
-//            recyclerView.getRecycledViewPool().setMaxRecycledViews(0, 24);
             new FastScrollerBuilder(recyclerView).useMd2Style().build();
             recyclerView.setAdapter(adapter);
         }
     }
 
     private void initViews(View view) {
+        mContainerPath = view.findViewById(R.id.container_path);
+        mContainerSelection = view.findViewById(R.id.container_selection_bar);
+        mSelectAll = view.findViewById(R.id.ib_select_all);
+        mClearSelection = view.findViewById(R.id.ib_clear_selection);
+        mSelectedCount = view.findViewById(R.id.tv_selection_status);
         actionMenu = view.findViewById(R.id.fab_menu);
+        mFabDelete = view.findViewById(R.id.fab_delete);
         FloatingActionButton addFile = view.findViewById(R.id.fab_add_file);
         FloatingActionButton addFolder = view.findViewById(R.id.fab_add_folder);
         FloatingActionButton searchFab = view.findViewById(R.id.fab_search);
-        AppCompatImageButton home_folder = view.findViewById(R.id.home_folder_app);
-        home_folder.setOnClickListener(v -> setPath(new File(projectPatch)));
+        AppCompatImageButton homeFolder = view.findViewById(R.id.home_folder_app);
+        homeFolder.setOnClickListener(v -> setPath(new File(projectPatch)));
         searchFab.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
             bundle.putString("curDirect", currentDirectory.getAbsolutePath());
@@ -247,28 +266,84 @@ public class FilesFragment extends Fragment implements FileOptionsDialogFragment
         actionMenu.setClosedOnTouchOutside(true);
     }
 
+    private void invalidateFab() {
+        ViewUtils.setVisibleOrGone(mFabDelete, adapter.anySelected());
+        ViewUtils.setVisibleOrGone(actionMenu, !adapter.anySelected());
+        mFabDelete.setOnClickListener(v -> actionDelete());
+    }
+
+    private void actionDelete() {
+        actionDelete(adapter.getSelectedItems());
+        adapter.clearSelection();
+    }
+
+    private void actionDelete(final List<File> files) {
+        final File sourceDirectory = currentDirectory;
+        adapter.removeAll(files);
+        for (File file : files) {
+            try {
+                FileUtil.deleteFile(file);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    private void invalidatePathAdapter() {
+        ViewUtils.setVisibleOrGone(mContainerSelection, adapter.anySelected());
+        ViewUtils.setVisibleOrGone(mContainerPath, !adapter.anySelected());
+        if(adapter.anySelected()) {
+            mSelectAll.setOnClickListener(v -> adapter.selectAll());
+            mClearSelection.setOnClickListener(v -> adapter.clearSelection());
+            mSelectedCount.setText(String.valueOf(adapter.getSelectedItemCount()));
+        }
+    }
+
     @Override
     public void onResume() {
         if (adapter != null) adapter.refresh();
         super.onResume();
     }
 
-    /*@Override
-    public void onBackPressed() {
-        //currentDirName is dependent on dirName
+    @Override
+    public boolean onBackPressed() {
+        if (adapter.anySelected()) {
+            adapter.clearSelection();
+            return true;
+        }
+        savePosition(false);
+
         String currentDirName = currentDirectory.getName();
         File f = new File(projectPatch);
-        //  File currLoc = new File(currentDirName);
-        if (currentDirName.equals(f.getName())) {
-            getActivity().onBackPressed();
-            //  getActivity().getSupportFragmentManager().popBackStack();
+        Fragment manager1 = getChildFragmentManager().findFragmentByTag(SearchFragment.TAG);
+        Fragment manager2 = getChildFragmentManager().findFragmentByTag(ColorEditorFragment.TAG);
+//        Fragment manager3 = getChildFragmentManager().findFragmentByTag(DimensEditorFragment.TAG);
+
+        if (manager1 != null) {
+            getChildFragmentManager().popBackStack();
+            return true;
+        } else if (manager2 != null) {
+            getChildFragmentManager().popBackStack();
+            return true;
+/*        } else if (manager3 != null) {
+            getChildFragmentManager().popBackStack();
+            return true;*/
+        } else if (currentDirName.equals(f.getName())) {
+            requireActivity().finish();
+            //getFragmentManager().popBackStack();
+            //getActivity().getFragmentManager().beginTransaction().remove(me).commit();
+            // getActivity().getFragmentManager().popBackStack();
+            //   getActivity().getFragmentManager().beginTransaction().remove(this).commit();
+            //  getActivity().getFragmentManager().popBackStack();
+            return true;
         } else {
             setPath(new File(downDir(1, currentDirectory.getAbsolutePath())));
+            return true;
         }
-    }*/
+    }
 
     @Override
-    public void onFileItemClick(Integer item) {
+    public void onFileItemClick(@IntegerRes int item) {
         switch (item) {
             case R.id.open_with:
                 startActivity(IntentUtils.openFileWithIntent(new File(selectedFile.getAbsolutePath())));
@@ -327,111 +402,78 @@ public class FilesFragment extends Fragment implements FileOptionsDialogFragment
     }
 
     @Override
-    public boolean onBackPressed() {
-        savePosition(false);
-
-        String currentDirName = currentDirectory.getName();
-        File f = new File(projectPatch);
-        Fragment manager1 = getChildFragmentManager().findFragmentByTag(SearchFragment.TAG);
-        Fragment manager2 = getChildFragmentManager().findFragmentByTag(ColorEditorFragment.TAG);
-//        Fragment manager3 = getChildFragmentManager().findFragmentByTag(DimensEditorFragment.TAG);
-
-        if (manager1 != null) {
-            getChildFragmentManager().popBackStack();
-            return true;
-        } else if (manager2 != null) {
-            getChildFragmentManager().popBackStack();
-            return true;
-/*        } else if (manager3 != null) {
-            getChildFragmentManager().popBackStack();
-            return true;*/
-        } else if (currentDirName.equals(f.getName())) {
-            requireActivity().finish();
-            //getFragmentManager().popBackStack();
-            //getActivity().getFragmentManager().beginTransaction().remove(me).commit();
-            // getActivity().getFragmentManager().popBackStack();
-            //   getActivity().getFragmentManager().beginTransaction().remove(this).commit();
-            //  getActivity().getFragmentManager().popBackStack();
-            return true;
-        } else {
-            setPath(new File(downDir(1, currentDirectory.getAbsolutePath())));
-            return true;
-        }
-    }
-
-    private final class OnItemClickListener implements com.mrikso.apkrepacker.recycler.OnItemClickListener {
-
-        private final Context context;
-
-        private OnItemClickListener(Context context) {
-            this.context = context;
-        }
-
-        @Override
-        public void onItemClick(int position) {
-            File file = null;
-            if (adapter != null && position >= 0) {
-                file = adapter.get(position);
-                if (adapter.anySelected()) {
-                    adapter.toggle(position);
-                    return;
-                }
+    public void onItemClick(int position) {
+        File file = null;
+        if (adapter != null && position >= 0) {
+            file = adapter.get(position);
+            if (adapter.anySelected()) {
+                adapter.toggle(position);
+                return;
             }
+        }
 
-            if (file != null) {
-                if (file.isDirectory()) {
-                    if (file.canRead()) {
-                        setPath(file);
-                        savePosition(true);
-                    } else {
-                        UIUtils.toast(context, R.string.cannt_open_directory);
-                    }
+        if (file != null) {
+            if (file.isDirectory()) {
+                if (file.canRead()) {
+                    setPath(file);
+                    savePosition(true);
                 } else {
-                    switch (FileUtil.FileType.getFileType(file)) {
-                        case TXT:
-                        case SMALI:
-                        case JS:
-                        case JSON:
-                        case HTM:
-                        case HTML:
-                        case INI:
-                        case XML:
-                            if (file.getName().startsWith("colors")) {
-                                Fragment colorEditorFragment = ColorEditorFragment.newInstance(file.getAbsolutePath());
-                                getChildFragmentManager().beginTransaction().replace(R.id.fragment_container, colorEditorFragment, ColorEditorFragment.TAG).addToBackStack(null).commit();
+                    UIUtils.toast(mContext, R.string.cannt_open_directory);
+                }
+            } else {
+                switch (FileUtil.FileType.getFileType(file)) {
+                    case TXT:
+                    case SMALI:
+                    case JS:
+                    case JSON:
+                    case HTM:
+                    case HTML:
+                    case INI:
+                    case XML:
+                        if (file.getName().startsWith("colors")) {
+                            Fragment colorEditorFragment = ColorEditorFragment.newInstance(file.getAbsolutePath());
+                            getChildFragmentManager().beginTransaction().replace(R.id.fragment_container, colorEditorFragment, ColorEditorFragment.TAG).addToBackStack(null).commit();
 /*                        } else if (file.getName().equals("dimens.xml")) {
                             Fragment dimensEditorFragment = DimensEditorFragment.newInstance(file.getAbsolutePath());
                             getChildFragmentManager().beginTransaction().replace(R.id.fragment_container, dimensEditorFragment, DimensEditorFragment.TAG).addToBackStack(null).commit();*/
-                            } else if ((currentDirectory.getName().startsWith("drawable") || currentDirectory.getName().startsWith("mipmap")) && new VectorMasterDrawable(context, file).isVector()) {
-                                ImageViewerActivity.setViewerData(getContext(), adapter, file);
-                                startActivity(new Intent(getActivity(), ImageViewerActivity.class));
-                            } else {
-                                Intent intent = new Intent(getActivity(), CodeEditorActivity.class);
-                                intent.putExtra("filePath", file.getAbsolutePath());
-                                intent.putExtra("currentDirectory", currentDirectory);
-                                startActivity(intent);
-                            }
-                            break;
-                        case IMAGE:
-//                    case TTF:
+                        } else if ((currentDirectory.getName().startsWith("drawable") || currentDirectory.getName().startsWith("mipmap")) && new VectorMasterDrawable(mContext, file).isVector()) {
                             ImageViewerActivity.setViewerData(getContext(), adapter, file);
                             startActivity(new Intent(getActivity(), ImageViewerActivity.class));
-                            break;
-                        default:
-                            startActivity(IntentUtils.openFileWithIntent(file));
-                            break;
-                    }
+                        } else {
+                            Intent intent = new Intent(getActivity(), CodeEditorActivity.class);
+                            intent.putExtra("filePath", file.getAbsolutePath());
+                            intent.putExtra("currentDirectory", currentDirectory);
+                            startActivity(intent);
+                        }
+                        break;
+                    case IMAGE:
+//                    case TTF:
+                        ImageViewerActivity.setViewerData(getContext(), adapter, file);
+                        startActivity(new Intent(getActivity(), ImageViewerActivity.class));
+                        break;
+                    default:
+                        startActivity(IntentUtils.openFileWithIntent(file));
+                        break;
                 }
             }
         }
+    }
 
-        @Override
-        public boolean onItemLongClick(int position) {
+    @Override
+    public boolean onItemActionClick(int position) {
+        if(!adapter.anySelected()) {
             selectedFile = adapter.get(position);
             selectedPosition = position;
-            FileOptionsDialogFragment fragment = FileOptionsDialogFragment.newInstance(new VectorMasterDrawable(context, selectedFile).isVector() != selectedFile.getName().equals("colors.xml"), !selectedFile.isDirectory());
+            FileOptionsDialogFragment fragment = FileOptionsDialogFragment.newInstance(new VectorMasterDrawable(mContext, selectedFile).isVector() != selectedFile.getName().equals("colors.xml"), !selectedFile.isDirectory());
             fragment.show(getChildFragmentManager(), FileOptionsDialogFragment.TAG);
-            return true;
         }
+        return true;
     }
+
+    @Override
+    public boolean onItemLongClick(int position) {
+        adapter.toggle(position);
+        return true;
+    }
+
 }

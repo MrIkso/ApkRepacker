@@ -1,6 +1,7 @@
 package com.mrikso.apkrepacker.fragment;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -36,6 +37,7 @@ import com.mrikso.apkrepacker.ui.prererence.PreferenceHelper;
 import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.StringUtils;
 import com.mrikso.apkrepacker.utils.Theme;
+import com.mrikso.apkrepacker.utils.ViewUtils;
 import com.mrikso.apkrepacker.utils.common.DLog;
 
 import java.util.ArrayList;
@@ -261,7 +263,7 @@ public class SearchFragment extends Fragment {
         chip.setChecked(true);
         chip.setClickable(true);
         chip.setTextColor(getResources().getColor(R.color.white));
-        chip.setChipBackgroundColorResource(R.color.light_accent);
+        chip.setChipBackgroundColorResource(ViewUtils.getColorFromAttrRes(R.attr.colorAccent, Color.CYAN, mContext));
         //Added click listener on close icon to remove tag from ChipGroup
         chip.setOnLongClickListener(v -> {
             //tagList.remove(tagName);
@@ -356,6 +358,7 @@ public class SearchFragment extends Fragment {
         StringUtils.setGreap(grep);
         Bundle bundle = new Bundle();
         bundle.putString("curDirect", path);
+        bundle.putString("searchText", findText.getText().toString());
         AppEditorActivity appEditorActivity = AppEditorActivity.getInstance();
         appEditorActivity.setSearchArguments(bundle);
         appEditorActivity.mViewPager.setCurrentItem(3);
