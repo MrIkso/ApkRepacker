@@ -33,7 +33,7 @@ import java.util.HashMap;
 
 public class ThemeLoader {
     public static final String ASSET_PATH = "themes";
-    private static final String DEFAULT_EDITOR_THEME_LIGHT = "mt-manager-dark.json";
+    private static final String DEFAULT_EDITOR_THEME_LIGHT = "idea.json";
     private static final HashMap<String, EditorTheme> CACHED = new HashMap<>();
     private static final String TAG = "ThemeLoader";
 

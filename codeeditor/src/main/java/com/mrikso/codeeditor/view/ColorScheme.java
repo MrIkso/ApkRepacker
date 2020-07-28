@@ -93,8 +93,8 @@ public abstract class ColorScheme {
             case Lexer.TYPE:
                 element = Colorable.TYPE;
                 break;
-            case Lexer.TEXT:
-                element = Colorable.TEXT;
+            case Lexer.STRING:
+                element = Colorable.STRING;
                 break;
             default:
                 TextWarriorException.fail("Invalid token type");

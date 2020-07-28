@@ -1099,10 +1099,10 @@ public abstract class FreeScrollingTextField extends View implements Document.Te
 
     // draw line number
     private int drawLineNum(Canvas canvas, String s, int paintX, int paintY) {
-        int originalColor = mTextPaint.getColor();
-        mTextPaint.setColor(mColorScheme.getColor(ColorScheme.Colorable.GUTTER_LINENUMBER));
+        int originalColor = mLineNumPaint.getColor();
+        mLineNumPaint.setColor(mColorScheme.getColor(ColorScheme.Colorable.GUTTER_LINENUMBER));
         canvas.drawText(s, paintX, paintY, mLineNumPaint);
-        mTextPaint.setColor(originalColor);
+        mLineNumPaint.setColor(originalColor);
         return 0;
     }
 

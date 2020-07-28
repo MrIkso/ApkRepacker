@@ -95,7 +95,7 @@ public class JsonLexTask extends Antlr4LexTask<JSONLexer> {
                     break;
                 default:
                    // type = ColorScheme.Colorable.NAME;
-                    _tokens.add(new Pair(token.getStopIndex(), Lexer.NAME));
+                    _tokens.add(new Pair(token.getStopIndex(), Lexer.NORMAL));
                     break;
             }
             //int end = token.getStopIndex();

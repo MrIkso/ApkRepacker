@@ -195,7 +195,7 @@ public class JavaLexTask extends Antlr4LexTask<JavaLexer> {
                     break;
                 default:
                     //type = ColorScheme.Colorable.NAME;
-                    _tokens.add(new Pair(token.getStopIndex(), Lexer.NAME));
+                    _tokens.add(new Pair(token.getStopIndex(), Lexer.NORMAL));
                     break;
             }
           //  Pair pair = new Pair(token.getStopIndex(), ColorScheme.getColor(type));

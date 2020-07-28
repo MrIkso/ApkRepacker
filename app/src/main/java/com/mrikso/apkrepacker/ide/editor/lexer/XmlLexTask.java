@@ -110,7 +110,7 @@ public class XmlLexTask extends Antlr4LexTask<XMLLexer> {
                     _tokens.add(new Pair(token.getStopIndex(), Lexer.OPERATOR));
                     break;
                 default:
-                    _tokens.add(new Pair(token.getStopIndex(), Lexer.NAME));
+                    _tokens.add(new Pair(token.getStopIndex(), Lexer.NORMAL));
                     break;
             }
             lastType = tokenType;

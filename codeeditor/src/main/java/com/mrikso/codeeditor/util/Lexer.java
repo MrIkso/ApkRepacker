@@ -20,17 +20,18 @@ public class Lexer {
 	private final static int MAX_KEYWORD_LENGTH = 127;
 
 	public final static int UNKNOWN = -1;
-	public final static int NORMAL = 0;
-	public final static int KEYWORD = 1;
-	public final static int OPERATOR = 2;
+	public final static int NORMAL = 0;//обычный текст
+	public final static int KEYWORD = 1;//зарезервированные слова
+	public final static int OPERATOR = 2;//операторы
 	public final static int NAME = 3;
-	public final static int LITERAL = 4;
-	public final static int COMMENT = 5;
-	public final static int SEPARATOR = 6;
-	public final static int PACKAGE = 7;
-	public final static int TYPE = 8;
-	public final static int ERROR = 9;
-	public final static int TEXT = 10;
+	public final static int LITERAL = 4;//литералы
+	public final static int COMMENT = 5;//комментарии
+	public final static int SEPARATOR = 6;//разделитель
+	public final static int PACKAGE = 7;//пакет
+	public final static int TYPE = 8;//тип
+	public final static int STRING = 9;//строка
+	public final static int ERROR = 10;//ошибка
+
 	private static final ExecutorService mExecutorService;
 
 	static{

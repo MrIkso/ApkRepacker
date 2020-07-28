@@ -1,0 +1,32 @@
+{
+  "theme_name": "Idea",
+  "theme_type": "light",
+
+  "dropdown_background": "#fafafa",
+  "dropdown_border": "#fafafa",
+  "dropdown_foreground": "#555555",
+  
+  "view_background_color": "#ffffff",
+  "view_caret_color": "#FFFAE3",
+
+  "view_gutter_background_color": "#f0f0f0",
+  "view_gutter_foreground_color": "#cfd8dc",
+
+  "view_selection_color": "#B1D2F2",
+
+  "view_comment": "#808080",
+  "view_keyword": "#000080",
+  "view_name": "#808000",
+  "view_literal": "#0000FF",
+  "view_operator": "#660E7A",
+  "view_separator": "#0096ff",
+  "view_package": "#800000",
+  "view_type": "#808000",
+
+  "view_error": "#FF0000",
+  "view_string": "#008000",
+  "view_default": "#000000",
+  "view_constant": "#7f8000",
+
+  "view_whitespace_color": "#e6e6e6"
+}

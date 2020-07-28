@@ -154,7 +154,7 @@ public class CssLexTask extends Antlr4LexTask<css3Lexer> {
                     _tokens.add(new Pair(token.getStopIndex(), Lexer.OPERATOR));
                     break;
                 default:
-                    _tokens.add(new Pair(token.getStopIndex(), Lexer.NAME));
+                    _tokens.add(new Pair(token.getStopIndex(), Lexer.NORMAL));
                     break;
             }
            // Pair pair = new Pair(token.getStopIndex(), ColorScheme.getColor(type));

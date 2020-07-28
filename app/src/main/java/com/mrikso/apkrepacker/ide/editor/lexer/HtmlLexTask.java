@@ -74,10 +74,10 @@ public class HtmlLexTask extends XmlLexTask {
                     _tokens.add(new Pair(token.getStopIndex(), Lexer.OPERATOR));
                     break;
                 case TEXT:
-                    _tokens.add(new Pair(token.getStopIndex(), Lexer.NAME));
+                    _tokens.add(new Pair(token.getStopIndex(), Lexer.NORMAL));
                     break;
                 default:
-                    _tokens.add(new Pair(token.getStopIndex(), Lexer.NAME));
+                    _tokens.add(new Pair(token.getStopIndex(), Lexer.NORMAL));
                     break;
             }
             lastType = tokenType;

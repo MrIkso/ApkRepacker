@@ -162,7 +162,7 @@ public class JavascriptLexTask extends Antlr4LexTask<JavaScriptLexer> {
                     _tokens.add(new Pair(token.getStopIndex(), Lexer.ERROR));
                     break;
                 default:
-                    _tokens.add(new Pair(token.getStopIndex(), Lexer.NAME));
+                    _tokens.add(new Pair(token.getStopIndex(), Lexer.NORMAL));
                     break;
             }
            // Pair pair = new Pair(token.getStopIndex(), ColorScheme.getColor(type));

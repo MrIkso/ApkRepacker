@@ -271,7 +271,7 @@ public class SmaliLexTask extends Antlr4LexTask<SmaliLexer> {
                     }
                     else {
                        // type1 = ColorScheme.Colorable.NAME;
-                        _tokens.add(new Pair(token.getStopIndex(), Lexer.NAME));
+                        _tokens.add(new Pair(token.getStopIndex(), Lexer.NORMAL));
                         isLabel = false;
                     }
                     break;
@@ -284,7 +284,7 @@ public class SmaliLexTask extends Antlr4LexTask<SmaliLexer> {
                     }
                     else {
                         //type1 = ColorScheme.Colorable.NAME;
-                        _tokens.add(new Pair(token.getStopIndex(), Lexer.TEXT));
+                        _tokens.add(new Pair(token.getStopIndex(), Lexer.NORMAL));
                     }
                     break;
             }

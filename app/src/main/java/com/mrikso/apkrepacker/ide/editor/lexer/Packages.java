@@ -22,6 +22,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -64,7 +65,7 @@ public class Packages {
         if (c.exists()) {
             try {
                 InputStream i = new FileInputStream(c);
-                String data = IOUtils.toString(i);
+                String data = IOUtils.toString(i, StandardCharsets.UTF_8);
                 JSONObject json = new JSONObject(data);
                 Iterator<String> keys = json.keys();
                 while (keys.hasNext()) {

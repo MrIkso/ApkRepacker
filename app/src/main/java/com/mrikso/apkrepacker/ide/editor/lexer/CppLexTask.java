@@ -208,7 +208,7 @@ public class CppLexTask extends Antlr4LexTask<CPP14Lexer> {
                     break;
                 default:
                     //type = ColorScheme.Colorable.NAME;
-                    _tokens.add(new Pair(token.getStopIndex(), Lexer.NAME));
+                    _tokens.add(new Pair(token.getStopIndex(), Lexer.NORMAL));
                     break;
             }
            // Pair pair = new Pair(token.getStopIndex(), ColorScheme.getColor(type));
