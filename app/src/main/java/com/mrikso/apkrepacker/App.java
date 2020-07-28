@@ -6,12 +6,18 @@ import android.content.SharedPreferences;
 
 import androidx.preference.PreferenceManager;
 
+import com.mrikso.apkrepacker.ui.filemanager.utils.CopyHelper;
 import com.mrikso.apkrepacker.utils.ExceptionHandler;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+
+import static com.mrikso.apkrepacker.ui.filemanager.misc.ThumbnailHelper.imageDecoder;
 
 public class App extends Application {
 
     private static Context mContext;
     private static App instance;
+    private CopyHelper mCopyHelper;
     private SharedPreferences preferences;
 
     public static Context getContext() {
@@ -29,7 +35,9 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        mCopyHelper = new CopyHelper();
         ExceptionHandler.get(this).start();
+        initImageLoader();
     }
 
     public static App get() {
@@ -37,6 +45,18 @@ public class App extends Application {
             instance = new App();
         }
         return instance;
+    }
+
+    private void initImageLoader() {
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
+                .diskCacheSize(10240000) // 10MB
+                .imageDecoder(imageDecoder(getApplicationContext()))
+                .build();
+        ImageLoader.getInstance().init(config);
+    }
+
+    public CopyHelper getCopyHelper() {
+        return mCopyHelper;
     }
 
     public SharedPreferences getPreferences() {

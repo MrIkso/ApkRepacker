@@ -6,7 +6,7 @@ import android.os.AsyncTask;
 import com.jecelyin.common.utils.UIUtils;
 import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
-import com.mrikso.apkrepacker.activity.FileManagerActivity;
+import com.mrikso.apkrepacker.fragment.MyFilesFragment;
 import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.SignUtil;
 
@@ -16,11 +16,11 @@ public class SignTask extends AsyncTask<File, CharSequence, Boolean> {
     private final SignUtil signTool;
     public File resultFile;
     private Context mContext;
-    private FileManagerActivity dialog;
+    private MyFilesFragment dialog;
 
-    public SignTask(Context mContext, SignUtil signTool) {
-        dialog = FileManagerActivity.getInstance();
-        this.mContext = mContext;
+    public SignTask(Context context, MyFilesFragment filesFragment , SignUtil signTool) {
+        dialog = filesFragment;
+        this.mContext = context;
         this.signTool = signTool;
     }
 

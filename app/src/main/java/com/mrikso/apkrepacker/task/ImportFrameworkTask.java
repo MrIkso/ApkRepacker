@@ -6,7 +6,7 @@ import android.os.AsyncTask;
 import com.jecelyin.common.utils.UIUtils;
 import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
-import com.mrikso.apkrepacker.activity.FileManagerActivity;
+import com.mrikso.apkrepacker.fragment.MyFilesFragment;
 
 import java.io.File;
 import java.util.logging.Level;
@@ -17,10 +17,10 @@ import brut.util.Logger;
 
 public class ImportFrameworkTask extends AsyncTask<File, CharSequence, Boolean> implements Logger {
     private Context mContext;
-    private FileManagerActivity dialog;
+    private MyFilesFragment dialog;
 
-    public ImportFrameworkTask(Context mContext){
-        dialog = FileManagerActivity.getInstance();
+    public ImportFrameworkTask(Context mContext, MyFilesFragment filesFragment){
+        dialog = filesFragment;
         this.mContext = mContext;
     }
 

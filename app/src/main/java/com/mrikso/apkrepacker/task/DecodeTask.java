@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.fragment.DecompileFragment;
-import com.mrikso.apkrepacker.ui.prererence.PreferenceHelper;
+import com.mrikso.apkrepacker.ui.preferences.PreferenceHelper;
 import com.mrikso.apkrepacker.utils.FileUtil;
 
 import java.io.File;

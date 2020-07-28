@@ -8,7 +8,7 @@
     android:clipToPadding="false"
     tools:ignore="UselessParent">
 
-    <com.mrikso.apkrepacker.utils.view.ElevationImageView
+    <com.mrikso.apkrepacker.view.ElevationImageView
         android:id="@+id/tv_about_app_icon"
         android:layout_width="60dp"
         android:layout_height="60dp"

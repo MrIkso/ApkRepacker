@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.utils.FileUtil;
+import com.mrikso.apkrepacker.utils.ProjectUtils;
 import com.mrikso.apkrepacker.utils.common.DLog;
 import com.thoughtbot.expandablerecyclerview.listeners.OnGroupClickListener;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
@@ -60,7 +61,7 @@ public class ParentViewHolder extends GroupViewHolder implements View.OnClickLis
         });
 
         textView_parent.setOnLongClickListener(v -> {
-            mListener.onTitleClick(FileUtil.getProjectPath() + "/" + groupName.getTitle(), getAdapterPosition(), this);
+            mListener.onTitleClick(ProjectUtils.getProjectPath() + "/" + groupName.getTitle(), getAdapterPosition(), this);
             return true;
         });
     }

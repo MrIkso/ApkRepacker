@@ -10,10 +10,6 @@ import androidx.fragment.app.Fragment;
 import com.jecelyin.editor.v2.utils.ExtGrep;
 
 public class StringUtils {
-    public static final String SAVED_DIRECTORY = "com.mrikso.apkrepacker.SAVED_DIRECTORY";
-    public static final String SAVED_SELECTION = "com.mrikso.apkrepacker.SAVED_SELECTION";
-    public static final String EXTRA_NAME = "com.mrikso.apkrepacker.EXTRA_NAME";
-    public static final String EXTRA_TYPE = "com.mrikso.apkrepacker.EXTRA_TYPE";
 
     public static ExtGrep extGreps;
     public static Bundle bundle;

@@ -7,7 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.mrikso.apkrepacker.activity.BaseActivity;
-import com.mrikso.apkrepacker.ui.filelist.FileAdapter;
+import com.mrikso.apkrepacker.ui.filemanager.FileAdapter;
+import com.mrikso.apkrepacker.ui.filemanager.holder.FileHolder;
 import com.mrikso.apkrepacker.utils.FileUtil;
 import com.sdsmdg.harjot.vectormaster.VectorMasterView;
 
@@ -23,11 +24,11 @@ public class ImageViewerActivity extends BaseActivity {
     public static void setViewerData(Context context, @NonNull FileAdapter adapter, @NonNull File path) {
         List<String> paths = new ArrayList<>();
         for (int i = 0; i < adapter.getItemCount(); ++i) {
-            File file = adapter.get(i);
-            String filePath = file.getAbsolutePath();
-            FileUtil.FileType fileType = FileUtil.FileType.getFileType(file);
+            FileHolder file = adapter.get(i);
+            String filePath = file.getFile().getAbsolutePath();
+            FileUtil.FileType fileType = FileUtil.FileType.getFileType(file.getFile());
 
-            boolean isVector = !fileType.equals(FileUtil.FileType.IMAGE) && fileType.equals(FileUtil.FileType.XML) && new VectorMasterView(context, file).isVector();
+            boolean isVector = !fileType.equals(FileUtil.FileType.IMAGE) && fileType.equals(FileUtil.FileType.XML) && new VectorMasterView(context, file.getFile()).isVector();
 
             if (fileType.equals(FileUtil.FileType.IMAGE) /*|| fileType.equals(FileUtil.FileType.TTF)*/ || filePath.equals(path.getPath()) || isVector) {
                 paths.add(filePath);

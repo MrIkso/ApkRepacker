@@ -326,5 +326,50 @@
     <string name="replace_request">Replace request</string>
     <string name="replace_in_file_title">Replace in File</string>
     <string name="replaced_successful">Replaced in File!</string>
-
+    <string name="directory">Directory</string>
+    <string name="this_folder_is_empty">Folder empty</string>
+    <string name="need_to_enable_read_storage_permissions">Needs your permission to access storage</string>
+    <string name="title_my_files">My Files</string>
+    <string name="action_select_all">Select All</string>
+    <string name="directory_created_sucess">Directory created success!</string>
+    <string name="deleting">Deleting..</string>
+    <string name="copied_file_name">Copy of %s</string>
+    <string name="copied_file_name_2">Copy %1$d of %2$s</string>
+    <string name="file_exists">File exits</string>
+    <string name="action_create_new_file">Create new file</string>
+    <string name="file_created_sucess">File created success!</string>
+    <string name="preview">Preview</string>
+    <string name="filename_pattern">Pattern</string>
+    <string name="start_numbering_at">Start numbering at</string>
+    <string name="variable_current_date">Current date</string>
+    <string name="variable_current_time">Current time</string>
+    <string name="variable_digit">Digit</string>
+    <string name="variable_file_date">File date</string>
+    <string name="variable_file_extension">File extension</string>
+    <string name="variable_file_name">File name</string>
+    <string name="variable_file_name_with_extension">File name + extension</string>
+    <string name="variable_file_size">File size</string>
+    <string name="variable_file_time">File time</string>
+    <string name="action_copy_name">Copy name</string>
+    <string name="action_copy_id">Copy ID</string>
+    <string name="notif_copying_item">Copying %1$s to %2$s.</string>
+    <string name="notif_space_more">You need %1$s more.</string>
+    <string name="notif_moving_item">Moving %1$s to %2$s.</string>
+    <string name="notif_title_operations">File operations</string>
+    <string name="copying">Copying&#8230;</string>
+    <string name="copied">Successfully copied</string>
+    <string name="copy_error">Some or all items couldn\'t be copied!</string>
+    <string name="moving">Moving&#8230;</string>
+    <string name="moved">Successfully moved</string>
+    <string name="move_error">Some or all items couldn\'t be moved!</string>
+    <string name="title_apk_options">Apk Options</string>
+    <string name="title_file_options">File Options</string>
+    <plurals name="menu_copy_items_to">
+        <item quantity="one">Copy %1$d item here</item>
+        <item quantity="other">Copy %1$d items here</item>
+    </plurals>
+    <plurals name="menu_move_items_to">
+        <item quantity="one">Move %1$d item here</item>
+        <item quantity="other">Move %1$d items here</item>
+    </plurals>
 </resources>

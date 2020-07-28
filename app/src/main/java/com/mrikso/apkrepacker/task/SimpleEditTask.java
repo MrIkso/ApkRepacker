@@ -6,7 +6,7 @@ import android.os.AsyncTask;
 import com.mrikso.apkrepacker.utils.common.DLog;
 import com.mrikso.apkrepacker.fragment.SimpleEditorFragment;
 import com.mrikso.apkrepacker.model.QickEdit;
-import com.mrikso.apkrepacker.ui.prererence.PreferenceHelper;
+import com.mrikso.apkrepacker.ui.preferences.PreferenceHelper;
 import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.SignUtil;
 

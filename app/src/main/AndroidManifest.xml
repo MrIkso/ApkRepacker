@@ -45,9 +45,6 @@
             android:label="@string/settings"
             android:parentActivityName=".activity.MainActivity" />
         <activity
-            android:name=".activity.FileManagerActivity"
-            android:parentActivityName=".activity.MainActivity" />
-        <activity
             android:name=".activity.ExceptionActivity"
             android:label="@string/title_activity_exception" />
         <activity android:name=".activity.CodeEditorActivity"
@@ -63,6 +60,9 @@
             android:authorities="${applicationId}.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true" />
+        <service
+            android:name=".service.CopyService"
+            android:exported="false" />
     </application>
 
 </manifest>

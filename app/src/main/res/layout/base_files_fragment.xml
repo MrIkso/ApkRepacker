@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.mrikso.apkrepacker.view.WaitingViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/flipper"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateFirstView="false"
+    android:clickable="true"
+    android:inAnimation="@android:anim/fade_in"
+    android:outAnimation="@android:anim/fade_out">
+
+    <!-- Content -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- List -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/file_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/list_item_file" />
+
+        <!-- Empty state -->
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/empty_text"
+                android:textSize="20sp"
+                android:textAppearance="?android:textAppearance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/this_folder_is_empty" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <!-- Loading -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true" />
+
+
+    </LinearLayout>
+
+    <!-- No permissions -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:paddingBottom="24dp"
+        tools:ignore="UseCompoundDrawables">
+
+        <TextView
+            android:textSize="20sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/need_to_enable_read_storage_permissions" />
+
+    </LinearLayout>
+</com.mrikso.apkrepacker.view.WaitingViewFlipper>

@@ -22,6 +22,7 @@ import com.mrikso.apkrepacker.database.ITabDatabase;
 import com.mrikso.apkrepacker.database.JsonDatabase;
 import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.FragmentUtils;
+import com.mrikso.apkrepacker.utils.ProjectUtils;
 
 import java.io.File;
 
@@ -66,7 +67,7 @@ public class AboutProjectFragment extends Fragment {
     public void onViewCreated(View view, Bundle bundle) {
         super.onViewCreated(view, bundle);
 //        setStyle(DialogFragment.STYLE_NORMAL, !Theme.getInstance(mContext).getCurrentTheme().isDark() ? R.style.DialogFullscreen : R.style.DialogFullscreen_Dark);
-        apkIcon.setImageDrawable(FileUtil.getProjectIconDrawable(mProjectItem.getAppIcon(), mContext));
+        apkIcon.setImageDrawable(ProjectUtils.getProjectIconDrawable(mProjectItem.getAppIcon(), mContext));
         patchPrj.setText(mProjectItem.getAppProjectPatch());
         appPackage.setText(mProjectItem.getAppPackage());
         appName.setText(mProjectItem.getAppName());
@@ -80,7 +81,6 @@ public class AboutProjectFragment extends Fragment {
         //createDate.setText(FileUtil.getCreateTime(new File(projectPath)));
         toolbar.setNavigationOnClickListener(v1 -> FragmentUtils.remove(this));
     }
-
     @SuppressLint("StaticFieldLeak")
     class GetProjectSizeTask extends AsyncTask<String, String, String> {
 

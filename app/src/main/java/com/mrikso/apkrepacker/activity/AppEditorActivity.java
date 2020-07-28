@@ -23,11 +23,11 @@ import com.mrikso.apkrepacker.fragment.FilesFragment;
 import com.mrikso.apkrepacker.fragment.FindFragment;
 import com.mrikso.apkrepacker.fragment.OnBackPressedListener;
 import com.mrikso.apkrepacker.fragment.StringsFragment;
-import com.mrikso.apkrepacker.ui.prererence.PreferenceHelper;
+import com.mrikso.apkrepacker.ui.preferences.PreferenceHelper;
 import com.mrikso.apkrepacker.ui.stringlist.DirectoryScanner;
 import com.mrikso.apkrepacker.ui.stringlist.StringFile;
-import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.FragmentUtils;
+import com.mrikso.apkrepacker.utils.ProjectUtils;
 import com.mrikso.apkrepacker.utils.StringUtils;
 
 import java.io.File;
@@ -72,7 +72,7 @@ public class AppEditorActivity extends BaseActivity {
         mViewPager = findViewById(R.id.tab_pager);
 
         projectPatch = getIntent().getStringExtra("projectPatch");
-        FileUtil.setProjectPath(projectPatch);
+        ProjectUtils.setProjectPath(projectPatch);
         bundle = new Bundle();
         bundle.putString("prjPatch", projectPatch);
         buildApp = findViewById(R.id.build_app);
@@ -116,7 +116,7 @@ public class AppEditorActivity extends BaseActivity {
         appName.setText(apkFileName);
         appPkg.setText(apkPackageName);
         appPkg.setVisibility(apkPackageName == null ? View.GONE : View.VISIBLE);
-        appIcon.setImageDrawable(FileUtil.getProjectIconDrawable(apkIconDrawableBase64, this));
+        appIcon.setImageDrawable(ProjectUtils.getProjectIconDrawable(apkIconDrawableBase64, this));
 
         buildApp.setOnClickListener(v -> buildApp());
         patchApp.setOnClickListener(v -> patchApp());

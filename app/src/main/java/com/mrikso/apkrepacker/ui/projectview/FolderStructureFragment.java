@@ -25,7 +25,7 @@ import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.filepicker.FilePickerDialog;
 import com.mrikso.apkrepacker.fragment.dialogs.CreateNewClass;
-import com.mrikso.apkrepacker.fragment.dialogs.ProjectFileOptionDialog;
+import com.mrikso.apkrepacker.fragment.dialogs.bottomsheet.ProjectFileOptionDialog;
 import com.mrikso.apkrepacker.utils.FileUtil;
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;

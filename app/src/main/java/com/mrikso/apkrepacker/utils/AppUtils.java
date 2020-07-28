@@ -1,5 +1,6 @@
 package com.mrikso.apkrepacker.utils;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -10,10 +11,13 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
 import com.mrikso.apkrepacker.R;
+
+import java.io.File;
 
 public class AppUtils {
 
@@ -26,20 +30,30 @@ public class AppUtils {
         }
     }
 
-    public static void toggledScreenOn(Activity mActivity, boolean screenon) {
-        if (screenon) {
-            mActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        } else {
-            mActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        }
-    }
-
     public static boolean apiIsAtLeast(int sdkInt) {
         return Build.VERSION.SDK_INT >= sdkInt;
     }
 
     public static void uninstallApp(Context context, String packageName) {
         context.startActivity(new Intent(Intent.ACTION_DELETE, Uri.parse("package:" + packageName)));
+    }
+
+    @SuppressLint("WrongConstant")
+    public static void installApk(Context c, File apk) {
+        Uri data;
+        if (Build.VERSION.SDK_INT >= 24) {
+            Uri.Builder builder = new Uri.Builder();
+            builder.authority(c.getPackageName() + ".fileprovider");
+            builder.scheme("content");
+            byte[] buf = apk.getAbsolutePath().getBytes();
+            builder.path(Base64.encodeToString(buf, Base64.NO_WRAP));
+            data = builder.build();
+        } else
+            data = Uri.fromFile(apk);
+        Intent intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
+        intent.setFlags(Intent.EXTRA_DOCK_STATE_LE_DESK);
+        intent.setData(data);
+        c.startActivity(intent);
     }
 
     public static void gotoApplicationSettings(Context context, String packageName) {
@@ -60,11 +74,6 @@ public class AppUtils {
             e.printStackTrace();
             return context.getResources().getString(R.string.about_version, null, null);
         }
-    }
-
-    public static int getScreenWidthDp(Context context) {
-        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-        return (int) (displayMetrics.widthPixels / displayMetrics.density);
     }
 
     public static String getArchName() {

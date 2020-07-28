@@ -24,7 +24,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.jecelyin.common.utils.UIUtils;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.filepicker.FilePickerDialog;
-import com.mrikso.apkrepacker.ui.prererence.PreferenceHelper;
+import com.mrikso.apkrepacker.ui.preferences.PreferenceHelper;
 
 public class KeystorePreferenceFragmentDialog extends PreferenceDialogFragmentCompat {
     private EditText key_path;

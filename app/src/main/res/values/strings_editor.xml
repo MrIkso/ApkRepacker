@@ -2,6 +2,8 @@
 
 <resources>
     <string name="copy">Copy</string>
+    <string name="cut">Cut</string>
+    <string name="delete">Delete</string>
     <string name="paste">Paste</string>
     <string name="replace">Replace</string>
     <string name="find">Find</string>

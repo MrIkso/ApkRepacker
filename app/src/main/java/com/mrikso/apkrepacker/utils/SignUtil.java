@@ -11,7 +11,7 @@ import androidx.appcompat.app.AlertDialog;
 import com.android.apksig.ApkSigner;
 import com.google.common.collect.ImmutableList;
 import com.mrikso.apkrepacker.R;
-import com.mrikso.apkrepacker.ui.prererence.PreferenceHelper;
+import com.mrikso.apkrepacker.ui.preferences.PreferenceHelper;
 
 import org.apache.commons.io.IOUtils;
 

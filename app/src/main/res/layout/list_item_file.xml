@@ -1,59 +1,61 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/list_item_name_marginStart"
+    android:paddingLeft="16dp"
+    android:paddingTop="8dp"
+    android:paddingRight="16dp"
+    android:paddingBottom="8dp"
     android:background="@drawable/selectable_background">
 
-    <LinearLayout
-        android:id="@+id/icon_layout"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        android:padding="@dimen/checkbox_margin"
-        android:layout_marginStart="@dimen/checkbox_margin"
-        android:layout_centerVertical="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/list_item_image"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_marginEnd="16dp"
+        android:scaleType="centerCrop"
+        tools:ignore="ContentDescription"
+        tools:srcCompat="@drawable/ic_directory" />
 
-        <com.mrikso.apkrepacker.utils.view.ElevationImageView
-            android:id="@+id/list_item_image"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:scaleType="center"
-            tools:srcCompat="@drawable/ic_directory"
-            tools:ignore="ContentDescription" />
-
-    </LinearLayout>
-
-    <LinearLayout
+    <TextView
+        android:id="@+id/list_item_name"
+        style="@style/Text.Subhead"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toEndOf="@id/icon_layout"
-        android:layout_marginEnd="@dimen/list_item_name_marginEnd"
-        android:orientation="vertical">
+        android:layout_marginBottom="8dp"
+        android:layout_toEndOf="@+id/list_item_image"
+        android:gravity="bottom"
+        tools:text="File Name" />
 
-        <TextView
-            style="@style/Text.Subhead"
-            tools:text="File Name"
-            android:id="@+id/list_item_name" />
+    <!--<TextView
+        android:id="@+id/list_item_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/list_item_name"
+        android:layout_marginBottom="4dp"
+        android:layout_toRightOf="@+id/list_item_image"
+        tools:text="Folder"
+        android:textColor="?android:attr/textColorSecondary"
+        android:visibility="gone" />-->
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/list_item_size"
+        style="@style/Text.Body1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/list_item_name"
+        android:layout_marginEnd="8dp"
+        android:layout_toStartOf="@+id/list_item_date"
+        android:layout_toEndOf="@+id/list_item_image"
+        tools:text="10mb" />
 
-            <TextView
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                style="@style/Text.Body1"
-                tools:text="Date"
-                android:id="@+id/list_item_date" />
-
-            <TextView
-                style="@style/Text.Body1"
-                android:id="@+id/list_item_size" />
-
-        </LinearLayout>
-
-    </LinearLayout>
+    <TextView
+        android:id="@+id/list_item_date"
+        style="@style/Text.Body1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/list_item_name"
+        android:layout_alignParentEnd="true"
+        tools:text="22/07/20" />
 
 </RelativeLayout>

@@ -83,27 +83,21 @@
                     android:textColor="?android:attr/textColorSecondary"
                     android:textSize="16sp" />
 
-                <androidx.appcompat.widget.AppCompatImageButton
-                    android:id="@+id/ib_select_all"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="@dimen/card_title_margin"
-                    android:layout_marginEnd="@dimen/checkbox_margin"
-                    android:layout_marginTop="@dimen/checkbox_margin"
-                    android:layout_marginBottom="@dimen/checkbox_margin"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:tint="?android:textColorSecondary"
-                    fab:srcCompat="@drawable/ic_select_all" />
             </LinearLayout>
         </FrameLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/resource_list"
+        <!--FileList-->
+        <include
+            layout="@layout/base_files_fragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            tools:listitem="@layout/item_project_file"/>
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+        <!--Action file Bar-->
+
+        <include
+            android:id="@+id/bottom_menu"
+            layout="@layout/bottom_toolbar_contextual"
+            android:visibility="gone" />
 
     </LinearLayout>
 
@@ -137,7 +131,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_create_new_folder"
             android:id="@+id/fab_add_folder"
-            fab:fab_label="@string/action_create_folder" />
+            fab:fab_label="@string/action_create_new_folder" />
 
         <com.github.clans.fab.FloatingActionButton
             style="@style/MenuButtonsSmall"
@@ -145,19 +139,24 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_file_add"
             android:id="@+id/fab_add_file"
+            fab:fab_label="@string/action_create_new_file" />
+
+        <com.github.clans.fab.FloatingActionButton
+            style="@style/MenuButtonsSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_create_new_folder"
+            android:id="@+id/fab_copy_folder"
+            fab:fab_label="@string/action_create_folder" />
+
+        <com.github.clans.fab.FloatingActionButton
+            style="@style/MenuButtonsSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_file_add"
+            android:id="@+id/fab_copy_file"
             fab:fab_label="@string/action_add_file" />
 
     </com.github.clans.fab.FloatingActionMenu>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_delete"
-        android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom|center"
-        android:layout_margin="16.0dip"
-        fab:backgroundTint="?colorAccent"
-        fab:tint="@color/white"
-        android:fitsSystemWindows="true"
-        android:src="@drawable/ic_delete" />
 </FrameLayout>

@@ -17,6 +17,7 @@ import com.mrikso.apkrepacker.ui.projectview.FolderStructureFragment;
 import com.mrikso.apkrepacker.ui.projectview.ProjectFileContract;
 import com.mrikso.apkrepacker.ui.projectview.ProjectFilePresenter;
 import com.mrikso.apkrepacker.utils.FileUtil;
+import com.mrikso.apkrepacker.utils.ProjectUtils;
 
 import java.io.File;
 
@@ -43,7 +44,7 @@ public class CodeEditorActivity  extends IdeActivity implements FileChangeListen
 
     @Override
     public void onFileCreated(File newFile) {
-        mFilePresenter.refresh(new File(FileUtil.getProjectPath()));
+        mFilePresenter.refresh(new File(ProjectUtils.getProjectPath()));
         openFile(newFile.getPath());
     }
 
@@ -74,7 +75,7 @@ public class CodeEditorActivity  extends IdeActivity implements FileChangeListen
     protected void initLeftNavigationView(@NonNull NavigationView nav) {
         super.initLeftNavigationView(nav);
         String tag = FolderStructureFragment.TAG;
-        FolderStructureFragment folderStructureFragment = FolderStructureFragment.newInstance(new File(FileUtil.getProjectPath()));
+        FolderStructureFragment folderStructureFragment = FolderStructureFragment.newInstance(new File(ProjectUtils.getProjectPath()));
         ViewGroup viewGroup = nav.findViewById(R.id.left_navigation_content);
         viewGroup.removeAllViews();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

@@ -15,7 +15,7 @@
     <dimen name="card_title_margin">16dp</dimen>
     <dimen name="avatar_size">48dp</dimen>
     <dimen name="list_item_icon_margin">16dp</dimen>
-    <dimen name="list_item_name_marginStart">74dp</dimen>
+    <dimen name="list_item_name_marginStart">72dp</dimen>
     <dimen name="list_item_name_marginStart_1">64dp</dimen>
     <dimen name="list_item_name_marginEnd">16dp</dimen>
     <dimen name="item_touch_helper_max_drag_scroll_per_frame">20dp</dimen>

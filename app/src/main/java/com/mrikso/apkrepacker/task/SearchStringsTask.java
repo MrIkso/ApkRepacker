@@ -13,6 +13,7 @@ import com.mrikso.apkrepacker.fragment.FindFragment;
 import com.mrikso.apkrepacker.ui.findresult.ChildData;
 import com.mrikso.apkrepacker.ui.findresult.ParentData;
 import com.mrikso.apkrepacker.utils.FileUtil;
+import com.mrikso.apkrepacker.utils.ProjectUtils;
 import com.mrikso.apkrepacker.utils.StringUtils;
 import com.mrikso.apkrepacker.utils.ViewUtils;
 
@@ -69,7 +70,7 @@ public class SearchStringsTask extends AsyncTask<String, Integer, Void> {
             if (!res.file.equals(file)) {
                 file = res.file;
                 childDataList = new ArrayList<>();
-                parentDataList.add(new ParentData(file.getAbsolutePath().substring((FileUtil.getProjectPath() + "/").length()), childDataList));
+                parentDataList.add(new ParentData(file.getAbsolutePath().substring((ProjectUtils.getProjectPath() + "/").length()), childDataList));
             }
 
             SpannableStringBuilder ssb = new SpannableStringBuilder();

@@ -85,6 +85,11 @@ public class FragmentUtils {
         add(fragment, fragmentManager, containerViewId, null, null, enter, exit, popEnter, popExit);
     }
 
+    public static void add(@NonNull Fragment fragment, @NonNull FragmentManager fragmentManager, @IdRes int containerViewId, @NonNull String tag) {
+        //noinspection deprecation
+        add(fragment, fragmentManager, containerViewId, tag, null, enter, exit, popEnter, popExit);
+    }
+
     public static void add(@NonNull Fragment fragment, @NonNull FragmentActivity activity, @IdRes int containerViewId) {
         //noinspection deprecation
         add(fragment, activity.getSupportFragmentManager(), containerViewId);
@@ -95,7 +100,12 @@ public class FragmentUtils {
         add(fragment, parentFragment.getChildFragmentManager(), containerViewId);
     }
 
-    @Deprecated
+    public static void add(@NonNull Fragment fragment, @NonNull Fragment parentFragment, @IdRes int containerViewId, @NonNull String tag) {
+        //noinspection deprecation
+        add(fragment, parentFragment.getChildFragmentManager(), containerViewId, tag);
+    }
+
+  //  @Deprecated
     public static void add(@NonNull Fragment fragment, @NonNull FragmentManager fragmentManager, @NonNull String tag, String back_stack) {
         // Pass 0 as in {@link android.support.v4.app.BackStackRecord#add(Fragment, String)}.
         //noinspection deprecation

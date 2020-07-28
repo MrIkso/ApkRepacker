@@ -16,7 +16,7 @@ import androidx.lifecycle.Observer;
 import androidx.preference.PreferenceManager;
 
 import com.mrikso.apkrepacker.R;
-import com.mrikso.apkrepacker.ui.prererence.PreferenceKeys;
+import com.mrikso.apkrepacker.ui.preferences.PreferenceKeys;
 
 import java.util.ArrayList;
 import java.util.List;

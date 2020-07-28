@@ -10,6 +10,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.jecelyin.common.utils.IOUtils;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.utils.FileUtil;
+import com.mrikso.apkrepacker.utils.ProjectUtils;
 
 import java.io.File;
 
@@ -21,7 +22,7 @@ public class CreateNewClass extends BaseDialog {
     private File mCurrFolder;
     private TextInputEditText mPackage;
 
-    public CreateNewClass(Context context, File mCurrFolder, CreateNewClass.OnFileCreatedListener listener) {
+    public CreateNewClass(Context context, @Nullable File mCurrFolder, CreateNewClass.OnFileCreatedListener listener) {
         super(context);
         this.mCurrFolder = mCurrFolder;
         this.listener = listener;
@@ -48,7 +49,7 @@ public class CreateNewClass extends BaseDialog {
     private void initPackage() {
         if (mCurrPackage == null || mCurrPackage.isEmpty()) {
             if (mCurrFolder != null) {
-                mCurrPackage = FileUtil.findPackage(new File(FileUtil.getProjectPath()), mCurrFolder);
+                mCurrPackage = FileUtil.findPackage(new File(ProjectUtils.getProjectPath()), mCurrFolder);
             }
         }
         mPackage.setText(mCurrPackage);

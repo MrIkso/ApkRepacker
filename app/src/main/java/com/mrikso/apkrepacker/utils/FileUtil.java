@@ -3,15 +3,11 @@ package com.mrikso.apkrepacker.utils;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.CursorLoader;
-import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.format.DateFormat;
@@ -22,17 +18,12 @@ import android.webkit.MimeTypeMap;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 
 import com.mrikso.apkrepacker.utils.common.DLog;
 import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.filepicker.Utility;
-import com.mrikso.apkrepacker.ui.prererence.PreferenceHelper;
-
-import org.apache.commons.io.IOUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.mrikso.apkrepacker.ui.preferences.PreferenceHelper;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -49,14 +40,11 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import brut.androlib.meta.VersionInfo;
-
 import static com.mrikso.apkrepacker.App.getContext;
 
 public class FileUtil {
     private static final String TAG = "FileUtil";
 
-    private static String projectPath;
 
     public static boolean isRoot(File root, File current) {
         try {
@@ -154,31 +142,6 @@ public class FileUtil {
         return new String[]{name, extension};
     }
 
-    @SuppressLint("WrongConstant")
-    public static void installApk(Context c, File apk) {
-        Uri data;
-        if (Build.VERSION.SDK_INT >= 24) {
-            Uri.Builder builder = new Uri.Builder();
-            builder.authority(c.getPackageName() + ".fileprovider");
-            builder.scheme("content");
-            byte[] buf = apk.getAbsolutePath().getBytes();
-            builder.path(Base64.encodeToString(buf, Base64.NO_WRAP));
-            data = builder.build();
-        } else
-            data = Uri.fromFile(apk);
-        Intent intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
-        intent.setFlags(Intent.EXTRA_DOCK_STATE_LE_DESK);
-        intent.setData(data);
-        c.startActivity(intent);
-    }
-
-    public static String getProjectPath() {
-        return projectPath;
-    }
-
-    public static void setProjectPath(String path) {
-        projectPath = path;
-    }
 
     @SuppressLint("DefaultLocale")
     @Nullable
@@ -714,32 +677,7 @@ public class FileUtil {
         }
     }
 
-
-    public static String readJson(File file, String stringName) {
-        String content;
-        try {
-            content = IOUtils.toString(new FileInputStream(file));
-            JSONObject json = new JSONObject(content);
-            VersionInfo versionInfo = VersionInfo.load(json);
-            if (stringName.equals("versionName")) {
-                return versionInfo.versionName;
-            } else if (stringName.equals("versionCode")) {
-                return versionInfo.versionCode;
-            } else {
-                return json.isNull(stringName) ? null : json.getString(stringName);
-            }
-        } catch (IOException | JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public static Drawable getProjectIconDrawable(String appIconBase64, Context context) {
-        Drawable icon = (decodeBase64(appIconBase64) != null) ? new BitmapDrawable(context.getResources(), decodeBase64(appIconBase64)) : null;
-        return appIconBase64 != null ? icon : ContextCompat.getDrawable(context, R.drawable.default_app_icon);
-    }
-
-    private static Bitmap decodeBase64(String input) {
+    public static Bitmap decodeBase64(String input) {
         try {
             byte[] decodedBytes = Base64.decode(input, 0);
             return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);

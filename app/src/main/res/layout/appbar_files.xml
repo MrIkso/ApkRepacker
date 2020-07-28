@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/action_bar_panel"
+    style="?attr/actionBarStyle"
+    android:layout_width="match_parent"
+    android:layout_height="?actionBarSize"
+    android:background="?colorPrimary"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:id="@+id/ab_title_container"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_weight="1.0"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_marginStart="24dp">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/ab_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:padding="2dp"
+            android:text="@string/title_my_files"
+            android:textSize="18sp"
+            android:textColor="?attr/textColor"
+            android:textStyle="bold" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/ab_subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:ellipsize="marquee"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:singleLine="true"
+            android:textSize="12.0sp" />
+    </LinearLayout>
+
+    <!--<EditText
+        android:id="@+id/search_view"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:nextFocusLeft="@+id/ab_icon"
+        android:nextFocusRight="@+id/action_overflow"
+        android:nextFocusDown="@+id/breadcrumb" />-->
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/action_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:tint="?android:textColorSecondary"
+        style="@style/ActionItem"
+        app:srcCompat="@drawable/ic_search_dark" />
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/action_overflow_toolbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:tint="?android:textColorSecondary"
+        style="@style/ActionItem"
+        app:srcCompat="@drawable/ic_more" />
+</LinearLayout>

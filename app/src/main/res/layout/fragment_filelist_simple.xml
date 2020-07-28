@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?colorPrimary"
+    android:orientation="vertical"
+    tools:context=".fragment.MyFilesFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <!--ToolBar-->
+        <include layout="@layout/appbar_files" />
+        <!--PathBar-->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!--верхняя панель-->
+            <LinearLayout
+                android:id="@+id/container_path"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                tools:ignore="UselessParent">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/pathScrollView"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:fadingEdge="horizontal"
+                    android:fadingEdgeLength="20dp"
+                    android:requiresFadingEdge="horizontal"
+                    tools:listitem="@layout/patch_button_layout" />
+
+            </LinearLayout>
+
+            <!--счетчик выбранных файлов-->
+            <LinearLayout
+                android:id="@+id/container_selection_bar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/ib_clear_selection"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/card_title_margin"
+                    android:layout_marginTop="@dimen/checkbox_margin"
+                    android:layout_marginEnd="@dimen/checkbox_margin"
+                    android:layout_marginBottom="@dimen/checkbox_margin"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:scaleType="center"
+                    android:tint="?android:textColorSecondary"
+                    fab:srcCompat="@drawable/ic_clear" />
+
+                <TextView
+                    android:id="@+id/tv_selection_status"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="4dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:gravity="start|center_vertical"
+                    android:includeFontPadding="false"
+                    android:padding="4dp"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+        </FrameLayout>
+        <!--FileList-->
+        <include
+            layout="@layout/base_files_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+        <!--Action file Bar-->
+
+        <include
+            android:id="@+id/bottom_menu"
+            layout="@layout/bottom_toolbar_contextual"
+            android:visibility="gone" />
+    </LinearLayout>
+    <!--Fab-->
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/fab_menu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="end|bottom"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp"
+        fab:menu_animationDelayPerItem="0"
+        fab:menu_colorNormal="?colorAccent"
+        fab:menu_colorPressed="?colorAccent"
+        fab:menu_colorRipple="?colorSelected"
+        fab:menu_icon="@drawable/ic_add_white"
+        fab:menu_labels_ellipsize="end"
+        fab:menu_labels_maxLines="2">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_add_folder"
+            style="@style/MenuButtonsSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_create_new_folder"
+            fab:fab_label="@string/action_create_folder" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_add_file"
+            style="@style/MenuButtonsSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_file_add"
+            fab:fab_label="@string/action_add_file" />
+
+    </com.github.clans.fab.FloatingActionMenu>
+</FrameLayout>

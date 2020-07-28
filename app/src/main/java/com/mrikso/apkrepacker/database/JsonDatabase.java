@@ -27,6 +27,7 @@ import com.mrikso.apkrepacker.database.entity.FindKeywordsItem;
 import com.mrikso.apkrepacker.database.entity.Project;
 import com.mrikso.apkrepacker.database.entity.RecentFileItem;
 import com.mrikso.apkrepacker.utils.FileUtil;
+import com.mrikso.apkrepacker.utils.ProjectUtils;
 import com.mrikso.apkrepacker.utils.common.DLog;
 
 
@@ -58,7 +59,7 @@ public class JsonDatabase implements ITabDatabase {
     public JsonDatabase(Context context) {
         mContext = context;
         mHelper = new RecentFileJsonHelper();
-        mProjectDatabasePath = new File(FileUtil.getProjectPath() + File.separator + ".database" + File.separator);
+        mProjectDatabasePath = new File(ProjectUtils.getProjectPath() + File.separator + ".database" + File.separator);
     }
 
     public static ITabDatabase getInstance(Context context) {

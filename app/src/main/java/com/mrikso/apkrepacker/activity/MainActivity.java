@@ -27,13 +27,15 @@ import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.adapter.ProjectItem;
 import com.mrikso.apkrepacker.adapter.ProjectViewAdapter;
 import com.mrikso.apkrepacker.fragment.AppsFragment;
+import com.mrikso.apkrepacker.fragment.MyFilesFragment;
+import com.mrikso.apkrepacker.fragment.OnBackPressedListener;
 import com.mrikso.apkrepacker.fragment.dialogs.ProgressDialogFragment;
-import com.mrikso.apkrepacker.ui.prererence.InitPreference;
-import com.mrikso.apkrepacker.ui.prererence.PreferenceHelper;
-import com.mrikso.apkrepacker.utils.AppUtils;
-import com.mrikso.apkrepacker.utils.FileUtil;
+import com.mrikso.apkrepacker.ui.preferences.InitPreference;
+import com.mrikso.apkrepacker.ui.preferences.PreferenceHelper;
 import com.mrikso.apkrepacker.utils.FragmentUtils;
 import com.mrikso.apkrepacker.utils.PermissionsUtils;
+import com.mrikso.apkrepacker.utils.ProjectUtils;
+import com.mrikso.apkrepacker.utils.ViewDeviceUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -71,9 +73,12 @@ public class MainActivity extends BaseActivity {
         if (projects != null && projects.length > 0) {
             for (File file : projects) {
                 File dataFile = new File(file, "apktool.json");
-                String apkFileIcon = FileUtil.readJson(dataFile, "apkFileIcon");
-                String apkFileName = FileUtil.readJson(dataFile, "apkFileName");
-                ProjectItem myList = new ProjectItem(apkFileIcon, (apkFileName != null) ? apkFileName : file.getName(), FileUtil.readJson(dataFile, "apkFilePackageName"), file.getAbsolutePath(), FileUtil.readJson(dataFile, "apkFilePatch"), FileUtil.readJson(dataFile, "versionName"), FileUtil.readJson(dataFile, "versionCode"));
+                String apkFileIcon = ProjectUtils.readJson(dataFile, "apkFileIcon");
+                String apkFileName = ProjectUtils.readJson(dataFile, "apkFileName");
+                ProjectItem myList = new ProjectItem(apkFileIcon, (apkFileName != null) ? apkFileName : file.getName(),
+                        ProjectUtils.readJson(dataFile, "apkFilePackageName"),
+                        file.getAbsolutePath(), ProjectUtils.readJson(dataFile, "apkFilePatch"),
+                        ProjectUtils.readJson(dataFile, "versionName"), ProjectUtils.readJson(dataFile, "versionCode"));
                 data.add(myList);
             }
         } else {
@@ -142,9 +147,9 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initViews() {
-        if (AppUtils.getScreenWidthDp(this) >= 1200) {
+        if (ViewDeviceUtils.getScreenWidthDp(this) >= 1200) {
             mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
-        } else if (AppUtils.getScreenWidthDp(this) >= 800) {
+        } else if (ViewDeviceUtils.getScreenWidthDp(this) >= 800) {
             mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         } else {
             mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -214,9 +219,30 @@ public class MainActivity extends BaseActivity {
 
     private void setupUiClicks() {
         fab.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, FileManagerActivity.class);
-            MainActivity.this.startActivity(intent);
+           /* Intent intent = new Intent(MainActivity.this, FileManagerActivity.class);
+            MainActivity.this.startActivity(intent);*/
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .addToBackStack(null)
+                    .replace(android.R.id.content, new MyFilesFragment())
+                    .commit();
         });
+    }
+    @Override
+    public void onBackPressed() {
+        FragmentManager fm = getSupportFragmentManager();
+        OnBackPressedListener backPressedListener = null;
+        for (Fragment fragment : fm.getFragments()) {
+            if (fragment instanceof OnBackPressedListener) {
+                backPressedListener = (OnBackPressedListener) fragment;
+                break;
+            }
+        }
+          if (backPressedListener != null) {
+            backPressedListener.onBackPressed();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @SuppressLint("StaticFieldLeak")

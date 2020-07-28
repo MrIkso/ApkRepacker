@@ -15,13 +15,13 @@ import androidx.preference.SwitchPreference;
 
 import com.jecelyin.common.utils.UIUtils;
 import com.mrikso.apkrepacker.R;
-import com.mrikso.apkrepacker.fragment.dialogs.DarkLightThemeSelectionDialogFragment;
-import com.mrikso.apkrepacker.fragment.dialogs.ThemeSelectionDialogFragment;
+import com.mrikso.apkrepacker.fragment.dialogs.bottomsheet.DarkLightThemeSelectionDialogFragment;
+import com.mrikso.apkrepacker.fragment.dialogs.bottomsheet.ThemeSelectionDialogFragment;
 import com.mrikso.apkrepacker.fragment.dialogs.base.BaseBottomSheetDialogFragment;
 import com.mrikso.apkrepacker.ui.keydialog.KeystorePreference;
 import com.mrikso.apkrepacker.ui.keydialog.KeystorePreferenceFragmentDialog;
-import com.mrikso.apkrepacker.ui.prererence.PreferenceHelper;
-import com.mrikso.apkrepacker.ui.prererence.PreferenceKeys;
+import com.mrikso.apkrepacker.ui.preferences.PreferenceHelper;
+import com.mrikso.apkrepacker.ui.preferences.PreferenceKeys;
 import com.mrikso.apkrepacker.utils.AppUtils;
 import com.mrikso.apkrepacker.utils.Theme;
 

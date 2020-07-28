@@ -30,9 +30,10 @@ import com.mrikso.apkrepacker.activity.MainActivity;
 import com.mrikso.apkrepacker.fragment.CompileFragment;
 import com.mrikso.apkrepacker.fragment.AboutProjectFragment;
 import com.mrikso.apkrepacker.fragment.dialogs.ProgressDialogFragment;
-import com.mrikso.apkrepacker.ui.prererence.PreferenceHelper;
-import com.mrikso.apkrepacker.utils.FileUtil;
+import com.mrikso.apkrepacker.recycler.OnMoveAndSwipedListener;
+import com.mrikso.apkrepacker.ui.preferences.PreferenceHelper;
 import com.mrikso.apkrepacker.utils.FragmentUtils;
+import com.mrikso.apkrepacker.utils.ProjectUtils;
 
 import org.apache.commons.io.FileUtils;
 
@@ -42,7 +43,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class ProjectViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements onMoveAndSwipedListener {
+public class ProjectViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OnMoveAndSwipedListener {
 
     private static Context context;
     private List<ProjectItem> mItems;
@@ -100,7 +101,7 @@ public class ProjectViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             recyclerViewHolder.appName.setText(projectItem.getAppName());
             recyclerViewHolder.appPackage.setText(projectItem.getAppPackage());
             recyclerViewHolder.appPackage.setVisibility(projectItem.getAppPackage() == null ? View.GONE : View.VISIBLE);
-            recyclerViewHolder.appIcon.setImageDrawable(FileUtil.getProjectIconDrawable(projectItem.getAppIcon(), context));
+            recyclerViewHolder.appIcon.setImageDrawable(ProjectUtils.getProjectIconDrawable(projectItem.getAppIcon(), context));
             recyclerViewHolder.appPatch.setText(projectItem.getAppProjectPatch());
 
             mainToolBar.setTitle(context.getResources().getString(R.string.projects_count, getItemCount()));

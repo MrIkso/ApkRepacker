@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:background="@drawable/shadow" />
+
+    <LinearLayout
+        android:id="@+id/bottom_toolbar_context"
+        style="?attr/actionBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:animateLayoutChanges="true"
+        android:gravity="end"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/action_paste"
+            style="@style/ActionItem"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="100"
+            android:drawableStart="@drawable/ic_paste"
+            android:drawablePadding="16dp"
+            android:gravity="left|center_vertical|center_horizontal|center"
+            android:paddingStart="16dp"
+            android:text="@string/paste"
+            android:visibility="gone" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/action_new_folder"
+            style="@style/ActionItem"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_create_new_folder_dark"
+            android:tag="@string/action_create_folder"
+            android:visibility="gone"
+            android:layout_height="match_parent"
+            android:layout_width="wrap_content" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/action_select_all"
+            style="@style/ActionItem"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_weight="1"
+            android:src="@drawable/ic_select_all"
+            android:tag="@string/action_select_all" />
+
+       <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/action_cut"
+            style="@style/ActionItem"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_weight="1"
+            android:src="@drawable/ic_cut"
+            android:tag="@string/cut" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/action_copy"
+            style="@style/ActionItem"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_weight="1"
+            android:src="@drawable/ic_copy"
+            android:tag="@string/copy" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/action_delete"
+            style="@style/ActionItem"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_weight="1"
+            android:src="@drawable/ic_delete"
+            android:tag="@string/delete" />
+
+        <!--<androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/action_share"
+            style="@style/ActionItem"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_weight="1"
+            android:src="@drawable/ic_share"
+            android:tag="@string/share_with" />-->
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/action_rename"
+            style="@style/ActionItem"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_weight="1"
+            android:src="@drawable/ic_rename"
+            android:tag="@string/action_rename" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/action_overflow"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            style="@style/ActionItem"
+            android:layout_weight="1"
+            android:src="@drawable/ic_more" />
+    </LinearLayout>
+</LinearLayout>

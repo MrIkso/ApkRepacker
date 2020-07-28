@@ -1,6 +1,7 @@
 package com.mrikso.apkrepacker.fragment;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
@@ -17,7 +18,6 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.google.android.material.button.MaterialButton;
@@ -31,14 +31,10 @@ import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.activity.AppEditorActivity;
 import com.mrikso.apkrepacker.database.ITabDatabase;
 import com.mrikso.apkrepacker.database.JsonDatabase;
-import com.mrikso.apkrepacker.database.entity.FindKeywordsAndFilesItem;
 import com.mrikso.apkrepacker.ui.autocompleteeidttext.CustomAdapter;
-import com.mrikso.apkrepacker.ui.prererence.PreferenceHelper;
-import com.mrikso.apkrepacker.utils.FileUtil;
+import com.mrikso.apkrepacker.ui.preferences.PreferenceHelper;
 import com.mrikso.apkrepacker.utils.StringUtils;
-import com.mrikso.apkrepacker.utils.Theme;
 import com.mrikso.apkrepacker.utils.ViewUtils;
-import com.mrikso.apkrepacker.utils.common.DLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -321,7 +317,7 @@ public class SearchFragment extends Fragment {
             chip.setChecked((boolean) val.getValue());
             chip.setClickable(true);
             chip.setTextColor(getResources().getColor(R.color.white));
-            chip.setChipBackgroundColorResource(!Theme.getInstance(mContext).getCurrentTheme().isDark() ? R.color.light_accent : R.color.dark_accent);
+            chip.setChipBackgroundColor(ColorStateList.valueOf(ViewUtils.getThemeColor(requireContext(), R.attr.colorAccent)));
             chip.setOnLongClickListener(v -> {
                 //tagList.remove(tagName);
                 extMap.remove(val.getKey().toString());

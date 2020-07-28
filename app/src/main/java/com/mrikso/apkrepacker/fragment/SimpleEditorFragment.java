@@ -263,7 +263,7 @@ public class SimpleEditorFragment extends Fragment implements TextWatcher, Progr
             UIUtils.showConfirmDialog(getContext(), getString(R.string.dialog_install_app), new UIUtils.OnClickCallback() {
                 @Override
                 public void onOkClick() {
-                    FileUtil.installApk(getContext(), outputFile);
+                    AppUtils.installApk(getContext(), outputFile);
                 }
             });
         } else {

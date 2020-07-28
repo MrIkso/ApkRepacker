@@ -27,7 +27,7 @@ import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.activity.AutoTranslatorActivity;
 import com.mrikso.apkrepacker.autotranslator.common.TranslateStringsHelper;
 import com.mrikso.apkrepacker.autotranslator.translator.TranslateItem;
-import com.mrikso.apkrepacker.fragment.dialogs.AddLanguageDialogFragment;
+import com.mrikso.apkrepacker.fragment.dialogs.bottomsheet.AddLanguageDialogFragment;
 import com.mrikso.apkrepacker.ui.stringlist.DirectoryScanner;
 import com.mrikso.apkrepacker.ui.stringlist.StringFile;
 import com.mrikso.apkrepacker.ui.stringlist.StringsAdapter;

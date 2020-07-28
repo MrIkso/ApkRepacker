@@ -1,20 +1,17 @@
 package com.mrikso.apkrepacker.fragment;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.annotation.IntegerRes;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,299 +19,215 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
-import com.jecelyin.common.utils.DLog;
 import com.jecelyin.common.utils.UIUtils;
 import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.activity.CodeEditorActivity;
 import com.mrikso.apkrepacker.filepicker.FilePickerDialog;
-import com.mrikso.apkrepacker.fragment.dialogs.FileOptionsDialogFragment;
-import com.mrikso.apkrepacker.recycler.OnItemClickListener;
-import com.mrikso.apkrepacker.ui.filelist.FileAdapter;
-import com.mrikso.apkrepacker.ui.filelist.PathButtonAdapter;
+import com.mrikso.apkrepacker.fragment.base.BaseFilesFragment;
+import com.mrikso.apkrepacker.recycler.OnItemSelectedListener;
+import com.mrikso.apkrepacker.ui.filemanager.PathButtonAdapter;
+import com.mrikso.apkrepacker.ui.filemanager.PanelActions;
+import com.mrikso.apkrepacker.ui.filemanager.holder.FileHolder;
+import com.mrikso.apkrepacker.ui.filemanager.utils.CopyHelper;
+import com.mrikso.apkrepacker.ui.filemanager.utils.Utils;
 import com.mrikso.apkrepacker.ui.imageviewer.ImageViewerActivity;
 import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.FragmentUtils;
-import com.mrikso.apkrepacker.utils.IntegerArray;
 import com.mrikso.apkrepacker.utils.IntentUtils;
+import com.mrikso.apkrepacker.utils.StringUtils;
 import com.mrikso.apkrepacker.utils.ViewUtils;
 import com.sdsmdg.harjot.vectormaster.VectorMasterDrawable;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.ArrayList;
 
-import me.zhanghai.android.fastscroll.FastScrollerBuilder;
+public class FilesFragment extends BaseFilesFragment implements OnBackPressedListener, OnItemSelectedListener,
+        View.OnClickListener, PopupMenu.OnMenuItemClickListener {
 
-public class FilesFragment extends Fragment implements FileOptionsDialogFragment.FileItemClickListener, OnItemClickListener, OnBackPressedListener {
-    private File currentDirectory;
-    private Context mContext;
-    private FileAdapter adapter;
-    private RecyclerView recyclerView, patchRecyclerView;
-    private String projectPatch;
-    private PathButtonAdapter pathAdapter;
-    private FloatingActionMenu actionMenu;
-    private File selectedFile;
-
-    private IntegerArray integerArray = new IntegerArray();
-    private int lastFirstVisiblePosition = 0;
-    private int selectedPosition = RecyclerView.NO_POSITION;
-    private LinearLayout mContainerSelection;
-    private LinearLayout mContainerPath;
+    private File mCurrentDirectory;
+    private File mSelectedFile;
+    private String mProjectPath;
+    private FloatingActionMenu mFab;
+    private RecyclerView mPathBar;
+    private LinearLayout mSelectionBar;
+    private LinearLayout mPathBarContainer;
+    private LinearLayout mBottomMenuContainer;
+    private PathButtonAdapter mPathAdapter;
+    private AppCompatTextView mSelectedCount, mPaste;
     private AppCompatImageButton mClearSelection;
-    private AppCompatImageButton mSelectAll;
-    private TextView mSelectedCount;
-    private com.google.android.material.floatingactionbutton.FloatingActionButton mFabDelete;
+    private AppCompatImageButton mSelectAll, mCut, mDelete, mCopy, mRename, mMoreMenuBottomBar, mCreateDirectory;
+
+    private ArrayList<FileHolder> mSelected = new ArrayList<>();
+    private PanelActions mActions;
+    private CopyHelper mCopyHelper;
+
+    private boolean isCanPaste = false;
+
     private FilesFragmentViewModel mViewModel;
 
     public FilesFragment() {
         // Required empty public constructor
     }
 
-    private static String downDir(int levels, String oldPath) {
-        String[] splitterPathArray = oldPath.split("/");
-        levels = splitterPathArray.length - levels;
-        List<String> splitedPathList = Arrays.asList(splitterPathArray);
-        splitedPathList = splitedPathList.subList(0, levels);
-        return TextUtils.join("/", splitedPathList);
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            projectPatch = bundle.getString("prjPatch");
+            mProjectPath = bundle.getString("prjPatch");
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mViewModel = new ViewModelProvider(this).get(FilesFragmentViewModel.class);
-        View result = inflater.inflate(R.layout.fragment_files, container, false);
-        mContext = result.getContext();
-        initViews(result);
-        adapter = new FileAdapter(mContext);
-        recyclerView = result.findViewById(R.id.resource_list);
-        //fastScroller = result.findViewById(R.id.fast_scroll_files);
-        patchRecyclerView = result.findViewById(R.id.pathScrollView);
-        //  binding.pathScrollView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        pathAdapter = new PathButtonAdapter();
-        // binding.pathScrollView.setAdapter(pathAdapter);
-        initRecyclerView();
-        setPath(new File(projectPatch));
-        return result;
+        return inflater.inflate(R.layout.fragment_files, container, false);
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-
+    public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initViews(view);
     }
 
-    private void setPath(File directory) {
-        if (!directory.exists()) {
-            UIUtils.toast(App.getContext(), R.string.toast_error_directory_not_exits);
-            return;
-        }
-        pathAdapter.setPath(directory);
-        currentDirectory = directory;
-        if (adapter != null) {
-            if (adapter.anySelected()) {
-                adapter.clear();
-                adapter.clearSelection();
-                adapter.addAll(FileUtil.getChildren(directory));
-            } else {
-                adapter.clear();
-                adapter.addAll(FileUtil.getChildren(directory));
-            }
-        }
+    @Override
+    protected void onDataApplied() {
+        super.onDataApplied();
+        // savePosition(true);
 
-        //invalidateTitle();
+        mCurrentDirectory = new File(getPath());
+        mPathAdapter.setPath(mCurrentDirectory, true);
+        mPathBar.setAdapter(mPathAdapter);
 
-    }
-
-    private void savePosition(boolean save) {
-        if (save) {
-            integerArray.add(((LinearLayoutManager) Objects.requireNonNull(recyclerView.getLayoutManager())).findFirstCompletelyVisibleItemPosition());
-        } else {
-            lastFirstVisiblePosition = integerArray.getSize();
-            lastFirstVisiblePosition--;
-            if (lastFirstVisiblePosition >= 0) {
-                ((LinearLayoutManager) Objects.requireNonNull(recyclerView.getLayoutManager())).scrollToPositionWithOffset(integerArray.get(lastFirstVisiblePosition), 0);
-            } else {
-                lastFirstVisiblePosition = 0;
-                integerArray.clear();
-            }
-        }
-    }
-
-    private void initRecyclerView() {
-        patchRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        pathAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onChanged() {
-                patchRecyclerView.scrollToPosition(pathAdapter.getItemCount() - 1);
-            }
-        });
-        pathAdapter.setPath(new File(projectPatch));
-        pathAdapter.setOnItemClickListener((position, view) -> {
-            File file = pathAdapter.getItem(position);
-            setPath(file);
-            if (Objects.equals(file.getParent(), currentDirectory.getParent())) {
-                savePosition(false);
-            }
-        });
-        patchRecyclerView.setAdapter(pathAdapter);
-        adapter.setOnItemClickListener(this);
-        adapter.setOnItemSelectedListener(() -> {
-            invalidateFab();
-            invalidatePathAdapter();
-        });
-        adapter.setItemLayout(R.layout.item_project_file);
-        adapter.setSpanCount(getResources().getInteger(R.integer.span_count0));
-
-        if (recyclerView != null) {
-            recyclerView.setHasFixedSize(true);
-            new FastScrollerBuilder(recyclerView).useMd2Style().build();
-            recyclerView.setAdapter(adapter);
-        }
+        getFileAdapter().setOnItemSelectedListener(this);
     }
 
     private void initViews(View view) {
-        mContainerPath = view.findViewById(R.id.container_path);
-        mContainerSelection = view.findViewById(R.id.container_selection_bar);
-        mSelectAll = view.findViewById(R.id.ib_select_all);
+        mActions = PanelActions.getInstance(requireContext(), this);
+        mPathBar = view.findViewById(R.id.pathScrollView);
+        mFab = view.findViewById(R.id.fab_menu);
+        mBottomMenuContainer = view.findViewById(R.id.bottom_menu);
+        AppCompatImageButton homeFolder = view.findViewById(R.id.home_folder_app);
+        homeFolder.setOnClickListener(this);
+        FloatingActionButton addFile = view.findViewById(R.id.fab_add_file);
+        addFile.setOnClickListener(this);
+        FloatingActionButton addFolder = view.findViewById(R.id.fab_add_folder);
+        addFolder.setOnClickListener(this);
+        FloatingActionButton copyNewFile = view.findViewById(R.id.fab_copy_file);
+        copyNewFile.setOnClickListener(this);
+        FloatingActionButton copyNewFolder = view.findViewById(R.id.fab_copy_folder);
+        copyNewFolder.setOnClickListener(this);
+        FloatingActionButton search = view.findViewById(R.id.fab_search);
+        search.setOnClickListener(this);
+
+        mPathAdapter = new PathButtonAdapter();
+
+        mCopy = view.findViewById(R.id.action_copy);
+        mCopy.setOnClickListener(this);
+        mCut = view.findViewById(R.id.action_cut);
+        mCut.setOnClickListener(this);
+        mDelete = view.findViewById(R.id.action_delete);
+        mDelete.setOnClickListener(this);
+        mRename = view.findViewById(R.id.action_rename);
+        mRename.setOnClickListener(this);
+
+        mCreateDirectory = view.findViewById(R.id.action_new_folder);
+        mCreateDirectory.setOnClickListener(this);
+        mPaste = view.findViewById(R.id.action_paste);
+        mPaste.setOnClickListener(this);
+
+        mMoreMenuBottomBar = view.findViewById(R.id.action_overflow);
+        mMoreMenuBottomBar.setOnClickListener(this);
+
+        mPathBarContainer = view.findViewById(R.id.container_path);
+        mSelectionBar = view.findViewById(R.id.container_selection_bar);
+        mSelectAll = view.findViewById(R.id.action_select_all);
+        mSelectAll.setOnClickListener(this);
         mClearSelection = view.findViewById(R.id.ib_clear_selection);
         mSelectedCount = view.findViewById(R.id.tv_selection_status);
-        actionMenu = view.findViewById(R.id.fab_menu);
-        mFabDelete = view.findViewById(R.id.fab_delete);
-        FloatingActionButton addFile = view.findViewById(R.id.fab_add_file);
-        FloatingActionButton addFolder = view.findViewById(R.id.fab_add_folder);
-        FloatingActionButton searchFab = view.findViewById(R.id.fab_search);
-        AppCompatImageButton homeFolder = view.findViewById(R.id.home_folder_app);
-        homeFolder.setOnClickListener(v -> setPath(new File(projectPatch)));
-        searchFab.setOnClickListener(v -> {
-            Bundle bundle = new Bundle();
-            bundle.putString("curDirect", currentDirectory.getAbsolutePath());
-            actionMenu.close(true);
-            SearchFragment searchFragment = new SearchFragment();
-            searchFragment.setArguments(bundle);
 
-            FragmentUtils.replace(searchFragment, getChildFragmentManager(), R.id.fragment_container, SearchFragment.TAG);
-        });
-        addFolder.setOnClickListener(v -> {
-            actionMenu.close(true);
-            new FilePickerDialog(getContext())
-                    .setTitleText(this.getResources().getString(R.string.select_directory))
-                    .setSelectMode(FilePickerDialog.MODE_SINGLE)
-                    .setSelectType(FilePickerDialog.TYPE_DIR)
-                    .setRootDir(Environment.getExternalStorageDirectory().getAbsolutePath())
-                    .setBackCancelable(true)
-                    .setOutsideCancelable(true)
-                    .setDialogListener(this.getResources().getString(R.string.choose_button_label), this.getResources().getString(R.string.cancel_button_label), new FilePickerDialog.FileDialogListener() {
-                        @Override
-                        public void onSelectedFilePaths(String[] filePaths) {
-                            for (String dir : filePaths) {
-                                try {
-                                    FileUtil.copyFile(new File(dir), new File(currentDirectory.getAbsolutePath()));
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                            setPath(new File(currentDirectory.getAbsolutePath()));
-                        }
-
-                        @Override
-                        public void onCanceled() {
-                        }
-                    })
-                    .show();
-
-        });
-        addFile.setOnClickListener(V -> {
-            actionMenu.close(true);
-            new FilePickerDialog(getContext())
-                    .setTitleText(this.getResources().getString(R.string.select_file))
-                    .setSelectMode(FilePickerDialog.MODE_MULTI)
-                    .setSelectType(FilePickerDialog.TYPE_FILE)
-                    .setRootDir(Environment.getExternalStorageDirectory().getAbsolutePath())
-                    .setBackCancelable(true)
-                    .setOutsideCancelable(true)
-                    .setDialogListener(this.getResources().getString(R.string.choose_button_label), this.getResources().getString(R.string.cancel_button_label), new FilePickerDialog.FileDialogListener() {
-                        @Override
-                        public void onSelectedFilePaths(String[] filePaths) {
-                            for (String dir : filePaths) {
-                                try {
-                                    FileUtil.copyFile(new File(dir), new File(currentDirectory.getAbsolutePath()));
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                            setPath(new File(currentDirectory.getAbsolutePath()));
-                        }
-
-                        @Override
-                        public void onCanceled() {
-                        }
-                    })
-                    .show();
-
+        mPathBar.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        mPathAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                mPathBar.scrollToPosition(mPathAdapter.getItemCount() - 1);
+            }
         });
 
-        actionMenu.setClosedOnTouchOutside(true);
+        mPathAdapter.setOnItemClickListener((position, v) -> {
+            File file = mPathAdapter.getItem(position);
+            setPath(file);
+            refresh();
+        });
+        //  mPathBar.setAdapter(mPathAdapter);
+        mFab.setClosedOnTouchOutside(true);
+        getFileAdapter().setProjectMode(true);
+        setPath(new File(mProjectPath));
+        refresh();
     }
 
-    private void invalidateFab() {
-        ViewUtils.setVisibleOrGone(mFabDelete, adapter.anySelected());
-        ViewUtils.setVisibleOrGone(actionMenu, !adapter.anySelected());
-        mFabDelete.setOnClickListener(v -> actionDelete());
+    @Override
+    public void onItemSelected() {
+        invalidatePathAdapter();
     }
 
-    private void actionDelete() {
-        actionDelete(adapter.getSelectedItems());
-        adapter.clearSelection();
-    }
-
-    private void actionDelete(final List<File> files) {
-        final File sourceDirectory = currentDirectory;
-        adapter.removeAll(files);
-        for (File file : files) {
-            try {
-                FileUtil.deleteFile(file);
-            } catch (Exception ex) {
-                ex.printStackTrace();
+    private void invalidatePathAdapter() {
+        if (getFileAdapter() != null) {
+            boolean isSelected = getFileAdapter().anySelected();
+            ViewUtils.setVisibleOrGone(mFab, !isSelected);
+            ViewUtils.setVisibleOrGone(mBottomMenuContainer, isSelected);
+            ViewUtils.setVisibleOrGone(mSelectionBar, isSelected);
+            ViewUtils.setVisibleOrGone(mPathBarContainer, !isSelected);
+            if (isSelected) {
+                mCopyHelper = App.get().getCopyHelper();
+                mCopyHelper.setFilesFragment(this);
+                mSelected.addAll(getFileAdapter().getSelectedItems());
+                mSelectAll.setOnClickListener(v -> getFileAdapter().selectAll());
+                mClearSelection.setOnClickListener(v -> getFileAdapter().clearSelection());
+                mSelectedCount.setText(getString(R.string.selected, getFileAdapter().getSelectedItemCount()));
             }
         }
     }
 
-    private void invalidatePathAdapter() {
-        ViewUtils.setVisibleOrGone(mContainerSelection, adapter.anySelected());
-        ViewUtils.setVisibleOrGone(mContainerPath, !adapter.anySelected());
-        if(adapter.anySelected()) {
-            mSelectAll.setOnClickListener(v -> adapter.selectAll());
-            mClearSelection.setOnClickListener(v -> adapter.clearSelection());
-            mSelectedCount.setText(String.valueOf(adapter.getSelectedItemCount()));
-        }
-    }
+    private void invalidateClipboardPanel() {
+        getFileAdapter().clearSelection();
+        ViewUtils.setVisibleOrGone(mFab, !isCanPaste);
+        ViewUtils.setVisibleOrGone(mBottomMenuContainer, isCanPaste);
+        ViewUtils.setVisibleOrGone(mSelectionBar, isCanPaste);
+        ViewUtils.setVisibleOrGone(mPathBarContainer, !isCanPaste);
+        ViewUtils.setVisibleOrGone(mCreateDirectory, isCanPaste);
+        ViewUtils.setVisibleOrGone(mPaste, isCanPaste);
 
-    @Override
-    public void onResume() {
-        if (adapter != null) adapter.refresh();
-        super.onResume();
+        ViewUtils.setVisibleOrGone(mCopy, !isCanPaste);
+        ViewUtils.setVisibleOrGone(mCut, !isCanPaste);
+        ViewUtils.setVisibleOrGone(mRename, !isCanPaste);
+        ViewUtils.setVisibleOrGone(mDelete, !isCanPaste);
+        ViewUtils.setVisibleOrGone(mMoreMenuBottomBar, !isCanPaste);
+        ViewUtils.setVisibleOrGone(mSelectAll, !isCanPaste);
+        mClearSelection.setOnClickListener(v -> {
+            mCopyHelper.clear();
+            isCanPaste = false;
+            invalidateClipboardPanel();
+        });
+        int stringResource = (mCopyHelper.getOperationType() == CopyHelper.COPY
+                ? R.plurals.menu_copy_items_to : R.plurals.menu_move_items_to);
+        mSelectedCount.setText(getResources().getQuantityString(stringResource,
+                mCopyHelper.getItemCount(), mCopyHelper.getItemCount()));
+
     }
 
     @Override
     public boolean onBackPressed() {
-        if (adapter.anySelected()) {
-            adapter.clearSelection();
+        if (getFileAdapter().anySelected()) {
+            getFileAdapter().clearSelection();
             return true;
         }
         savePosition(false);
 
-        String currentDirName = currentDirectory.getName();
-        File f = new File(projectPatch);
         Fragment manager1 = getChildFragmentManager().findFragmentByTag(SearchFragment.TAG);
         Fragment manager2 = getChildFragmentManager().findFragmentByTag(ColorEditorFragment.TAG);
 //        Fragment manager3 = getChildFragmentManager().findFragmentByTag(DimensEditorFragment.TAG);
@@ -328,86 +241,24 @@ public class FilesFragment extends Fragment implements FileOptionsDialogFragment
 /*        } else if (manager3 != null) {
             getChildFragmentManager().popBackStack();
             return true;*/
-        } else if (currentDirName.equals(f.getName())) {
+        } else if (Utils.backWillExit(mProjectPath, getPath())) {
             requireActivity().finish();
-            //getFragmentManager().popBackStack();
-            //getActivity().getFragmentManager().beginTransaction().remove(me).commit();
-            // getActivity().getFragmentManager().popBackStack();
-            //   getActivity().getFragmentManager().beginTransaction().remove(this).commit();
-            //  getActivity().getFragmentManager().popBackStack();
             return true;
         } else {
-            setPath(new File(downDir(1, currentDirectory.getAbsolutePath())));
+            setPath(new File(Utils.downDir(1, getPath())));
+            refresh();
             return true;
         }
+
     }
 
     @Override
-    public void onFileItemClick(@IntegerRes int item) {
-        switch (item) {
-            case R.id.open_with:
-                startActivity(IntentUtils.openFileWithIntent(new File(selectedFile.getAbsolutePath())));
-                break;
-            case R.id.open_in_editor:
-                Intent intent = new Intent(getActivity(), CodeEditorActivity.class);
-                intent.putExtra("filePath", selectedFile.getAbsolutePath());
-                startActivity(intent);
-                break;
-            case R.id.rename_file:
-                UIUtils.showInputDialog(requireContext(), R.string.action_rename, 0, selectedFile.getName(), EditorInfo.TYPE_CLASS_TEXT, new UIUtils.OnShowInputCallback() {
-                    @Override
-                    public void onConfirm(CharSequence input) {
-                        try {
-                            int index = adapter.indexOf(selectedFile);
-                            File newFile = FileUtil.renameFile(selectedFile, input.toString());
-                            // FileUtil.createDirectory(new File(currentDirectory.getAbsolutePath()), input.toString());
-                            adapter.updateItemAt(index, newFile);
-                        } catch (Exception e) {
-                            UIUtils.toast(requireContext(), R.string.toast_error_on_rename);
-                            DLog.e(e);
-                        }
-                    }
-                });
-                break;
-            case R.id.add_new_folder:
-                UIUtils.showInputDialog(requireContext(), R.string.action_create_new_folder, 0, null, EditorInfo.TYPE_CLASS_TEXT,
-                        new UIUtils.OnShowInputCallback() {
-                            @Override
-                            public void onConfirm(CharSequence input) {
-                                try {
-                                    FileUtil.createDirectory(new File(currentDirectory.getAbsolutePath()), input.toString());
-                                    setPath(new File(currentDirectory.getAbsolutePath()));
-                                } catch (Exception e) {
-                                    UIUtils.toast(requireContext(), R.string.toast_error_on_add_folder);
-                                    DLog.e(e);
-                                }
-                            }
-                        });
-                break;
-            case R.id.delete_file:
-                try {
-                    FileUtil.deleteFile(selectedFile);
-                    adapter.removeItemAt(selectedPosition);
-                    if (selectedFile.isDirectory()) {
-                        UIUtils.toast(requireContext(), String.format(getString(R.string.toast_deleted_dictionary), selectedFile.getName()));
-                    } else {
-                        UIUtils.toast(requireContext(), String.format(getString(R.string.toast_deleted_item), selectedFile.getName()));
-                    }
-                } catch (Exception e) {
-                    UIUtils.toast(requireContext(), R.string.toast_error_on_delete_file);
-                    DLog.e(e);
-                }
-                break;
-        }
-    }
-
-    @Override
-    public void onItemClick(int position) {
+    public void onFileClick(FileHolder item, int position) {
         File file = null;
-        if (adapter != null && position >= 0) {
-            file = adapter.get(position);
-            if (adapter.anySelected()) {
-                adapter.toggle(position);
+        if (getFileAdapter() != null && position >= 0) {
+            file = item.getFile();
+            if (getFileAdapter().anySelected()) {
+                getFileAdapter().toggle(position);
                 return;
             }
         }
@@ -416,9 +267,10 @@ public class FilesFragment extends Fragment implements FileOptionsDialogFragment
             if (file.isDirectory()) {
                 if (file.canRead()) {
                     setPath(file);
+                    refresh();
                     savePosition(true);
                 } else {
-                    UIUtils.toast(mContext, R.string.cannt_open_directory);
+                    UIUtils.toast(requireContext(), R.string.cannt_open_directory);
                 }
             } else {
                 switch (FileUtil.FileType.getFileType(file)) {
@@ -436,19 +288,19 @@ public class FilesFragment extends Fragment implements FileOptionsDialogFragment
 /*                        } else if (file.getName().equals("dimens.xml")) {
                             Fragment dimensEditorFragment = DimensEditorFragment.newInstance(file.getAbsolutePath());
                             getChildFragmentManager().beginTransaction().replace(R.id.fragment_container, dimensEditorFragment, DimensEditorFragment.TAG).addToBackStack(null).commit();*/
-                        } else if ((currentDirectory.getName().startsWith("drawable") || currentDirectory.getName().startsWith("mipmap")) && new VectorMasterDrawable(mContext, file).isVector()) {
-                            ImageViewerActivity.setViewerData(getContext(), adapter, file);
+                        } else if ((mCurrentDirectory.getName().startsWith("drawable") || mCurrentDirectory.getName().startsWith("mipmap")) && new VectorMasterDrawable(requireContext(), file).isVector()) {
+                            ImageViewerActivity.setViewerData(getContext(), getFileAdapter(), file);
                             startActivity(new Intent(getActivity(), ImageViewerActivity.class));
                         } else {
                             Intent intent = new Intent(getActivity(), CodeEditorActivity.class);
                             intent.putExtra("filePath", file.getAbsolutePath());
-                            intent.putExtra("currentDirectory", currentDirectory);
+                            intent.putExtra("currentDirectory", mCurrentDirectory.getAbsolutePath());
                             startActivity(intent);
                         }
                         break;
                     case IMAGE:
 //                    case TTF:
-                        ImageViewerActivity.setViewerData(getContext(), adapter, file);
+                        ImageViewerActivity.setViewerData(getContext(), getFileAdapter(), file);
                         startActivity(new Intent(getActivity(), ImageViewerActivity.class));
                         break;
                     default:
@@ -460,20 +312,184 @@ public class FilesFragment extends Fragment implements FileOptionsDialogFragment
     }
 
     @Override
-    public boolean onItemActionClick(int position) {
-        if(!adapter.anySelected()) {
-            selectedFile = adapter.get(position);
-            selectedPosition = position;
-            FileOptionsDialogFragment fragment = FileOptionsDialogFragment.newInstance(new VectorMasterDrawable(mContext, selectedFile).isVector() != selectedFile.getName().equals("colors.xml"), !selectedFile.isDirectory());
-            fragment.show(getChildFragmentManager(), FileOptionsDialogFragment.TAG);
-        }
-        return true;
+    public void onLongClick(FileHolder item, int position) {
+        getFileAdapter().toggle(position);
     }
 
     @Override
-    public boolean onItemLongClick(int position) {
-        adapter.toggle(position);
-        return true;
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.action_copy:
+                if (getFileAdapter().getSelectedItemCount() > 1) {
+                    mCopyHelper.copy(getFileAdapter().getSelectedItems());
+                } else {
+                    mCopyHelper.copy(getFileAdapter().getSelectedItems().get(0));
+                }
+                isCanPaste = mCopyHelper.canPaste();
+                invalidateClipboardPanel();
+                break;
+            case R.id.action_delete:
+                FileHolder[] params = mSelected.toArray(new FileHolder[mSelected.size()]);
+                mActions.actionDelete(params);
+                getFileAdapter().clearSelection();
+                break;
+            case R.id.action_share:
+                mActions.actionShare(getFileAdapter().getSelectedItems().get(0));
+                break;
+            case R.id.action_rename:
+                if (getFileAdapter().getSelectedItemCount() > 1) {
+                    Toast.makeText(requireContext(), "Multiple rename doesent supported!", Toast.LENGTH_SHORT).show();
+                    // FragmentUtils.add(new BatchRenameFragment(), getParentFragmentManager(), android.R.id.content);
+                } else {
+                    mActions.actionRenameFile(getFileAdapter().getSelectedItems().get(0).getFile());
+                }
+                break;
+            case R.id.action_cut:
+                if (getFileAdapter().getSelectedItemCount() > 1) {
+                    mCopyHelper.cut(getFileAdapter().getSelectedItems());
+                } else {
+                    mCopyHelper.cut(getFileAdapter().getSelectedItems().get(0));
+                }
+                isCanPaste = mCopyHelper.canPaste();
+                invalidateClipboardPanel();
+                break;
+            case R.id.action_paste:
+                if (mCopyHelper.canPaste()) {
+                    mCopyHelper.paste(requireContext(), new File(getPath()));
+                } else {
+                    // Toast.makeText(requireContext(), R.string.nothing_to_paste, Toast.LENGTH_LONG).show();
+                }
+                isCanPaste = false;
+                invalidateClipboardPanel();
+                break;
+            case R.id.action_overflow:
+                if (getFileAdapter().getSelectedItemCount() == 1) {
+                    FileHolder fileHolder = getFileAdapter().getSelectedItems().get(0);
+                    mSelectedFile = fileHolder.getFile();
+                    PopupMenu popupMenu = new PopupMenu(requireContext(), v);
+                    popupMenu.inflate(R.menu.filemanager_project_menu);
+                    popupMenu.setOnMenuItemClickListener(this);
+                    popupMenu.getMenu().findItem(R.id.action_open_with).setVisible(mSelectedFile.isFile());
+                    popupMenu.getMenu().findItem(R.id.action_open_in_editor).setVisible(mSelectedFile.isFile());
+                    popupMenu.getMenu().findItem(R.id.action_share).setVisible(mSelectedFile.isFile());
+                    popupMenu.getMenu().findItem(R.id.action_copy_id).setVisible(mSelectedFile.isFile());
+                    popupMenu.show();
+                } else {
+
+                }
+                break;
+            case R.id.fab_search:
+                mFab.close(true);
+                Bundle bundle = new Bundle();
+                bundle.putString("curDirect", getPath());
+                SearchFragment searchFragment = new SearchFragment();
+                searchFragment.setArguments(bundle);
+                FragmentUtils.add(searchFragment, getChildFragmentManager(), R.id.fragment_container, SearchFragment.TAG);
+                break;
+            case R.id.fab_add_file:
+                mFab.close(true);
+                mActions.actionCreateFile(new File(getPath()));
+                break;
+            case R.id.action_new_folder:
+            case R.id.fab_add_folder:
+                mFab.close(true);
+                mActions.actionCreateNewDirectory(new File(getPath()));
+                break;
+            case R.id.fab_copy_file:
+                mFab.close(true);
+                new FilePickerDialog(getContext())
+                        .setTitleText(getString(R.string.select_directory))
+                        .setSelectMode(FilePickerDialog.MODE_SINGLE)
+                        .setSelectType(FilePickerDialog.TYPE_DIR)
+                        .setRootDir(FileUtil.getInternalStorage().getAbsolutePath())
+                        .setBackCancelable(true)
+                        .setOutsideCancelable(true)
+                        .setDialogListener(getString(R.string.choose_button_label), getString(R.string.cancel_button_label), new FilePickerDialog.FileDialogListener() {
+                            @Override
+                            public void onSelectedFilePaths(String[] filePaths) {
+                                new Thread(() -> {
+                                    for (String dir : filePaths) {
+                                        try {
+                                            FileUtil.copyFile(new File(dir), new File(getPath()));
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }).start();
+                                refresh();
+                            }
+
+                            @Override
+                            public void onCanceled() {
+                            }
+                        })
+                        .show();
+                break;
+            case R.id.fab_copy_folder:
+                mFab.close(true);
+                new FilePickerDialog(getContext())
+                        .setTitleText(getString(R.string.select_file))
+                        .setSelectMode(FilePickerDialog.MODE_MULTI)
+                        .setSelectType(FilePickerDialog.TYPE_FILE)
+                        .setRootDir(FileUtil.getInternalStorage().getAbsolutePath())
+                        .setBackCancelable(true)
+                        .setOutsideCancelable(true)
+                        .setDialogListener(getString(R.string.choose_button_label), getString(R.string.cancel_button_label), new FilePickerDialog.FileDialogListener() {
+                            @Override
+                            public void onSelectedFilePaths(String[] filePaths) {
+                                new Thread(() -> {
+                                    for (String dir : filePaths) {
+                                        try {
+                                            FileUtil.copyFile(new File(dir), new File(getPath()));
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }).start();
+                                refresh();
+                            }
+
+                            @Override
+                            public void onCanceled() {
+                            }
+                        })
+                        .show();
+                break;
+            case R.id.home_folder_app:
+                setPath(new File(mProjectPath));
+                refresh();
+                break;
+        }
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_open_with:
+                startActivity(IntentUtils.openFileWithIntent(mSelectedFile));
+                //refresh();
+                return true;
+            case R.id.action_open_in_editor:
+                Intent intent = new Intent(getActivity(), CodeEditorActivity.class);
+                intent.putExtra("filePath", mSelectedFile.getAbsolutePath());
+                startActivity(intent);
+                //refresh();
+                return true;
+            case R.id.action_share:
+                mActions.actionShare(getFileAdapter().getSelectedItems().get(0));
+                //refresh();
+                return true;
+            case R.id.action_copy_name:
+                StringUtils.setClipboard(requireContext(), mSelectedFile.getName());
+                return false;
+            case R.id.action_copy_path:
+                StringUtils.setClipboard(requireContext(), mSelectedFile.getAbsolutePath());
+                return false;
+            case R.id.action_copy_id:
+
+                return false;
+        }
+        return false;
     }
 
 }

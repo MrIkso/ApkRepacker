@@ -20,23 +20,7 @@
             android:title="@string/pref_use_circular_icons" />
     </PreferenceCategory>
     <PreferenceCategory
-        android:title="@string/pref_general"
-        app:iconSpaceReserved="false">
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="pref_extension"
-            android:summary="@string/pref_hide_know_extensions_summary"
-            android:title="@string/pref_hide_know_extensions" />
-
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="pref_date"
-            android:title="@string/pref_show_last" />
-
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="pref_size"
-            android:title="@string/pref_show_file_sizes" />
+        android:title="@string/pref_general">
 
         <SwitchPreference
             android:defaultValue="false"
@@ -49,8 +33,7 @@
 
     </PreferenceCategory>
     <PreferenceCategory
-        android:title="@string/pref_general_decompiler"
-        >
+        android:title="@string/pref_general_decompiler">
         <EditTextPreference
             android:key="pref_decode_folder"
             android:title="@string/pref_decode_folder" />

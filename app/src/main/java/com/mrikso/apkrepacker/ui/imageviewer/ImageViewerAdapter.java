@@ -140,7 +140,7 @@ public class ImageViewerAdapter extends ViewPagerAdapter {
     private static void loadVector(@NonNull ViewHolder holder, @NonNull String path) {
         ViewUtils.setVisibleOrGone(holder.vector, true);
 
-//        holder.vector.setProjectPatch(FileUtil.getProjectPath());
+//        holder.vector.setProjectPatch(ProjectUtils.getProjectPath());
 //        holder.vector.setUseLightTheme(ThemeWrapper.isLightTheme());
         holder.vector.setVectorFile(new File(path));
     }

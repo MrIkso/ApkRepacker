@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 
 import com.jecelyin.common.utils.DLog;
 import com.mrikso.apkrepacker.fragment.CompileFragment;
-import com.mrikso.apkrepacker.ui.prererence.PreferenceHelper;
+import com.mrikso.apkrepacker.ui.preferences.PreferenceHelper;
 import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.SignUtil;
 

@@ -242,8 +242,10 @@ public class ImageViewerFragment extends Fragment {
             ViewUtils.fadeToVisibility(fabEdit, true);
         } else if (fileType.equals(FileUtil.FileType.IMAGE)) {
             Bitmap bitmap = BitmapFactory.decodeFile(getCurrentPath());
-            width = bitmap.getWidth();
-            height = bitmap.getHeight();
+            if (bitmap != null) {
+                width = bitmap.getWidth();
+                height = bitmap.getHeight();
+            }
             ViewUtils.fadeToVisibility(fabEdit, false);
         } /*else if (fileType.equals(FileUtil.FileType.TTF)) {
             ViewUtils.fadeToVisibility(fabEdit, false);

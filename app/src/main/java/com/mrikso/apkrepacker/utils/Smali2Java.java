@@ -31,7 +31,7 @@ public class Smali2Java {
             args.setSkipResources(true);
             args.setShowInconsistentCode(true);
             args.setInputFiles(files);
-            //   args.setOutDirRes(new File(FileUtil.getProjectPath()));
+            //   args.setOutDirRes(new File(ProjectUtils.getProjectPath()));
             JadxDecompiler decompiler = new JadxDecompiler(args);
             decompiler.load();
             JavaClass javaClass = decompiler.getClasses().iterator().next();
