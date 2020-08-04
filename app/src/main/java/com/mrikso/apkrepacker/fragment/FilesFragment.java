@@ -37,6 +37,7 @@ import com.mrikso.apkrepacker.utils.FragmentUtils;
 import com.mrikso.apkrepacker.utils.IntentUtils;
 import com.mrikso.apkrepacker.utils.StringUtils;
 import com.mrikso.apkrepacker.utils.ViewUtils;
+import com.mrikso.apkrepacker.viewmodel.FilesFragmentViewModel;
 import com.sdsmdg.harjot.vectormaster.VectorMasterDrawable;
 
 import org.jetbrains.annotations.NotNull;
@@ -372,7 +373,7 @@ public class FilesFragment extends BaseFilesFragment implements OnBackPressedLis
                     popupMenu.getMenu().findItem(R.id.action_open_with).setVisible(mSelectedFile.isFile());
                     popupMenu.getMenu().findItem(R.id.action_open_in_editor).setVisible(mSelectedFile.isFile());
                     popupMenu.getMenu().findItem(R.id.action_share).setVisible(mSelectedFile.isFile());
-                    popupMenu.getMenu().findItem(R.id.action_copy_id).setVisible(mSelectedFile.isFile());
+                    popupMenu.getMenu().findItem(R.id.action_copy_id).setVisible(mSelectedFile.isFile() && mSelectedFile.getAbsolutePath().contains(mProjectPath + "/res/"));
                     popupMenu.show();
                 } else {
 
@@ -397,7 +398,7 @@ public class FilesFragment extends BaseFilesFragment implements OnBackPressedLis
                 break;
             case R.id.fab_copy_file:
                 mFab.close(true);
-                new FilePickerDialog(getContext())
+                new FilePickerDialog(requireContext())
                         .setTitleText(getString(R.string.select_directory))
                         .setSelectMode(FilePickerDialog.MODE_SINGLE)
                         .setSelectType(FilePickerDialog.TYPE_DIR)
@@ -427,7 +428,7 @@ public class FilesFragment extends BaseFilesFragment implements OnBackPressedLis
                 break;
             case R.id.fab_copy_folder:
                 mFab.close(true);
-                new FilePickerDialog(getContext())
+                new FilePickerDialog(requireContext())
                         .setTitleText(getString(R.string.select_file))
                         .setSelectMode(FilePickerDialog.MODE_MULTI)
                         .setSelectType(FilePickerDialog.TYPE_FILE)
@@ -481,9 +482,11 @@ public class FilesFragment extends BaseFilesFragment implements OnBackPressedLis
                 return true;
             case R.id.action_copy_name:
                 StringUtils.setClipboard(requireContext(), mSelectedFile.getName());
+                UIUtils.toast(requireContext(), getString(R.string.toast_copy_to_clipboard));
                 return false;
             case R.id.action_copy_path:
                 StringUtils.setClipboard(requireContext(), mSelectedFile.getAbsolutePath());
+                UIUtils.toast(requireContext(), getString(R.string.toast_copy_to_clipboard));
                 return false;
             case R.id.action_copy_id:
 

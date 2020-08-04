@@ -1,9 +1,9 @@
 package com.mrikso.apkrepacker.ui.preferences;
 
+import android.content.Context;
 import android.content.res.AssetManager;
 import android.util.Log;
 
-import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.utils.AppUtils;
 
 import org.apache.commons.io.IOUtils;
@@ -19,10 +19,10 @@ import brut.androlib.ApkOptions;
 public class InitPreference {
     private PreferenceHelper preferenceHelper;
 
-    public void init() {
-        preferenceHelper = PreferenceHelper.getInstance(App.getContext());
+    public void init(Context context) {
+        preferenceHelper = PreferenceHelper.getInstance(context);
         if (!preferenceHelper.isToolsInstalled()) {
-            copyFiles(App.getContext().getAssets(), App.getContext().getFilesDir());
+            copyFiles(context.getAssets(), context.getFilesDir());
             preferenceHelper.setToolsInstalled(true);
         }
         loadApkOptions();

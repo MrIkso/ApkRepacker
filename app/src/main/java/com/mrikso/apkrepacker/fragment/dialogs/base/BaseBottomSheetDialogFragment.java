@@ -18,6 +18,9 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.mrikso.apkrepacker.R;
+import com.mrikso.apkrepacker.utils.ViewUtils;
+
+import pxb.android.axml.Axml;
 
 public class BaseBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
@@ -25,6 +28,7 @@ public class BaseBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
     private Button mPositiveButton;
     private Button mNegativeButton;
+    private TextView mTitle;
 
     @NonNull
     @Override
@@ -32,6 +36,7 @@ public class BaseBottomSheetDialogFragment extends BottomSheetDialogFragment {
         mDialog = new BottomSheetDialog(requireContext());
 
         View dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.bottom_sheet_dialog_base, null);
+        mTitle = dialogView.findViewById(R.id.tv_bottom_sheet_dialog_base_title);
         mPositiveButton = dialogView.findViewById(R.id.button_bottom_sheet_dialog_base_ok);
         mNegativeButton = dialogView.findViewById(R.id.button_bottom_sheet_dialog_base_cancel);
         mDialog.setContentView(dialogView);
@@ -53,7 +58,7 @@ public class BaseBottomSheetDialogFragment extends BottomSheetDialogFragment {
     }
 
     @Override
-    public final void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -66,20 +71,33 @@ public class BaseBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
     }
 
+    @NonNull
     protected Button getPositiveButton() {
         return mPositiveButton;
     }
 
+    @NonNull
     protected Button getNegativeButton() {
         return mNegativeButton;
     }
+    @NonNull
 
     public void setTitle(@StringRes int title) {
         setTitle(getString(title));
     }
+    @NonNull
 
     public void setTitle(CharSequence title) {
-        ((TextView) mDialog.findViewById(R.id.tv_bottom_sheet_dialog_base_title)).setText(title);
+        mTitle.setText(title);
+    }
+
+    @NonNull
+    protected TextView getTitle(){
+        return mTitle;
+    }
+
+    public void hideTitle(boolean hide){
+        ViewUtils.setVisibleOrGone(mTitle, hide);
     }
 
     protected void revealBottomSheet() {

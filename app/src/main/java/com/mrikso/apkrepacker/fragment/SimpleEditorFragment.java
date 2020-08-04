@@ -127,7 +127,7 @@ public class SimpleEditorFragment extends Fragment implements TextWatcher, Progr
             mInstallLoc.setOnClickListener(v -> showListDialog(getContext(), location));
         } catch (Exception ex) {
             ex.printStackTrace();
-            UIUtils.toast(App.getContext(), R.string.toast_error_cant_parse_apk);
+            UIUtils.toast(requireContext(), R.string.toast_error_cant_parse_apk);
         }
     }
 

@@ -46,7 +46,6 @@ public class FindFragment extends Fragment implements ProgressDialogFragment.Pro
     private RecyclerView mRecyclerView;
     private boolean mFindFiles;
     private String mPath, mSearchText, mSearchFilename;
-    private SearchListAdapter mFilesAdapter;
     private ArrayList<String> mExt;
     private DialogFragment mDialogProgress;
     private Bundle mBundle;
@@ -90,7 +89,7 @@ public class FindFragment extends Fragment implements ProgressDialogFragment.Pro
     }
 
     public void setResult(List<File> mFileList) {
-        mFilesAdapter = new SearchListAdapter(this);
+        SearchListAdapter mFilesAdapter = new SearchListAdapter(this);
         if (!mFileList.isEmpty()) {
             mFilesAdapter.notifyDataUpdated(mFileList);
             mRecyclerView.setAdapter(mFilesAdapter);
@@ -186,6 +185,7 @@ public class FindFragment extends Fragment implements ProgressDialogFragment.Pro
                 startActivity(intent);
             case R.id.copy_path:
                 StringUtils.setClipboard(mContext, mSelectedFile.getAbsolutePath());
+                UIUtils.toast(requireContext(), getString(R.string.toast_copy_to_clipboard));
                 break;
             case R.id.replace_in_file:
                 ReplaceInFileDialogFragment replaceInFileDialogFragment = ReplaceInFileDialogFragment.newInstance(mSearchText, mSelectedFile.getAbsolutePath());
@@ -197,7 +197,7 @@ public class FindFragment extends Fragment implements ProgressDialogFragment.Pro
 
     @Override
     public void onTitleClick(String file, int position, ParentViewHolder holder) {
-        UIUtils.toast(requireContext(), String.valueOf(position));
+      //  UIUtils.toast(requireContext(), String.valueOf(position));
         mSelectedFile = new File(file);
         mHolder = holder;
         FindFileOptionDialogFragment fragment = FindFileOptionDialogFragment.newInstance();

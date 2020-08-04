@@ -17,16 +17,16 @@
 
 package com.mrikso.apkrepacker.ide.editor.task;
 
-import android.os.AsyncTask;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.mrikso.apkrepacker.ide.file.SaveListener;
 import com.mrikso.apkrepacker.ide.editor.Document;
+import com.mrikso.apkrepacker.task.base.CoroutinesAsyncTask;
 
 import java.io.File;
 
-public class SaveTask extends AsyncTask<Void, Void, Boolean> {
+public class SaveTask extends CoroutinesAsyncTask<Void, Void, Boolean> {
     private File mFile;
     private String mEncoding;
     private Document mDocument;
@@ -42,7 +42,7 @@ public class SaveTask extends AsyncTask<Void, Void, Boolean> {
     }
 
     @Override
-    protected Boolean doInBackground(Void... voids) {
+    public Boolean doInBackground(Void... voids) {
         try {
             mDocument.writeToFile(mFile, mEncoding);
             return true;
@@ -54,7 +54,7 @@ public class SaveTask extends AsyncTask<Void, Void, Boolean> {
     }
 
     @Override
-    protected void onPostExecute(Boolean aBoolean) {
+    public void onPostExecute(Boolean aBoolean) {
         super.onPostExecute(aBoolean);
         if (aBoolean) {
             if (mListener != null) {

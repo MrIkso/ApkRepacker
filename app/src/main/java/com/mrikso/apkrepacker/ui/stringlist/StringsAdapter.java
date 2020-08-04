@@ -1,6 +1,5 @@
 package com.mrikso.apkrepacker.ui.stringlist;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Build;
 import android.view.LayoutInflater;
@@ -14,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.common.collect.Iterables;
 import com.jecelyin.common.utils.UIUtils;
@@ -24,10 +24,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class StringsAdapter extends RecyclerView.Adapter<StringsAdapter.ViewHolder> implements Filterable {
+    private static OnItemClickListener onItemClickListener;
     private Map<String, String> data;
     private Map<String, String> dataFilter;
-    private static Context context;
-    private static OnItemClickListener onItemClickListener;
+    private Context context;
 
     public StringsAdapter(Context context) {
         this.context = context;
@@ -91,13 +91,9 @@ public class StringsAdapter extends RecyclerView.Adapter<StringsAdapter.ViewHold
         onItemClickListener = listener;
     }
 
-    public interface OnItemClickListener {
-        void onTranslateClicked(String key, String value);
-    }
-
     @Override
     public Filter getFilter() {
-        Filter filter = new Filter() {
+        return new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
 
@@ -126,15 +122,18 @@ public class StringsAdapter extends RecyclerView.Adapter<StringsAdapter.ViewHold
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
 
-                dataFilter = (Map<String, String>) results.values;
+                dataFilter.putAll((Map<String, String>) results.values);
                 notifyDataSetChanged();
 
             }
         };
-        return filter;
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    public interface OnItemClickListener {
+        void onTranslateClicked(String key, String value);
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder {
 
         private Map.Entry<String, String> item;
         private TextView mStringName;
@@ -147,8 +146,8 @@ public class StringsAdapter extends RecyclerView.Adapter<StringsAdapter.ViewHold
             mStringValue = itemView.findViewById(R.id.string_value);
 
             itemView.setOnClickListener((view) -> {
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle(R.string.translate_string);
+                MaterialDialog.Builder builder = new MaterialDialog.Builder(context);
+                builder.title(R.string.translate_string);
                 View viewinf = LayoutInflater.from(context).inflate(R.layout.dialog_edit_string_value, null, false);
                 EditText oldValue = viewinf.findViewById(R.id.old_value);
                 oldValue.setTextIsSelectable(true);
@@ -156,16 +155,18 @@ public class StringsAdapter extends RecyclerView.Adapter<StringsAdapter.ViewHold
                 TextInputLayout textInputLayout = viewinf.findViewById(R.id.text_input_layout_old);
                 textInputLayout.setHint(item.getKey());
                 oldValue.setText(item.getValue());
-                builder.setNegativeButton(android.R.string.cancel, (dialog, which) -> {
-                    dialog.dismiss();
-                });
-                builder.setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                builder.positiveText(android.R.string.ok);
+                builder.negativeText(android.R.string.cancel);
+                builder.onPositive((dialog, which) -> {
                     if (onItemClickListener != null)
                         onItemClickListener.onTranslateClicked(item.getKey(), newValue.getText().toString());
                 });
-                builder.setView(viewinf);
+
+                builder.customView(viewinf, false);
                 // AlertDialog dialog =builder.create();
-                builder.show();
+                MaterialDialog dlg = builder.show();
+                dlg.setCanceledOnTouchOutside(true);
+                dlg.setCancelable(true);
             });
             itemView.setOnLongClickListener(v -> {
                 StringUtils.setClipboard(context, item.getKey());

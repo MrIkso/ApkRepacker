@@ -22,14 +22,14 @@ import com.jecelyin.common.utils.UIUtils;
 import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.fragment.base.BaseFilesFragment;
+import com.mrikso.apkrepacker.fragment.dialogs.ProgressDialogFragment;
 import com.mrikso.apkrepacker.fragment.dialogs.bottomsheet.ApkOptionsDialogFragment;
 import com.mrikso.apkrepacker.fragment.dialogs.bottomsheet.DecompileOptionsDialogFragment;
-import com.mrikso.apkrepacker.fragment.dialogs.ProgressDialogFragment;
 import com.mrikso.apkrepacker.recycler.OnItemSelectedListener;
 import com.mrikso.apkrepacker.task.ImportFrameworkTask;
 import com.mrikso.apkrepacker.task.SignTask;
-import com.mrikso.apkrepacker.ui.filemanager.PathButtonAdapter;
 import com.mrikso.apkrepacker.ui.filemanager.PanelActions;
+import com.mrikso.apkrepacker.ui.filemanager.PathButtonAdapter;
 import com.mrikso.apkrepacker.ui.filemanager.holder.FileHolder;
 import com.mrikso.apkrepacker.ui.filemanager.utils.CopyHelper;
 import com.mrikso.apkrepacker.ui.filemanager.utils.Utils;
@@ -51,6 +51,8 @@ import java.util.Objects;
 public class MyFilesFragment extends BaseFilesFragment implements View.OnClickListener, ApkOptionsDialogFragment.ItemClickListener,
         DecompileOptionsDialogFragment.ItemClickListener, OnItemSelectedListener, OnBackPressedListener,
         PopupMenu.OnMenuItemClickListener {
+
+    public static final String TAG = "MyFilesFragment";
 
     private static File selectedApk;
     public File signedApk;
@@ -216,12 +218,12 @@ public class MyFilesFragment extends BaseFilesFragment implements View.OnClickLi
                     decompileOptionsDialogFragment.show(getChildFragmentManager(), DecompileOptionsDialogFragment.TAG);
                 } else {
                     mDecompileFragment = DecompileFragment.newInstance(selectedApk.getAbsolutePath(), mode == 0 ? 3 : mode == 1 ? 2 : mode == 2 ? 1 : 0);
-                    FragmentUtils.add(mDecompileFragment, getChildFragmentManager(), android.R.id.content);
+                    FragmentUtils.add(mDecompileFragment, getParentFragmentManager(), R.id.fragment_container, DecompileFragment.TAG);
                 }
                 break;
             case R.id.simple_edit_apk:
                 SimpleEditorFragment simpleEditorFragment = SimpleEditorFragment.newInstance(selectedApk.getAbsolutePath());
-                FragmentUtils.add(simpleEditorFragment, getParentFragmentManager(), android.R.id.content, SimpleEditorFragment.TAG);
+                FragmentUtils.add(simpleEditorFragment, getParentFragmentManager(), R.id.fragment_container, SimpleEditorFragment.TAG);
                 break;
             case R.id.install_app:
                 UIUtils.toast(requireContext(), getString(R.string.install_app));
@@ -229,7 +231,7 @@ public class MyFilesFragment extends BaseFilesFragment implements View.OnClickLi
                 break;
             case R.id.sign_app:
                 signedMode = true;
-                Runnable build = () -> SignUtil.loadKey(requireContext(), signTool -> new SignTask(requireContext(),this, signTool).execute(selectedApk));
+                Runnable build = () -> SignUtil.loadKey(requireContext(), signTool -> new SignTask(requireContext(), this, signTool).execute(selectedApk));
                 build.run();
                 break;
             case R.id.set_as_framework_app:
@@ -253,15 +255,15 @@ public class MyFilesFragment extends BaseFilesFragment implements View.OnClickLi
         switch (item) {
             case R.id.decompile_all:
                 mDecompileFragment = DecompileFragment.newInstance(selectedApk.getAbsolutePath(), 3);
-                FragmentUtils.add(mDecompileFragment, getParentFragmentManager(), android.R.id.content);
+                FragmentUtils.add(mDecompileFragment, getParentFragmentManager(), R.id.fragment_container, DecompileFragment.TAG);
                 break;
             case R.id.decompile_all_res:
                 mDecompileFragment = DecompileFragment.newInstance(selectedApk.getAbsolutePath(), 2);
-                FragmentUtils.add(mDecompileFragment, getParentFragmentManager(), android.R.id.content);
+                FragmentUtils.add(mDecompileFragment, getParentFragmentManager(), R.id.fragment_container, DecompileFragment.TAG);
                 break;
             case R.id.decompile_all_dex:
                 mDecompileFragment = DecompileFragment.newInstance(selectedApk.getAbsolutePath(), 1);
-                FragmentUtils.add(mDecompileFragment, getParentFragmentManager(), android.R.id.content);
+                FragmentUtils.add(mDecompileFragment, getParentFragmentManager(), R.id.fragment_container, DecompileFragment.TAG);
                 break;
         }
     }
@@ -358,6 +360,7 @@ public class MyFilesFragment extends BaseFilesFragment implements View.OnClickLi
     public boolean onBackPressed() {
         //  savePosition(false);
         Fragment mSimpleEditor = getParentFragmentManager().findFragmentByTag(SimpleEditorFragment.TAG);
+        Fragment decompile = getParentFragmentManager().findFragmentByTag(DecompileFragment.TAG);
 
         if (getFileAdapter().anySelected()) {
             getFileAdapter().clearSelection();
@@ -365,7 +368,14 @@ public class MyFilesFragment extends BaseFilesFragment implements View.OnClickLi
         } else if (Utils.backWillExit(FileUtil.getInternalStorage().getAbsolutePath(), getPath())) {
             FragmentUtils.remove(this);
             return true;
+        } else if (mSdCard != null && Utils.backWillExit(mSdCard.getAbsolutePath(), getPath())) {
+            FragmentUtils.remove(this);
+            return true;
         } else if (mSimpleEditor != null) {
+            getParentFragmentManager().popBackStack();
+            // FragmentUtils.remove(mSimpleEditor);
+            return true;
+        } else if (decompile != null) {
             getParentFragmentManager().popBackStack();
             // FragmentUtils.remove(mSimpleEditor);
             return true;
@@ -409,6 +419,7 @@ public class MyFilesFragment extends BaseFilesFragment implements View.OnClickLi
         }
         return false;
     }
+
     public void showProgress() {
         Bundle args = new Bundle();
         if (signedMode) {
@@ -464,7 +475,7 @@ public class MyFilesFragment extends BaseFilesFragment implements View.OnClickLi
         ViewUtils.setVisibleOrGone(mSelectAll, !isCanPaste);
         ViewUtils.setVisibleOrGone(mDelete, !isCanPaste);
         ViewUtils.setVisibleOrGone(mMoreMenuBottomBar, !isCanPaste);
-      //  ViewUtils.setVisibleOrGone(mSelectAll, !isCanPaste);
+        //  ViewUtils.setVisibleOrGone(mSelectAll, !isCanPaste);
         mClearSelection.setOnClickListener(v -> {
             mCopyHelper.clear();
             isCanPaste = false;

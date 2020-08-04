@@ -1,10 +1,12 @@
-package com.mrikso.apkrepacker.activity;
+package com.mrikso.apkrepacker.fragment;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -14,57 +16,63 @@ import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.widget.NestedScrollView;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.fragment.dialogs.LicensesDialogFragment;
 import com.mrikso.apkrepacker.utils.AppUtils;
 import com.mrikso.apkrepacker.utils.Constant;
+import com.mrikso.apkrepacker.utils.FragmentUtils;
+import com.mrikso.apkrepacker.viewmodel.ProjectsFragmentViewModel;
 
-public class AboutActivity extends BaseActivity implements View.OnClickListener {
+import org.jetbrains.annotations.NotNull;
+
+public class AboutFragment extends Fragment implements View.OnClickListener {
+
+    public static final String TAG = "AboutFragment";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_about);
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-//        getWindow().setNavigationBarColor(getResources().getColor(R.color.light_primary));
-        initView();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_about, container, false);
     }
 
-    public void initView() {
-        Animation animation = AnimationUtils.loadAnimation(this, R.anim.about_card_show);
-        NestedScrollView scroll_about = findViewById(R.id.scroll_about);
+    @Override
+    public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ;
+        initView(view);
+    }
+
+    public void initView(View view) {
+        Animation animation = AnimationUtils.loadAnimation(requireContext(), R.anim.about_card_show);
+        NestedScrollView scroll_about = view.findViewById(R.id.scroll_about);
         scroll_about.startAnimation(animation);
 
-        findViewById(R.id.ll_card_about_2_email).setOnClickListener(this);
-        findViewById(R.id.ll_card_about_2_git_hub).setOnClickListener(this);
-        findViewById(R.id.ll_card_about_2_website).setOnClickListener(this);
-        findViewById(R.id.ll_card_about_source_licenses).setOnClickListener(this);
-        findViewById(R.id.ll_card_about_2_telegram_channel).setOnClickListener(this);
-        findViewById(R.id.ll_card_about_2_mrikso).setOnClickListener(this);
-        findViewById(R.id.ll_card_about_2_phoenix).setOnClickListener(this);
-        findViewById(R.id.ll_card_about_2_easy_apk).setOnClickListener(this);
-        findViewById(R.id.ll_card_about_2_alex_strannik).setOnClickListener(this);
+        view.findViewById(R.id.ll_card_about_2_email).setOnClickListener(this);
+        view.findViewById(R.id.ll_card_about_2_git_hub).setOnClickListener(this);
+        view.findViewById(R.id.ll_card_about_2_website).setOnClickListener(this);
+        view.findViewById(R.id.ll_card_about_source_licenses).setOnClickListener(this);
+        view.findViewById(R.id.ll_card_about_2_telegram_channel).setOnClickListener(this);
+        view.findViewById(R.id.ll_card_about_2_mrikso).setOnClickListener(this);
+        view.findViewById(R.id.ll_card_about_2_phoenix).setOnClickListener(this);
+        view.findViewById(R.id.ll_card_about_2_easy_apk).setOnClickListener(this);
+        view.findViewById(R.id.ll_card_about_2_alex_strannik).setOnClickListener(this);
 
         AlphaAnimation alphaAnimation = new AlphaAnimation(0.0f, 1.0f);
         alphaAnimation.setDuration(200);
         alphaAnimation.setStartOffset(400);
 
         try {
-            ((ImageView) findViewById(R.id.tv_about_app_icon)).setImageDrawable(getPackageManager().getApplicationIcon(this.getPackageName()));
+            ((ImageView) view.findViewById(R.id.tv_about_app_icon)).setImageDrawable(requireContext().getPackageManager().getApplicationIcon(requireContext().getPackageName()));
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        findViewById(R.id.tv_about_app_name).startAnimation(animation);
-        TextView tv_about_version = findViewById(R.id.tv_about_version);
-        tv_about_version.setText(AppUtils.getVersionName(this));
+        view.findViewById(R.id.tv_about_app_name).startAnimation(animation);
+        TextView tv_about_version = view.findViewById(R.id.tv_about_version);
+        tv_about_version.setText(AppUtils.getVersionName(requireContext()));
         tv_about_version.startAnimation(alphaAnimation);
-        scroll_about.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> findViewById(R.id.app_bar).setSelected(scroll_about.canScrollVertically(-1)));
+       // scroll_about.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> view.findViewById(R.id.app_bar).setSelected(scroll_about.canScrollVertically(-1)));
     }
 
     @Override
@@ -77,7 +85,7 @@ public class AboutActivity extends BaseActivity implements View.OnClickListener 
                 try {
                     startActivity(intent);
                 } catch (Exception e) {
-                    Toast.makeText(AboutActivity.this, getString(R.string.about_not_found_email), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), getString(R.string.about_not_found_email), Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.ll_card_about_source_licenses:

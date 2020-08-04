@@ -240,7 +240,7 @@ public class StringsFragment extends Fragment implements AddLanguageDialogFragme
                 }
             }
         } catch (IOException | SAXException | ParserConfigurationException e) {
-            UIUtils.toast(App.getContext(), getResources().getString(R.string.toast_error_pasring));
+            UIUtils.toast(mContext, getResources().getString(R.string.toast_error_pasring));
             e.printStackTrace();
         }
     }
@@ -401,7 +401,7 @@ public class StringsFragment extends Fragment implements AddLanguageDialogFragme
             //transformer.transform(source, consoleResult);
 
         } catch (Exception e) {
-            UIUtils.toast(App.getContext(), getResources().getString(R.string.toast_error_translate_language));
+            UIUtils.toast(mContext, getResources().getString(R.string.toast_error_translate_language));
             e.printStackTrace();
         }
     }
@@ -417,7 +417,7 @@ public class StringsFragment extends Fragment implements AddLanguageDialogFragme
                     translateArray(dataTranslated, "-" + selectedLanguage);
                 }
             } catch (ParserConfigurationException e) {
-                UIUtils.toast(App.getContext(), getResources().getString(R.string.toast_error_translate_language));
+                UIUtils.toast(mContext, getResources().getString(R.string.toast_error_translate_language));
                 e.printStackTrace();
             }
         }
@@ -474,7 +474,7 @@ public class StringsFragment extends Fragment implements AddLanguageDialogFragme
             parseStings(resultString);
             reloadAdapter();
         } catch (Exception e) {
-            UIUtils.toast(App.getContext(), getResources().getString(R.string.toast_error_translate_language));
+            UIUtils.toast(mContext, getResources().getString(R.string.toast_error_translate_language));
             e.printStackTrace();
         }
     }

@@ -157,6 +157,14 @@ public class FragmentUtils {
                 .commit();
     }
 
+    //@Deprecated
+    public static void replace(@NonNull Fragment fragment, @NonNull FragmentManager fragmentManager, @IdRes int containerViewId, @Nullable String tag, boolean addToBackStack) {
+        fragmentManager.beginTransaction()
+                .setCustomAnimations(enter, exit, popEnter, popExit)
+                .replace(containerViewId, fragment, tag)
+                .commit();
+    }
+
     @Deprecated
     public static void replace(@NonNull Fragment fragment, @NonNull FragmentManager fragmentManager, @IdRes int containerViewId, @Nullable String tag, @AnimRes int enter, @AnimRes int exit) {
         //noinspection deprecation

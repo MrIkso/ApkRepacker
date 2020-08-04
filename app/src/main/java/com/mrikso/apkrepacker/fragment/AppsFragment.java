@@ -152,7 +152,7 @@ public class AppsFragment extends Fragment implements AppsAdapter.OnItemInteract
     @Override
     public void onDetach() {
         super.onDetach();
-        MainActivity.getInstance().refreshAdapter(false);
+        //MainActivity.getInstance().refreshAdapter(false);
     }
 
     @Override
@@ -181,7 +181,7 @@ public class AppsFragment extends Fragment implements AppsAdapter.OnItemInteract
                         FragmentUtils.replace(decompileFragment, getActivity().getSupportFragmentManager(), android.R.id.content, "DecompileFragment");
                     }
                 } catch (Exception e) {
-                    UIUtils.toast(App.getContext(), R.string.toast_error_in_decompile_installed_app);
+                    UIUtils.toast(requireContext(), R.string.toast_error_in_decompile_installed_app);
                     Log.e(TAG, "Error in decompile installed app");
                     e.printStackTrace();
                 }
@@ -194,7 +194,7 @@ public class AppsFragment extends Fragment implements AppsAdapter.OnItemInteract
                     SimpleEditorFragment simpleEditorFragment = SimpleEditorFragment.newInstance(applicationInfo.publicSourceDir);
                     FragmentUtils.replace(simpleEditorFragment, getActivity().getSupportFragmentManager(), android.R.id.content, SimpleEditorFragment.TAG);
                 } catch (Exception e) {
-                    UIUtils.toast(App.getContext(), R.string.toast_error_in_simple_edit_installed_app);
+                    UIUtils.toast(requireContext(), R.string.toast_error_in_simple_edit_installed_app);
                     Log.e(TAG, "Error in simple edit installed app");
                     e.printStackTrace();
                 }

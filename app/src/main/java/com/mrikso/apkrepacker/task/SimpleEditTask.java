@@ -1,8 +1,8 @@
 package com.mrikso.apkrepacker.task;
 
 import android.content.Context;
-import android.os.AsyncTask;
 
+import com.mrikso.apkrepacker.task.base.CoroutinesAsyncTask;
 import com.mrikso.apkrepacker.utils.common.DLog;
 import com.mrikso.apkrepacker.fragment.SimpleEditorFragment;
 import com.mrikso.apkrepacker.model.QickEdit;
@@ -14,7 +14,7 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 
-public class SimpleEditTask extends AsyncTask<File, Integer, Boolean> {
+public class SimpleEditTask extends CoroutinesAsyncTask<File, Integer, Boolean> {
 
     private static SignUtil signTool;
     private File resultFile;
@@ -29,12 +29,12 @@ public class SimpleEditTask extends AsyncTask<File, Integer, Boolean> {
     }
 
     @Override
-    protected void onPreExecute() {
+    public void onPreExecute() {
         simpleEditorFragment.showProgress();
     }
 
     @Override
-    protected Boolean doInBackground(File[] p1) {
+    public Boolean doInBackground(File[] p1) {
         boolean success = true;
         for (File file : p1) {
             if (!process(file))
@@ -44,12 +44,12 @@ public class SimpleEditTask extends AsyncTask<File, Integer, Boolean> {
     }
 
     @Override
-    protected void onPostExecute(Boolean result) {
+    public void onPostExecute(Boolean result) {
         simpleEditorFragment.hideProgress(result);
     }
 
     @Override
-    protected void onProgressUpdate(Integer... values) {
+    public void onProgressUpdate(Integer... values) {
         simpleEditorFragment.updateProgress(values[0]);
     }
 

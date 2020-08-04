@@ -1,15 +1,15 @@
 package com.mrikso.apkrepacker.task;
 
 import android.content.Context;
-import android.os.AsyncTask;
 
 import com.mrikso.apkrepacker.fragment.FindFragment;
 import com.mrikso.apkrepacker.model.SearchFinder;
+import com.mrikso.apkrepacker.task.base.CoroutinesAsyncTask;
 
 import java.io.File;
 import java.util.ArrayList;
 
-public class SearchFilesTask extends AsyncTask<String, Integer, Void> {
+public class SearchFilesTask extends CoroutinesAsyncTask<String, Integer, Void> {
 
     private FindFragment mFindFragment;
     private Context mContext;
@@ -32,12 +32,12 @@ public class SearchFilesTask extends AsyncTask<String, Integer, Void> {
     }
 
     @Override
-    protected void onPreExecute() {
+    public void onPreExecute() {
         mFindFragment.showProgress();
     }
 
     @Override
-    protected Void doInBackground(String... strings) {
+    public Void doInBackground(String... strings) {
         mFinder.setCurrentPath(new File(mPath));
         mFinder.setExtensions(mExt);
         mFinder.query(mSearchText);
@@ -45,12 +45,12 @@ public class SearchFilesTask extends AsyncTask<String, Integer, Void> {
     }
 
     @Override
-    protected void onProgressUpdate(Integer... items) {
+    public void onProgressUpdate(Integer... items) {
         mFindFragment.updateProgress(items);
     }
 
     @Override
-    protected void onPostExecute(Void result) {
+    public void onPostExecute(Void result) {
         super.onPostExecute(result);
         if (mFinder != null){
             mFindFragment.setResult(mFinder.getFileList());

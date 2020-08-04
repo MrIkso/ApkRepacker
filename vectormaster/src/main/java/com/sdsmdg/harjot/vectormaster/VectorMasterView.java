@@ -43,7 +43,7 @@ public class VectorMasterView extends View {
 
     private InputStream vectorStream;
     private File vectorFile;
-    private String resourcePrefix = "@/";
+    private String resourcePrefix = "@";
 //    private String projectPatch;
 
     public VectorMasterView(Context context) {

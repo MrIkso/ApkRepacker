@@ -1,33 +1,31 @@
-package com.mrikso.apkrepacker.adapter;
-
-import android.graphics.drawable.Drawable;
+package com.mrikso.apkrepacker.ui.projectlist;
 
 public class ProjectItem {
     private String appIcon;
     private String appName;
     private String appPackage;
     private String apkPatch;
-    private String appProjectPatch;
+    private String appProjectPath;
     private String appVersionName;
     private String appVersionCode;
 
     private boolean isChecked = false;
 
     //constructor initializing values
-    public ProjectItem(String icon, String appName, String appPackage, String appProjectPatch, String appVersionName, String appVersionCode) {
+    public ProjectItem(String icon, String appName, String appPackage, String appProjectPath, String appVersionName, String appVersionCode) {
         this.appIcon = icon;
         this.appName = appName;
         this.appPackage = appPackage;
-        this.appProjectPatch = appProjectPatch;
+        this.appProjectPath = appProjectPath;
         this.appVersionName = appVersionName;
         this.appVersionCode = appVersionCode;
     }
 
-    public ProjectItem(String icon, String appName, String appPackage, String appProjectPatch, String apkPatch, String appVersionName, String appVersionCode) {
+    public ProjectItem(String icon, String appName, String appPackage, String appProjectPath, String apkPatch, String appVersionName, String appVersionCode) {
         this.appIcon = icon;
         this.appName = appName;
         this.appPackage = appPackage;
-        this.appProjectPatch = appProjectPatch;
+        this.appProjectPath = appProjectPath;
         this.apkPatch = apkPatch;
         this.appVersionName = appVersionName;
         this.appVersionCode = appVersionCode;
@@ -50,8 +48,8 @@ public class ProjectItem {
         return apkPatch;
     }
 
-    public String getAppProjectPatch() {
-        return appProjectPatch;
+    public String getAppProjectPath() {
+        return appProjectPath;
     }
 
     public String getAppVersionName() {

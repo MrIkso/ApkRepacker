@@ -161,7 +161,7 @@ public class SearchFragment extends Fragment {
             if (isChecked) {
                 mPtef.setRegexMode(regex);
                 regex = true;
-                UIUtils.toast(App.getContext(), R.string.use_regex_to_find_tip);
+                UIUtils.toast(mContext, R.string.use_regex_to_find_tip);
             } else {
                 regex = false;
                 mPtef.setRegexMode(regex);

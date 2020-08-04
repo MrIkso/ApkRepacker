@@ -364,6 +364,14 @@
     <string name="move_error">Some or all items couldn\'t be moved!</string>
     <string name="title_apk_options">Apk Options</string>
     <string name="title_file_options">File Options</string>
+    <string name="title_home">Home</string>
+    <string name="about_check_updates">Check for updates</string>
+    <string name="management">Management</string>
+    <string name="title_build_apk">Build Apk</string>
+    <string name="step">Step %d/%d: %s</string>
+    <string name="action_show_log">Show log</string>
+    <string name="toast_copy_to_clipboard">Copied to clipboards</string>
+
     <plurals name="menu_copy_items_to">
         <item quantity="one">Copy %1$d item here</item>
         <item quantity="other">Copy %1$d items here</item>

@@ -14,16 +14,14 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
-import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.activity.CodeEditorActivity;
-import com.mrikso.apkrepacker.fragment.dialogs.ColorOptionsDialogFragment;
+import com.mrikso.apkrepacker.fragment.dialogs.bottomsheet.ColorOptionsDialogFragment;
 import com.mrikso.apkrepacker.ui.colorslist.ColorMeta;
 import com.mrikso.apkrepacker.ui.colorslist.ColorsAdapter;
 import com.mrikso.apkrepacker.ui.colorslist.ColorsViewModel;

@@ -25,11 +25,13 @@ import java.util.List;
 
 public class ColorsAdapter extends RecyclerView.Adapter<ColorsAdapter.ViewHolder> {
     public boolean changed;
+    private Context mContext;
     private LayoutInflater mInflater;
     private List<ColorMeta> mColors;
     private OnItemInteractionListener mListener;
 
     public ColorsAdapter(Context c) {
+        mContext = c;
         mInflater = LayoutInflater.from(c);
         setHasStableIds(true);
     }
@@ -120,7 +122,7 @@ public class ColorsAdapter extends RecyclerView.Adapter<ColorsAdapter.ViewHolder
             Object color = getAndroidColor("android.R$color", colorValue.substring(15));
             if (color != null) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    return App.getContext().getColor((Integer) color);
+                    return mContext.getColor((Integer) color);
                 }
             }
         } else if (colorValue.startsWith("#")) {
@@ -176,8 +178,8 @@ public class ColorsAdapter extends RecyclerView.Adapter<ColorsAdapter.ViewHolder
             });
 
             itemView.findViewById(R.id.app_item).setOnLongClickListener(v -> {
-                StringUtils.setClipboard(v.getContext(), mColors.get(getAdapterPosition()).label);
-                UIUtils.toast(v.getContext(), v.getContext().getString(R.string.color_name_copied, mColors.get(getAdapterPosition()).label));
+                StringUtils.setClipboard(mContext, mColors.get(getAdapterPosition()).label);
+                UIUtils.toast(mContext, v.getContext().getString(R.string.color_name_copied, mColors.get(getAdapterPosition()).label));
                 return true;
             });
         }

@@ -1,4 +1,4 @@
-package com.mrikso.apkrepacker.fragment;
+package com.mrikso.apkrepacker.viewmodel;
 
 import android.app.Application;
 

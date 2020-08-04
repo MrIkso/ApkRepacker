@@ -5,8 +5,10 @@ import android.os.AsyncTask;
 
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.fragment.DecompileFragment;
+import com.mrikso.apkrepacker.task.base.CoroutinesAsyncTask;
 import com.mrikso.apkrepacker.ui.preferences.PreferenceHelper;
 import com.mrikso.apkrepacker.utils.FileUtil;
+import com.mrikso.apkrepacker.utils.common.DLog;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -20,8 +22,8 @@ import brut.directory.ExtFile;
 import brut.util.Logger;
 import brut.util.OS;
 
-public class DecodeTask extends AsyncTask<File, CharSequence, Boolean> implements Logger {
-    private static Context mContext;
+public class DecodeTask extends CoroutinesAsyncTask<File, CharSequence, Boolean> implements Logger {
+    private Context mContext;
     private final int action;
     private final String name;
     public File resultFile;
@@ -35,7 +37,7 @@ public class DecodeTask extends AsyncTask<File, CharSequence, Boolean> implement
     }
 
     @Override
-    protected Boolean doInBackground(File[] p1) {
+    public Boolean doInBackground(File[] p1) {
         boolean success = true;
         for (File file : p1) {
             if (!process(file))
@@ -45,25 +47,27 @@ public class DecodeTask extends AsyncTask<File, CharSequence, Boolean> implement
     }
 
     @Override
-    protected void onPostExecute(Boolean result) {
+    public void onPostExecute(Boolean result) {
         final ArrayList<String> arrText = decompileFragment.getTextArray();
         decompileFragment.append(arrText);
         decompileFragment.decompileResult(resultFile);
     }
 
     @Override
-    protected void onProgressUpdate(CharSequence... values) {
+    public void onProgressUpdate(CharSequence... values) {
         decompileFragment.append(values[0]);
     }
 
     @Override
     public void info(int id, Object... args) {
         publishProgress(String.format("I: %s", getText(id, args)));
+        DLog.d(String.format("I: %s", getText(id, args)));
     }
 
     @Override
     public void warning(int id, Object... args) {
         publishProgress(String.format("W: %s", getText(id, args)));
+        DLog.d(String.format("W: %s", getText(id, args)));
     }
 
     @Override
@@ -79,6 +83,7 @@ public class DecodeTask extends AsyncTask<File, CharSequence, Boolean> implement
     @Override
     public void error(int id, Object... args) {
         publishProgress(String.format("E: %s", getText(id, args)));
+        DLog.d(String.format("E: %s", getText(id, args)));
     }
 
     @Override
@@ -92,8 +97,11 @@ public class DecodeTask extends AsyncTask<File, CharSequence, Boolean> implement
     private void log(String fmt, char ch, Throwable ex) {
         if (ex == null) return;
         publishProgress(String.format(fmt, ch, ex.getMessage()));
-        for (StackTraceElement ste : ex.getStackTrace())
+
+        for (StackTraceElement ste : ex.getStackTrace()) {
             publishProgress(String.format(fmt, ch, ste));
+            DLog.d(String.format(fmt, ch, ste));
+        }
         log(fmt, ch, ex.getCause());
     }
 

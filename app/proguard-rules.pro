@@ -33,3 +33,8 @@ private *;
 -keep class com.android.apksig.**{*;}
 -keep class com.google.common.**{*;}
 -keep class org.jf.dexlib2.**{*;}
+-keepclassmembernames class * {
+@com.google.gson.annotations.SerializedName <fields>;
+}
+
+#-keep @inteface com.google.gson.annotations.SerializedName

@@ -2,7 +2,6 @@ package com.mrikso.apkrepacker.task;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
@@ -10,9 +9,9 @@ import android.text.style.ForegroundColorSpan;
 import com.jecelyin.editor.v2.utils.ExtGrep;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.fragment.FindFragment;
+import com.mrikso.apkrepacker.task.base.CoroutinesAsyncTask;
 import com.mrikso.apkrepacker.ui.findresult.ChildData;
 import com.mrikso.apkrepacker.ui.findresult.ParentData;
-import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.ProjectUtils;
 import com.mrikso.apkrepacker.utils.StringUtils;
 import com.mrikso.apkrepacker.utils.ViewUtils;
@@ -21,7 +20,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchStringsTask extends AsyncTask<String, Integer, Void> {
+public class SearchStringsTask extends CoroutinesAsyncTask<String, Integer, Void> {
 
     private FindFragment mFindFragment;
     private List<ParentData> mParentList;
@@ -35,23 +34,23 @@ public class SearchStringsTask extends AsyncTask<String, Integer, Void> {
     }
 
     @Override
-    protected Void doInBackground(String... extGreps) {
+    public Void doInBackground(String... extGreps) {
         mParentList = getList(mExtGrep.execute());
         return null;
     }
 
     @Override
-    protected void onPreExecute() {
+    public void onPreExecute() {
         mFindFragment.showProgress();
     }
 
     @Override
-    protected void onProgressUpdate(Integer... items) {
+    public void onProgressUpdate(Integer... items) {
         mFindFragment.updateProgress(items);
     }
 
     @Override
-    protected void onPostExecute(Void result) {
+    public void onPostExecute(Void result) {
         super.onPostExecute(result);
         mFindFragment.setStringResult(mParentList);
         mFindFragment.hideProgress();

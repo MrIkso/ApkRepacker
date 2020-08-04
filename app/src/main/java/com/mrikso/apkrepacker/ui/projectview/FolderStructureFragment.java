@@ -2,7 +2,6 @@ package com.mrikso.apkrepacker.ui.projectview;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
@@ -26,6 +25,7 @@ import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.filepicker.FilePickerDialog;
 import com.mrikso.apkrepacker.fragment.dialogs.CreateNewClass;
 import com.mrikso.apkrepacker.fragment.dialogs.bottomsheet.ProjectFileOptionDialog;
+import com.mrikso.apkrepacker.task.base.CoroutinesAsyncTask;
 import com.mrikso.apkrepacker.utils.FileUtil;
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
@@ -237,7 +237,7 @@ public class FolderStructureFragment extends Fragment implements ProjectFileCont
             return null;
         }
         TreeNode root = TreeNode.root();
-        Runnable frame = () -> new LoadTree().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, root);
+        Runnable frame = () -> new LoadTree().execute( root);
         frame.run();
 
 
@@ -450,10 +450,10 @@ public class FolderStructureFragment extends Fragment implements ProjectFileCont
         boolean accept(T t);
     }
 
-    private class LoadTree extends AsyncTask<TreeNode, CharSequence, Boolean> {
+    private class LoadTree extends CoroutinesAsyncTask<TreeNode, CharSequence, Boolean> {
 
         @Override
-        protected Boolean doInBackground(TreeNode... root) {
+        public Boolean doInBackground(TreeNode... root) {
             TreeNode fileStructure = createFileStructure(mProject);
             if (fileStructure != null) {
                 root[0].addChildren(fileStructure);
@@ -477,7 +477,7 @@ public class FolderStructureFragment extends Fragment implements ProjectFileCont
         }
 
         @Override
-        protected void onPostExecute(Boolean result) {
+        public void onPostExecute(Boolean result) {
             progressBar.setVisibility(View.GONE);
             mContainerView.setVisibility(View.VISIBLE);
             mContainerView.removeAllViews();

@@ -94,6 +94,7 @@ public abstract class BaseFilesFragment extends Fragment implements FileListView
         super.onViewCreated(view, savedInstanceState);
         mFlipper = (WaitingViewFlipper) view.findViewById(R.id.flipper);
         mSdCard = FileUtil.getExternalStorage();
+
         // Get arguments
         boolean needsLoading = true;
         if (savedInstanceState == null) {

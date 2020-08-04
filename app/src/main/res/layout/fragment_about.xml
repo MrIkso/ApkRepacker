@@ -3,21 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorBackgroundTint">
-
-    <include layout="@layout/appbar" />
+    android:background="?android:windowBackground">
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scroll_about"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/normal_padding"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/normal_padding">
 
             <include layout="@layout/card_about_header" />
 
@@ -43,9 +40,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="?android:selectableItemBackground"
-                        android:orientation="horizontal"
                         android:clickable="true"
-                        android:focusable="true">
+                        android:focusable="true"
+                        android:orientation="horizontal">
 
                         <androidx.appcompat.widget.AppCompatImageView
                             android:layout_width="wrap_content"
@@ -68,9 +65,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="?android:selectableItemBackground"
-                        android:orientation="horizontal"
                         android:clickable="true"
-                        android:focusable="true">
+                        android:focusable="true"
+                        android:orientation="horizontal">
 
                         <androidx.appcompat.widget.AppCompatImageView
                             android:layout_width="wrap_content"
@@ -93,9 +90,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="?android:selectableItemBackground"
-                        android:orientation="horizontal"
                         android:clickable="true"
-                        android:focusable="true">
+                        android:focusable="true"
+                        android:orientation="horizontal">
 
                         <androidx.appcompat.widget.AppCompatImageView
                             android:layout_width="wrap_content"
@@ -118,9 +115,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="?android:selectableItemBackground"
-                        android:orientation="horizontal"
                         android:clickable="true"
-                        android:focusable="true">
+                        android:focusable="true"
+                        android:orientation="horizontal">
 
                         <androidx.appcompat.widget.AppCompatImageView
                             android:layout_width="wrap_content"
@@ -143,9 +140,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="?android:selectableItemBackground"
-                        android:orientation="horizontal"
                         android:clickable="true"
-                        android:focusable="true">
+                        android:focusable="true"
+                        android:orientation="horizontal">
 
                         <androidx.appcompat.widget.AppCompatImageView
                             android:layout_width="wrap_content"
@@ -168,9 +165,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="?android:selectableItemBackground"
-                        android:orientation="horizontal"
                         android:clickable="true"
-                        android:focusable="true">
+                        android:focusable="true"
+                        android:orientation="horizontal">
 
                         <androidx.appcompat.widget.AppCompatImageView
                             android:layout_width="wrap_content"
@@ -193,9 +190,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="?android:selectableItemBackground"
-                        android:orientation="horizontal"
                         android:clickable="true"
-                        android:focusable="true">
+                        android:focusable="true"
+                        android:orientation="horizontal">
 
                         <androidx.appcompat.widget.AppCompatImageView
                             android:layout_width="wrap_content"
@@ -218,9 +215,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="?android:selectableItemBackground"
-                        android:orientation="horizontal"
                         android:clickable="true"
-                        android:focusable="true">
+                        android:focusable="true"
+                        android:orientation="horizontal">
 
                         <androidx.appcompat.widget.AppCompatImageView
                             android:layout_width="wrap_content"
@@ -243,9 +240,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="?android:selectableItemBackground"
-                        android:orientation="horizontal"
                         android:clickable="true"
-                        android:focusable="true">
+                        android:focusable="true"
+                        android:orientation="horizontal">
 
                         <androidx.appcompat.widget.AppCompatImageView
                             android:layout_width="wrap_content"

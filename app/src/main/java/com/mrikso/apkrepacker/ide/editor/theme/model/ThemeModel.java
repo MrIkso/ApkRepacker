@@ -1,8 +1,11 @@
 package com.mrikso.apkrepacker.ide.editor.theme.model;
 
+import androidx.annotation.Keep;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+@Keep
 public class ThemeModel {
 
     @SerializedName("theme_name")

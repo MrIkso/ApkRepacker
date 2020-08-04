@@ -19,7 +19,7 @@ public class Smali2Java {
         //File tmp1 = File.createTempFile("temp", ".arsc");
         try {
             dexBuilder.writeTo(new FileDataStore(tmp));
-            // ZipFile zipFile = new ZipFile(ProjectItem.getApkPatch());
+            // ZipFile zipFile = new ZipFile(ProjectItemJson.getApkPatch());
             //  ZipEntry entry = ZipUtils.getEntry(zipFile, "resources.arsc");
             //  InputStream in = zipFile.getInputStream(entry);
             // FileOutputStream fileOutputStream = new  FileOutputStream(tmp1);

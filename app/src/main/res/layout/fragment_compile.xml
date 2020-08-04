@@ -4,6 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:clickable="true"
+    android:focusable="true"
     android:background="?android:windowBackground"
     tools:context=".fragment.CompileFragment">
 
@@ -41,22 +43,23 @@
                 android:layout_margin="20dp"
                 android:text="@string/compile_in_progress"
                 android:textStyle="bold"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-            <ListView
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:typeface="monospace"
                 android:padding="4dp"
                 android:id="@+id/log"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 
         </LinearLayout>
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_copy"
+        <!--<com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_show_log"
             style="@style/MD2Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/normal_padding"
-            android:text="@string/action_copy_log"
-            android:visibility="gone" />
+            android:text="@string/action_show_log"
+            android:visibility="gone" />-->
     </LinearLayout>
 
     <!--разметка когда апк собрано-->

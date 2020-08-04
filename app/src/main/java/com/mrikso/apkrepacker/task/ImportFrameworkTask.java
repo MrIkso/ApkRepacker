@@ -1,12 +1,11 @@
 package com.mrikso.apkrepacker.task;
 
 import android.content.Context;
-import android.os.AsyncTask;
 
 import com.jecelyin.common.utils.UIUtils;
-import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.fragment.MyFilesFragment;
+import com.mrikso.apkrepacker.task.base.CoroutinesAsyncTask;
 
 import java.io.File;
 import java.util.logging.Level;
@@ -15,7 +14,7 @@ import brut.androlib.ApkOptions;
 import brut.androlib.res.AndrolibResources;
 import brut.util.Logger;
 
-public class ImportFrameworkTask extends AsyncTask<File, CharSequence, Boolean> implements Logger {
+public class ImportFrameworkTask extends CoroutinesAsyncTask<File, CharSequence, Boolean> implements Logger {
     private Context mContext;
     private MyFilesFragment dialog;
 
@@ -25,7 +24,7 @@ public class ImportFrameworkTask extends AsyncTask<File, CharSequence, Boolean> 
     }
 
     @Override
-    protected Boolean doInBackground(File... files) {
+    public Boolean doInBackground(File... files) {
         boolean success = true;
         for (File file : files) {
             if (!process(file))
@@ -35,21 +34,21 @@ public class ImportFrameworkTask extends AsyncTask<File, CharSequence, Boolean> 
     }
 
     @Override
-    protected void onPostExecute(Boolean result) {
+    public void onPostExecute(Boolean result) {
         super.onPostExecute(result);
         dialog.hideProgress();
         if(!result)
-            UIUtils.toast(App.getContext(), R.string.toast_error_import_framework_failed);
+            UIUtils.toast(mContext, R.string.toast_error_import_framework_failed);
 
     }
 
     @Override
-    protected void onProgressUpdate(CharSequence... values) {
+    public void onProgressUpdate(CharSequence... values) {
         dialog.updateProgress();
     }
 
     @Override
-    protected void onPreExecute() {
+    public void onPreExecute() {
         dialog.showProgress();
     }
     protected boolean process(File file) {

@@ -2,7 +2,6 @@ package com.mrikso.apkrepacker.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,12 +11,12 @@ import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.mrikso.apkrepacker.R;
-import com.mrikso.apkrepacker.adapter.ProjectItem;
+import com.mrikso.apkrepacker.task.base.CoroutinesAsyncTask;
+import com.mrikso.apkrepacker.ui.projectlist.ProjectItem;
 import com.mrikso.apkrepacker.database.ITabDatabase;
 import com.mrikso.apkrepacker.database.JsonDatabase;
 import com.mrikso.apkrepacker.utils.FileUtil;
@@ -68,36 +67,36 @@ public class AboutProjectFragment extends Fragment {
         super.onViewCreated(view, bundle);
 //        setStyle(DialogFragment.STYLE_NORMAL, !Theme.getInstance(mContext).getCurrentTheme().isDark() ? R.style.DialogFullscreen : R.style.DialogFullscreen_Dark);
         apkIcon.setImageDrawable(ProjectUtils.getProjectIconDrawable(mProjectItem.getAppIcon(), mContext));
-        patchPrj.setText(mProjectItem.getAppProjectPatch());
+        patchPrj.setText(mProjectItem.getAppProjectPath());
         appPackage.setText(mProjectItem.getAppPackage());
         appName.setText(mProjectItem.getAppName());
         appVersion.setText(getString(R.string.about_version, mProjectItem.getAppVersionName(), mProjectItem.getAppVersionCode()));
-        lastWrite.setText(FileUtil.getLastModified(new File(mProjectItem.getAppProjectPatch())));
-        mProjectNotes.setText(mDatabase.getProjectNotes(mProjectItem.getAppProjectPatch()));
-        new GetProjectSizeTask().execute(mProjectItem.getAppProjectPatch());
+        lastWrite.setText(FileUtil.getLastModified(new File(mProjectItem.getAppProjectPath())));
+        mProjectNotes.setText(mDatabase.getProjectNotes(mProjectItem.getAppProjectPath()));
+        new GetProjectSizeTask().execute(mProjectItem.getAppProjectPath());
         mFabSave.setOnClickListener(v ->{
-            mDatabase.addProjectNotes(mProjectNotes.getText().toString(), mProjectItem.getAppProjectPatch());
+            mDatabase.addProjectNotes(mProjectNotes.getText().toString(), mProjectItem.getAppProjectPath());
         });
         //createDate.setText(FileUtil.getCreateTime(new File(projectPath)));
         toolbar.setNavigationOnClickListener(v1 -> FragmentUtils.remove(this));
     }
     @SuppressLint("StaticFieldLeak")
-    class GetProjectSizeTask extends AsyncTask<String, String, String> {
+    class GetProjectSizeTask extends CoroutinesAsyncTask<String, String, String> {
 
         @SuppressLint("WrongThread")
         @Override
-        protected String doInBackground(String... projectPath) {
+        public String doInBackground(String... projectPath) {
             return FileUtil.getFormatFolderSize(getContext(), new File(projectPath[0]));
         }
 
         @Override
-        protected void onPreExecute() {
+        public void onPreExecute() {
             super.onPreExecute();
             size.setText("....  ....");
         }
 
         @Override
-        protected void onPostExecute(String result) {
+        public void onPostExecute(String result) {
             super.onPostExecute(result);
             size.setText(result);
         }

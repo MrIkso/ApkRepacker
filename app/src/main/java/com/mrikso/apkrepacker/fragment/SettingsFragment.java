@@ -27,6 +27,8 @@ import com.mrikso.apkrepacker.utils.Theme;
 
 public class SettingsFragment extends PreferenceFragmentCompat implements BaseBottomSheetDialogFragment.OnDismissListener, DarkLightThemeSelectionDialogFragment.OnDarkLightThemesChosenListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
+    public static final String TAG = "SettingsFragment";
+
     private PreferenceHelper mHelper;
     private Preference mThemePref;
 

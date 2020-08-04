@@ -157,10 +157,10 @@
         <item name="simpleThemeTextSecondaryColor">@color/colorTextSecondaryRenaLight</item>
     </style>
 
-    <style name="BottomSheetDialog" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
-        <item name="colorPrimary">@color/light_accent</item>
+    <style name="BottomSheetDialog" parent="ThemeOverlay.MaterialComponents.Dialog">
+       <!-- <item name="colorPrimary">@color/light_accent</item>
         <item name="colorPrimaryDark">@color/light_accent</item>
-        <item name="colorAccent">@color/light_accent</item>
+        <item name="colorAccent">@color/light_accent</item>-->
         <item name="android:colorBackgroundCacheHint">@null</item>
         <item name="android:windowBackground">#00000000</item>
         <item name="android:statusBarColor">#00000000</item>

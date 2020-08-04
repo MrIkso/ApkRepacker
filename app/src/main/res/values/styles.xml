@@ -191,7 +191,7 @@
     </style>
 
     <!-- BottomSheet styles-->
-    <style name="BottomSheetDialog" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+    <style name="BottomSheetDialog" parent="ThemeOverlay.MaterialComponents.Dialog">
       <!--  <item name="colorPrimary">?attr/simpleThemePrimaryColor</item>
         <item name="colorPrimaryDark">?attr/simpleThemePrimaryColor</item>
         <item name="colorAccent">?attr/simpleThemeAccentColor</item>-->
@@ -206,7 +206,7 @@
         <item name="bottomSheetStyle">@style/BottomSheetDialogStyle</item>
     </style>
 
-    <style name="BottomSheetDialog.Dark" parent="Theme.MaterialComponents.BottomSheetDialog">
+    <style name="BottomSheetDialog.Dark" parent="ThemeOverlay.MaterialComponents.Dialog">
      <!--   <item name="colorPrimary">?attr/simpleThemePrimaryColor</item>
         <item name="colorPrimaryDark">?attr/simpleThemePrimaryColor</item>
         <item name="colorAccent">?attr/simpleThemeAccentColor</item>-->
@@ -350,6 +350,7 @@
         <item name="android:textSize">@dimen/text_size_14</item>
         <item name="android:textStyle">bold</item>
         <item name="android:clickable">true</item>
+        <item name="android:textColor">?colorAccent</item>
         <item name="rippleColor">?colorAccent</item>
         <item name="iconGravity">textStart</item>
         <item name="iconPadding">@dimen/checkbox_margin</item>

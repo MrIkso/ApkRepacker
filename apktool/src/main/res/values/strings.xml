@@ -6,4 +6,5 @@
     <string name="log_decoding_shared_library">Decoding Shared Library \(%1$s\), pkgId: %2$d</string>
     <string name="log_report_error">Please report this application to Apktool to get a fix: https://github.com/iBotPeaches/Apktool/issues/1728</string>
     <string name="log_unknown_skip_bytes">"Unknown data detected. Skipping: %d byte\(s\)"</string>
+    <string name="assemble_dex_detail">%d/%d files assembled</string>
 </resources>

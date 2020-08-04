@@ -1,18 +1,17 @@
 package com.mrikso.apkrepacker.task;
 
 import android.content.Context;
-import android.os.AsyncTask;
 
 import com.jecelyin.common.utils.UIUtils;
-import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.fragment.MyFilesFragment;
+import com.mrikso.apkrepacker.task.base.CoroutinesAsyncTask;
 import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.SignUtil;
 
 import java.io.File;
 
-public class SignTask extends AsyncTask<File, CharSequence, Boolean> {
+public class SignTask extends CoroutinesAsyncTask<File, CharSequence, Boolean> {
     private final SignUtil signTool;
     public File resultFile;
     private Context mContext;
@@ -25,7 +24,7 @@ public class SignTask extends AsyncTask<File, CharSequence, Boolean> {
     }
 
     @Override
-    protected Boolean doInBackground(File[] p1) {
+    public Boolean doInBackground(File[] p1) {
         boolean success = true;
         for (File file : p1) {
             if (!process(file))
@@ -35,22 +34,22 @@ public class SignTask extends AsyncTask<File, CharSequence, Boolean> {
     }
 
     @Override
-    protected void onPostExecute(Boolean result) {
+    public void onPostExecute(Boolean result) {
         super.onPostExecute(result);
         dialog.hideProgress();
         dialog.signedApk = resultFile;
         if(!result)
-        UIUtils.toast(App.getContext(), R.string.toast_error_sign_failed);
+        UIUtils.toast(mContext, R.string.toast_error_sign_failed);
 
     }
 
     @Override
-    protected void onProgressUpdate(CharSequence... values) {
+    public void onProgressUpdate(CharSequence... values) {
         dialog.updateProgress();
     }
 
     @Override
-    protected void onPreExecute() {
+    public void onPreExecute() {
         dialog.showProgress();
     }
 

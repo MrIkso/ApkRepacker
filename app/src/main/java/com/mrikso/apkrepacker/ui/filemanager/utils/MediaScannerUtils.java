@@ -20,11 +20,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.provider.MediaStore;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.mrikso.apkrepacker.task.base.CoroutinesAsyncTask;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -124,9 +125,9 @@ public abstract class MediaScannerUtils {
         return null;
     }
 
-    private static class DeleteFromMediaStoreAsyncTask extends AsyncTask<DeleteTaskParams, Void, Void> {
+    private static class DeleteFromMediaStoreAsyncTask extends CoroutinesAsyncTask<DeleteTaskParams, Void, Void> {
         @Override
-        protected Void doInBackground(DeleteTaskParams... params) {
+        public Void doInBackground(DeleteTaskParams... params) {
             Context context = params[0].context.getApplicationContext();
             File file = params[0].file;
             List<String> paths = params[0].paths;
@@ -152,7 +153,7 @@ public abstract class MediaScannerUtils {
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
+        public void onPostExecute(Void aVoid) {
            // Logger.logV(Logger.TAG_MEDIASCANNER, "Async removal of references from MediaStore complete");
         }
     }

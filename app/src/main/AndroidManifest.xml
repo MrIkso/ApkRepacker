@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:name=".App"
@@ -37,14 +38,6 @@
             android:name=".activity.AppEditorActivity"
             android:parentActivityName=".activity.MainActivity" />
         <activity
-            android:name=".activity.AboutActivity"
-            android:label="@string/title_activity_about"
-            android:parentActivityName=".activity.MainActivity" />
-        <activity
-            android:name=".activity.SettingsActivity"
-            android:label="@string/settings"
-            android:parentActivityName=".activity.MainActivity" />
-        <activity
             android:name=".activity.ExceptionActivity"
             android:label="@string/title_activity_exception" />
         <activity android:name=".activity.CodeEditorActivity"
@@ -62,6 +55,9 @@
             android:grantUriPermissions="true" />
         <service
             android:name=".service.CopyService"
+            android:exported="false" />
+        <service
+            android:name=".service.BuildService"
             android:exported="false" />
     </application>
 

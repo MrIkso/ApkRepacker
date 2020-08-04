@@ -1,15 +1,14 @@
 package com.mrikso.apkrepacker.autotranslator.translator;
 
-import android.os.AsyncTask;
-
 import com.mrikso.apkrepacker.activity.AutoTranslatorActivity;
+import com.mrikso.apkrepacker.task.base.CoroutinesAsyncTask;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class TranslateTask extends AsyncTask<Void, List<TranslateItem>, Boolean> {
+public class TranslateTask extends CoroutinesAsyncTask<Void, List<TranslateItem>, Boolean> {
 
     private List<TranslateItem> untranslated;
     private WeakReference<AutoTranslatorActivity> activityRef;
@@ -20,17 +19,17 @@ public class TranslateTask extends AsyncTask<Void, List<TranslateItem>, Boolean>
     }
 
     @Override
-    protected void onPreExecute() {
+    public void onPreExecute() {
 
     }
 
     @Override
-    protected void onPostExecute(Boolean result) {
+    public void onPostExecute(Boolean result) {
         activityRef.get().translateCompleted();
     }
 
     @Override
-    protected Boolean doInBackground(Void... params) {
+    public Boolean doInBackground(Void... params) {
         Random r = new Random(System.currentTimeMillis());
         final int maxItems = 15 + r.nextInt(5);
         final int maxChars = 1000;
@@ -115,7 +114,7 @@ public class TranslateTask extends AsyncTask<Void, List<TranslateItem>, Boolean>
 
     @SafeVarargs
     @Override
-    protected final void onProgressUpdate(List<TranslateItem>... args) {
+    public final void onProgressUpdate(List<TranslateItem>... args) {
         List<TranslateItem> translated = args[0];
         activityRef.get().updateView(translated);
     }

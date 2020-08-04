@@ -24,6 +24,7 @@ import java.io.File
 import java.util.*
 
 class DecompileFragment : Fragment() {
+
     private var listView: ListView? = null
     private var adapter: LogAdapter? = null
     var textArray: ArrayList<String>? = null
@@ -172,6 +173,9 @@ class DecompileFragment : Fragment() {
 
     /* new instance functions */
     companion object {
+
+        const val TAG = "DecopmileFragment"
+
         @JvmStatic fun newInstance(name: String?, selected: String?, f: Boolean): DecompileFragment {
             val fragment = DecompileFragment()
             val args = Bundle()

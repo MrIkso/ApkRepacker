@@ -33,18 +33,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:gravity="center"
+
         android:orientation="vertical"
         android:paddingLeft="@dimen/normal_padding"
         android:paddingRight="@dimen/normal_padding"
         android:paddingBottom="@dimen/checkbox_margin">
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/message_build_file_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size"
+            tools:text="10m" />
+
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/message_build_file_saved"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/text_size"
-            tools:text="Файл сохранен в: /storage/emulated/0ApkRepacker/output/out.appk" />
+            tools:text="File saved to: /storage/emulated/0/ApkRepacker/output/out.apk" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -80,5 +87,12 @@
             android:layout_marginTop="@dimen/checkbox_margin"
             android:text="@string/uninstall_app"
             android:visibility="gone" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_show_log"
+            style="@style/MD2Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/action_show_log" />
     </LinearLayout>
+
 </LinearLayout>
