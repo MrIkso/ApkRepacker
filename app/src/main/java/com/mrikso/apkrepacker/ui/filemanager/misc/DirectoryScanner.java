@@ -327,7 +327,7 @@ class SizeComparator extends FileHolderComparator {
 
     @Override
     protected int comp(FileHolder f1, FileHolder f2) {
-        return ((Long) f1.getFile().length()).compareTo(f2.getFile().length());
+        return Long.compare(f1.getFile().length(), f2.getFile().length());
     }
 }
 
@@ -349,6 +349,6 @@ class LastModifiedComparator extends FileHolderComparator {
 
     @Override
     protected int comp(FileHolder f1, FileHolder f2) {
-        return ((Long) f1.getFile().lastModified()).compareTo(f2.getFile().lastModified());
+        return Long.compare(f1.getFile().lastModified(), f2.getFile().lastModified());
     }
 }

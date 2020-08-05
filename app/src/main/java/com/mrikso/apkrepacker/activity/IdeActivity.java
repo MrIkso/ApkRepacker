@@ -79,6 +79,7 @@ import org.apache.commons.io.IOUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Objects;
 
@@ -512,7 +513,7 @@ public abstract class IdeActivity extends BaseActivity implements MenuItem.OnMen
             // FileManager fileManager = new FileManager(this);
             File newFile = File.createTempFile(name, ".java");
             FileOutputStream output = new FileOutputStream(newFile);
-            IOUtils.write(content.toString(), output);
+            IOUtils.write(content.toString(), output, "utf-8");
             output.close();
             mTabManager.newTab(newFile);
         } catch (Exception e) {

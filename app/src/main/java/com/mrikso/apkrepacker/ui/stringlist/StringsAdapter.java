@@ -122,7 +122,7 @@ public class StringsAdapter extends RecyclerView.Adapter<StringsAdapter.ViewHold
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
 
-                dataFilter.putAll((Map<String, String>) results.values);
+                dataFilter = (Map<String, String>) results.values;
                 notifyDataSetChanged();
 
             }

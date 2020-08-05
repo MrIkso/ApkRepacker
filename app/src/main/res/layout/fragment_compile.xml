@@ -44,13 +44,18 @@
                 android:text="@string/compile_in_progress"
                 android:textStyle="bold"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"
+                android:fillViewport="true">
             <androidx.appcompat.widget.AppCompatTextView
                 android:typeface="monospace"
                 android:padding="4dp"
                 android:id="@+id/log"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
-
+            </androidx.core.widget.NestedScrollView>
         </LinearLayout>
         <!--<com.google.android.material.button.MaterialButton
             android:id="@+id/btn_show_log"

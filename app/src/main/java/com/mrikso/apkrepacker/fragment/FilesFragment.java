@@ -61,7 +61,7 @@ public class FilesFragment extends BaseFilesFragment implements OnBackPressedLis
     private AppCompatImageButton mClearSelection;
     private AppCompatImageButton mSelectAll, mCut, mDelete, mCopy, mRename, mMoreMenuBottomBar, mCreateDirectory;
 
-    private ArrayList<FileHolder> mSelected = new ArrayList<>();
+   // private ArrayList<FileHolder> mSelected = new ArrayList<>();
     private PanelActions mActions;
     private CopyHelper mCopyHelper;
 
@@ -186,7 +186,7 @@ public class FilesFragment extends BaseFilesFragment implements OnBackPressedLis
             if (isSelected) {
                 mCopyHelper = App.get().getCopyHelper();
                 mCopyHelper.setFilesFragment(this);
-                mSelected.addAll(getFileAdapter().getSelectedItems());
+            //    mSelected.addAll(getFileAdapter().getSelectedItems());
                 mSelectAll.setOnClickListener(v -> getFileAdapter().selectAll());
                 mClearSelection.setOnClickListener(v -> getFileAdapter().clearSelection());
                 mSelectedCount.setText(getString(R.string.selected, getFileAdapter().getSelectedItemCount()));
@@ -330,9 +330,14 @@ public class FilesFragment extends BaseFilesFragment implements OnBackPressedLis
                 invalidateClipboardPanel();
                 break;
             case R.id.action_delete:
-                FileHolder[] params = mSelected.toArray(new FileHolder[mSelected.size()]);
-                mActions.actionDelete(params);
-                getFileAdapter().clearSelection();
+                UIUtils.showConfirmDialog(requireContext(), R.string.confirm_delete, new UIUtils.OnClickCallback() {
+                    @Override
+                    public void onOkClick() {
+                        FileHolder[] params = getFileAdapter().getSelectedItems().toArray(new FileHolder[getFileAdapter().getSelectedItemCount()]);
+                        mActions.actionDelete(params);
+                        getFileAdapter().clearSelection();
+                    }
+                });
                 break;
             case R.id.action_share:
                 mActions.actionShare(getFileAdapter().getSelectedItems().get(0));
@@ -396,7 +401,7 @@ public class FilesFragment extends BaseFilesFragment implements OnBackPressedLis
                 mFab.close(true);
                 mActions.actionCreateNewDirectory(new File(getPath()));
                 break;
-            case R.id.fab_copy_file:
+            case R.id.fab_copy_folder:
                 mFab.close(true);
                 new FilePickerDialog(requireContext())
                         .setTitleText(getString(R.string.select_directory))
@@ -426,7 +431,7 @@ public class FilesFragment extends BaseFilesFragment implements OnBackPressedLis
                         })
                         .show();
                 break;
-            case R.id.fab_copy_folder:
+            case R.id.fab_copy_file:
                 mFab.close(true);
                 new FilePickerDialog(requireContext())
                         .setTitleText(getString(R.string.select_file))

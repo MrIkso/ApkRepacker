@@ -39,6 +39,11 @@ public class TranslateStringsAdapter extends RecyclerView.Adapter<TranslateStrin
         notifyDataSetChanged();
     }
 
+    public void clear(){
+        this.mTranslateItemList.clear();
+        notifyDataSetChanged();
+    }
+
     public void setTranslatedFinished(boolean translateFinished) {
         this.translateFinished = translateFinished;
     }

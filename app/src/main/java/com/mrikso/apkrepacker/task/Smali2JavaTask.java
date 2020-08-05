@@ -104,7 +104,7 @@ public class Smali2JavaTask extends AsyncTask<File, CharSequence, Boolean> {
     @Override
     protected void onPostExecute(Boolean result) {
         super.onPostExecute(result);
-        editorActivity.openJavaText(javaCode, FileUtil.getNameVithoutExt(smali));
+        editorActivity.openJavaText(javaCode, smali.getName()/*FileUtil.getNameVithoutExt(smali)*/);
         //dialog.hideProgress();
         if (!result)
             UIUtils.toast(App.getContext(), R.string.toast_error_decompile_smali_to_java);
