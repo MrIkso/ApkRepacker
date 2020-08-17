@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Material.CardView.BottomSheet"
+    app:strokeWidth="0dp">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="@dimen/checkbox_dimens"
+            android:layout_height="5dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/bottom_sheet_dialog_indicator" />
+        <TextView
+            android:id="@+id/open_with"
+            android:drawableStart="@drawable/ic_open_with"
+            android:text="@string/action_open_with"
+            style="@style/ActionItem" />
+
+        <TextView
+            android:id="@+id/add_new_string"
+            android:drawableStart="@drawable/ic_add"
+            android:text="@string/action_add_new_string"
+            style="@style/ActionItem" />
+
+        <TextView
+            android:id="@+id/add_new_language"
+            android:drawableStart="@drawable/ic_add"
+            android:text="@string/action_add_new_lang"
+            style="@style/ActionItem" />
+
+        <TextView
+            android:id="@+id/auto_translate_language"
+            android:drawableStart="@drawable/ic_translate"
+            android:text="@string/action_auto_translate_lang"
+            style="@style/ActionItem" />
+
+        <TextView
+            android:id="@+id/auto_translate_language_with"
+            android:drawableStart="@drawable/ic_dictionary"
+            android:text="@string/action_auto_translate_lang_dictionary"
+            style="@style/ActionItem" />
+
+        <TextView
+            android:id="@+id/save_as_dictionary"
+            android:drawableStart="@drawable/ic_save_white"
+            android:text="@string/action_save_as_dictionary"
+            style="@style/ActionItem" />
+
+    </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</com.google.android.material.card.MaterialCardView>

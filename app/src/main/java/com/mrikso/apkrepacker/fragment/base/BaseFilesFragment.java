@@ -31,6 +31,7 @@ import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.IntegerArray;
 import com.mrikso.apkrepacker.utils.PermissionsUtils;
 import com.mrikso.apkrepacker.utils.PreferenceUtils;
+import com.mrikso.apkrepacker.utils.ScrollingViewOnApplyWindowInsetsListener;
 import com.mrikso.apkrepacker.view.WaitingViewFlipper;
 
 import org.jetbrains.annotations.NotNull;
@@ -39,6 +40,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import me.zhanghai.android.fastscroll.FastScroller;
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
 
 public abstract class BaseFilesFragment extends Fragment implements FileListViewHolder.OnItemClickListener{
@@ -59,7 +61,6 @@ public abstract class BaseFilesFragment extends Fragment implements FileListView
     public int mFilesCount;
     private IntegerArray integerArray = new IntegerArray();
     private int lastFirstVisiblePosition = 0;
-    private int selectedPosition = RecyclerView.NO_POSITION;
     public File mSdCard;
     public boolean mFlag = false;
 
@@ -93,7 +94,7 @@ public abstract class BaseFilesFragment extends Fragment implements FileListView
     public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mFlipper = (WaitingViewFlipper) view.findViewById(R.id.flipper);
-        mSdCard = FileUtil.getExternalStorage();
+        mSdCard = FileUtil.getExternalStorage(requireContext());
 
         // Get arguments
         boolean needsLoading = true;
@@ -113,12 +114,15 @@ public abstract class BaseFilesFragment extends Fragment implements FileListView
         }
 
         mFileList = view.findViewById(R.id.file_list);
+
         mAdapter = new FileAdapter(view.getContext());
         mAdapter.addAll(mFiles);
         mAdapter.notifyDataSetChanged();
         mAdapter.setOnItemClickListener(this);
         mFileList.setAdapter(mAdapter);
-        new FastScrollerBuilder(mFileList).useMd2Style().build();
+        FastScroller fastScroller= new FastScrollerBuilder(mFileList).useMd2Style().build();
+        mFileList.setOnApplyWindowInsetsListener(new ScrollingViewOnApplyWindowInsetsListener(
+                mFileList, fastScroller));
     }
 
 
@@ -239,12 +243,14 @@ public abstract class BaseFilesFragment extends Fragment implements FileListView
 
                     if (mAdapter.anySelected()) {
                         mAdapter.clear();
-                        mAdapter.clearSelection();}
+                        mAdapter.clearSelection();
+                        mAdapter.addAll(mFiles);
+                    }
                     else {
                         mAdapter.clear();
                         mAdapter.addAll(mFiles);
                     }
-                    mAdapter.notifyDataSetChanged();
+                   mAdapter.notifyDataSetChanged();
 
                     mDirsCount = c.listDir.size();
                     mFilesCount = c.listFile.size();

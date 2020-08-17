@@ -31,12 +31,15 @@ import com.mrikso.apkrepacker.ui.findresult.ParentViewHolder;
 import com.mrikso.apkrepacker.ui.findresult.files.SearchListAdapter;
 import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.IntentUtils;
+import com.mrikso.apkrepacker.utils.ScrollingViewOnApplyWindowInsetsListener;
 import com.mrikso.apkrepacker.utils.StringUtils;
+import com.mrikso.apkrepacker.utils.common.DLog;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.zhanghai.android.fastscroll.FastScroller;
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
 
 public class FindFragment extends Fragment implements ProgressDialogFragment.ProgressDialogFragmentListener, FindFileOptionDialogFragment.ItemClickListener,
@@ -47,6 +50,7 @@ public class FindFragment extends Fragment implements ProgressDialogFragment.Pro
     private boolean mFindFiles;
     private String mPath, mSearchText, mSearchFilename;
     private ArrayList<String> mExt;
+    private ArrayList<String> mFiles = new ArrayList<>();
     private DialogFragment mDialogProgress;
     private Bundle mBundle;
     private Context mContext;
@@ -59,7 +63,7 @@ public class FindFragment extends Fragment implements ProgressDialogFragment.Pro
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initValue();
+        startSearch();
     }
 
     @Override
@@ -76,13 +80,17 @@ public class FindFragment extends Fragment implements ProgressDialogFragment.Pro
         super.onViewCreated(view, bundle);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        new FastScrollerBuilder(mRecyclerView).useMd2Style().build();
+        FastScroller fastScroller = new FastScrollerBuilder(mRecyclerView).useMd2Style().build();
+        mRecyclerView.setOnApplyWindowInsetsListener(new ScrollingViewOnApplyWindowInsetsListener(mRecyclerView, fastScroller));
+    }
 
+    public void startSearch(){
+        initValue();
         if (!mFindFiles) {
-            SearchStringsTask searchStringsTask = new SearchStringsTask(mContext, this);
+            SearchStringsTask searchStringsTask = new SearchStringsTask(requireContext(), this);
             searchStringsTask.execute();
         } else {
-            SearchFilesTask task = new SearchFilesTask(mContext, this, new SearchFinder());
+            SearchFilesTask task = new SearchFilesTask(requireContext(), this, new SearchFinder());
             task.setArguments(mPath, mSearchFilename, mExt);
             task.execute();
         }
@@ -98,9 +106,10 @@ public class FindFragment extends Fragment implements ProgressDialogFragment.Pro
         }
     }
 
-    public void setStringResult(List<ParentData> mParentList) {
-        if (!mParentList.isEmpty()) {
-            FoundStringsAdapter mFindStringsAdapter = new FoundStringsAdapter(mContext, this, mParentList);
+    public void setStringResult(List<ParentData> parentList, ArrayList<String> files) {
+        if (!parentList.isEmpty()) {
+            mFiles = files;
+            FoundStringsAdapter mFindStringsAdapter = new FoundStringsAdapter(mContext, this, parentList);
             mRecyclerView.setAdapter(mFindStringsAdapter);
         } else {
             UIUtils.toast(mContext, R.string.find_not_found);
@@ -116,6 +125,7 @@ public class FindFragment extends Fragment implements ProgressDialogFragment.Pro
             mSearchFilename = mBundle.getString("searchFileName");
             mSearchText = mBundle.getString("searchText");
             mExt = mBundle.getStringArrayList("expensions");
+            DLog.d("initValue() called");
         }
     }
 
@@ -183,12 +193,13 @@ public class FindFragment extends Fragment implements ProgressDialogFragment.Pro
                 Intent intent = new Intent(getActivity(), CodeEditorActivity.class);
                 intent.putExtra("filePath", mSelectedFile.getAbsolutePath());
                 startActivity(intent);
+                break;
             case R.id.copy_path:
                 StringUtils.setClipboard(mContext, mSelectedFile.getAbsolutePath());
                 UIUtils.toast(requireContext(), getString(R.string.toast_copy_to_clipboard));
                 break;
             case R.id.replace_in_file:
-                ReplaceInFileDialogFragment replaceInFileDialogFragment = ReplaceInFileDialogFragment.newInstance(mSearchText, mSelectedFile.getAbsolutePath());
+                ReplaceInFileDialogFragment replaceInFileDialogFragment = ReplaceInFileDialogFragment.newInstance(mSearchText, mSelectedFile.getAbsolutePath(), mFiles);
                 replaceInFileDialogFragment.setItemClickListener(this);
                 replaceInFileDialogFragment.show(getParentFragmentManager(), ReplaceInFileDialogFragment.TAG);
                 break;

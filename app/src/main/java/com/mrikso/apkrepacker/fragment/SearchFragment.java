@@ -259,7 +259,7 @@ public class SearchFragment extends Fragment {
         chip.setChecked(true);
         chip.setClickable(true);
         chip.setTextColor(getResources().getColor(R.color.white));
-        chip.setChipBackgroundColorResource(ViewUtils.getColorFromAttrRes(R.attr.colorAccent, Color.CYAN, mContext));
+        chip.setChipBackgroundColor(ColorStateList.valueOf(ViewUtils.getThemeColor(requireContext(), R.attr.colorAccent)));
         //Added click listener on close icon to remove tag from ChipGroup
         chip.setOnLongClickListener(v -> {
             //tagList.remove(tagName);

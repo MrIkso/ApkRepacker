@@ -4,9 +4,11 @@ import android.util.Log;
 
 import com.mrikso.apkrepacker.BuildConfig;
 
+import org.json.JSONArray;
 import org.jsoup.Jsoup;
 
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Translator {
@@ -28,29 +30,38 @@ public class Translator {
     }
 
     //translating item
-    public void translate(List<TranslateItem> items) {
-
+    public List<TranslateItem> translate(List<TranslateItem> items) {
+        List<TranslateItem> translateItems = new ArrayList<>();
         try {
-            // Only one item, all the translation content should save to it
-            if (items.size() == 1) {
-                String content = translateFromGoogle("auto", targetLangCode, items.get(0).originValue);
-                items.get(0).translatedValue = checkIsFormattedValue((content));
-                if(BuildConfig.DEBUG)
-                Log.d("DEBUG", String.format("translated: %s ---> %1s", items.get(0).originValue, items.get(0).translatedValue));
+            /*// Only one item, all the translation content should save to it
+            // if (items.size() == 1) {
+            String content = translateFromGoogle("auto", targetLangCode, item.originValue);
+            String translated = checkIsFormattedValue(content);
+            translateItems.add(new TranslateItem(item.name, item.originValue,translated));
+          //  items.get(0).translatedValue = checkIsFormattedValue((content));
+            if (BuildConfig.DEBUG) {
+                Log.d("DEBUG", String.format("translated: %s ---> %1s", item.originValue, translated));
             }
+            return translateItems;
+        }
             //extract one value from translated content
-            else {
+
+             */
+          //  else {
                 for (int i = 0; i < items.size(); i++) {
                     TranslateItem item = items.get(i);
                     String content = translateFromGoogle("auto", targetLangCode, item.originValue);
-                    item.translatedValue = checkIsFormattedValue(content);
+                    String translated = checkIsFormattedValue(content);
+                    translateItems.add(new TranslateItem(item.name, item.originValue,translated));
                     if(BuildConfig.DEBUG)
-                    Log.d("DEBUG", String.format("translated: %s ---> %1s", item.originValue, item.translatedValue));
+                    Log.d("DEBUG", String.format("translated: %s ---> %1s", item.originValue, translated));
                 }
             }
-        } catch (Exception e) {
+  //      }
+        catch (Exception e) {
             e.printStackTrace();
         }
+        return translateItems;
     }
 
     private String checkIsFormattedValue(String inputString) {

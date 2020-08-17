@@ -5,6 +5,7 @@ import android.util.SparseBooleanArray;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -63,9 +64,10 @@ public class FileAdapter extends RecyclerView.Adapter<FileListViewHolder> {
 
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
         super.onAttachedToRecyclerView(recyclerView);
     }
+
     public void add(FileHolder file) {
         items.add(file);
     }

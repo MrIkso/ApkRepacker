@@ -8,8 +8,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:animateLayoutChanges="true"
-        android:focusableInTouchMode="true"
         android:orientation="vertical">
 
         <include
@@ -21,10 +19,9 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/string_list"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:divider="?dividerColor"
-            android:focusable="false"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="@dimen/list_padding"
             tools:listitem="@layout/item_string_value" />
 
     </LinearLayout>
@@ -45,29 +42,13 @@
         fab:menu_labels_ellipsize="end"
         fab:menu_labels_maxLines="2">
 
-<!--        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/fab_filter"
-            style="@style/MenuButtonsSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_search"
-            fab:fab_label="@string/action_search" />-->
-
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/fab_add_language"
+            android:id="@+id/fab_save_language"
             style="@style/MenuButtonsSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_add_white"
-            fab:fab_label="@string/action_add_new_lang" />
-
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/fab_auto_translate_language"
-            style="@style/MenuButtonsSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_translate"
-            fab:fab_label="@string/action_auto_translate_lang" />
+            android:src="@drawable/ic_save"
+            fab:fab_label="@string/save" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fab_select_language"
@@ -76,6 +57,14 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_web"
             fab:fab_label="@string/action_select_lang" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_more_options"
+            style="@style/MenuButtonsSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_add_white"
+            fab:fab_label="@string/action_more" />
     </com.github.clans.fab.FloatingActionMenu>
 
 </FrameLayout>

@@ -64,7 +64,6 @@
         android:layout_marginEnd="@dimen/checkbox_margin"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:tint="?android:textColorSecondary"
-        android:visibility="gone"
         app:srcCompat="@drawable/ic_patch" />
 
     <androidx.appcompat.widget.AppCompatImageButton

@@ -372,6 +372,21 @@
     <string name="action_show_log">Show log</string>
     <string name="toast_copy_to_clipboard">Copied to clipboards</string>
     <string name="confirm_delete">Delete this file(s)?</string>
+    <string name="action_apply_patch">Apply Patches</string>
+    <string name="add_patch">Add Patch</string>
+    <string name="title_patcher">Patcher</string>
+    <string name="action_add_new_string">Add new string</string>
+    <string name="action_save_as_dictionary">Save as dictionary</string>
+    <string name="action_auto_translate_lang_dictionary">Translate with dictionary</string>
+    <string name="action_more">More options</string>
+    <string name="value">Value</string>
+    <string name="key">Key</string>
+    <string name="app_compile_elapsed_time">App buided in %s</string>
+    <string name="dialog_dictionary_name">Enter dictionary name</string>
+    <string name="dialog_warring">Warring</string>
+    <string name="dialog_warring_save_changes">Do you want to save the changes?</string>
+    <string name="apply_to_all_files">Apply to all files</string>
+    <string name="caption_string_replace_options">Replace options</string>
 
     <plurals name="menu_copy_items_to">
         <item quantity="one">Copy %1$d item here</item>
@@ -380,5 +395,13 @@
     <plurals name="menu_move_items_to">
         <item quantity="one">Move %1$d item here</item>
         <item quantity="other">Move %1$d items here</item>
+    </plurals>
+    <plurals name="file_list_subtitle_directory_count_format">
+        <item quantity="one">%1$,d folder</item>
+        <item quantity="other">%1$,d folders</item>
+    </plurals>
+    <plurals name="file_list_subtitle_file_count_format">
+        <item quantity="one">%1$,d file</item>
+        <item quantity="other">%1$,d files</item>
     </plurals>
 </resources>

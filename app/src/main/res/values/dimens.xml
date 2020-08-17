@@ -26,6 +26,7 @@
     <dimen name="text_size_12">12sp</dimen>
     <dimen name="text_size_10">10sp</dimen>
     <dimen name="normal_padding">16dp</dimen>
+    <dimen name="list_padding">80dp</dimen>
     <dimen name="dialog_round">12dp</dimen>
     <dimen name="bottom_sheet_dialog_round">16dp</dimen>
     <dimen name="dimen_small">10dp</dimen>

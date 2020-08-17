@@ -44,6 +44,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class FilesFragment extends BaseFilesFragment implements OnBackPressedListener, OnItemSelectedListener,
         View.OnClickListener, PopupMenu.OnMenuItemClickListener {
@@ -98,7 +99,7 @@ public class FilesFragment extends BaseFilesFragment implements OnBackPressedLis
     @Override
     protected void onDataApplied() {
         super.onDataApplied();
-        // savePosition(true);
+
 
         mCurrentDirectory = new File(getPath());
         mPathAdapter.setPath(mCurrentDirectory, true);
@@ -163,8 +164,10 @@ public class FilesFragment extends BaseFilesFragment implements OnBackPressedLis
             File file = mPathAdapter.getItem(position);
             setPath(file);
             refresh();
+            if (Objects.equals(file.getParent(), new File(getPath()).getParent())) {
+                savePosition(false);
+            }
         });
-        //  mPathBar.setAdapter(mPathAdapter);
         mFab.setClosedOnTouchOutside(true);
         getFileAdapter().setProjectMode(true);
         setPath(new File(mProjectPath));
@@ -268,8 +271,8 @@ public class FilesFragment extends BaseFilesFragment implements OnBackPressedLis
             if (file.isDirectory()) {
                 if (file.canRead()) {
                     setPath(file);
-                    refresh();
                     savePosition(true);
+                    refresh();
                 } else {
                     UIUtils.toast(requireContext(), R.string.cannt_open_directory);
                 }

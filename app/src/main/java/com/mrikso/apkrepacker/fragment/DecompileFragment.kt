@@ -20,6 +20,7 @@ import com.mrikso.apkrepacker.adapter.LogAdapter
 import com.mrikso.apkrepacker.task.DecodeTask
 import com.mrikso.apkrepacker.ui.preferences.PreferenceHelper
 import com.mrikso.apkrepacker.utils.*
+import com.mrikso.apkrepacker.viewmodel.projects.ProjectLoader
 import java.io.File
 import java.util.*
 
@@ -169,6 +170,7 @@ class DecompileFragment : Fragment() {
         mClose!!.setOnClickListener {
             FragmentUtils.remove(this)
         }
+        ProjectLoader.getInstance(requireContext()).loadProjects()
     }
 
     /* new instance functions */

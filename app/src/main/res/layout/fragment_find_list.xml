@@ -11,5 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
+        android:paddingBottom="@dimen/list_padding"
         tools:listitem="@layout/find_in_files_item"/>
 </FrameLayout>

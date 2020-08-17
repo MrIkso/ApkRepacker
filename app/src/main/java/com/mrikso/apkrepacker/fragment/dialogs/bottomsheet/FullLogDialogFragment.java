@@ -10,12 +10,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.jecelyin.common.utils.UIUtils;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.fragment.dialogs.base.BaseBottomSheetDialogFragment;
 import com.mrikso.apkrepacker.utils.StringUtils;
 
-public class FullLogDialogFragment extends BaseBottomSheetDialogFragment {
+public class FullLogDialogFragment extends BottomSheetDialogFragment {
 
     public static final String TAG = "FullLogDialogFragment";
     private String mLog;
@@ -40,23 +41,18 @@ public class FullLogDialogFragment extends BaseBottomSheetDialogFragment {
 
     @Nullable
     @Override
-    protected View onCreateContentView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.bottom_sheet_dialog_log, container, false);
     }
 
     @Override
-    protected void onContentViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onContentViewCreated(view, savedInstanceState);
-       // setTitle(getString(R.string.log_text));
-        hideTitle(true);
-        Button button = getPositiveButton();
-        button.setText(R.string.action_copy_log);
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Button button = view.findViewById(R.id.btn_copy_log);
         button.setOnClickListener(v -> {
             StringUtils.setClipboard(requireContext(), mLog);
             UIUtils.toast(requireContext(), getString(R.string.toast_copy_to_clipboard));
         });
-        getNegativeButton().setOnClickListener(v -> dismiss());
-
         AppCompatTextView log = view.findViewById(R.id.log);
         log.setText(mLog);
     }

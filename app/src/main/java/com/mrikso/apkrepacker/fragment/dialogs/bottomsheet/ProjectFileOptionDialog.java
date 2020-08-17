@@ -10,10 +10,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.mrikso.apkrepacker.R;
-import com.mrikso.apkrepacker.fragment.dialogs.base.BaseBottomSheetDialogFragment;
 
-public class ProjectFileOptionDialog extends BaseBottomSheetDialogFragment implements  View.OnClickListener{
+public class ProjectFileOptionDialog extends BottomSheetDialogFragment implements  View.OnClickListener{
 
     public static final String TAG = "ProjectFileOptionDialogFragment";
 
@@ -25,18 +25,14 @@ public class ProjectFileOptionDialog extends BaseBottomSheetDialogFragment imple
 
     @Nullable
     @Override
-    protected View onCreateContentView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.bottom_sheet_project_file_options, container, false);
     }
 
     @Override
-    protected void onContentViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onContentViewCreated(view, savedInstanceState);
-
-        setTitle(R.string.title_file_options);
-        getPositiveButton().setVisibility(View.GONE);
-        getNegativeButton().setOnClickListener(v -> dismiss());
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         view.findViewById(R.id.create_class_file).setOnClickListener(this);
         view.findViewById(R.id.create_xml_file).setOnClickListener(this);
         view.findViewById(R.id.add_new_folder).setOnClickListener(this);

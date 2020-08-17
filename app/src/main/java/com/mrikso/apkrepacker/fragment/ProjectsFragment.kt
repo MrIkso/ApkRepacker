@@ -29,6 +29,7 @@ import com.mrikso.apkrepacker.utils.PermissionsUtils
 import com.mrikso.apkrepacker.utils.ViewDeviceUtils
 import com.mrikso.apkrepacker.utils.ViewUtils
 import com.mrikso.apkrepacker.viewmodel.ProjectsFragmentViewModel
+import com.mrikso.apkrepacker.viewmodel.projects.ProjectLoader
 
 class ProjectsFragment : Fragment(),
     ProjectViewHolder.OnItemClickListener {
@@ -54,7 +55,7 @@ class ProjectsFragment : Fragment(),
         savedInstanceState: Bundle?
     ) {
         super.onViewCreated(view, savedInstanceState)
-        mViewModel!!.startLoad()
+
         val addAppFab: ExtendedFloatingActionButton =
             view.findViewById(R.id.fab_add_app)
         addAppFab.setOnClickListener {
@@ -74,13 +75,13 @@ class ProjectsFragment : Fragment(),
             R.color.google_red,
             R.color.google_yellow
         )
-        mRefresh!!.setOnRefreshListener { initData() }
+        mRefresh!!.setOnRefreshListener { ProjectLoader.getInstance(requireContext()).loadProjects() }
         mAdapter = ProjectViewAdapter(requireContext())
         mAdapter!!.setOnItemClickListener(this)
         mProjectsList!!.adapter = mAdapter
         mToolBar!!.title = getString(R.string.projects_count, mAdapter!!.itemCount)
 
-        //   initData();
+        initData();
     }
 
     private fun initData() {
@@ -180,7 +181,7 @@ class ProjectsFragment : Fragment(),
     }
 
     override fun onResume() {
-        initData()
+       // initData()
         super.onResume()
     }
 

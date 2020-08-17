@@ -5,27 +5,34 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
+import androidx.appcompat.widget.AppCompatSpinner;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.fragment.app.Fragment;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.jecelyin.common.utils.UIUtils;
 import com.mrikso.apkrepacker.R;
-import com.mrikso.apkrepacker.fragment.dialogs.base.BaseBottomSheetDialogFragment;
 import com.mrikso.apkrepacker.utils.translation.LanguageMaps;
 import com.mrikso.apkrepacker.utils.translation.Languages;
 
 import java.util.Locale;
-import java.util.Objects;
 
-public class AddLanguageDialogFragment extends BaseBottomSheetDialogFragment implements View.OnClickListener {
+public class AddLanguageDialogFragment extends BottomSheetDialogFragment implements View.OnClickListener {
 
     public static final String TAG = "AddLanguageDialogFragment";
     private TextInputEditText languageCode, et_lang;
+    private AppCompatTextView title;
+    private MaterialButton addLang;
     private String[] langCodes;
     private String[] langNames;
 
@@ -37,22 +44,20 @@ public class AddLanguageDialogFragment extends BaseBottomSheetDialogFragment imp
 
     @Nullable
     @Override
-    protected View onCreateContentView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.bottom_sheet_add_new_language, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.bottom_sheet_add_new_language, container, false);
+        title = view.findViewById(R.id.title_text_view);
+        addLang = view.findViewById(R.id.btn_add_lang_ok);
+        languageCode = view.findViewById(R.id.language_code);
+        et_lang = view.findViewById(R.id.et_lang);
+        return view;
     }
 
     @Override
-    protected void onContentViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onContentViewCreated(view, savedInstanceState);
-
-        getPositiveButton().setOnClickListener(this);
-        getNegativeButton().setOnClickListener(v -> dismiss());
-
-        languageCode = view.findViewById(R.id.language_code);
-        et_lang = view.findViewById(R.id.et_lang);
-
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         initView(requireContext());
-
+        addLang.setOnClickListener(this);
     }
 
     private void initView(Context context) {
@@ -71,7 +76,7 @@ public class AddLanguageDialogFragment extends BaseBottomSheetDialogFragment imp
             et_lang.setText(selected);
             languageCode.setText(this.langCodes[selectedCode]);
         }
-        setTitle(mListener.setTitle());
+        title.setText(mListener.setTitle());
         et_lang.setOnClickListener(v -> showListDialog(v.getContext(), langNames));
     }
 
@@ -127,13 +132,14 @@ public class AddLanguageDialogFragment extends BaseBottomSheetDialogFragment imp
 
     @Override
     public void onClick(View view) {
-        mListener.onAddLangClick(Objects.requireNonNull(languageCode.getText()).toString());
+        mListener.onAddLangClick(languageCode.getText().toString());
         dismiss();
     }
 
     public interface ItemClickListener {
         void onAddLangClick(String code);
-        @StringRes int setTitle();
+        @StringRes
+        int setTitle();
     }
 }
 

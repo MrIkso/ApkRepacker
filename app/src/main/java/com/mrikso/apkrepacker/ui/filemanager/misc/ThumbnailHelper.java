@@ -33,8 +33,11 @@ import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.content.res.AppCompatResources;
+
 import com.mrikso.apkrepacker.ui.filemanager.holder.FileHolder;
 import com.mrikso.apkrepacker.ui.filemanager.utils.FileUtils;
+import com.mrikso.apkrepacker.ui.filemanager.utils.Utils;
 import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.Theme;
 import com.mrikso.apkrepacker.utils.ViewUtils;
@@ -176,7 +179,7 @@ public class ThumbnailHelper {
                             case APK:
                                 Drawable drawable = getApkIconDrawable(holder, context);
                                 if (drawable != null) {
-                                    bitmap = ((BitmapDrawable) drawable).getBitmap();
+                                    bitmap = Utils.bitmapFrom(drawable);
                                 }
                                 break;
                             case TTF:

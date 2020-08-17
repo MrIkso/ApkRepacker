@@ -1,32 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Material.CardView.BottomSheet"
+    app:strokeWidth="0dp">
 
-    <TextView
-        android:id="@+id/open_with"
-        style="@style/ActionItem"
-        android:drawableStart="@drawable/ic_open_with"
-        android:text="@string/action_open_with" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/open_in_editor"
-        style="@style/ActionItem"
-        android:drawableStart="@drawable/ic_rename"
-        android:text="@string/action_open_in_editor" />
+        <View
+            android:layout_width="@dimen/checkbox_dimens"
+            android:layout_height="5dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/bottom_sheet_dialog_indicator" />
 
-    <TextView
-        android:id="@+id/copy_path"
-        style="@style/ActionItem"
-        android:drawableStart="@drawable/ic_copy"
-        android:text="@string/action_copy_path" />
+        <TextView
+            android:id="@+id/open_with"
+            style="@style/ActionItem"
+            android:drawableStart="@drawable/ic_open_with"
+            android:text="@string/action_open_with" />
 
-    <TextView
-        android:id="@+id/replace_in_file"
-        style="@style/ActionItem"
-        android:drawableStart="@drawable/ic_find_replace"
-        android:text="@string/action_replace_panel"
-        android:visibility="gone" />
+        <TextView
+            android:id="@+id/open_in_editor"
+            style="@style/ActionItem"
+            android:drawableStart="@drawable/ic_rename"
+            android:text="@string/action_open_in_editor" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/copy_path"
+            style="@style/ActionItem"
+            android:drawableStart="@drawable/ic_copy"
+            android:text="@string/action_copy_path" />
+
+        <TextView
+            android:id="@+id/replace_in_file"
+            style="@style/ActionItem"
+            android:drawableStart="@drawable/ic_find_replace"
+            android:text="@string/action_replace_panel"
+            android:visibility="gone" />
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

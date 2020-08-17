@@ -55,7 +55,7 @@ public class ParentViewHolder extends GroupViewHolder implements View.OnClickLis
         textView_parent.setText(groupName.getTitle());
         textView_parent.setOnClickListener(v -> {
             if (listener != null) {
-                DLog.d("setGroupName", getAdapterPosition());
+               // DLog.d("setGroupName", getAdapterPosition());
                 listener.onGroupClick(getAdapterPosition());
             }
         });

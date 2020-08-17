@@ -1,22 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    style="@style/Material.CardView.BottomSheet"
+    app:strokeWidth="0dp">
 
-    <androidx.core.widget.NestedScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="vertical"
-        android:fillViewport="true">
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/log"
-            android:padding="4dp"
-            android:textSize="@dimen/labels_text_size"
-            android:textColor="?attr/textColor_1"
-            android:typeface="monospace"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </androidx.core.widget.NestedScrollView>
-</LinearLayout>
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:scrollbars="vertical">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/log"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="4dp"
+                android:textColor="?attr/textColor_1"
+                android:textSize="@dimen/labels_text_size"
+                android:typeface="monospace" />
+        </androidx.core.widget.NestedScrollView>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_copy_log"
+            style="@style/MD2Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/card_title_margin"
+            android:text="@string/action_copy_log" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

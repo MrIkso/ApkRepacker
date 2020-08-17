@@ -73,6 +73,8 @@
                 android:id="@+id/app_packages"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingBottom="@dimen/list_padding"
                 tools:listitem="@layout/item_apps" />
 
         </RelativeLayout>

@@ -10,10 +10,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.mrikso.apkrepacker.R;
-import com.mrikso.apkrepacker.fragment.dialogs.base.BaseBottomSheetDialogFragment;
 
-public class ApkOptionsDialogFragment extends BaseBottomSheetDialogFragment implements View.OnClickListener {
+public class ApkOptionsDialogFragment extends BottomSheetDialogFragment implements View.OnClickListener {
 
     public static final String TAG = "ApkOptionsDialogFragment";
 
@@ -25,18 +25,13 @@ public class ApkOptionsDialogFragment extends BaseBottomSheetDialogFragment impl
 
     @Nullable
     @Override
-    protected View onCreateContentView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+       // setStyle(STYLE_NORMAL, );
         return inflater.inflate(R.layout.bottom_sheet_apk_options, container, false);
     }
 
-    @Override
-    protected void onContentViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onContentViewCreated(view, savedInstanceState);
-        setTitle(getString(R.string.title_apk_options));
-
-        getPositiveButton().setVisibility(View.GONE);
-        getNegativeButton().setOnClickListener(v -> dismiss());
-
+    @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         view.findViewById(R.id.decompile_app).setOnClickListener(this);
         view.findViewById(R.id.simple_edit_apk).setOnClickListener(this);
         view.findViewById(R.id.sign_app).setOnClickListener(this);

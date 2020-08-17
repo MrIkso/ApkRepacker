@@ -1,10 +1,13 @@
 package com.mrikso.apkrepacker.utils;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.inputmethod.InputMethodManager;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.jecelyin.editor.v2.utils.ExtGrep;
@@ -15,10 +18,23 @@ public class StringUtils {
     public static Bundle bundle;
 
     public static void setClipboard(Context context, String text) {
-        android.content.ClipboardManager clipboard = (android.content.ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-        android.content.ClipData clip = android.content.ClipData.newPlainText("Copied Text", text);
-        assert clipboard != null;
+        ClipboardManager clipboard =(ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("", text);
         clipboard.setPrimaryClip(clip);
+    }
+
+    @Nullable
+    public static CharSequence getClipboard(Context context) {
+        ClipboardManager clipboardManager =(ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        if (clipboardManager == null) {
+            return null;
+        }
+        // Examines the item on the clipboard. If getText() does not return null,
+        // the clip item contains the
+        // text. Assumes that this application can only handle one item at a time.
+        ClipData.Item item = clipboardManager.getPrimaryClip().getItemAt(0);
+        // Gets the clipboard as text.
+        return item.getText();
     }
 
     public static void setGreap(ExtGrep extGrep){

@@ -124,13 +124,24 @@ public abstract class Utils {
         }
     }
 
-    private static Bitmap bitmapFrom(DisplayMetrics metrics, Drawable drawable) {
+    public static Bitmap bitmapFrom(DisplayMetrics metrics, Drawable drawable) {
         Bitmap result = Bitmap.createBitmap(
                 metrics,
                 drawable.getIntrinsicWidth(),
                 drawable.getIntrinsicHeight(),
                 ARGB_8888);
         Canvas c = new Canvas(result);
+        drawable.draw(c);
+        return result;
+    }
+
+    public static Bitmap bitmapFrom(Drawable drawable) {
+        Bitmap result = Bitmap.createBitmap(
+                drawable.getIntrinsicWidth(),
+                drawable.getIntrinsicHeight(),
+                ARGB_8888);
+        Canvas c = new Canvas(result);
+        drawable.setBounds(0, 0, c.getWidth(), c.getHeight());
         drawable.draw(c);
         return result;
     }

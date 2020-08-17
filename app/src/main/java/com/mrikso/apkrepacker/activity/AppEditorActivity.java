@@ -12,16 +12,20 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.jecelyin.common.utils.UIUtils;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.adapter.FragmentAdapter;
 import com.mrikso.apkrepacker.filepicker.FilePickerDialog;
 import com.mrikso.apkrepacker.fragment.CompileFragment;
+import com.mrikso.apkrepacker.fragment.DecompileFragment;
 import com.mrikso.apkrepacker.fragment.FilesFragment;
 import com.mrikso.apkrepacker.fragment.FindFragment;
 import com.mrikso.apkrepacker.fragment.OnBackPressedListener;
+import com.mrikso.apkrepacker.fragment.PatcherFragment;
 import com.mrikso.apkrepacker.fragment.StringsFragment;
 import com.mrikso.apkrepacker.ui.preferences.PreferenceHelper;
 import com.mrikso.apkrepacker.ui.stringlist.DirectoryScanner;
@@ -40,7 +44,7 @@ public class AppEditorActivity extends BaseActivity {
     final Fragment stringsFragment = new StringsFragment();
     final Fragment filesFragment = new FilesFragment();
     final FindFragment findFragment = new FindFragment();
-    public ViewPager mViewPager;
+    public ViewPager2 mViewPager;
     private FragmentAdapter mFragmentAdapter;
     private String projectPatch;
     private TabLayout mTabLayout;
@@ -101,9 +105,10 @@ public class AppEditorActivity extends BaseActivity {
         filesFragment.setArguments(bundle);
         fragments.add(filesFragment);
 //        fragments.add(findFragment);
-        mFragmentAdapter = new FragmentAdapter(getSupportFragmentManager(), fragments, titles);
+        mFragmentAdapter = new FragmentAdapter(this, fragments, titles);
         mViewPager.setAdapter(mFragmentAdapter);
-        mTabLayout.setupWithViewPager(mViewPager);
+        new TabLayoutMediator(mTabLayout, mViewPager, ((tab, position) -> tab.setText(mFragmentAdapter.getPageTitle(position)))).attach();
+       // mTabLayout.setupWithViewPager(mViewPager);
 
         String apkIconDrawableBase64 = getIntent().getStringExtra("apkFileIcon");
         String apkFileName = getIntent().getStringExtra("apkFileName");
@@ -124,14 +129,16 @@ public class AppEditorActivity extends BaseActivity {
 
     public void setSearchArguments(Bundle bundle) {
         findFragment.setArguments(bundle);
-        mFragmentAdapter.notifyDataSetChanged();
-        mViewPager.setAdapter(mFragmentAdapter);
+     //mFragmentAdapter.notifyDataSetChanged();
+       //mViewPager.setAdapter(mFragmentAdapter);
         if (!fragments.contains(findFragment)) {
             fragments.add(findFragment);
-            mFragmentAdapter = new FragmentAdapter(getSupportFragmentManager(), fragments, titles);
+           /* mFragmentAdapter = new FragmentAdapter(getSupportFragmentManager(), fragments, titles);
             mViewPager.setAdapter(mFragmentAdapter);
-            mTabLayout.setupWithViewPager(mViewPager);
+            mTabLayout.setupWithViewPager(mViewPager);*/
         }
+       // fragments.add(findFragment);
+        mViewPager.getAdapter().notifyDataSetChanged();
     }
 
     private boolean stringFilesExists() {
@@ -144,26 +151,8 @@ public class AppEditorActivity extends BaseActivity {
 
     private void patchApp() {
         StringUtils.hideKeyboard(this);
-        new FilePickerDialog(this)
-                .setTitleText(this.getResources().getString(R.string.select_patch))
-                .setSelectMode(FilePickerDialog.MODE_SINGLE)
-                .setSelectType(FilePickerDialog.TYPE_FILE)
-                .setRootDir(Environment.getExternalStorageDirectory().getAbsolutePath())
-                .setBackCancelable(true)
-                .setOutsideCancelable(true)
-                .setDialogListener(this.getResources().getString(R.string.choose_button_label), this.getResources().getString(R.string.cancel_button_label), new FilePickerDialog.FileDialogListener() {
-                    @Override
-                    public void onSelectedFilePaths(String[] filePaths) {
-                        for (String file : filePaths) {
-                            //ParsePatch.openPatch(new File(file));
-                        }
-                    }
-
-                    @Override
-                    public void onCanceled() {
-                    }
-                })
-                .show();
+        PatcherFragment patcherFragment = PatcherFragment.newInstance();
+        FragmentUtils.add(patcherFragment, getSupportFragmentManager(), android.R.id.content, PatcherFragment.TAG);
     }
 
     private void buildApp() {
@@ -189,6 +178,7 @@ public class AppEditorActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         FragmentManager fm = getSupportFragmentManager();
+        Fragment patcher = fm.findFragmentByTag(PatcherFragment.TAG);
         OnBackPressedListener backPressedListener = null;
         for (Fragment fragment : fm.getFragments()) {
             if (fragment instanceof OnBackPressedListener) {
@@ -197,20 +187,25 @@ public class AppEditorActivity extends BaseActivity {
             }
         }
 
-        if (mTabLayout.getSelectedTabPosition() == 2) {
+       /* if (mTabLayout.getSelectedTabPosition() == 2) {
             removeFindFragment();
-        } else if (backPressedListener != null) {
+        }*/
+         if(patcher !=null){
+            FragmentUtils.remove(patcher);
+        }
+        else if (backPressedListener != null) {
             backPressedListener.onBackPressed();
         } else {
             super.onBackPressed();
         }
     }
 
-    private void removeFindFragment() {
+    /*private void removeFindFragment() {
         fragments.remove(findFragment);
-        mFragmentAdapter = new FragmentAdapter(getSupportFragmentManager(), fragments, titles);
-        mViewPager.setAdapter(mFragmentAdapter);
-        mTabLayout.setupWithViewPager(mViewPager);
+        mFragmentAdapter.notifyDataSetChanged();
+        //mFragmentAdapter = new FragmentAdapter(getSupportFragmentManager(), fragments, titles);
+         mViewPager.setAdapter(mFragmentAdapter);
+       mTabLayout.setupWithViewPager(mViewPager);
         mViewPager.setCurrentItem(2);
-    }
+    }*/
 }

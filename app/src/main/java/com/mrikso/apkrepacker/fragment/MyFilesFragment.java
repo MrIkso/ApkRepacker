@@ -1,5 +1,6 @@
 package com.mrikso.apkrepacker.fragment;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -148,13 +149,17 @@ public class MyFilesFragment extends BaseFilesFragment implements View.OnClickLi
     @Override
     protected void onDataApplied() {
         super.onDataApplied();
-        // savePosition(true);
+        Resources resources = requireContext().getResources();
         if (mDirsCount > 0 && mFilesCount > 0) {
-            mSubtitle.setText(String.format(Locale.ENGLISH, "%1d folders, %2d files", mDirsCount, mFilesCount));
+            mSubtitle.setText(resources.getQuantityString(
+                    R.plurals.file_list_subtitle_directory_count_format, mDirsCount, mDirsCount) + ", " + resources.getQuantityString(
+                    R.plurals.file_list_subtitle_file_count_format, mFilesCount, mFilesCount) );
         } else if (mDirsCount == 0 && mFilesCount > 0) {
-            mSubtitle.setText(String.format(Locale.ENGLISH, "%d files", mFilesCount));
+            mSubtitle.setText(resources.getQuantityString(
+                    R.plurals.file_list_subtitle_file_count_format, mFilesCount, mFilesCount));
         } else if (mFilesCount == 0 && mDirsCount > 0) {
-            mSubtitle.setText(String.format(Locale.ENGLISH, "%d folders", mDirsCount));
+            mSubtitle.setText(resources.getQuantityString(
+                    R.plurals.file_list_subtitle_directory_count_format, mDirsCount, mDirsCount));
         } else {
             mSubtitle.setText(getString(R.string.this_folder_is_empty));
         }

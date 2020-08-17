@@ -25,10 +25,12 @@ import com.mrikso.apkrepacker.fragment.dialogs.bottomsheet.ColorOptionsDialogFra
 import com.mrikso.apkrepacker.ui.colorslist.ColorMeta;
 import com.mrikso.apkrepacker.ui.colorslist.ColorsAdapter;
 import com.mrikso.apkrepacker.ui.colorslist.ColorsViewModel;
+import com.mrikso.apkrepacker.utils.ScrollingViewOnApplyWindowInsetsListener;
 
 import java.io.File;
 import java.util.Objects;
 
+import me.zhanghai.android.fastscroll.FastScroller;
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
 
 public class ColorEditorFragment extends Fragment implements ColorsAdapter.OnItemInteractionListener, ColorOptionsDialogFragment.ItemClickListener {
@@ -75,7 +77,6 @@ public class ColorEditorFragment extends Fragment implements ColorsAdapter.OnIte
         mViewModel.setColorsFile(colors);
         colorsList = view.findViewById(R.id.colors);
         colorsList.setLayoutManager(new LinearLayoutManager(mContext));
-        colorsList.getRecycledViewPool().setMaxRecycledViews(0, 24);
         colorsAdapter = new ColorsAdapter(mContext);
         // mViewModel.getPackages().observe(getViewLifecycleOwner(), appsAdapter::setData);
 
@@ -96,7 +97,9 @@ public class ColorEditorFragment extends Fragment implements ColorsAdapter.OnIte
 
         fabMenu.setClosedOnTouchOutside(true);
         colorsAdapter.setInteractionListener(this);
-        new FastScrollerBuilder(colorsList).useMd2Style().build();
+        FastScroller fastScroller = new FastScrollerBuilder(colorsList).useMd2Style().build();
+        colorsList.setOnApplyWindowInsetsListener(new ScrollingViewOnApplyWindowInsetsListener(colorsList, fastScroller));
+
 
         initData();
         setupToolbar(view);

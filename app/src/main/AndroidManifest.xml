@@ -46,8 +46,7 @@
         <activity android:name=".activity.EditorSettingsActivity" />
         <activity android:name=".activity.IdeActivity"/>
         <activity android:name=".ui.imageviewer.ImageViewerActivity"/>
-        <activity android:name=".activity.AutoTranslatorActivity"
-            android:label="@string/title_activity_auto_translator"/>
+
         <provider
             android:name=".utils.FileProvider"
             android:authorities="${applicationId}.fileprovider"

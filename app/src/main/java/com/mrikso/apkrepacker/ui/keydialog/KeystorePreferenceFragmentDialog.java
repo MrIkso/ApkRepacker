@@ -72,7 +72,7 @@ public class KeystorePreferenceFragmentDialog extends PreferenceDialogFragmentCo
                             .setTitleText(getString(R.string.select_key))
                             .setSelectMode(FilePickerDialog.MODE_SINGLE)
                             .setSelectType(FilePickerDialog.TYPE_FILE)
-                            //.setExtensions(new String[]{"jks", "bks"})
+                            //.setExtensions("jks", "bks"})
                             .setRootDir(Environment.getExternalStorageDirectory().getAbsolutePath())
                             .setBackCancelable(true)
                             .setOutsideCancelable(true)

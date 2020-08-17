@@ -10,12 +10,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.mrikso.apkrepacker.R;
-import com.mrikso.apkrepacker.fragment.dialogs.base.BaseBottomSheetDialogFragment;
 
-import org.jetbrains.annotations.NotNull;
-
-public class AppsOptionsItemDialogFragment extends BaseBottomSheetDialogFragment implements View.OnClickListener {
+public class AppsOptionsItemDialogFragment extends BottomSheetDialogFragment
+        implements View.OnClickListener {
 
     public static final String TAG = "ApkOptionsDialogFragment";
 
@@ -27,18 +26,15 @@ public class AppsOptionsItemDialogFragment extends BaseBottomSheetDialogFragment
 
     @Nullable
     @Override
-    protected View onCreateContentView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        // setStyle(STYLE_NORMAL, );
         return inflater.inflate(R.layout.bottom_sheet_apps, container, false);
     }
 
     @Override
-    protected void onContentViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onContentViewCreated(view, savedInstanceState);
-        setTitle(getString(R.string.title_apk_options));
-
-        getPositiveButton().setVisibility(View.GONE);
-        getNegativeButton().setOnClickListener(v -> dismiss());
-
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         view.findViewById(R.id.decompile_app).setOnClickListener(this);
         view.findViewById(R.id.simple_edit_apk).setOnClickListener(this);
         view.findViewById(R.id.goto_settings_app).setOnClickListener(this);
@@ -46,7 +42,7 @@ public class AppsOptionsItemDialogFragment extends BaseBottomSheetDialogFragment
     }
 
     @Override
-    public void onAttach(@NotNull Context context) {
+    public void onAttach(Context context) {
         super.onAttach(context);
         final Fragment parent= getParentFragment();
         if(parent!=null){

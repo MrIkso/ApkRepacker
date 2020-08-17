@@ -11,6 +11,7 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -18,49 +19,57 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.common.collect.Iterables;
 import com.jecelyin.common.utils.UIUtils;
 import com.mrikso.apkrepacker.R;
+import com.mrikso.apkrepacker.autotranslator.translator.TranslateItem;
 import com.mrikso.apkrepacker.utils.StringUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class StringsAdapter extends RecyclerView.Adapter<StringsAdapter.ViewHolder> implements Filterable {
+public class StringsAdapter extends RecyclerView.Adapter<StringsAdapter.ViewHolder> /*implements Filterable*/ {
     private static OnItemClickListener onItemClickListener;
-    private Map<String, String> data;
-    private Map<String, String> dataFilter;
+   // private List<TranslateItem> data;
+    private List<TranslateItem> dataFilter;
     private Context context;
 
     public StringsAdapter(Context context) {
         this.context = context;
-        data = new HashMap();
-        dataFilter = new HashMap();
+//        data = new ArrayList<>();
+        dataFilter = new ArrayList<>();
     }
 
-    public void setItems(Map<String, String> map) {
-        data = map;
-        dataFilter = map;
+    public void setUpdatedItems(List<TranslateItem> map) {
+        final DiffUtil.DiffResult result = DiffUtil.calculateDiff(new StringsDiffCallback(dataFilter, map), false);
+        dataFilter.clear();
+        dataFilter.addAll(map);
+        result.dispatchUpdatesTo(this);
+     //   notifyDataSetChanged();
+    }
+
+    public void setItems(List<TranslateItem> map) {
+        dataFilter.clear();
+        dataFilter.addAll(map);
         notifyDataSetChanged();
     }
 
-    public Object getItem(int position) {
-        return Iterables.get(dataFilter.entrySet(), position);
+    public void addItem(TranslateItem item){
+        dataFilter.add(item);
+        notifyDataSetChanged();
     }
 
-    public void setUpdateValue(String key, String value) {
-        if (dataFilter.containsKey(key) && data.containsKey(key)) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                dataFilter.replace(key, value);
-                data.replace(key, value);
-            } else {
-                dataFilter.remove(key);
-                dataFilter.put(key, value);
-                data.remove(key);
-                data.put(key, value);
-            }
-        } else {
-            dataFilter.put(key, value);
-            data.put(key, value);
-        }
-        notifyDataSetChanged();
+    public void setUpdateValue(String value, int position) {
+        dataFilter.get(position).translatedValue = value;
+        notifyItemChanged(position);
+    }
+
+    public void remove(int position) {
+        dataFilter.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public List<TranslateItem> getData(){
+        return dataFilter;
     }
 
     @Override
@@ -83,15 +92,15 @@ public class StringsAdapter extends RecyclerView.Adapter<StringsAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull StringsAdapter.ViewHolder holder, int position) {
-        Map.Entry<String, String> item = Iterables.get(dataFilter.entrySet(), position);
-        holder.bindTo(item);
+        TranslateItem translateItem = dataFilter.get(position);
+        holder.bindTo(translateItem, position);
     }
 
     public void setInteractionListener(OnItemClickListener listener) {
         onItemClickListener = listener;
     }
 
-    @Override
+   /* @Override
     public Filter getFilter() {
         return new Filter() {
             @Override
@@ -103,12 +112,12 @@ public class StringsAdapter extends RecyclerView.Adapter<StringsAdapter.ViewHold
                     filterResults.values = data;
 
                 } else {
-                    Map<String, String> resultsModel = new HashMap<>();
+                    List<TranslateItem> resultsModel = new ArrayList<>();
                     String searchStr = constraint.toString().toLowerCase();
 
-                    for (Map.Entry<String, String> item : data.entrySet()) {
-                        if (item.getKey().toLowerCase().contains(searchStr) || item.getValue().toLowerCase().contains(searchStr)) {
-                            resultsModel.put(item.getKey(), item.getValue());
+                    for (TranslateItem item : data) {
+                        if (item.name.toLowerCase().contains(searchStr) || item.originValue.toLowerCase().contains(searchStr)) {
+                            resultsModel.add(new TranslateItem(item.name, item.originValue, item.translatedValue));
                         }
                         filterResults.count = resultsModel.size();
                         filterResults.values = resultsModel;
@@ -122,22 +131,23 @@ public class StringsAdapter extends RecyclerView.Adapter<StringsAdapter.ViewHold
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
 
-                dataFilter = (Map<String, String>) results.values;
+                dataFilter = (List<TranslateItem>) results.values;
                 notifyDataSetChanged();
 
             }
         };
-    }
+    }*/
 
     public interface OnItemClickListener {
-        void onTranslateClicked(String key, String value);
+        void onTranslateClicked(TranslateItem item, int position);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        private Map.Entry<String, String> item;
+        private TranslateItem mItem;
         private TextView mStringName;
         private TextView mStringValue;
+        private int mPosition;
 
         private ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -146,40 +156,22 @@ public class StringsAdapter extends RecyclerView.Adapter<StringsAdapter.ViewHold
             mStringValue = itemView.findViewById(R.id.string_value);
 
             itemView.setOnClickListener((view) -> {
-                MaterialDialog.Builder builder = new MaterialDialog.Builder(context);
-                builder.title(R.string.translate_string);
-                View viewinf = LayoutInflater.from(context).inflate(R.layout.dialog_edit_string_value, null, false);
-                EditText oldValue = viewinf.findViewById(R.id.old_value);
-                oldValue.setTextIsSelectable(true);
-                EditText newValue = viewinf.findViewById(R.id.new_value);
-                TextInputLayout textInputLayout = viewinf.findViewById(R.id.text_input_layout_old);
-                textInputLayout.setHint(item.getKey());
-                oldValue.setText(item.getValue());
-                builder.positiveText(android.R.string.ok);
-                builder.negativeText(android.R.string.cancel);
-                builder.onPositive((dialog, which) -> {
-                    if (onItemClickListener != null)
-                        onItemClickListener.onTranslateClicked(item.getKey(), newValue.getText().toString());
-                });
-
-                builder.customView(viewinf, false);
-                // AlertDialog dialog =builder.create();
-                MaterialDialog dlg = builder.show();
-                dlg.setCanceledOnTouchOutside(true);
-                dlg.setCancelable(true);
+                if (onItemClickListener != null)
+                    onItemClickListener.onTranslateClicked(mItem, mPosition);
             });
             itemView.setOnLongClickListener(v -> {
-                StringUtils.setClipboard(context, item.getKey());
-                UIUtils.toast(context, context.getString(R.string.string_name_copied, item.getKey()));
+                StringUtils.setClipboard(context, mItem.name);
+                UIUtils.toast(context, context.getString(R.string.string_name_copied, mItem.name));
                 return true;
             });
 
         }
 
-        void bindTo(Map.Entry<String, String> item) {
-            this.item = item;
-            mStringName.setText(item.getKey());
-            mStringValue.setText(item.getValue());
+        void bindTo(TranslateItem item, int position) {
+            mItem = item;
+            mPosition = position;
+            mStringName.setText(item.originValue);
+            mStringValue.setText(item.translatedValue);
         }
     }
 }

@@ -19,28 +19,23 @@ import java.util.List;
 public class ProjectsFragmentViewModel extends AndroidViewModel {
 
     private ProjectLoader mLoader;
-    private MutableLiveData<List<ProjectItem>> projectItemLiveData = new MutableLiveData();
     private Context mContext;
 
     public ProjectsFragmentViewModel(@NonNull Application application) {
         super(application);
         mContext = application;
-    }
-
-    public void startLoad(){
-        mLoader = ProjectLoader.getInstance(mContext);
+        mLoader = new ProjectLoader(application);
     }
 
     public LiveData<List<ProjectItem>> getProjects() {
-      //  projectItemLiveData.setValue();
-      return mLoader.getProjectItems();
+       return mLoader;
     }
 
     public void deleteProject(int position){
         AppExecutor.getInstance().getDiskIO().execute(() -> {
             try {
-                FileUtil.deleteFile(new File(getProjects().getValue().get(position).getAppProjectPath()));
-                //getProjects();
+                FileUtil.deleteFile(new File(mLoader.getValue().get(position).getAppProjectPath()));
+                mLoader.loadProjects();
             } catch (Exception e) {
                 e.printStackTrace();
             }

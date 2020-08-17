@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 
 import com.jecelyin.editor.v2.utils.ExtGrep;
@@ -24,6 +25,7 @@ public class SearchStringsTask extends CoroutinesAsyncTask<String, Integer, Void
 
     private FindFragment mFindFragment;
     private List<ParentData> mParentList;
+    private ArrayList<String> mFindFiles = new ArrayList<>();
     private Context mContext;
     private ExtGrep mExtGrep;
 
@@ -52,7 +54,7 @@ public class SearchStringsTask extends CoroutinesAsyncTask<String, Integer, Void
     @Override
     public void onPostExecute(Void result) {
         super.onPostExecute(result);
-        mFindFragment.setStringResult(mParentList);
+        mFindFragment.setStringResult(mParentList, mFindFiles);
         mFindFragment.hideProgress();
     }
 
@@ -60,7 +62,7 @@ public class SearchStringsTask extends CoroutinesAsyncTask<String, Integer, Void
     private List<ParentData> getList(List<ExtGrep.Result> results) {
         File file = null;
 
-        int findResultsKeywordColor = ViewUtils.getThemeColor(mContext, R.attr.findResultsKeyword);
+        int findResultsKeywordColor = ViewUtils.getThemeColor(mContext, R.attr.colorAccent);
 
         List<ParentData> parentDataList = new ArrayList<>();
         List<ChildData> childDataList = null;
@@ -69,6 +71,7 @@ public class SearchStringsTask extends CoroutinesAsyncTask<String, Integer, Void
             if (!res.file.equals(file)) {
                 file = res.file;
                 childDataList = new ArrayList<>();
+                mFindFiles.add(file.getAbsolutePath());
                 parentDataList.add(new ParentData(file.getAbsolutePath().substring((ProjectUtils.getProjectPath() + "/").length()), childDataList));
             }
 
@@ -77,7 +80,7 @@ public class SearchStringsTask extends CoroutinesAsyncTask<String, Integer, Void
             int start = ssb.length();
             ssb.append(res.line);
 
-            ssb.setSpan(new ForegroundColorSpan(findResultsKeywordColor), start + res.matchStart, start + res.matchEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ssb.setSpan(new BackgroundColorSpan(findResultsKeywordColor), start + res.matchStart, start + res.matchEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             childDataList.add(new ChildData(ssb, file.getAbsolutePath(), res.lineNumber));
         }
 

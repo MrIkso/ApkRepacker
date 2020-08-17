@@ -1,62 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    style="@style/Material.CardView.BottomSheet"
+    app:strokeWidth="0dp">
 
-    <TextView
-        android:id="@+id/decompile_app"
-        style="@style/ActionItem"
-        android:drawableStart="@drawable/ic_decompile"
-        android:text="@string/decompile_app"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/simple_edit_apk"
-        style="@style/ActionItem"
-        android:drawableStart="@drawable/ic_rename"
-        android:text="@string/simple_edit_app"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/decompile_app" />
+        <View
+            android:layout_width="@dimen/checkbox_dimens"
+            android:layout_height="5dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/bottom_sheet_dialog_indicator" />
 
-    <TextView
-        android:id="@+id/install_app"
-        style="@style/ActionItem"
-        android:drawableStart="@drawable/ic_install"
-        android:text="@string/install_app"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/simple_edit_apk" />
+        <TextView
+            android:id="@+id/decompile_app"
+            android:drawableStart="@drawable/ic_decompile"
+            android:text="@string/decompile_app"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            style="@style/ActionItem" />
 
-    <TextView
-        android:id="@+id/sign_app"
-        style="@style/ActionItem"
-        android:drawableStart="@drawable/ic_sign"
-        android:text="@string/sign_app"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/install_app" />
+        <TextView
+            android:id="@+id/simple_edit_apk"
+            android:drawableStart="@drawable/ic_rename"
+            android:text="@string/simple_edit_app"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/decompile_app"
+            style="@style/ActionItem" />
 
-    <TextView
-        android:id="@+id/set_as_framework_app"
-        style="@style/ActionItem"
-        android:drawableStart="@drawable/ic_framework"
-        android:text="@string/install_as_framework"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sign_app" />
+        <TextView
+            android:id="@+id/install_app"
+            android:drawableStart="@drawable/ic_install"
+            android:text="@string/install_app"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/simple_edit_apk"
+            style="@style/ActionItem" />
 
-    <TextView
-        android:id="@+id/delete_item"
-        style="@style/ActionItem"
-        android:drawableStart="@drawable/ic_delete"
-        android:text="@string/action_delete"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/set_as_framework_app" />
+        <TextView
+            android:id="@+id/sign_app"
+            android:drawableStart="@drawable/ic_sign"
+            android:text="@string/sign_app"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/install_app"
+            style="@style/ActionItem" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/set_as_framework_app"
+            android:drawableStart="@drawable/ic_framework"
+            android:text="@string/install_as_framework"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sign_app"
+            style="@style/ActionItem" />
+
+        <TextView
+            android:id="@+id/delete_item"
+            android:drawableStart="@drawable/ic_delete"
+            android:text="@string/action_delete"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/set_as_framework_app"
+            style="@style/ActionItem" />
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

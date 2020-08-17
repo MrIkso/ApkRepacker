@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="all_rules_applied">All rules applied.</string>
+    <string name="failed_create_dir">Failed to create directory: %s</string>
+
+    <string name="general_error">"Error: %s"</string>
+    <string name="patch_applied">Patch Applied</string>
+    <string name="patch_capital">PATCH</string>
+    <string name="patch_error_cannot_parse">"Cannot parse line %d: %s"</string>
+    <string name="patch_error_invalid_target" >Invalid or unsupported target at line %d: %s</string>
+    <string name="patch_error_no_entry">"Cannot find '%s' inside the patch."</string>
+    <string name="patch_error_no_match">"No match found in %s."</string>
+    <string name="patch_error_no_match_content">Match content is not specified.</string>
+    <string name="patch_error_no_source_file">Source file is not specified.</string>
+    <string name="patch_error_no_target_file">Target file is not specified.</string>
+    <string name="patch_error_publicxml_notfound">Cannot find res/values/public.xml</string>
+    <string name="patch_error_read_from">"Cannot read from %s."</string>
+    <string name="patch_error_unknown_rule">"Unsupported rule at line %d: %s"</string>
+    <string name="patch_error_write_to">Cannot write to %s.</string>
+    <string name="patch_examples_copied">"Patch examples copied to %s"</string>
+    <string name="patch_info_num_replaced">%d match(es) replaced.</string>
+    <string name="patch_start_apply">Apply patch rule at line %d …</string>
+    <string name="patch_start_parse">Parse rules inside patch.txt …</string>
+    <string name="patch">Patch</string>
+    <string name="patch_code_cache_done">"Patch applied to %s"</string>
+    <string name="patch_code_cache_tip">Try to patch the odex file without installation? (need ROOT access)</string>
+    <string name="patch_err_odex_not_found1">Cannot find target odex file. Please make sure ROOT access is granted. Try again?</string>
+    <string name="patch_err_odex_not_found2">"Cannot find target odex file: neither %s nor %s"</string>
+    <string name="patch_error_goto_target_notfound">"Cannot find the GOTO target '%s'"</string>
+    <string name="patch_error_no_goto_target">GOTO is not specified for [MATCH_GOTO]/[GOTO] rule.</string>
+    <string name="patch_error_regex_not_true">REGEX must be true in MATCH_ASSIGN rule.</string>
+    <string name="patch_error_regex_syntax">Regular Expression Syntax error: %s</string>
+    <string name="patch_error_no_entrance_func">Entrance function is not specified.</string>
+    <string name="patch_error_no_main_class">Main class is not specified.</string>
+    <string name="patch_error_no_script_name">Script name is not specified.</string>
+
+</resources>

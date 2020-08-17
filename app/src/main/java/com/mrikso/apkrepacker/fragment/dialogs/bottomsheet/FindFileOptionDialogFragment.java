@@ -11,11 +11,12 @@ import androidx.annotation.IntegerRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.fragment.dialogs.base.BaseBottomSheetDialogFragment;
 
 
-public class FindFileOptionDialogFragment extends BaseBottomSheetDialogFragment implements View.OnClickListener {
+public class FindFileOptionDialogFragment extends BottomSheetDialogFragment implements View.OnClickListener {
 
     public static final String TAG = "FindFileOptionDialogFragment";
 
@@ -36,17 +37,17 @@ public class FindFileOptionDialogFragment extends BaseBottomSheetDialogFragment 
 
     @Nullable
     @Override
-    protected View onCreateContentView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.bottom_sheet_find_file_options, container, false);
     }
 
     @Override
-    protected void onContentViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onContentViewCreated(view, savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        setTitle(R.string.title_file_options);
-        getPositiveButton().setVisibility(View.GONE);
-        getNegativeButton().setOnClickListener(v -> dismiss());
+       // setTitle(R.string.title_file_options);
+       // getPositiveButton().setVisibility(View.GONE);
+       // getNegativeButton().setOnClickListener(v -> dismiss());
 
         TextView tv_openWith = view.findViewById(R.id.replace_in_file);
         tv_openWith.setVisibility(mStringsMode ? View.VISIBLE : View.GONE);

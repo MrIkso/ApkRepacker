@@ -244,9 +244,9 @@ public class FileUtil {
 
     //----------------------------------------------------------------------------------------------
 
-    public static File getExternalStorage() {
+    public static File getExternalStorage(Context context) {
         //returns the path to the external storage or null if it doesn't exist
-        String path = Utility.getExternalStoragePath(getContext(), true);
+        String path = Utility.getExternalStoragePath(context, true);
         return path != null ? new File(path) : null;
     }
 
@@ -377,7 +377,7 @@ public class FileUtil {
 
     public static String getStorageUsage(Context context) {
         File internal = getInternalStorage();
-        File external = getExternalStorage();
+        File external = getExternalStorage(context);
         long f = internal.getFreeSpace();
         long t = internal.getTotalSpace();
         if (external != null) {
@@ -549,9 +549,9 @@ public class FileUtil {
         }
     }
 
-    public static boolean isStorage(File dir) {
+   /* public static boolean isStorage(File dir) {
         return dir == null || dir.equals(getInternalStorage()) || dir.equals(getExternalStorage());
-    }
+    }*/
 
     //----------------------------------------------------------------------------------------------
 

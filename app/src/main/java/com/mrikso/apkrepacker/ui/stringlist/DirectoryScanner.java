@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 public class DirectoryScanner {
 
     public ArrayList<StringFile> findStringFiles(String pathToLoad) {
-        Log.i("langs", "Start load");
+        //Log.i("langs", "Start load");
         ArrayList<StringFile> toLoad = new ArrayList<>();
         File resValuesDir = new File(pathToLoad + "/res/values");
 
@@ -18,7 +18,7 @@ public class DirectoryScanner {
             boolean found = false;
             //found default language
             for (File aFile : resValuesDir.listFiles()) {
-                Log.i("langs", aFile.getAbsolutePath());
+                //Log.i("langs", aFile.getAbsolutePath());
                 if ("strings.xml".equals(aFile.getName())) {
                     found = true;
                     toLoad.add(new StringFile(resValuesDir, aFile.getName(), "default"));
@@ -44,7 +44,7 @@ public class DirectoryScanner {
                 }
             }
         }
-        Log.i("langs", "end load");
+       // Log.i("langs", "end load");
         return (toLoad);
     }
 }

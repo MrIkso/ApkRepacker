@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:paddingLeft="16dp"
+    android:paddingTop="8dp"
+    android:paddingRight="16dp"
+    android:paddingBottom="8dp"
+    android:background="@drawable/selectable_background">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_toStartOf="@+id/btn_preview"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/img_icon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:scaleType="center"
+            app:srcCompat="@drawable/ic_zip" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/patch_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:gravity="center_vertical"
+            tools:text="FuckAss.zip" />
+
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/btn_preview"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignBottom="@+id/linearLayout"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:background="?selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        app:srcCompat="@drawable/ic_preview" />
+
+</RelativeLayout>

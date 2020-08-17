@@ -11,12 +11,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatEditText;
 
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.button.MaterialButton;
 import com.jecelyin.common.utils.UIUtils;
 import com.jecelyin.editor.v2.io.LocalFileWriter;
 import com.jecelyin.editor.v2.utils.ExtGrep;
 import com.jecelyin.editor.v2.utils.GrepBuilder;
 import com.mrikso.apkrepacker.R;
-import com.mrikso.apkrepacker.fragment.dialogs.base.BaseBottomSheetDialogFragment;
 
 import org.apache.commons.io.IOUtils;
 
@@ -24,12 +25,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Objects;
 
-public class ReplaceInFileDialogFragment extends BaseBottomSheetDialogFragment {
+import static jadx.core.utils.files.FileUtils.close;
+
+public class ReplaceInFileDialogFragment extends BottomSheetDialogFragment {
 
     public static final String TAG = "ReplaceInFileDialogFragment";
     private static final String FILE = "file";
+    private static final String FILES = "files";
     private static final String SEARCH_TEXT = "search_text";
 
     private AppCompatEditText mSearchText;
@@ -37,10 +42,12 @@ public class ReplaceInFileDialogFragment extends BaseBottomSheetDialogFragment {
     private CheckBox mCaseSensitiveCheckBox;
     private CheckBox mRegexCheckBox;
     private CheckBox mWholeWordsOnlyCheckBox;
+    private CheckBox mReplaceInAllFilesCheckBox;
 
     private String mDefaultSearchText;
 
     private File mInputFile;
+    private ArrayList<String> mInputFiles;
 
     private OnReplacedInterface mReplacedInterface;
 
@@ -48,12 +55,13 @@ public class ReplaceInFileDialogFragment extends BaseBottomSheetDialogFragment {
         return new ReplaceInFileDialogFragment();
     }
 
-    public static ReplaceInFileDialogFragment newInstance(String searchText, String file) {
+    public static ReplaceInFileDialogFragment newInstance(String searchText, String file, ArrayList<String> files) {
         ReplaceInFileDialogFragment fragment = new ReplaceInFileDialogFragment();
 
         Bundle args = new Bundle();
         args.putString(SEARCH_TEXT, searchText);
         args.putString(FILE, file);
+        args.putStringArrayList(FILES, files);
 
         fragment.setArguments(args);
         return fragment;
@@ -66,29 +74,29 @@ public class ReplaceInFileDialogFragment extends BaseBottomSheetDialogFragment {
         Bundle args = getArguments();
         if (args != null) {
             mDefaultSearchText = args.getString(SEARCH_TEXT);
+            mInputFiles = new ArrayList<>(Objects.requireNonNull(args.getStringArrayList(FILES)));
             mInputFile = new File(Objects.requireNonNull(args.getString(FILE)));
         }
     }
 
     @Nullable
     @Override
-    protected View onCreateContentView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.bottom_sheet_dialog_search_replace, container, false);
     }
 
     @Override
-    protected void onContentViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        revealBottomSheet();
-        setTitle(R.string.replace_in_file_title);
-        getNegativeButton().setOnClickListener(v -> dismiss());
-        getPositiveButton().setOnClickListener(v -> startReplace());
 
         mSearchText = view.findViewById(R.id.search_text);
         mReplaceText = view.findViewById(R.id.replace_text);
         mCaseSensitiveCheckBox = view.findViewById(R.id.ignore_case_cb);
         mRegexCheckBox = view.findViewById(R.id.regular_exp_cb);
         mWholeWordsOnlyCheckBox = view.findViewById(R.id.whole_words_only_cb);
+        mReplaceInAllFilesCheckBox = view.findViewById(R.id.apply_to_all_files_cb);
+        MaterialButton ok = view.findViewById(R.id.button_bottom_sheet_dialog_base_ok);
+        ok.setOnClickListener(v -> startReplace());
 
         initView();
     }
@@ -165,30 +173,59 @@ public class ReplaceInFileDialogFragment extends BaseBottomSheetDialogFragment {
         builder.setRegex(findText, mRegexCheckBox.isChecked());
         ExtGrep mGrep = builder.build();
 
-        new Thread(() -> {
-            try {
-                FileInputStream input = new FileInputStream(mInputFile);
-                String result = mGrep.replaceAll(IOUtils.toString(input, StandardCharsets.UTF_8), replaceText);
-                LocalFileWriter writer = new LocalFileWriter(mInputFile, StandardCharsets.UTF_8.toString());
-                writer.writeToFile(result);
-                getActivity().runOnUiThread(() -> {
-                    UIUtils.toast(requireContext(), getString(R.string.replaced_successful));
-                    if (mReplacedInterface != null) {
-                        mReplacedInterface.onReplaced();
-                    }
-                });
-            } catch (IOException io) {
-                io.printStackTrace();
-                getActivity().runOnUiThread(() -> {
-                    UIUtils.toast(requireContext(), getString(R.string.error));
-                });
+        if (mReplaceInAllFilesCheckBox.isChecked())
+            multiReplace(replaceText, mGrep);
+        else
+            new Thread(() -> {
+                try {
+                    FileInputStream input = new FileInputStream(mInputFile);
+                    String result = mGrep.replaceAll(IOUtils.toString(input, StandardCharsets.UTF_8), replaceText);
+                    LocalFileWriter writer = new LocalFileWriter(mInputFile, StandardCharsets.UTF_8.toString());
+                    writer.writeToFile(result);
+                    getActivity().runOnUiThread(() -> {
+                        UIUtils.toast(requireContext(), getString(R.string.replaced_successful));
+                        if (mReplacedInterface != null) {
+                            mReplacedInterface.onReplaced();
+                        }
+                    });
+                } catch (IOException io) {
+                    io.printStackTrace();
+                    getActivity().runOnUiThread(() -> {
+                        UIUtils.toast(requireContext(), getString(R.string.error));
+                    });
 
-            }
-        }).start();
+                }
+            }).start();
         dismiss();
     }
 
-    public interface OnReplacedInterface{
+    private void multiReplace(String replaceText, ExtGrep extGrep) {
+        new Thread(() -> {
+            for (String s : mInputFiles) {
+                try {
+                    FileInputStream input = new FileInputStream(s);
+                    String result = extGrep.replaceAll(IOUtils.toString(input, StandardCharsets.UTF_8), replaceText);
+                    LocalFileWriter writer = new LocalFileWriter(new File(s), StandardCharsets.UTF_8.toString());
+                    writer.writeToFile(result);
+                    /*getActivity().runOnUiThread(() -> {
+                        UIUtils.toast(requireContext(), getString(R.string.replaced_successful));
+                        if (mReplacedInterface != null) {
+                            mReplacedInterface.onReplaced();
+                        }
+                    });*/
+                    close(input);
+                } catch (IOException io) {
+                    io.printStackTrace();
+                    getActivity().runOnUiThread(() -> {
+                        UIUtils.toast(requireContext(), getString(R.string.error));
+                    });
+
+                }
+            }
+        }).start();
+    }
+
+    public interface OnReplacedInterface {
         void onReplaced();
     }
 }
