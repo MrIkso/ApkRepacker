@@ -367,32 +367,32 @@ public class MyFilesFragment extends BaseFilesFragment implements View.OnClickLi
     }
 
     @Override
-    public boolean onBackPressed() {
+    public void onBackPressed() {
         //  savePosition(false);
         Fragment mSimpleEditor = getParentFragmentManager().findFragmentByTag(SimpleEditorFragment.TAG);
         Fragment decompile = getParentFragmentManager().findFragmentByTag(DecompileFragment.TAG);
 
         if (getFileAdapter().anySelected()) {
             getFileAdapter().clearSelection();
-            return true;
+          //  return true;
         } else if (Utils.backWillExit(FileUtil.getInternalStorage().getAbsolutePath(), getPath())) {
             FragmentUtils.remove(this);
-            return true;
+           // return true;
         } else if (mSdCard != null && Utils.backWillExit(mSdCard.getAbsolutePath(), getPath())) {
             FragmentUtils.remove(this);
-            return true;
+          //  return true;
         } else if (mSimpleEditor != null) {
             getParentFragmentManager().popBackStack();
             // FragmentUtils.remove(mSimpleEditor);
-            return true;
+         //   return true;
         } else if (decompile != null) {
             getParentFragmentManager().popBackStack();
             // FragmentUtils.remove(mSimpleEditor);
-            return true;
+           // return true;
         } else {
             setPath(new File(Utils.downDir(1, getPath())));
             refresh();
-            return true;
+            //return true;
         }
     }
 

@@ -387,6 +387,10 @@
     <string name="dialog_warring_save_changes">Do you want to save the changes?</string>
     <string name="apply_to_all_files">Apply to all files</string>
     <string name="caption_string_replace_options">Replace options</string>
+    <string name="functions">Functions</string>
+    <string name="clear_search_result">Clear search results</string>
+    <string name="search_result">search result (%d) - %s</string>
+    <string name="replace_in_files_title">Replace in all files</string>
 
     <plurals name="menu_copy_items_to">
         <item quantity="one">Copy %1$d item here</item>

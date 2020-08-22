@@ -54,5 +54,10 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListViewHolder
     public int getItemCount() {
         return data.size();
     }
+
+    public void clear() {
+        data.clear();
+        notifyDataSetChanged();
+    }
 }
 

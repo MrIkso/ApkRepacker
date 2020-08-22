@@ -322,6 +322,9 @@
         <item name="android:buttonBarButtonStyle">@style/MD2TextButton</item>
     </style>
 
+    <style name="DialogFullScreen" parent="ThemeOverlay.MaterialComponents.Dialog">
+        <item name="android:windowNoTitle">true</item>
+    </style>
     <!--FAB-->
     <style name="MenuButtonsSmall">
         <item name="fab_size">mini</item>

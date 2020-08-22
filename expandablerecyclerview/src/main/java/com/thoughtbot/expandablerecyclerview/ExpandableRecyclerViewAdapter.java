@@ -99,6 +99,10 @@ public abstract class ExpandableRecyclerViewAdapter<GVH extends GroupViewHolder,
     return expandableList.getVisibleItemCount();
   }
 
+  public void clearExpandableList(){
+    expandableList.clear();
+  }
+
   /**
    * Gets the view type of the item at the given position.
    *

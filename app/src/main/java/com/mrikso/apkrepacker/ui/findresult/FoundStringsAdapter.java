@@ -25,6 +25,11 @@ public class FoundStringsAdapter extends ExpandableRecyclerViewAdapter<ParentVie
         mListener = listener;
     }
 
+    public void clearData(){
+        clearExpandableList();
+        notifyDataSetChanged();
+    }
+
     @Override
     public ParentViewHolder onCreateGroupViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

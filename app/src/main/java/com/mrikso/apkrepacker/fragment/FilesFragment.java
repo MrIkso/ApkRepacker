@@ -22,6 +22,7 @@ import com.github.clans.fab.FloatingActionMenu;
 import com.jecelyin.common.utils.UIUtils;
 import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
+import com.mrikso.apkrepacker.activity.AppEditorActivity;
 import com.mrikso.apkrepacker.activity.CodeEditorActivity;
 import com.mrikso.apkrepacker.filepicker.FilePickerDialog;
 import com.mrikso.apkrepacker.fragment.base.BaseFilesFragment;
@@ -35,6 +36,7 @@ import com.mrikso.apkrepacker.ui.imageviewer.ImageViewerActivity;
 import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.FragmentUtils;
 import com.mrikso.apkrepacker.utils.IntentUtils;
+import com.mrikso.apkrepacker.utils.ProjectUtils;
 import com.mrikso.apkrepacker.utils.StringUtils;
 import com.mrikso.apkrepacker.utils.ViewUtils;
 import com.mrikso.apkrepacker.viewmodel.FilesFragmentViewModel;
@@ -43,7 +45,6 @@ import com.sdsmdg.harjot.vectormaster.VectorMasterDrawable;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class FilesFragment extends BaseFilesFragment implements OnBackPressedListener, OnItemSelectedListener,
@@ -100,7 +101,7 @@ public class FilesFragment extends BaseFilesFragment implements OnBackPressedLis
     protected void onDataApplied() {
         super.onDataApplied();
 
-
+        ProjectUtils.setCurrentPath(getPath());
         mCurrentDirectory = new File(getPath());
         mPathAdapter.setPath(mCurrentDirectory, true);
         mPathBar.setAdapter(mPathAdapter);
@@ -225,33 +226,33 @@ public class FilesFragment extends BaseFilesFragment implements OnBackPressedLis
     }
 
     @Override
-    public boolean onBackPressed() {
+    public void onBackPressed() {
         if (getFileAdapter().anySelected()) {
             getFileAdapter().clearSelection();
-            return true;
+           // return true;
         }
         savePosition(false);
 
-        Fragment manager1 = getChildFragmentManager().findFragmentByTag(SearchFragment.TAG);
+   //     Fragment manager1 = getChildFragmentManager().findFragmentByTag(SearchSettingsFragment.TAG);
         Fragment manager2 = getChildFragmentManager().findFragmentByTag(ColorEditorFragment.TAG);
 //        Fragment manager3 = getChildFragmentManager().findFragmentByTag(DimensEditorFragment.TAG);
 
-        if (manager1 != null) {
+        /*if (manager1 != null) {
             getChildFragmentManager().popBackStack();
             return true;
-        } else if (manager2 != null) {
+        }*/  if (manager2 != null) {
             getChildFragmentManager().popBackStack();
-            return true;
+           // return true;
 /*        } else if (manager3 != null) {
             getChildFragmentManager().popBackStack();
             return true;*/
         } else if (Utils.backWillExit(mProjectPath, getPath())) {
             requireActivity().finish();
-            return true;
+          //  return true;
         } else {
             setPath(new File(Utils.downDir(1, getPath())));
             refresh();
-            return true;
+          //  return true;
         }
 
     }
@@ -389,11 +390,8 @@ public class FilesFragment extends BaseFilesFragment implements OnBackPressedLis
                 break;
             case R.id.fab_search:
                 mFab.close(true);
-                Bundle bundle = new Bundle();
-                bundle.putString("curDirect", getPath());
-                SearchFragment searchFragment = new SearchFragment();
-                searchFragment.setArguments(bundle);
-                FragmentUtils.add(searchFragment, getChildFragmentManager(), R.id.fragment_container, SearchFragment.TAG);
+                AppEditorActivity appEditorActivity = AppEditorActivity.getInstance();
+                appEditorActivity.mViewPager.setCurrentItem(3);
                 break;
             case R.id.fab_add_file:
                 mFab.close(true);

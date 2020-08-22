@@ -204,4 +204,8 @@ public class ExpandableList {
   public ExpandableGroup getExpandableGroup(ExpandableListPosition listPosition) {
     return groups.get(listPosition.groupPos);
   }
+
+  public void clear(){
+    groups.clear();
+  }
 }
