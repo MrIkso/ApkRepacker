@@ -86,7 +86,7 @@ public class AppEditorActivity extends BaseActivity {
         if (!stringFilesExists()) {
             titles.add(getString(R.string.menu_string));
             titles.add(getString(R.string.menu_files));
-            titles.add(getString(R.string.menu_find_list));
+            titles.add(getString(R.string.menu_find));
             mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(0)));
             mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(1)));
             mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(2)));
@@ -94,7 +94,7 @@ public class AppEditorActivity extends BaseActivity {
             fragments.add(stringsFragment);
         } else {
             titles.add(getString(R.string.menu_files));
-            titles.add(getString(R.string.menu_find_list));
+            titles.add(getString(R.string.menu_find));
             mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(0)));
             mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(1)));
         }

@@ -160,7 +160,7 @@ public class StringsAdapter extends RecyclerView.Adapter<StringsAdapter.ViewHold
                     onItemClickListener.onTranslateClicked(mItem, mPosition);
             });
             itemView.setOnLongClickListener(v -> {
-                StringUtils.setClipboard(context, mItem.name);
+                StringUtils.setClipboard(context, mItem.name, false);
                 UIUtils.toast(context, context.getString(R.string.string_name_copied, mItem.name));
                 return true;
             });

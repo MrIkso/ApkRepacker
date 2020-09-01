@@ -46,18 +46,18 @@ public class PatchRuleExecDex extends PatchRule {
     private boolean smaliNeeded = false;
 
     public PatchRuleExecDex() {
-        this.keywords.add(SCRIPT);
-        this.keywords.add(INTERFACE_VERSION);
-        this.keywords.add(SMALI_NEEDED);
-        this.keywords.add(MAIN_CLASS);
-        this.keywords.add(ENTRANCE);
-        this.keywords.add(PARAM);
-        this.keywords.add(strEnd);
+        keywords.add(SCRIPT);
+        keywords.add(INTERFACE_VERSION);
+        keywords.add(SMALI_NEEDED);
+        keywords.add(MAIN_CLASS);
+        keywords.add(ENTRANCE);
+        keywords.add(PARAM);
+        keywords.add(strEnd);
     }
 
     @Override
     public void parseFrom(LinedReader br, IPatchContext logger) throws IOException {
-        this.startLine = br.getCurrentLine();
+        startLine = br.getCurrentLine();
         String line = br.readLine();
         while (line != null) {
             line = line.trim();
@@ -65,24 +65,24 @@ public class PatchRuleExecDex extends PatchRule {
                 if (!super.parseAsKeyword(line, br)) {
                     switch (line) {
                         case SCRIPT:
-                            this.scriptName = br.readLine().trim();
+                            scriptName = br.readLine().trim();
                             break;
                         case MAIN_CLASS:
-                            this.mainClass = br.readLine().trim();
+                            mainClass = br.readLine().trim();
                             break;
                         case ENTRANCE:
-                            this.entranceFunc = br.readLine().trim();
+                            entranceFunc = br.readLine().trim();
                             break;
                         case SMALI_NEEDED:
-                            this.smaliNeeded = Boolean.parseBoolean(br.readLine().trim());
+                            smaliNeeded = Boolean.parseBoolean(br.readLine().trim());
                             break;
                         case INTERFACE_VERSION:
-                            this.ifVersion = Integer.parseInt(br.readLine().trim());
+                            ifVersion = Integer.parseInt(br.readLine().trim());
                             break;
                         default:
                             if (PARAM.equals(line)) {
                                 List<String> lines = new ArrayList<>();
-                                line = readMultiLines(br, lines, true, this.keywords);
+                                line = readMultiLines(br, lines, true, keywords);
                                 StringBuilder sb = new StringBuilder();
                                 for (int i = 0; i < lines.size(); i++) {
                                     sb.append(lines.get(i));
@@ -90,7 +90,7 @@ public class PatchRuleExecDex extends PatchRule {
                                         sb.append(10);
                                     }
                                 }
-                                this.param = sb.toString();
+                                param = sb.toString();
                                 continue;
                             }
                             logger.error(R.string.patch_error_cannot_parse, br.getCurrentLine(), line);
@@ -106,15 +106,15 @@ public class PatchRuleExecDex extends PatchRule {
 
     @Override
     public String executeRule(ProjectHelper activity, ZipFile patchZip, IPatchContext logger) {
-        if (this.ifVersion != 1) {
-            logger.error(R.string.general_error, "Unsupported interface version: " + this.ifVersion);
+        if (ifVersion != 1) {
+            logger.error(R.string.general_error, "Unsupported interface version: " + ifVersion);
             return null;
         }
         File optimizedDexOutputPath = activity.getCacheDir();
 
-        ZipEntry ze = patchZip.getEntry(this.scriptName);
+        ZipEntry ze = patchZip.getEntry(scriptName);
         if (ze == null) {
-            logger.error(R.string.general_error, "Cannot find '" + this.scriptName + "' inside the patch.");
+            logger.error(R.string.general_error, "Cannot find '" + scriptName + "' inside the patch.");
             return null;
         }
         InputStream is = null;
@@ -128,8 +128,8 @@ public class PatchRuleExecDex extends PatchRule {
             closeQuietly(os);
             try {
                 logger.info("Executing dex..", true);
-                Class<?> entryClass = new DexClassLoader(dexPath, optimizedDexOutputPath.getAbsolutePath(), null, activity.getContext().getClassLoader()).loadClass(this.mainClass);
-                entryClass.getMethod(this.entranceFunc, String.class, String.class, String.class, String.class).invoke(entryClass.newInstance(), activity.getApkPath(), patchZip.getName(), activity.getProjectPath(), this.param);
+                Class<?> entryClass = new DexClassLoader(dexPath, optimizedDexOutputPath.getAbsolutePath(), null, activity.getContext().getClassLoader()).loadClass(mainClass);
+                entryClass.getMethod(entranceFunc, String.class, String.class, String.class, String.class).invoke(entryClass.newInstance(), activity.getApkPath(), patchZip.getName(), activity.getProjectPath(), param);
                 return null;
             } catch (Throwable th) {
                 if (th instanceof InvocationTargetException) {
@@ -145,7 +145,7 @@ public class PatchRuleExecDex extends PatchRule {
                 return null;
             }
         } catch (Exception e) {
-            logger.error(R.string.general_error, "Cannot extract '" + this.scriptName + "' to SD card.");
+            logger.error(R.string.general_error, "Cannot extract '" + scriptName + "' to SD card.");
             closeQuietly(is);
             closeQuietly(os);
             return null;
@@ -164,13 +164,13 @@ public class PatchRuleExecDex extends PatchRule {
 
     @Override
     public boolean isValid(IPatchContext logger) {
-        if (this.scriptName == null) {
+        if (scriptName == null) {
             logger.error(R.string.patch_error_no_script_name);
             return false;
-        } else if (this.mainClass == null) {
+        } else if (mainClass == null) {
             logger.error(R.string.patch_error_no_main_class);
             return false;
-        } else if (this.entranceFunc != null) {
+        } else if (entranceFunc != null) {
             return true;
         } else {
             logger.error(R.string.patch_error_no_entrance_func);
@@ -180,6 +180,6 @@ public class PatchRuleExecDex extends PatchRule {
 
     @Override
     public boolean isSmaliNeeded() {
-        return this.smaliNeeded;
+        return smaliNeeded;
     }
 }

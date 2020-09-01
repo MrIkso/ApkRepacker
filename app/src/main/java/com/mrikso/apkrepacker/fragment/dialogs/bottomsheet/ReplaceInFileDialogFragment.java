@@ -251,6 +251,9 @@ public class ReplaceInFileDialogFragment extends BottomSheetDialogFragment {
 
                 }
             }
+            getActivity().runOnUiThread(() -> {
+                UIUtils.toast(requireContext(), getString(R.string.toast_replace_in_files, mInputFiles.size()));
+            });
         }).start();
     }
 

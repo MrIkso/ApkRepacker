@@ -19,26 +19,32 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.github.ybq.android.spinkit.style.CubeGrid
 import com.google.android.material.button.MaterialButton
 import com.mrikso.apkrepacker.R
+import com.mrikso.apkrepacker.adapter.ErrorAdapter
+import com.mrikso.apkrepacker.fragment.dialogs.bottomsheet.FileOptionsDialogFragment
 import com.mrikso.apkrepacker.fragment.dialogs.bottomsheet.FullLogDialogFragment
 import com.mrikso.apkrepacker.service.BuildService
 import com.mrikso.apkrepacker.utils.AppUtils
 import com.mrikso.apkrepacker.utils.FragmentUtils
 import com.mrikso.apkrepacker.utils.TimeUtils
 import com.mrikso.apkrepacker.utils.ViewUtils
+import com.mrikso.apkrepacker.utils.common.DLog
 import com.mrikso.apkrepacker.viewmodel.CompileFragmentViewModel
 import java.io.File
 
-class CompileFragment : Fragment() {
+class CompileFragment : Fragment(), ErrorAdapter.OnItemInteractionListener {
 
     private var mViewModel: CompileFragmentViewModel? = null
     private lateinit var mService: BuildService
+    private val mAdapter = ErrorAdapter()
     private var mBound: Boolean = false
     private var mFinish: Boolean = false
-    private var mLog: AppCompatTextView? = null
-    private var mContext: Context? = null
+    private var mErrorLogList: RecyclerView? = null
+  //  private var mContext: Context? = null
     private var mProjectDir: String? = null
     private var mLayoutApkCompiling: LinearLayout? = null
     private var mLayoutApkCompiled: LinearLayout? = null
@@ -51,7 +57,6 @@ class CompileFragment : Fragment() {
     private var mSavedFileMsg: AppCompatTextView? = null
     private var mImageError: AppCompatImageView? = null
     private var mCompiledTime: AppCompatTextView? = null
-    private var mLogSting: StringBuilder? = null
 
     companion object {
         @JvmStatic
@@ -66,7 +71,6 @@ class CompileFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mLogSting = java.lang.StringBuilder()
         mProjectDir = if (arguments != null) requireArguments().getString("project") else null
         retainInstance = true
     }
@@ -79,8 +83,8 @@ class CompileFragment : Fragment() {
 
     override fun onViewCreated(view: View, bundle: Bundle?) {
         super.onViewCreated(view, bundle)
-        mContext = view.context
-        mLog = view.findViewById(R.id.log)
+       // mContext = view.context
+        mErrorLogList = view.findViewById(R.id.error_list)
         mLayoutApkCompiling = view.findViewById(R.id.layout_apk_compiling)
         mLayoutApkCompiled = view.findViewById(R.id.layout_apk_compiled)
         mUninstallApp = view.findViewById(R.id.btn_remove)
@@ -94,39 +98,49 @@ class CompileFragment : Fragment() {
         mSavedFileMsg = view.findViewById(R.id.message_build_file_saved)
         val cubeGrid = CubeGrid()
         cubeGrid.setBounds(0, 0, 100, 100)
-        cubeGrid.color = ViewUtils.getThemeColor(mContext!!, R.attr.colorAccent)
+        cubeGrid.color = ViewUtils.getThemeColor(requireContext(), R.attr.colorAccent)
         cubeGrid.alpha = 0
         mProgressBar!!.indeterminateDrawable = cubeGrid
+
+        mErrorLogList?.apply{
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = mAdapter
+        }
 
         bindLocalService()
         startBuildService()
     }
 
-    val text: CharSequence?
-        get() = mLog?.text
+    private fun initList(string: String?){
+        mErrorLogList?.let { ViewUtils.setVisibleOrGone(it, true) }
+        mAdapter.apply {
+            setItemInteractionListener(this@CompileFragment)
+            updateMessage(string)
+        }
+    }
 
     fun builded(result: File?) {
-        requireContext().unbindService(connection)
-        mBound = false
-        stopBuildService()
+      //  requireContext().unbindService(connection)
+        //mBound = false
+      //  stopBuildService()
 
         if (result != null) {
             //apk было собрано успешно
-            val animation = AnimationUtils.loadAnimation(mContext, R.anim.about_card_show)
+            val animation = AnimationUtils.loadAnimation(requireContext(), R.anim.about_card_show)
             mLayoutApkCompiling!!.visibility = View.GONE
             mLayoutApkCompiled!!.visibility = View.VISIBLE
             mLayoutApkCompiled!!.startAnimation(animation)
-            val pkg = AppUtils.getApkPackage(mContext, result.absolutePath)
-            if (AppUtils.checkAppInstalled(mContext, pkg)) {
+            val pkg = AppUtils.getApkPackage(requireContext(), result.absolutePath)
+            if (AppUtils.checkAppInstalled(requireContext(), pkg)) {
                 mUninstallApp!!.visibility = View.VISIBLE
                 mUninstallApp!!.setOnClickListener { v: View? ->
-                    AppUtils.uninstallApp(mContext, pkg)
+                    AppUtils.uninstallApp(requireContext(), pkg)
                 }
             }
-            mSavedFileMsg!!.text = mContext!!.resources
+            mSavedFileMsg!!.text = requireContext().resources
                 .getString(R.string.build_apk_saved_to, result.absolutePath)
             mInstallApp!!.setOnClickListener {
-                AppUtils.installApk(mContext, result)
+                AppUtils.installApk(requireContext(), result)
             }
         } else {
           //  mShowLog!!.visibility = View.VISIBLE
@@ -134,14 +148,16 @@ class CompileFragment : Fragment() {
             mProgressBar!!.visibility = View.GONE
             mImageError!!.visibility = View.VISIBLE
             mProgressTip!!.setText(R.string.error_build_failed)
-            mProgressTip!!.setTextColor(ContextCompat.getColor(mContext!!,R.color.google_red))
+            mProgressTip!!.setTextColor(ContextCompat.getColor(requireContext(),R.color.google_red))
         }
         mShowLog!!.setOnClickListener {
             val fragment =
-                FullLogDialogFragment.newInstance(mLogSting.toString())
+                FullLogDialogFragment.newInstance()
             fragment.show(parentFragmentManager, FullLogDialogFragment.TAG)
         }
         mCloseFragment!!.setOnClickListener {
+            requireContext().unbindService(connection)
+            mBound = false
             stopBuildService()
             FragmentUtils.remove(this)
         }
@@ -170,10 +186,15 @@ class CompileFragment : Fragment() {
             mService = binder.getService()
             mBound = true
 
-            //subscribe to compile log
+           /* //subscribe to compile log
             mService.compileLog.observe(viewLifecycleOwner, Observer {
                 mLog!!.append(it + "\n")
                 mLogSting!!.append(it + "\n")
+            })*/
+
+            //subscribe to errors
+            mService.falied.observe(viewLifecycleOwner, Observer {
+                initList(it)
             })
             //subscribe to steps
             mService.stepInfo.observe(viewLifecycleOwner, Observer {
@@ -187,11 +208,17 @@ class CompileFragment : Fragment() {
             mService.success.observe(viewLifecycleOwner, Observer {
                 mFinish = true
                 builded(it)
+              //  initList(mService.compileLog)
             })
         }
 
         override fun onServiceDisconnected(arg0: ComponentName) {
             mBound = false
         }
+    }
+
+    override fun OnItemClicked(filePath: String?, lineNumber: Int) {
+        val fragment = FileOptionsDialogFragment.newInstance(filePath,lineNumber);
+        fragment.show(parentFragmentManager,FileOptionsDialogFragment.TAG)
     }
 }

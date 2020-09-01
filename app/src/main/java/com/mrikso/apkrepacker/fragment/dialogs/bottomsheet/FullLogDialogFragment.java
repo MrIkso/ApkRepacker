@@ -14,12 +14,26 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.jecelyin.common.utils.UIUtils;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.fragment.dialogs.base.BaseBottomSheetDialogFragment;
+import com.mrikso.apkrepacker.ui.preferences.PreferenceHelper;
 import com.mrikso.apkrepacker.utils.StringUtils;
+
+import org.apache.commons.io.IOUtils;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 public class FullLogDialogFragment extends BottomSheetDialogFragment {
 
     public static final String TAG = "FullLogDialogFragment";
     private String mLog;
+
+    public static FullLogDialogFragment newInstance(){
+        return new FullLogDialogFragment();
+    }
 
     public static FullLogDialogFragment newInstance(String log) {
         FullLogDialogFragment fullLogDialogFragment  = new FullLogDialogFragment();
@@ -32,11 +46,6 @@ public class FullLogDialogFragment extends BottomSheetDialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Bundle args = getArguments();
-        if (args != null) {
-            mLog = args.getString("log");
-        }
     }
 
     @Nullable
@@ -46,12 +55,23 @@ public class FullLogDialogFragment extends BottomSheetDialogFragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Bundle args = getArguments();
+        if (args != null) {
+            mLog = args.getString("log");
+        }
+        else {
+            try {
+                mLog = IOUtils.toString(new FileInputStream(new File(PreferenceHelper.getInstance(requireContext()).getDecodingPath() + File.separator + "compile_log.txt")), StandardCharsets.UTF_8);
+            }
+            catch (IOException io){
+                io.printStackTrace();
+            }
+        }
         Button button = view.findViewById(R.id.btn_copy_log);
         button.setOnClickListener(v -> {
-            StringUtils.setClipboard(requireContext(), mLog);
-            UIUtils.toast(requireContext(), getString(R.string.toast_copy_to_clipboard));
+            StringUtils.setClipboard(requireContext(), mLog, true);
         });
         AppCompatTextView log = view.findViewById(R.id.log);
         log.setText(mLog);

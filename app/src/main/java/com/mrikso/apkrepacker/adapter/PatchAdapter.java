@@ -2,6 +2,7 @@ package com.mrikso.apkrepacker.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,9 +26,10 @@ import static com.mrikso.apkrepacker.utils.FileUtil.getImageResource;
 public class PatchAdapter extends RecyclerView.Adapter<PatchAdapter.ViewHolder> {
 
     private List<PatchItem> mPatchData = new ArrayList<>();
+    private final SparseBooleanArray selectedItems;
 
     public PatchAdapter(Context context){
-
+        selectedItems = new SparseBooleanArray();
     }
 
     public void setData(List<PatchItem> data){
@@ -40,7 +42,47 @@ public class PatchAdapter extends RecyclerView.Adapter<PatchAdapter.ViewHolder> 
         notifyDataSetChanged();
     }
 
-    public void deleteItem(PatchItem item){
+    public void selectAll() {
+        selectedItems.clear();
+        for (int i = 0; i < getItemCount(); i++) {
+            selectedItems.append(i, true);
+            notifyItemChanged(i);
+        }
+    }
+
+    public void clearSelection() {
+        ArrayList<Integer> selectedPositions = getSelectedPositions();
+        selectedItems.clear();
+        for (int i : selectedPositions) notifyItemChanged(i);
+    }
+
+    public void toggle(int position) {
+        if (getSelected(position)) selectedItems.delete(position);
+        else selectedItems.append(position, true);
+        notifyItemChanged(position);
+
+    }
+
+    public ArrayList<Integer> getSelectedPositions() {
+        ArrayList<Integer> list = new ArrayList<>();
+        for (int i = 0; i < getItemCount(); i++) {
+            if (getSelected(i)) list.add(i);
+        }
+        return list;
+    }
+
+    public boolean anySelected() {
+        return selectedItems.size() > 0;
+    }
+
+    private boolean getSelected(int position) {
+        return selectedItems.get(position);
+    }
+
+    public int getSelectedItemCount() {
+        return selectedItems.size();
+    }
+        public void deleteItem(PatchItem item){
         mPatchData.remove(item);
     }
 
@@ -61,8 +103,7 @@ public class PatchAdapter extends RecyclerView.Adapter<PatchAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull PatchAdapter.ViewHolder holder, int position) {
-        PatchItem patchItem = mPatchData.get(position);
-        holder.bindTo(patchItem);
+        holder.bindTo(mPatchData.get(position), getSelected(position));
     }
 
     @Override
@@ -87,7 +128,8 @@ public class PatchAdapter extends RecyclerView.Adapter<PatchAdapter.ViewHolder> 
             mIcon.setImageDrawable(drawable);
         }
 
-        private void bindTo(PatchItem item) {
+        private void bindTo(PatchItem item, boolean selected) {
+            itemView.setSelected(selected);
             mPatchName.setText(item.mPatchName);
         }
     }

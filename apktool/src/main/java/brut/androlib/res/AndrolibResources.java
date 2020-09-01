@@ -379,7 +379,10 @@ final public class AndrolibResources {
             }
 
             try {
-                OS.exec(cmd, LOGGER);
+               // OS.exec(cmd, LOGGER);
+                CommandRunner commandRunner = new CommandRunner();
+                commandRunner.exec(cmd,LOGGER);
+                mAaptError = commandRunner.getStdError();
                 LOGGER.fine(R.string.log_text,"aapt2 compile command ran: ");
                 LOGGER.fine(R.string.log_text,cmd.toString());
             } catch (BrutException ex) {
@@ -500,7 +503,9 @@ final public class AndrolibResources {
 
         try {
             LOGGER.info(R.string.log_text,"Using aapt2 for compilation resources");
-            OS.exec(cmd,LOGGER);
+            CommandRunner commandRunner = new CommandRunner();
+            commandRunner.exec(cmd,LOGGER);
+            mAaptError = commandRunner.getStdError();
             LOGGER.fine(R.string.log_text,"aapt2 link command ran: ");
             LOGGER.fine(R.string.log_text,cmd.toString());
         } catch (BrutException ex) {
@@ -618,7 +623,10 @@ final public class AndrolibResources {
         }
         try {
             LOGGER.info(R.string.log_text,"Using aapt for compilation resources");
-            OS.exec(cmd, LOGGER);
+           // OS.exec(cmd, LOGGER);
+            CommandRunner commandRunner = new CommandRunner();
+            commandRunner.exec(cmd,LOGGER);
+            mAaptError = commandRunner.getStdError();
             LOGGER.fine(R.string.log_text,"command ran: ");
             LOGGER.fine(R.string.log_text,cmd.toString());
         } catch (BrutException ex) {
@@ -974,6 +982,10 @@ final public class AndrolibResources {
         return apkOptions.isAapt2() ? 2 : 1;
     }
 
+    public String getAaptError(){
+        return mAaptError;
+    }
+
     public File getAndroidResourcesFile() throws AndrolibException {
         try {
             return Jar.getResourceAsFile("/brut/androlib/android-framework.jar");
@@ -991,7 +1003,9 @@ final public class AndrolibResources {
     public AndrolibResources(Logger LOGGER) {
         this.LOGGER = LOGGER;
     }
-
+    public AndrolibResources() {
+        this.LOGGER = null;
+    }
     public ApkOptions apkOptions;
 
     // TODO: dirty static hack. I have to refactor decoding mechanisms.
@@ -1010,6 +1024,8 @@ final public class AndrolibResources {
     private String mVersionName = null;
     private String mPackageRenamed = null;
     private String mPackageId = null;
+
+    private String mAaptError;
 
     private boolean mSharedLibrary = false;
     private boolean mSparseResources = false;

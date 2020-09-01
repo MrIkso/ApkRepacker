@@ -122,7 +122,7 @@
     <string name="installed_apps">Installed Apps</string>
     <string name="menu_string">Strings</string>
     <string name="menu_files">Files</string>
-    <string name="menu_find_list">Find List</string>
+    <string name="menu_find">Search</string>
     <string name="complete">Complete</string>
     <string name="toast_deleted_item">File %s has been deleted</string>
     <string name="menu_build_app">Build</string>
@@ -391,6 +391,7 @@
     <string name="clear_search_result">Clear search results</string>
     <string name="search_result">search result (%d) - %s</string>
     <string name="replace_in_files_title">Replace in all files</string>
+    <string name="toast_replace_in_files">Replaced in %d files</string>
 
     <plurals name="menu_copy_items_to">
         <item quantity="one">Copy %1$d item here</item>

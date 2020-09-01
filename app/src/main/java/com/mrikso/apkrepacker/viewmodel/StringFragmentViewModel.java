@@ -16,8 +16,10 @@ import com.mrikso.apkrepacker.autotranslator.dictionary.DictionaryItem;
 import com.mrikso.apkrepacker.autotranslator.dictionary.DictionaryReader;
 import com.mrikso.apkrepacker.autotranslator.dictionary.DictionaryWriter;
 import com.mrikso.apkrepacker.autotranslator.translator.TranslateItem;
+import com.mrikso.apkrepacker.ui.preferences.PreferenceHelper;
 import com.mrikso.apkrepacker.ui.stringlist.DirectoryScanner;
 import com.mrikso.apkrepacker.ui.stringlist.StringFile;
+import com.mrikso.apkrepacker.utils.AppExecutor;
 import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.ProjectUtils;
 import com.mrikso.apkrepacker.utils.common.DLog;
@@ -309,12 +311,14 @@ public class StringFragmentViewModel extends AndroidViewModel {
      * @param translatedList переведенный список строк
      */
     public void saveTranslationToDictionary(String dictionaryName, List<TranslateItem> translatedList) {
-        File dictionaryDir = new File(FileUtil.getInternalStorage() + "/ApkRepacker/dictionary");
-        if (!dictionaryDir.exists()) {
-            dictionaryDir.mkdirs();
-        }
-        File dictionary = new File(dictionaryDir.getAbsolutePath() + "/" + dictionaryName + ".mtd");
-        new DictionaryWriter(dictionary).writeDictionary(translatedList);
+        AppExecutor.getInstance().getDiskIO().execute(() -> {
+            File dictionaryDir = new File(PreferenceHelper.getInstance(mContext).getDecodingPath() + "/dictionary");
+            if (!dictionaryDir.exists()) {
+                dictionaryDir.mkdirs();
+            }
+            File dictionary = new File(dictionaryDir.getAbsolutePath() + "/" + dictionaryName + ".mtd");
+            new DictionaryWriter(dictionary).writeDictionary(translatedList);
+        });
     }
 
     public void filter(String query) {
@@ -322,7 +326,7 @@ public class StringFragmentViewModel extends AndroidViewModel {
     }
 
     private void filter(FilterQuery filterQuery) {
-        DLog.d("called filter");
+       // DLog.d("called filter");
         mCurrentFilterQuery = filterQuery;
         mFilter.filter(filterQuery.serializeToString());
     }

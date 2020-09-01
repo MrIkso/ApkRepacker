@@ -5,8 +5,8 @@ public class PatchItem {
     public String mPath;
     public String mPatchName;
 
-    public PatchItem(String mPatchName, String mPath){
-        this.mPatchName = mPatchName;
-        this.mPath = mPath;
+    public PatchItem(String patchName, String path){
+        this.mPatchName = patchName;
+        this.mPath = path;
     }
 }

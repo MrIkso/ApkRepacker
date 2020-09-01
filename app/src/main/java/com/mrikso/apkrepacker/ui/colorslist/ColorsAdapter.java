@@ -178,7 +178,7 @@ public class ColorsAdapter extends RecyclerView.Adapter<ColorsAdapter.ViewHolder
             });
 
             itemView.findViewById(R.id.app_item).setOnLongClickListener(v -> {
-                StringUtils.setClipboard(mContext, mColors.get(getAdapterPosition()).label);
+                StringUtils.setClipboard(mContext, mColors.get(getAdapterPosition()).label, false);
                 UIUtils.toast(mContext, v.getContext().getString(R.string.color_name_copied, mColors.get(getAdapterPosition()).label));
                 return true;
             });

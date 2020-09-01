@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="?android:windowBackground"
     android:clickable="true"
     android:focusable="true"
-    android:background="?android:windowBackground"
     tools:context=".fragment.CompileFragment">
 
     <!--разметка когда собирается apk-->
@@ -25,38 +25,36 @@
             android:orientation="vertical">
 
             <ProgressBar
-                style="?android:attr/progressBarStyleLarge"
                 android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleLarge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/normal_padding"/>
+                android:layout_marginTop="@dimen/normal_padding" />
+
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/image_error"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 app:srcCompat="@drawable/ic_error" />
+
             <TextView
                 android:id="@+id/progress_tip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:text="@string/compile_in_progress"
-                android:textStyle="bold"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-            <androidx.core.widget.NestedScrollView
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/error_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scrollbars="vertical"
-                android:fillViewport="true">
-            <androidx.appcompat.widget.AppCompatTextView
-                android:typeface="monospace"
                 android:padding="4dp"
-                android:id="@+id/log"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-            </androidx.core.widget.NestedScrollView>
+                tools:listitem="@layout/list_item_error"/>
         </LinearLayout>
+
         <!--<com.google.android.material.button.MaterialButton
             android:id="@+id/btn_show_log"
             style="@style/MD2Button"

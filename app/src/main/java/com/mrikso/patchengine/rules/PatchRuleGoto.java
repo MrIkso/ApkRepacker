@@ -21,14 +21,14 @@ public class PatchRuleGoto extends PatchRule {
 
     @Override
     public void parseFrom(LinedReader br, IPatchContext logger) throws IOException {
-        this.startLine = br.getCurrentLine();
+        startLine = br.getCurrentLine();
         String line = br.readLine();
         while (line != null) {
             String line2 = line.trim();
             if (!strEnd.equals(line2)) {
                 if (!super.parseAsKeyword(line2, br)) {
                     if (GOTO.equals(line2)) {
-                        this.targetRule = br.readLine().trim();
+                        targetRule = br.readLine().trim();
                     } else {
                         logger.error(R.string.patch_error_cannot_parse, br.getCurrentLine(), line2);
                     }
@@ -42,20 +42,20 @@ public class PatchRuleGoto extends PatchRule {
 
     @Override
     public String executeRule(ProjectHelper activity, ZipFile patchZip, IPatchContext logger) {
-        return this.targetRule;
+        return targetRule;
     }
 
     @Override
     public boolean isValid(IPatchContext logger) {
-        if (this.targetRule == null) {
+        if (targetRule == null) {
             logger.error(R.string.patch_error_no_goto_target);
             return false;
         }
         List<String> allRuleName = logger.getPatchNames();
-        if (allRuleName != null && allRuleName.contains(this.targetRule)) {
+        if (allRuleName != null && allRuleName.contains(targetRule)) {
             return true;
         }
-        logger.error(R.string.patch_error_goto_target_notfound, this.targetRule);
+        logger.error(R.string.patch_error_goto_target_notfound, targetRule);
         return false;
     }
 

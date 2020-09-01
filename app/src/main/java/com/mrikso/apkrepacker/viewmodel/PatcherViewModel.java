@@ -187,6 +187,7 @@ public class PatcherViewModel extends AndroidViewModel implements IRulesInfo, IP
     }
 
     private void appendText(final String txt, final boolean bold, final boolean red) {
+        DLog.d("PatcherViewModel",txt);
         mLog.postValue(txt);
     }
 

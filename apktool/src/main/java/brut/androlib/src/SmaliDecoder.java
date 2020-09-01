@@ -55,11 +55,11 @@ public class SmaliDecoder {
             options.deodex = false;
             options.implicitReferences = false;
             options.parameterRegisters = true;
-            options.localsDirective = true;
-            options.sequentialLabels = true;
+            options.localsDirective = false;
+            options.sequentialLabels = false;
             options.debugInfo = mBakDeb;
             options.codeOffsets = false;
-            options.accessorComments = false;
+            options.accessorComments = true;
             options.registerInfo = 0;
             options.inlineResolver = null;
 

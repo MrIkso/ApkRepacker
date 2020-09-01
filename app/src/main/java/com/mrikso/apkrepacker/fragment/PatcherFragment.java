@@ -1,6 +1,8 @@
 package com.mrikso.apkrepacker.fragment;
 
 import android.os.Bundle;
+import android.text.method.MovementMethod;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,9 +69,14 @@ public class PatcherFragment extends Fragment implements View.OnClickListener, O
         mPatchList.setAdapter(mPathAdapter);
         AppCompatTextView log = view.findViewById(R.id.logger);
 
-        mViewModel.getLogLiveData().observe(getViewLifecycleOwner(), log::append);
+        mViewModel.getLogLiveData().observe(getViewLifecycleOwner(), (v)->{
+            log.append(v);
+            log.setMovementMethod(new ScrollingMovementMethod() {
+            });
+        });
         mViewModel.getPatchRulesSize().observe(getViewLifecycleOwner(), integer -> mPatchRulesProgress.setMax(integer));
         mViewModel.getPatchCurrentRules().observe(getViewLifecycleOwner(), this::progressRulesObserver);
+
         toolbar.setNavigationOnClickListener(v -> FragmentUtils.remove(this));
     }
 
@@ -108,9 +115,9 @@ public class PatcherFragment extends Fragment implements View.OnClickListener, O
     }
 
     @Override
-    public boolean onBackPressed() {
+    public void onBackPressed() {
         FragmentUtils.remove(this);
-        return false;
+        //return false;
     }
 
     @Override

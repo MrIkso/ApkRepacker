@@ -34,6 +34,13 @@ public abstract class PatchRule {
     protected String ruleName;
     protected int startLine;
 
+    /**
+     * cоздает переменные на основе регулярного выражения
+     * пример : TEXT=${GROUP1}
+     * @param ctx контекст
+     * @param rawStr строка
+     * @return возвращеает TEXT=TEST
+     */
     public static String assignValues(IPatchContext ctx, String rawStr) {
         Log.d(TAG, "start assign values");
         ArrayList<ReplaceRec> replaces = new ArrayList<>();
@@ -47,6 +54,7 @@ public abstract class PatchRule {
                     Log.d(TAG, "adding replaces " + realVal);
                     replaces.add(new ReplaceRec(position - 2, endPos + 1, realVal));
                 }
+                Log.d(TAG, "real value null");
                 position = rawStr.indexOf("${", endPos);
             }
         }
@@ -71,14 +79,40 @@ public abstract class PatchRule {
         return null;
     }
 
+    /**
+     * стартуем правило патча
+     * @param projectHelper
+     * @param zipFile файл патча
+     * @param iPatchContext контекст
+     * @return
+     */
     public abstract String executeRule(ProjectHelper projectHelper, ZipFile zipFile, IPatchContext iPatchContext);
 
+    /**
+     * нужен ли smali патчу
+     * @return
+     */
     public abstract boolean isSmaliNeeded();
 
+    /**
+     * проверяет ли валиден патч
+     * @param iPatchContext
+     * @return
+     */
     public abstract boolean isValid(IPatchContext iPatchContext);
 
+    /**
+     * парсинг правил патча
+     * @param linedReader
+     * @param iPatchContext
+     * @throws IOException
+     */
     public abstract void parseFrom(LinedReader linedReader, IPatchContext iPatchContext) throws IOException;
 
+    /**
+     * возвращвет имя правила патча
+     * @return
+     */
     public String getRuleName() {
         return this.ruleName;
     }
@@ -153,6 +187,7 @@ public abstract class PatchRule {
                 Log.d("PatchRule", assignedVal);
                 values.set(i, assignedVal);
             }
+            else
             Log.d("PatchRule", "assignedVal null");
         }
     }
@@ -232,6 +267,11 @@ public abstract class PatchRule {
         return true;
     }
 
+    /**
+     * проверка ли папка является smali папкой
+     * @param targetFile входная папка
+     * @return true/false
+     */
     public boolean isInSmaliFolder(String targetFile) {
         int pos;
         if (!(targetFile == null || (pos = targetFile.lastIndexOf(47)) == -1)) {

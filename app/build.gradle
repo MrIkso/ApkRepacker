@@ -87,4 +87,7 @@ dependencies {
     implementation 'org.jetbrains:annotations:19.0.0'
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     // implementation 'me.jfenn.ColorPickerDialog:base:0.2.1'
+    testImplementation 'junit:junit:4.13'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }

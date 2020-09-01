@@ -88,6 +88,7 @@ public class BuildTask extends CoroutinesAsyncTask<File, CharSequence, Boolean> 
                         setResult(out);
                     } catch (Exception e) {
                         e.printStackTrace();
+                        cancel(true);
                     }
                 }
                 long buildTime = System.currentTimeMillis() - start;
@@ -99,9 +100,10 @@ public class BuildTask extends CoroutinesAsyncTask<File, CharSequence, Boolean> 
             }
             return true;
         } catch (Exception e) {
-            mBuilderCallback.taskFailed(e.getMessage());
+           // mBuilderCallback.taskFailed(e.getMessage());
             logger.log(Level.WARNING, e.getMessage(), e);
-            e.printStackTrace();
+            //e.printStackTrace();
+            cancel(true);
             return false;
         }
     }
@@ -115,8 +117,9 @@ public class BuildTask extends CoroutinesAsyncTask<File, CharSequence, Boolean> 
             File resultFile = new File(f);
             mBuilderCallback.taskSucceed(resultFile);
         } catch (Exception e) {
-            mBuilderCallback.taskFailed("Result file failed" +e.getMessage());
-            logger.log(Level.SEVERE, "Result file failed", e);
+           // mBuilderCallback.taskFailed("Result file failed" +e.getMessage());
+            logger.log(Level.WARNING, "Result file failed", e);
+            cancel(true);
         }
     }
 }

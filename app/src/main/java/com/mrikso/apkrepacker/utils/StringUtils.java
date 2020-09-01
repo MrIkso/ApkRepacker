@@ -10,18 +10,23 @@ import android.view.inputmethod.InputMethodManager;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.jecelyin.common.utils.UIUtils;
 import com.jecelyin.editor.v2.utils.ExtGrep;
+import com.mrikso.apkrepacker.R;
 
 public class StringUtils {
 
     public static ExtGrep extGreps;
     public static Bundle bundle;
 
-    public static void setClipboard(Context context, String text) {
+    public static void setClipboard(Context context, String text, boolean showToast) {
         ClipboardManager clipboard =(ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText("", text);
         clipboard.setPrimaryClip(clip);
+        if(showToast)
+        UIUtils.toast(context, context.getString(R.string.toast_copy_to_clipboard));
     }
+
 
     @Nullable
     public static CharSequence getClipboard(Context context) {

@@ -91,22 +91,23 @@ public class PatchExecutor {
     private void applyRules(final List<PatchRule> rules, final ZipFile sourceZip) {
         new Thread() {
             public void run() {
-                int index = 0;
-                int totalRules = rules.size();
-                mRulesInfo.allRules(totalRules);
-                while (index < rules.size()) {
-                    PatchRule rule = rules.get(index);
-                    mRulesInfo.currentRules(index);
+             ///   int index = 0;
+              //  int totalRules = rules.size();
+               // mRulesInfo.allRules(totalRules);
+                for(PatchRule rule : rules){
+               // while (index < rules.size()) {
+                  //  PatchRule rule = rules.get(index);
+                   // mRulesInfo.currentRules(index);
                     mPatchContext.info(R.string.patch_start_apply, true, rule.startLine);
-                    DLog.d("patchexecutor", totalRules + " "+ index);
+                  //  DLog.d("patchexecutor", totalRules + " "+ index);
                     String nextRule = null;
                     if (rule.isValid(mPatchContext)) {
                         nextRule = rule.executeRule(mProjectHelper, sourceZip, mPatchContext);
                     }
                     if (nextRule != null) {
-                        index = findTargetRule(rules, nextRule);
+                        findTargetRule(rules, nextRule);
                     } else {
-                        index++;
+                        //index++;
                     }
                 }
                 mPatchContext.info(R.string.all_rules_applied, true);
@@ -125,7 +126,6 @@ public class PatchExecutor {
     }
 
     public void callbackFunc() {
-      //  Patch patch2 = mPatch;
         if (mPatch != null && mPatch.rules != null && mSourceZip != null) {
             applyRules(mPatch.rules, mSourceZip);
         }

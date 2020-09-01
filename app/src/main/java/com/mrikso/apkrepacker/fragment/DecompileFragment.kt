@@ -162,7 +162,7 @@ class DecompileFragment : Fragment() {
             mImageResult!!.visibility = View.VISIBLE
             mCopylog!!.visibility = View.VISIBLE
             mCopylog!!.setOnClickListener {
-                StringUtils.setClipboard(mContext, text.toString())
+                StringUtils.setClipboard(mContext, text.toString(), true)
             }
             mTextProgress!!.setText(R.string.error_decompilation_failed)
             mTextProgress!!.setTextColor(ContextCompat.getColor(mContext!!,R.color.google_red))

@@ -1,8 +1,7 @@
 package com.mrikso.patchengine.rules;
 
-import android.annotation.SuppressLint;
-
 import com.mrikso.apkrepacker.R;
+import com.mrikso.apkrepacker.utils.common.DLog;
 import com.mrikso.patchengine.LinedReader;
 import com.mrikso.patchengine.PatchRule;
 import com.mrikso.patchengine.PathFinder;
@@ -17,6 +16,8 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipFile;
 
 public class PatchRuleMatchAssign extends PatchRule {
+
+    private final String TAG = "PatchRuleMatchAssign";
 
     private static final String ASSIGN = "ASSIGN:";
     private static final String DOTALL = "DOTALL:";
@@ -90,50 +91,41 @@ public class PatchRuleMatchAssign extends PatchRule {
 
     private boolean executeOnEntry(ProjectHelper activity, ZipFile patchZip, IPatchContext patchCtx, String targetFile) {
         Pattern pattern;
-        String filepath;
-        String content;
-        String filepath2 = activity.getProjectPath() + "/" + targetFile;
-        int i = 0;
+        String filepath = activity.getProjectPath() + "/" + targetFile;
+        DLog.d(TAG, "Start assigning: " + filepath);
         try {
-            String content2 = readFileContent(filepath2);
+            String fileContent = readFileContent(filepath);
             String regStr = matches.get(0);
             if (bDotall) {
                 pattern = Pattern.compile(regStr.trim(), Pattern.DOTALL);
             } else {
                 pattern = Pattern.compile(regStr.trim());
             }
-            Matcher m = pattern.matcher(content2);
+            Matcher m = pattern.matcher(fileContent);
             if (m.find(0)) {
-                List<String> groupStrs = new ArrayList<>();
+                List<String> groupStrs = null;
                 int groupCount = m.groupCount();
                 if (groupCount > 0) {
-                    for (int i2 = 0; i2 < groupCount; i2++) {
-                        groupStrs.add(m.group(i2 + 1));
+                    groupStrs = new ArrayList<>(groupCount);
+                    for (int i = 0; i < groupCount; i++) {
+                        groupStrs.add(m.group(i + 1));
                     }
                 }
                 for (String strAssign : assigns) {
                     String strAssign2 = strAssign.trim();
-                    int position = strAssign2.indexOf(61);
+                    int position = strAssign2.indexOf("=");
                     if (position != -1) {
-                        String name = strAssign2.substring(i, position);
+                        String name = strAssign2.substring(0, position);
                         String assignedVal = getRealValue(strAssign2.substring(position + 1), groupStrs);
                         patchCtx.setVariableValue(name, assignedVal);
-                        content = content2;
-                        filepath = filepath2;
                         patchCtx.info("%s=\"%s\"", false, name, assignedVal);
-                    } else {
-                        content = content2;
-                        filepath = filepath2;
                     }
-                    content2 = content;
-                    filepath2 = filepath;
-                    i = 0;
                 }
                 return true;
             }
             return false;
         } catch (IOException e) {
-            patchCtx.error(R.string.patch_error_read_from, filepath2);
+            patchCtx.error(R.string.patch_error_read_from, filepath);
             return false;
         }
     }

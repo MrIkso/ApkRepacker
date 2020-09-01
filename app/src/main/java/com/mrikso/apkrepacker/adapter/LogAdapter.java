@@ -98,7 +98,7 @@ public class LogAdapter extends ArrayAdapter<String> {
             textview.setText(data);
             textview.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
             textview.setTextColor(getLogColor(data));
-            textview.setOnClickListener(v -> StringUtils.setClipboard(mContext, textview.getText().toString()));
+            textview.setOnClickListener(v -> StringUtils.setClipboard(mContext, textview.getText().toString(), true));
         }
         return view;
     }

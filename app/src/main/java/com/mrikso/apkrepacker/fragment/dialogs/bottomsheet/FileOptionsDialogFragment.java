@@ -1,6 +1,7 @@
 package com.mrikso.apkrepacker.fragment.dialogs.bottomsheet;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,18 +15,23 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.mrikso.apkrepacker.R;
+import com.mrikso.apkrepacker.activity.CodeEditorActivity;
+import com.mrikso.apkrepacker.utils.IntentUtils;
+import com.mrikso.apkrepacker.utils.StringUtils;
+
+import java.io.File;
 
 public class FileOptionsDialogFragment extends BottomSheetDialogFragment implements View.OnClickListener {
 
     public static final String TAG = "FileOptionsDialogFragment";
 
-    private FileItemClickListener mListener;
-    private static boolean openInEditor;
-    private static boolean openWith;
+   // private FileItemClickListener mListener;
+    private static String mFilePath;
+    private static int mLineNumber;
 
-    public static FileOptionsDialogFragment newInstance(boolean openInEditor, boolean openWith) {
-        FileOptionsDialogFragment.openInEditor = openInEditor;
-        FileOptionsDialogFragment.openWith = openWith;
+    public static FileOptionsDialogFragment newInstance(String filePath, int lineNumber) {
+        mFilePath = filePath;
+        mLineNumber = lineNumber;
         return new FileOptionsDialogFragment();
     }
 
@@ -39,20 +45,20 @@ public class FileOptionsDialogFragment extends BottomSheetDialogFragment impleme
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         TextView tv_openInEditor = view.findViewById(R.id.open_in_editor);
-        tv_openInEditor.setVisibility(openInEditor ? View.VISIBLE : View.GONE);
+     /*   tv_openInEditor.setVisibility(openInEditor ? View.VISIBLE : View.GONE);*/
         tv_openInEditor.setOnClickListener(this);
 
         TextView tv_openWith = view.findViewById(R.id.open_with);
-        tv_openWith.setVisibility(openWith ? View.VISIBLE : View.GONE);
+     //   tv_openWith.setVisibility(openWith ? View.VISIBLE : View.GONE);
         tv_openWith.setOnClickListener(this);
 
         view.findViewById(R.id.open_with).setOnClickListener(this);
-        view.findViewById(R.id.rename_file).setOnClickListener(this);
-        view.findViewById(R.id.add_new_folder).setOnClickListener(this);
-        view.findViewById(R.id.delete_file).setOnClickListener(this);
+        view.findViewById(R.id.action_copy_path).setOnClickListener(this);
+    //    view.findViewById(R.id.add_new_folder).setOnClickListener(this);
+      //  view.findViewById(R.id.delete_file).setOnClickListener(this);
     }
 
-    @Override
+  /*  @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         final Fragment parent = getParentFragment();
@@ -67,21 +73,37 @@ public class FileOptionsDialogFragment extends BottomSheetDialogFragment impleme
         //   throw new RuntimeException(context.toString()
         //         + " must implement ItemClickListener");
         // }
-    }
+    }*/
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+       // mListener = null;
     }
 
     @Override
     public void onClick(View view) {
-        mListener.onFileItemClick(view.getId());
-        dismiss();
+        switch (view.getId()){
+            case R.id.open_in_editor:
+                Intent intent = new Intent(getActivity(), CodeEditorActivity.class);
+                intent.putExtra("filePath",mFilePath);
+                intent.putExtra("offset", mLineNumber);
+                requireContext().startActivity(intent);
+                dismiss();
+                break;
+            case R.id.open_with:
+                startActivity(IntentUtils.openFileWithIntent(new File(mFilePath)));
+                dismiss();
+                break;
+            case R.id.action_copy_path:
+                StringUtils.setClipboard(requireContext(), mFilePath, true);
+                break;
+        }
+       // mListener.onFileItemClick(view.getId());
+
     }
 
-    public interface FileItemClickListener {
+   /* public interface FileItemClickListener {
         void onFileItemClick(@IdRes int item);
-    }
+    }*/
 }

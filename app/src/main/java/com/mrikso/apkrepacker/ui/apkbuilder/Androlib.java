@@ -533,7 +533,7 @@ public class Androlib implements ISmaliCallback {
                 mAndRes.aaptPackage(apkFile, new File(appDir,
                                 "AndroidManifest.xml"), new File(appDir, "res"),
                         ninePatch, null, parseUsesFramework(usesFramework));
-
+              //  mBuilderCallback.taskFailed(mAndRes.getAaptError());
                 Directory tmpDir = new ExtFile(apkFile).getDirectory();
 
                 // Sometimes an application is built with a resources.arsc file with no resources,
@@ -544,6 +544,7 @@ public class Androlib implements ISmaliCallback {
                             tmpDir.containsDir("res") ? APK_RESOURCES_FILENAMES
                                     : APK_RESOURCES_WITHOUT_RES_FILENAMES);
                 } catch (DirectoryException ex) {
+                    mBuilderCallback.taskFailed(ex.getMessage());
                     LOGGER.warning(R.string.log_text,ex.getMessage());
                 }
 

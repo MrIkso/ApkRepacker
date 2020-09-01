@@ -22,23 +22,21 @@
             android:id="@+id/open_with"
             android:drawableStart="@drawable/ic_open_with"
             android:text="@string/action_open_with"
-            android:visibility="gone"
             style="@style/ActionItem" />
 
         <TextView
             android:id="@+id/open_in_editor"
             android:drawableStart="@drawable/ic_rename"
             android:text="@string/action_open_in_editor"
-            android:visibility="gone"
             style="@style/ActionItem" />
 
         <TextView
-            android:id="@+id/rename_file"
-            android:drawableStart="@drawable/ic_rename"
-            android:text="@string/action_rename"
-            style="@style/ActionItem" />
+            android:id="@+id/action_copy_path"
+            android:drawableStart="@drawable/ic_copy"
+            android:text="@string/action_copy_path"
+            style="@style/ActionItem"/>
 
-        <TextView
+        <!--<TextView
             android:id="@+id/add_new_folder"
             android:drawableStart="@drawable/ic_create_new_folder_dark"
             android:text="@string/action_create_new_folder"
@@ -48,7 +46,7 @@
             android:id="@+id/delete_file"
             android:drawableStart="@drawable/ic_delete"
             android:text="@string/action_delete"
-            style="@style/ActionItem" />
+            style="@style/ActionItem" />-->
 
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

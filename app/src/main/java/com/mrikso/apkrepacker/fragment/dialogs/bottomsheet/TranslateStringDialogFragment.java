@@ -93,7 +93,7 @@ public class TranslateStringDialogFragment extends BottomSheetDialogFragment imp
                 mNewEdit.setText(StringUtils.getClipboard(requireContext()));
                 break;
             case R.id.button_copy:
-                StringUtils.setClipboard(requireContext(), mOldValue);
+                StringUtils.setClipboard(requireContext(), mOldValue, true);
                 break;
             case R.id.delete_string:
                 mListener.onDeleteString(mItemPosition);

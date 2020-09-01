@@ -179,8 +179,7 @@ public class FindFragment extends Fragment implements ProgressDialogFragment.Pro
                 startActivity(intent);
                 break;
             case R.id.copy_path:
-                StringUtils.setClipboard(mContext, mSelectedFile.getAbsolutePath());
-                UIUtils.toast(requireContext(), getString(R.string.toast_copy_to_clipboard));
+                StringUtils.setClipboard(mContext, mSelectedFile.getAbsolutePath(), true);
                 break;
             case R.id.replace_in_file:
                 ReplaceInFileDialogFragment replaceInFileDialogFragment = ReplaceInFileDialogFragment.newInstance(mSearchText, mSelectedFile.getAbsolutePath());
@@ -284,6 +283,8 @@ public class FindFragment extends Fragment implements ProgressDialogFragment.Pro
         Fragment find = getChildFragmentManager().findFragmentByTag(SearchSettingsFragment.TAG);
         if (find != null) {
             getChildFragmentManager().popBackStack();
+        } else{
+            requireActivity().finish();
         }
     }
 }

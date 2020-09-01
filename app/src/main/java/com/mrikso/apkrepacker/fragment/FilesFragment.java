@@ -229,7 +229,7 @@ public class FilesFragment extends BaseFilesFragment implements OnBackPressedLis
     public void onBackPressed() {
         if (getFileAdapter().anySelected()) {
             getFileAdapter().clearSelection();
-           // return true;
+           return;
         }
         savePosition(false);
 
@@ -487,12 +487,10 @@ public class FilesFragment extends BaseFilesFragment implements OnBackPressedLis
                 //refresh();
                 return true;
             case R.id.action_copy_name:
-                StringUtils.setClipboard(requireContext(), mSelectedFile.getName());
-                UIUtils.toast(requireContext(), getString(R.string.toast_copy_to_clipboard));
+                StringUtils.setClipboard(requireContext(), mSelectedFile.getName(), true);
                 return false;
             case R.id.action_copy_path:
-                StringUtils.setClipboard(requireContext(), mSelectedFile.getAbsolutePath());
-                UIUtils.toast(requireContext(), getString(R.string.toast_copy_to_clipboard));
+                StringUtils.setClipboard(requireContext(), mSelectedFile.getAbsolutePath(), true);
                 return false;
             case R.id.action_copy_id:
 

@@ -6,18 +6,18 @@ import java.io.Reader;
 
 public class LinedReader extends BufferedReader {
 
-    private int curLine = 0;
+    private int mCurrentLine = 0;
 
     public LinedReader(Reader input) {
         super(input);
     }
 
     public String readLine() throws IOException {
-        this.curLine++;
+        mCurrentLine++;
         return super.readLine();
     }
 
     public int getCurrentLine() {
-        return this.curLine;
+        return mCurrentLine;
     }
 }

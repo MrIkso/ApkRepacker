@@ -82,7 +82,7 @@
     <string name="installed_apps">Установленные приложения</string>
     <string name="menu_string">Строки</string>
     <string name="menu_files">Файлы</string>
-    <string name="menu_find_list">Список найденных</string>
+    <string name="menu_find">Поиск</string>
     <string name="build_run_title">Сборка приложения</string>
     <string name="complete">Завершено</string>
     <string name="toast_deleted_item">Файл %s удален</string>

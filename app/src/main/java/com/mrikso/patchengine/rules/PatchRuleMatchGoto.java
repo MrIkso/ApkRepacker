@@ -33,13 +33,12 @@ public class PatchRuleMatchGoto extends PatchRule {
     private PathFinder pathFinder;
 
     public PatchRuleMatchGoto() {
-
-        this.keywords.add(TARGET);
-        this.keywords.add(MATCH);
-        this.keywords.add(REGEX);
-        this.keywords.add(GOTO);
-        this.keywords.add(DOTALL);
-        this.keywords.add(strEnd);
+        keywords.add(TARGET);
+        keywords.add(MATCH);
+        keywords.add(REGEX);
+        keywords.add(GOTO);
+        keywords.add(DOTALL);
+        keywords.add(strEnd);
     }
 
     @Override
@@ -62,7 +61,7 @@ public class PatchRuleMatchGoto extends PatchRule {
                             break;
                         default:
                             if (MATCH.equals(line)) {
-                                line = readMultiLines(br, this.matches, true, this.keywords);
+                                line = readMultiLines(br, matches, true, keywords);
                                 continue;
                             }
                             if (GOTO.equals(line)) {
@@ -83,27 +82,26 @@ public class PatchRuleMatchGoto extends PatchRule {
 
     @Override
     public String executeRule(ProjectHelper projectHelper, ZipFile patchZip, IPatchContext logger) {
-        preProcessing(logger, this.matches);
-        String nextPath = this.pathFinder.getNextPath();
+        preProcessing(logger, matches);
+        String nextPath = pathFinder.getNextPath();
         while (nextPath != null) {
             if (entryMatches(projectHelper, logger, nextPath)) {
-                return this.gotoRule;
+                return gotoRule;
             }
-            nextPath = this.pathFinder.getNextPath();
+            nextPath = pathFinder.getNextPath();
         }
         return null;
     }
 
-    @SuppressLint("WrongConstant")
-    private boolean entryMatches(ProjectHelper activity, IPatchContext patchCtx, String targetFile) {
+    private boolean entryMatches(ProjectHelper projectHelper, IPatchContext patchCtx, String targetFile) {
         Pattern pattern;
-        String filepath = activity.getProjectPath() + "/" + targetFile;
+        String filepath = projectHelper.getProjectPath() + "/" + targetFile;
         if (isUseRegex) {
             try {
                 String content = readFileContent(filepath);
                 List<Section> sections = new ArrayList<>();
-                String regStr = this.matches.get(0);
-                if (this.bDotall) {
+                String regStr = matches.get(0);
+                if (bDotall) {
                     pattern = Pattern.compile(regStr.trim(), Pattern.DOTALL);
                 } else {
                     pattern = Pattern.compile(regStr.trim());
@@ -130,7 +128,7 @@ public class PatchRuleMatchGoto extends PatchRule {
                 List<String> lines = super.readFileLines(filepath);
                 boolean matches2 = false;
                 int i2 = 0;
-                while (i2 < (lines.size() - this.matches.size()) + 1 && !(matches2 = checkMatch(lines, i2))) {
+                while (i2 < (lines.size() - matches.size()) + 1 && !(matches2 = checkMatch(lines, i2))) {
                     i2++;
                 }
                 return matches2;
@@ -143,37 +141,36 @@ public class PatchRuleMatchGoto extends PatchRule {
 
     private boolean checkMatch(List<String> lines, int idx) {
         int i = 0;
-        while (i < this.matches.size() && lines.get(idx + i).trim().equals(this.matches.get(i))) {
+        while (i < matches.size() && lines.get(idx + i).trim().equals(matches.get(i))) {
             i++;
         }
-        return i == this.matches.size();
+        return i == matches.size();
     }
 
     @Override
     public boolean isValid(IPatchContext logger) {
-        PathFinder pathFinder2 = this.pathFinder;
-        if (pathFinder2 == null || !pathFinder2.isValid()) {
+        if (pathFinder == null || !pathFinder.isValid()) {
             return false;
         }
-        if (this.matches.isEmpty()) {
+        if (matches.isEmpty()) {
             logger.error(R.string.patch_error_no_match_content);
             return false;
-        } else if (this.gotoRule == null) {
+        } else if (gotoRule == null) {
             logger.error(R.string.patch_error_no_goto_target);
             return false;
         } else {
             List<String> allRuleName = logger.getPatchNames();
-            if (allRuleName != null && allRuleName.contains(this.gotoRule)) {
+            if (allRuleName != null && allRuleName.contains(gotoRule)) {
                 return true;
             }
-            logger.error(R.string.patch_error_goto_target_notfound, this.gotoRule);
+            logger.error(R.string.patch_error_goto_target_notfound, gotoRule);
             return false;
         }
     }
 
     @Override
     public boolean isSmaliNeeded() {
-        return this.pathFinder.isSmaliNeeded();
+        return pathFinder.isSmaliNeeded();
     }
 
 }

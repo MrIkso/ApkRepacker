@@ -16,10 +16,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import brut.util.Logger
 import com.jecelyin.common.utils.DLog
+import com.jecelyin.common.utils.IOUtils
 import com.mrikso.apkrepacker.R
 import com.mrikso.apkrepacker.task.BuildTask
 import com.mrikso.apkrepacker.ui.apkbuilder.IBuilderCallback
 import com.mrikso.apkrepacker.ui.apkbuilder.TaskStepInfo
+import com.mrikso.apkrepacker.ui.preferences.PreferenceHelper
 import com.mrikso.apkrepacker.utils.SignUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -37,13 +39,14 @@ class BuildService : Service(), IBuilderCallback, Logger {
         const val NOTIFICATION_ID = 1
     }
 
+    private val LINE_SEPARATOR_WIN = "\r\n"
     private val binder = LocalBinder()
     private val job = Job()
     private val uiScope = CoroutineScope(Dispatchers.IO + job)
     private var mProjectDir: String? = ""
 
-    private val mCompileLogMutable = MutableLiveData<String>()
-    val compileLog: LiveData<String> = mCompileLogMutable
+    private val mCompileLogMutable = StringBuilder()
+    var compileLog: String? = ""
 
     private val mStepMutable = MutableLiveData<String>()
     val stepInfo: LiveData<String> = mStepMutable
@@ -127,12 +130,14 @@ class BuildService : Service(), IBuilderCallback, Logger {
     }
 
     override fun info(@StringRes id: Int, vararg args: Any?) {
-        mCompileLogMutable.postValue(String.format("I: %s", getString(id, *args)))
+        mCompileLogMutable.append(String.format("I: %s", getString(id, *args)))
+        mCompileLogMutable.append(LINE_SEPARATOR_WIN)
         DLog.i("BuildService", String.format("I: %s", getString(id, *args)))
     }
 
     override fun warning(@StringRes id: Int, vararg args: Any?) {
-        mCompileLogMutable.postValue(String.format("W: %s", getString(id, *args)))
+        mCompileLogMutable.append(String.format("W: %s", getString(id, *args)))
+        mCompileLogMutable.append(LINE_SEPARATOR_WIN)
         DLog.w("BuildService", getString(id, *args));
     }
 
@@ -141,26 +146,33 @@ class BuildService : Service(), IBuilderCallback, Logger {
     }
 
     override fun text(@StringRes id: Int, vararg args: Any?) {
-        mCompileLogMutable.postValue(getString(id, *args))
+        mCompileLogMutable.append(getString(id, *args))
+        mCompileLogMutable.append(LINE_SEPARATOR_WIN)
     }
 
     override fun error(@StringRes id: Int, vararg args: Any?) {
-        mCompileLogMutable.postValue(String.format("E: %s", getString(id, *args)))
-        DLog.e(getString(id, *args))
+        compileLog = getString(id, *args);
+        mCompileLogMutable.append(String.format("E: %s", compileLog))
+        mCompileLogMutable.append(LINE_SEPARATOR_WIN)
+        DLog.e("BuildService",compileLog)
+        taskFailed(getString(id, *args))
     }
 
     override fun log(level: Level, format: String?, ex: Throwable?) {
         val ch = level.name[0]
         val fmt = "%c: %s"
-        mCompileLogMutable.postValue(String.format(fmt, ch, format))
+        mCompileLogMutable.append(String.format(fmt, ch, format))
+        mCompileLogMutable.append(LINE_SEPARATOR_WIN)
         log(fmt, ch, ex)
     }
 
     private fun log(fmt: String, ch: Char, ex: Throwable?) {
         if (ex == null) return
-        mCompileLogMutable.postValue(String.format(fmt, ch, ex.message))
+        mCompileLogMutable.append(String.format(fmt, ch, ex.message))
+        mCompileLogMutable.append(LINE_SEPARATOR_WIN)
         for (ste in ex.stackTrace)
-            mCompileLogMutable.postValue(String.format(fmt, ch, ste))
+            mCompileLogMutable.append(String.format(fmt, ch, ste))
+            mCompileLogMutable.append(LINE_SEPARATOR_WIN)
         log(fmt, ch, ex.cause)
     }
 
@@ -182,10 +194,15 @@ class BuildService : Service(), IBuilderCallback, Logger {
 
     override fun taskSucceed(file: File?) {
         mSuccessMutable.postValue(file)
+        IOUtils.writeFile(File(PreferenceHelper.getInstance(baseContext).decodingPath + "/" + "compile_log.txt"), mCompileLogMutable.toString())
+        stopForeground(true)
     }
 
     override fun taskFailed(str: String?) {
         mFaliedMutable.postValue(str)
+        mSuccessMutable.postValue(null)
+        IOUtils.writeFile(File(PreferenceHelper.getInstance(baseContext).decodingPath + "/" + "compile_log.txt"), mCompileLogMutable.toString())
+        stopForeground(true)
     }
 
 }

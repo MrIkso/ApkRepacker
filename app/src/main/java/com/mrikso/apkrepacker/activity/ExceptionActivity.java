@@ -34,8 +34,7 @@ public class ExceptionActivity extends BaseActivity {
         mErrorView.setText(mError);
         Button copy = findViewById(R.id.btn_copy_log);
         copy.setOnClickListener(v -> {
-            StringUtils.setClipboard(this, mError);
-            UIUtils.toast(this, getString(R.string.toast_copy_to_clipboard));
+            StringUtils.setClipboard(this, mError, true);
         });
         if(!BuildConfig.DEBUG) {
             sendErrorMail(this, mError);
