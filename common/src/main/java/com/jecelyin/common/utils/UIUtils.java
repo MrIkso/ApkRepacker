@@ -41,14 +41,31 @@ import java.lang.reflect.Field;
  * @author Jecelyin Peng <jecelyin@gmail.com>
  */
 public class UIUtils {
+
     public static void alert(Context context, String message) {
-        alert(context, null, message);
+        alert(context, null, message, null);
     }
 
-    public static void alert(Context context, String title, String message) {
+    public static void alert(Context context, String title,String message) {
+        alert(context, title, message, null);
+    }
+
+    public static void alert(Context context, String message, final OnClickCallback callback) {
+        alert(context, null, message, callback);
+    }
+
+    public static void alert(Context context, String title, String message, final OnClickCallback callback) {
         MaterialDialog.Builder builder = new MaterialDialog.Builder(context)
                 .content(message)
-                .positiveText(android.R.string.ok);
+                .positiveText(android.R.string.ok)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        if (callback == null)
+                            return;
+                        callback.onOkClick();
+                    }
+                });
 
         if (!TextUtils.isEmpty(title))
             builder.title(title);
