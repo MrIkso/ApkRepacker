@@ -3,6 +3,7 @@ package com.mrikso.patchengine;
 import android.util.Log;
 
 import com.mrikso.apkrepacker.R;
+import com.mrikso.apkrepacker.utils.common.DLog;
 import com.mrikso.patchengine.interfaces.IPatchContext;
 import com.mrikso.patchengine.patchfilter.PathFilter;
 import com.mrikso.patchengine.patchfilter.PathFilterComponent;
@@ -19,7 +20,7 @@ public class PathFinder {
     private List<PathFilter> filters = new ArrayList();
 
     public PathFinder(IPatchContext ctx, String pathStr, int line) {
-        Log.d(TAG, "Starting PatchFinder");
+        DLog.d(TAG, "Starting PatchFinder");
 
         String expanded = PatchRule.assignValues(ctx, pathStr);
         pathStr = expanded != null ? expanded : pathStr;
@@ -80,7 +81,7 @@ public class PathFinder {
     }
 
     public String getNextPath() {
-        Log.d(TAG, "Starting getNextPatch");
+        DLog.d(TAG, "Starting getNextPatch");
         List<PathFilter> list = this.filters;
         if (list == null) {
             return null;

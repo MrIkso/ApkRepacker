@@ -88,7 +88,7 @@ public class PatchExecutor {
         }.start();
     }*/
     //применяем правила патча
-    private void applyRules(final List<PatchRule> rules, final ZipFile sourceZip) {
+    private void applyRules(List<PatchRule> rules, ZipFile sourceZip) {
         new Thread() {
             public void run() {
              ///   int index = 0;

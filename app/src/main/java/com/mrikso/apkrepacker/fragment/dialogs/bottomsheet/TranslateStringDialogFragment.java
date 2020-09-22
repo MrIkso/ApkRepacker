@@ -20,7 +20,12 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.autotranslator.translator.TranslateItem;
 import com.mrikso.apkrepacker.ide.editor.content.ClipboardCompat;
+import com.mrikso.apkrepacker.ui.publicxml.PublicXmlParser;
+import com.mrikso.apkrepacker.utils.FileUtil;
+import com.mrikso.apkrepacker.utils.ProjectUtils;
 import com.mrikso.apkrepacker.utils.StringUtils;
+
+import java.io.File;
 
 
 public class TranslateStringDialogFragment extends BottomSheetDialogFragment implements View.OnClickListener {
@@ -64,6 +69,15 @@ public class TranslateStringDialogFragment extends BottomSheetDialogFragment imp
         ok.setOnClickListener(this);
         AppCompatImageButton copyOldValue = view.findViewById(R.id.button_copy);
         copyOldValue.setOnClickListener(this);
+        copyOldValue.setOnLongClickListener(view1 -> {
+            new Thread(() -> {
+                PublicXmlParser mXmlParser = new PublicXmlParser(new File(ProjectUtils.getProjectPath() + "/res/values/public.xml"));
+                getActivity().runOnUiThread(() -> {
+                    StringUtils.setClipboard(requireContext(), mXmlParser.getIdByName(mKey), true);
+                });
+            }).start();
+            return true;
+        });
         AppCompatImageButton pasteValue = view.findViewById(R.id.button_paste);
         pasteValue.setOnClickListener(this);
         AppCompatImageButton clearNewValue = view.findViewById(R.id.button_clear);

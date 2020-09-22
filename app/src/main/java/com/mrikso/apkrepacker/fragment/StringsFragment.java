@@ -167,12 +167,6 @@ public class StringsFragment extends Fragment implements AddLanguageDialogFragme
         }, null);
     }
 
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if (hidden)
-            StringUtils.hideKeyboard(this);
-    }
 
     @Override
     public void onAddLangClick(String item) {

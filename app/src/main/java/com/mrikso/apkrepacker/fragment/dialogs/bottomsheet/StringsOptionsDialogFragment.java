@@ -33,7 +33,8 @@ public class StringsOptionsDialogFragment extends BottomSheetDialogFragment impl
         return inflater.inflate(R.layout.bottom_sheet_strings_options, container, false);
     }
 
-    @Override public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         view.findViewById(R.id.open_with).setOnClickListener(this);
         view.findViewById(R.id.add_new_string).setOnClickListener(this);

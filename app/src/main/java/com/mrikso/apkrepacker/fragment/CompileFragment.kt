@@ -75,6 +75,11 @@ class CompileFragment : Fragment(), ErrorAdapter.OnItemInteractionListener {
         retainInstance = true
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean("serviceRunning", mBound)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_compile, container, false)
         mViewModel =  ViewModelProvider(this).get(CompileFragmentViewModel::class.java)
@@ -106,7 +111,10 @@ class CompileFragment : Fragment(), ErrorAdapter.OnItemInteractionListener {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = mAdapter
         }
-
+        if (bundle != null) {
+            mBound = bundle.getBoolean("serviceRunning")
+        }
+        if(!mBound)
         bindLocalService()
         startBuildService()
     }

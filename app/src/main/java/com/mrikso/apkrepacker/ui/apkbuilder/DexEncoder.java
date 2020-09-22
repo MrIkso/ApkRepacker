@@ -61,6 +61,7 @@ public class DexEncoder {
                         callback.updateAssembledFiles(finishedTasks2, totalTasks);
                         break;
                     } catch (InterruptedException e2) {
+                        e2.printStackTrace();
                     }
                 }
                 errors = errors2;

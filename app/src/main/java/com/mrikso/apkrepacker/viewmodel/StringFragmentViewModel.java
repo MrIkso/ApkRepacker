@@ -246,7 +246,8 @@ public class StringFragmentViewModel extends AndroidViewModel {
      */
     public void updateString(int position, String newValue){
         isChanget = true;
-        mTranslateItemMutableLiveData.getValue().get(position).translatedValue = newValue;
+        mUpdatedStrings = mTranslateItemMutableLiveData.getValue();
+        mUpdatedStrings.get(position).translatedValue = newValue;
     }
 
     /**

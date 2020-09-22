@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.jecelyin.common.utils.IOUtils;
 import com.jecelyin.common.utils.UIUtils;
 import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
@@ -33,6 +34,7 @@ import com.mrikso.apkrepacker.ui.filemanager.holder.FileHolder;
 import com.mrikso.apkrepacker.ui.filemanager.utils.CopyHelper;
 import com.mrikso.apkrepacker.ui.filemanager.utils.Utils;
 import com.mrikso.apkrepacker.ui.imageviewer.ImageViewerActivity;
+import com.mrikso.apkrepacker.ui.publicxml.PublicXmlParser;
 import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.FragmentUtils;
 import com.mrikso.apkrepacker.utils.IntentUtils;
@@ -45,6 +47,7 @@ import com.sdsmdg.harjot.vectormaster.VectorMasterDrawable;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Objects;
 
 public class FilesFragment extends BaseFilesFragment implements OnBackPressedListener, OnItemSelectedListener,
@@ -62,8 +65,9 @@ public class FilesFragment extends BaseFilesFragment implements OnBackPressedLis
     private AppCompatTextView mSelectedCount, mPaste;
     private AppCompatImageButton mClearSelection;
     private AppCompatImageButton mSelectAll, mCut, mDelete, mCopy, mRename, mMoreMenuBottomBar, mCreateDirectory;
+    private PublicXmlParser mXmlParser = null;
 
-   // private ArrayList<FileHolder> mSelected = new ArrayList<>();
+    // private ArrayList<FileHolder> mSelected = new ArrayList<>();
     private PanelActions mActions;
     private CopyHelper mCopyHelper;
 
@@ -190,7 +194,7 @@ public class FilesFragment extends BaseFilesFragment implements OnBackPressedLis
             if (isSelected) {
                 mCopyHelper = App.get().getCopyHelper();
                 mCopyHelper.setFilesFragment(this);
-            //    mSelected.addAll(getFileAdapter().getSelectedItems());
+                //    mSelected.addAll(getFileAdapter().getSelectedItems());
                 mSelectAll.setOnClickListener(v -> getFileAdapter().selectAll());
                 mClearSelection.setOnClickListener(v -> getFileAdapter().clearSelection());
                 mSelectedCount.setText(getString(R.string.selected, getFileAdapter().getSelectedItemCount()));
@@ -229,30 +233,31 @@ public class FilesFragment extends BaseFilesFragment implements OnBackPressedLis
     public void onBackPressed() {
         if (getFileAdapter().anySelected()) {
             getFileAdapter().clearSelection();
-           return;
+            return;
         }
         savePosition(false);
 
-   //     Fragment manager1 = getChildFragmentManager().findFragmentByTag(SearchSettingsFragment.TAG);
+        //     Fragment manager1 = getChildFragmentManager().findFragmentByTag(SearchSettingsFragment.TAG);
         Fragment manager2 = getChildFragmentManager().findFragmentByTag(ColorEditorFragment.TAG);
 //        Fragment manager3 = getChildFragmentManager().findFragmentByTag(DimensEditorFragment.TAG);
 
         /*if (manager1 != null) {
             getChildFragmentManager().popBackStack();
             return true;
-        }*/  if (manager2 != null) {
+        }*/
+        if (manager2 != null) {
             getChildFragmentManager().popBackStack();
-           // return true;
+            // return true;
 /*        } else if (manager3 != null) {
             getChildFragmentManager().popBackStack();
             return true;*/
         } else if (Utils.backWillExit(mProjectPath, getPath())) {
             requireActivity().finish();
-          //  return true;
+            //  return true;
         } else {
             setPath(new File(Utils.downDir(1, getPath())));
             refresh();
-          //  return true;
+            //  return true;
         }
 
     }
@@ -385,7 +390,7 @@ public class FilesFragment extends BaseFilesFragment implements OnBackPressedLis
                     popupMenu.getMenu().findItem(R.id.action_copy_id).setVisible(mSelectedFile.isFile() && mSelectedFile.getAbsolutePath().contains(mProjectPath + "/res/"));
                     popupMenu.show();
                 } else {
-
+                    //todo add support multiselections
                 }
                 break;
             case R.id.fab_search:
@@ -493,7 +498,16 @@ public class FilesFragment extends BaseFilesFragment implements OnBackPressedLis
                 StringUtils.setClipboard(requireContext(), mSelectedFile.getAbsolutePath(), true);
                 return false;
             case R.id.action_copy_id:
-
+                if (mXmlParser != null) {
+                    StringUtils.setClipboard(requireContext(), mXmlParser.getIdByName(FileUtil.removeExtension(mSelectedFile.getName())), true);
+                } else {
+                    new Thread(() -> {
+                        mXmlParser = new PublicXmlParser(new File(mProjectPath + "/res/values/public.xml"));
+                        getActivity().runOnUiThread(() -> {
+                            StringUtils.setClipboard(requireContext(), mXmlParser.getIdByName(FileUtil.removeExtension(mSelectedFile.getName())), true);
+                        });
+                    }).start();
+                }
                 return false;
         }
         return false;

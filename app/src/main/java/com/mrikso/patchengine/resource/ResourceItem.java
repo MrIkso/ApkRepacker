@@ -2,6 +2,21 @@ package com.mrikso.patchengine.resource;
 
 import androidx.annotation.NonNull;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 public class ResourceItem {
 
     private int id;
@@ -14,8 +29,8 @@ public class ResourceItem {
         this.id = _id;
     }
 
-    public static ResourceItem parseFrom(String line) {
-        int startPos = 0;
+    public static List<ResourceItem> parseFrom(File line) {
+        /*int startPos = 0;
         int endPos;
         int startPos2 = 0;
         int endPos2;
@@ -38,8 +53,29 @@ public class ResourceItem {
         }
         if (type2 == null || name2 == null || id2 == -1) {
             return null;
+        }*/
+        try {
+            List<ResourceItem> result = new ArrayList<>();
+            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder documentBuilder = builderFactory.newDocumentBuilder();
+            Document doc = documentBuilder.parse(line);
+            doc.getDocumentElement().normalize();
+            NodeList nodeList = doc.getElementsByTagName("public");
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                Node node = nodeList.item(i);
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    Element element = (Element) node;
+                    String type = element.getAttribute("type");
+                    String name = element.getAttribute("name");
+                    String id = element.getAttribute("id");
+                    result.add(new ResourceItem(type, name, string2Id(id)));
+                }
+            }
+            return result;
+        } catch (IOException | SAXException | ParserConfigurationException e) {
+            e.printStackTrace();
         }
-        return new ResourceItem(type2, name2, id2);
+       return null;
     }
 
     public static int string2Id(String str) {

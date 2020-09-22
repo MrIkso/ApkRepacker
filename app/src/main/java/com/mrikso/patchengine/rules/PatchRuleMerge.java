@@ -217,7 +217,7 @@ public class PatchRuleMerge extends PatchRule {
 
     private List<ResourceItem> getResourceItems(InputStream input) throws IOException {
         List<ResourceItem> result = new ArrayList<>();
-        BufferedReader br = new BufferedReader(new InputStreamReader(input));
+        /*BufferedReader br = new BufferedReader(new InputStreamReader(input));
         while (true) {
             String readLine = br.readLine();
             if (readLine == null) {
@@ -227,7 +227,8 @@ public class PatchRuleMerge extends PatchRule {
             if (item != null) {
                 result.add(item);
             }
-        }
+        }*/
+        return null;
     }
 
     @Override

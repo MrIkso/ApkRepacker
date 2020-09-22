@@ -171,7 +171,11 @@ public class StringsAdapter extends RecyclerView.Adapter<StringsAdapter.ViewHold
             mItem = item;
             mPosition = position;
             mStringName.setText(item.originValue);
-            mStringValue.setText(item.translatedValue);
+            String translated = item.translatedValue;
+            if(translated != null)
+                //если строка будет переведена, то цвет фона будет изменен и перевён текст будет отображаться
+                mStringValue.setBackgroundColor(0x20888888);
+                mStringValue.setText(translated);
         }
     }
 }
