@@ -7,27 +7,22 @@ android {
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
     }
-    dataBinding {
-        enabled = true
-    }
 
 }
 
 dependencies {
-    testImplementation 'androidx.test:runner:1.2.0'
-    testImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    testImplementation 'androidx.test.espresso:espresso-contrib:3.2.0'
-
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(":md-dialog-core")
-    implementation 'com.google.android.material:material:1.1.0'
-    //implementation 'com.rengwuxian.materialedittext:library:2.1.4'
-//    implementation 'com.afollestad.material-dialogs:commons:0.9.6.0'
-    implementation 'com.google.code.gson:gson:2.8.6'
+
+    //android x
+    implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.annotation:annotation:1.1.0'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
-    implementation 'androidx.cardview:cardview:1.0.0'
+    //implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
+    //implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    implementation 'androidx.annotation:annotation:1.1.0'
+
+    // tests
+    testImplementation 'junit:junit:4.13'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 }
