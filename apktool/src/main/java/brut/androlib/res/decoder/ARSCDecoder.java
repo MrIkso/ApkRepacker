@@ -186,7 +186,8 @@ public class ARSCDecoder {
 
             type = nextChunk().type;
 
-            addMissingResSpecs();
+            //APKTOOL_DYMMY not aploved in aapt2
+            //addMissingResSpecs();
         }
     }
 

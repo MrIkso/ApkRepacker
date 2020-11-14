@@ -501,6 +501,8 @@ final public class AndrolibResources {
             cmd.add(resourcesZip.getAbsolutePath());
         }
 
+        //disable manifest validation
+        cmd.add("--warn-manifest-validation");
         try {
             LOGGER.info(R.string.log_text,"Using aapt2 for compilation resources");
             CommandRunner commandRunner = new CommandRunner();
