@@ -35,5 +35,9 @@ public class PreferenceKeys {
     public static final String KEY_CURRENT_THEME = "current_theme";
     public static final String KEY_THEME_MODE = "theme_mode";
     public static final String KEY_AUTO_THEME = "pref_auto_theme_mode";
-    public static final String KEY_AUTO_THEME_PICKER = "pref_auto_theme_picker" ;
+    public static final String KEY_AUTO_THEME_PICKER = "pref_auto_theme_picker";
+    //translation options
+    public static final String KEY_SKIP_TRANSLATED = "pref_skip_translated_lines";
+    public static final String KEY_SKIP_SUPPORT_LINES = "pref_skip_support_lines";
+    public static final String KEY_REVERSE_TRANSLATED = "pref_reverse_translated";
 }

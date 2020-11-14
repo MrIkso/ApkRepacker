@@ -34,8 +34,11 @@ import static com.mrikso.apkrepacker.ui.preferences.PreferenceKeys.KEY_MATCH_CAS
 import static com.mrikso.apkrepacker.ui.preferences.PreferenceKeys.KEY_PRIVATE_KEY;
 import static com.mrikso.apkrepacker.ui.preferences.PreferenceKeys.KEY_PRIVATE_KEY_PATH;
 import static com.mrikso.apkrepacker.ui.preferences.PreferenceKeys.KEY_RECURSIVELY;
+import static com.mrikso.apkrepacker.ui.preferences.PreferenceKeys.KEY_REVERSE_TRANSLATED;
 import static com.mrikso.apkrepacker.ui.preferences.PreferenceKeys.KEY_SHOW_HIDDEN_FILES;
 import static com.mrikso.apkrepacker.ui.preferences.PreferenceKeys.KEY_SIGN_OUT_APK;
+import static com.mrikso.apkrepacker.ui.preferences.PreferenceKeys.KEY_SKIP_SUPPORT_LINES;
+import static com.mrikso.apkrepacker.ui.preferences.PreferenceKeys.KEY_SKIP_TRANSLATED;
 import static com.mrikso.apkrepacker.ui.preferences.PreferenceKeys.KEY_STORE_KEY;
 import static com.mrikso.apkrepacker.ui.preferences.PreferenceKeys.KEY_THEME;
 import static com.mrikso.apkrepacker.ui.preferences.PreferenceKeys.KEY_TOOLS_INSTALLED;
@@ -94,6 +97,9 @@ public class PreferenceHelper implements SharedPreferences.OnSharedPreferenceCha
         map.put(KEY_CONFIRM_BUILD, false);
         map.put(KEY_THEME, 0);
         map.put(KEY_AUTO_THEME, false);
+        map.put(KEY_SKIP_TRANSLATED, false);
+        map.put(KEY_SKIP_SUPPORT_LINES, false);
+        map.put(KEY_REVERSE_TRANSLATED, false);
         Map<String, ?> values = pm.getAll();
         for(String key : map.keySet()) {
             updateValue(key, values);
@@ -284,6 +290,33 @@ public class PreferenceHelper implements SharedPreferences.OnSharedPreferenceCha
 
     public boolean isFilesMode() {
         return (boolean)map.get(KEY_FILES_MODE);
+    }
+
+    public void setSkipTranslated(boolean b) {
+        pm.edit().putBoolean(KEY_SKIP_TRANSLATED, b).apply();
+        map.put(KEY_SKIP_TRANSLATED, b);
+    }
+
+    public boolean isSkipTranslated() {
+        return (boolean)map.get(KEY_SKIP_TRANSLATED);
+    }
+
+    public void setSkipSupportLines(boolean b) {
+        pm.edit().putBoolean(KEY_SKIP_SUPPORT_LINES, b).apply();
+        map.put(KEY_SKIP_SUPPORT_LINES, b);
+    }
+
+    public boolean isSkipSupportLines() {
+        return (boolean)map.get(KEY_SKIP_SUPPORT_LINES);
+    }
+
+    public void setReverseDictionary(boolean b) {
+        pm.edit().putBoolean(KEY_REVERSE_TRANSLATED, b).apply();
+        map.put(KEY_REVERSE_TRANSLATED, b);
+    }
+
+    public boolean isReverseDictionary() {
+        return (boolean)map.get(KEY_REVERSE_TRANSLATED);
     }
 
     public void setExt(Map<String,Boolean> inputMap) {

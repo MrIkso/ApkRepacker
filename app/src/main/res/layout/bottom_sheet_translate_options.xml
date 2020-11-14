@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Material.CardView.BottomSheet"
+    app:strokeWidth="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="@dimen/checkbox_dimens"
+            android:layout_height="5dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/bottom_sheet_dialog_indicator" />
+        <!--auto translate options -->
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/sw_skip_translated"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/margin_big"
+            android:layout_marginStart="@dimen/card_title_margin"
+            android:layout_marginTop="@dimen/card_title_margin"
+            android:layout_marginEnd="@dimen/card_title_margin"
+            android:layout_marginBottom="0dp"
+            android:text="@string/label_skip_translated" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/sw_skip_support_lines"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/margin_big"
+            android:layout_marginStart="@dimen/card_title_margin"
+            android:layout_marginTop="@dimen/card_title_margin"
+            android:layout_marginEnd="@dimen/card_title_margin"
+            android:layout_marginBottom="0dp"
+            android:text="@string/label_skip_support_lines" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/sw_reverse_dictionary"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/margin_big"
+            android:layout_marginStart="@dimen/card_title_margin"
+            android:layout_marginTop="@dimen/card_title_margin"
+            android:layout_marginEnd="@dimen/card_title_margin"
+            android:layout_marginBottom="@dimen/card_title_margin"
+            android:text="@string/label_reverse_dictionary" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_ok"
+            style="@style/MD2Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/card_title_margin"
+            android:text="@string/abc_action_mode_done"
+            tools:ignore="PrivateResource" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

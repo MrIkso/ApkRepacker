@@ -1,9 +1,6 @@
 package com.mrikso.apkrepacker.service
 
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.Service
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.os.Binder
@@ -18,6 +15,7 @@ import brut.util.Logger
 import com.jecelyin.common.utils.DLog
 import com.jecelyin.common.utils.IOUtils
 import com.mrikso.apkrepacker.R
+import com.mrikso.apkrepacker.activity.AppEditorActivity
 import com.mrikso.apkrepacker.task.BuildTask
 import com.mrikso.apkrepacker.ui.apkbuilder.IBuilderCallback
 import com.mrikso.apkrepacker.ui.apkbuilder.TaskStepInfo
@@ -84,9 +82,13 @@ class BuildService : Service(), IBuilderCallback, Logger {
     }
 
     private fun addNotification(/*intent: Intent,*/ message: String) {
+       /* val intent = Intent(baseContext, AppEditorActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        intent.putExtra("showCompileFragment", true)
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(baseContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         // val notificationIntent = Intent(this, CompileFragment::class.java)
         //  val pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0)
-
+*/
         val notificationManager = NotificationManagerCompat.from(this)
 
         val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
@@ -95,7 +97,7 @@ class BuildService : Service(), IBuilderCallback, Logger {
             .setSmallIcon(R.mipmap.ic_launcher)
             .setWhen(System.currentTimeMillis())
             .setOnlyAlertOnce(true)
-        //   .setContentIntent(pendingIntent)
+          //  .setContentIntent(pendingIntent)
 
         val notification: Notification = notificationBuilder.build()
         notificationManager.notify(NOTIFICATION_ID, notification)
@@ -154,7 +156,7 @@ class BuildService : Service(), IBuilderCallback, Logger {
         compileLog = getString(id, *args);
         mCompileLogMutable.append(String.format("E: %s", compileLog))
         mCompileLogMutable.append(LINE_SEPARATOR_WIN)
-        DLog.e("BuildService",compileLog)
+        DLog.e("BuildService", compileLog)
         taskFailed(getString(id, *args))
     }
 
@@ -194,14 +196,20 @@ class BuildService : Service(), IBuilderCallback, Logger {
 
     override fun taskSucceed(file: File?) {
         mSuccessMutable.postValue(file)
-        IOUtils.writeFile(File(PreferenceHelper.getInstance(baseContext).decodingPath + "/" + "compile_log.txt"), mCompileLogMutable.toString())
+        IOUtils.writeFile(
+            File(PreferenceHelper.getInstance(baseContext).decodingPath + "/" + "compile_log.txt"),
+            mCompileLogMutable.toString()
+        )
         stopForeground(true)
     }
 
     override fun taskFailed(str: String?) {
         mFaliedMutable.postValue(str)
         mSuccessMutable.postValue(null)
-        IOUtils.writeFile(File(PreferenceHelper.getInstance(baseContext).decodingPath + "/" + "compile_log.txt"), mCompileLogMutable.toString())
+        IOUtils.writeFile(
+            File(PreferenceHelper.getInstance(baseContext).decodingPath + "/" + "compile_log.txt"),
+            mCompileLogMutable.toString()
+        )
         stopForeground(true)
     }
 

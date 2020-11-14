@@ -55,14 +55,14 @@
                 tools:listitem="@layout/list_item_error"/>
         </LinearLayout>
 
-        <!--<com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_show_log"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_copy_log"
             style="@style/MD2Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/normal_padding"
-            android:text="@string/action_show_log"
-            android:visibility="gone" />-->
+            android:text="@string/action_copy_log"
+            android:visibility="gone" />
     </LinearLayout>
 
     <!--разметка когда апк собрано-->

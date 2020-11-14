@@ -40,7 +40,7 @@ public class StringsAdapter extends RecyclerView.Adapter<StringsAdapter.ViewHold
     }
 
     public void setUpdatedItems(List<TranslateItem> map) {
-        final DiffUtil.DiffResult result = DiffUtil.calculateDiff(new StringsDiffCallback(dataFilter, map), false);
+        final DiffUtil.DiffResult result = DiffUtil.calculateDiff(new StringsDiffCallback(dataFilter, map), true);
         dataFilter.clear();
         dataFilter.addAll(map);
         result.dispatchUpdatesTo(this);
@@ -171,11 +171,12 @@ public class StringsAdapter extends RecyclerView.Adapter<StringsAdapter.ViewHold
             mItem = item;
             mPosition = position;
             mStringName.setText(item.originValue);
-            String translated = item.translatedValue;
-            if(translated != null)
+           // String translated = item.translatedValue;
+            //if(translated != null && !translated.isEmpty()) {
                 //если строка будет переведена, то цвет фона будет изменен и перевён текст будет отображаться
-                mStringValue.setBackgroundColor(0x20888888);
-                mStringValue.setText(translated);
+               // mStringValue.setBackgroundColor(item.translatedValue!=null && item.translatedValue.isEmpty() ? 0x20888888 : 0x00000000);
+                mStringValue.setText(item.translatedValue);
+           // }
         }
     }
 }

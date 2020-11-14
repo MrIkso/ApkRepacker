@@ -187,10 +187,10 @@ public class ExceptionHandler implements Thread.UncaughtExceptionHandler {
        // writeToFile(reportStringBuffer.toString());
 
         //вызываем активити с диалогом
-        Intent intent = new Intent( App.getContext(), ExceptionActivity.class);
+        Intent intent = new Intent( application.getApplicationContext(), ExceptionActivity.class);
         intent.putExtra("mError", reportStringBuffer.toString());
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        App.getContext().startActivity(intent);
+        application.getApplicationContext().startActivity(intent);
       //  Intent intent = new Intent(application, ErrorReporterActivity.class);
       //  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
       //  application.startActivity(intent);

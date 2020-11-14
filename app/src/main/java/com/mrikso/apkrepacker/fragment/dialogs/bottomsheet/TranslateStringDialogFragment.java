@@ -17,6 +17,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.jecelyin.common.utils.UIUtils;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.autotranslator.translator.TranslateItem;
 import com.mrikso.apkrepacker.ide.editor.content.ClipboardCompat;
@@ -71,9 +72,11 @@ public class TranslateStringDialogFragment extends BottomSheetDialogFragment imp
         copyOldValue.setOnClickListener(this);
         copyOldValue.setOnLongClickListener(view1 -> {
             new Thread(() -> {
-                PublicXmlParser mXmlParser = new PublicXmlParser(new File(ProjectUtils.getProjectPath() + "/res/values/public.xml"));
+                PublicXmlParser xmlParser = new PublicXmlParser(new File(ProjectUtils.getProjectPath() + "/res/values/public.xml"));
                 getActivity().runOnUiThread(() -> {
-                    StringUtils.setClipboard(requireContext(), mXmlParser.getIdByName(mKey), true);
+                    String id = xmlParser.getIdByName(mKey);
+                    StringUtils.setClipboard(requireContext(), id, false);
+                    UIUtils.toast(requireContext(), getString(R.string.string_id_copied, id));
                 });
             }).start();
             return true;

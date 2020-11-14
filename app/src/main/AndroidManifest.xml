@@ -59,6 +59,7 @@
         <service
             android:name=".service.BuildService"
             android:exported="false" />
+        <uses-library android:name="org.apache.http.legacy" android:required="true"/>
     </application>
 
 </manifest>

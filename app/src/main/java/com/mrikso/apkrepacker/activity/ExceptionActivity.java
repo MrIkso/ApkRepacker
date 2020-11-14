@@ -2,16 +2,13 @@ package com.mrikso.apkrepacker.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.widget.NestedScrollView;
 
-import com.jecelyin.common.utils.UIUtils;
 import com.mrikso.apkrepacker.BuildConfig;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.utils.StringUtils;
@@ -20,8 +17,6 @@ public class ExceptionActivity extends BaseActivity {
 
     private static String DEFAULT_EMAIL_SUBJECT = "Apk Repacker: Crash Report";
     private String mError;
-    private AppCompatTextView mErrorView;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +25,8 @@ public class ExceptionActivity extends BaseActivity {
         setContentView(R.layout.activity_exception);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        mErrorView = findViewById(R.id.error_view);
-        mErrorView.setText(mError);
+        AppCompatTextView error = findViewById(R.id.error_view);
+        error.setText(mError);
         Button copy = findViewById(R.id.btn_copy_log);
         copy.setOnClickListener(v -> {
             StringUtils.setClipboard(this, mError, true);
@@ -45,7 +40,7 @@ public class ExceptionActivity extends BaseActivity {
                         findViewById(R.id.app_bar).setSelected(scrollView.canScrollVertically(-1)));
     }
 
-    private void sendErrorMail(Context _context, String errorContent) {
+    private void sendErrorMail(Context context, String errorContent) {
         Intent sendIntent = new Intent(Intent.ACTION_SEND);
         String subject = DEFAULT_EMAIL_SUBJECT;
         String body = "\n\n" + errorContent + "\n\n";
@@ -55,7 +50,7 @@ public class ExceptionActivity extends BaseActivity {
         sendIntent.setType("message/rfc822");
         //sendIntent.setType("text/html");
         sendIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        _context.startActivity(Intent.createChooser(sendIntent, getString(R.string.title_select_mail_app)));
+        context.startActivity(Intent.createChooser(sendIntent, getString(R.string.title_select_mail_app)));
     }
     /*
     private void sendErrorMail(Context _context, String errorContent) {

@@ -28,10 +28,7 @@ import com.mrikso.apkrepacker.adapter.ErrorAdapter
 import com.mrikso.apkrepacker.fragment.dialogs.bottomsheet.FileOptionsDialogFragment
 import com.mrikso.apkrepacker.fragment.dialogs.bottomsheet.FullLogDialogFragment
 import com.mrikso.apkrepacker.service.BuildService
-import com.mrikso.apkrepacker.utils.AppUtils
-import com.mrikso.apkrepacker.utils.FragmentUtils
-import com.mrikso.apkrepacker.utils.TimeUtils
-import com.mrikso.apkrepacker.utils.ViewUtils
+import com.mrikso.apkrepacker.utils.*
 import com.mrikso.apkrepacker.utils.common.DLog
 import com.mrikso.apkrepacker.viewmodel.CompileFragmentViewModel
 import java.io.File
@@ -52,6 +49,7 @@ class CompileFragment : Fragment(), ErrorAdapter.OnItemInteractionListener {
     private var mInstallApp: MaterialButton? = null
     private var mCloseFragment: MaterialButton? = null
     private var mShowLog: MaterialButton? = null
+    private var mCopyLog: MaterialButton? = null
     private var mProgressBar: ProgressBar? = null
     private var mProgressTip: TextView? = null
     private var mSavedFileMsg: AppCompatTextView? = null
@@ -96,6 +94,7 @@ class CompileFragment : Fragment(), ErrorAdapter.OnItemInteractionListener {
         mInstallApp = view.findViewById(R.id.btn_install)
         mCloseFragment = view.findViewById(R.id.btn_close)
         mShowLog = view.findViewById(R.id.btn_show_log)
+        mCopyLog = view.findViewById(R.id.btn_copy_log)
         mProgressBar = view.findViewById(R.id.progressBar)
         mProgressTip = view.findViewById(R.id.progress_tip)
         mImageError = view.findViewById(R.id.image_error)
@@ -151,8 +150,7 @@ class CompileFragment : Fragment(), ErrorAdapter.OnItemInteractionListener {
                 AppUtils.installApk(requireContext(), result)
             }
         } else {
-          //  mShowLog!!.visibility = View.VISIBLE
-
+            mShowLog!!.visibility = View.VISIBLE
             mProgressBar!!.visibility = View.GONE
             mImageError!!.visibility = View.VISIBLE
             mProgressTip!!.setText(R.string.error_build_failed)
@@ -163,6 +161,7 @@ class CompileFragment : Fragment(), ErrorAdapter.OnItemInteractionListener {
                 FullLogDialogFragment.newInstance()
             fragment.show(parentFragmentManager, FullLogDialogFragment.TAG)
         }
+        mCopyLog!!.setOnClickListener{StringUtils.setClipboard(requireContext(), mAdapter.errorLines.joinToString(), true)}
         mCloseFragment!!.setOnClickListener {
             requireContext().unbindService(connection)
             mBound = false
@@ -223,6 +222,10 @@ class CompileFragment : Fragment(), ErrorAdapter.OnItemInteractionListener {
         override fun onServiceDisconnected(arg0: ComponentName) {
             mBound = false
         }
+    }
+
+    override fun OnItemLongClick(message: String?) {
+        StringUtils.setClipboard(requireContext(), message, true)
     }
 
     override fun OnItemClicked(filePath: String?, lineNumber: Int) {

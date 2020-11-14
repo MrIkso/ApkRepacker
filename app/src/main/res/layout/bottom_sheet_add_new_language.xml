@@ -82,6 +82,29 @@
                 android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <!--auto translate options -->
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/sw_skip_translated"
+            android:text="@string/label_skip_translated"
+            android:layout_marginTop="@dimen/card_title_margin"
+            android:layout_marginStart="@dimen/card_title_margin"
+            android:layout_marginEnd="@dimen/card_title_margin"
+            android:layout_marginBottom="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/margin_big"
+            android:visibility="gone"/>
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/sw_skip_support_lines"
+            android:text="@string/label_skip_support_lines"
+            android:layout_marginTop="@dimen/card_title_margin"
+            android:layout_marginStart="@dimen/card_title_margin"
+            android:layout_marginEnd="@dimen/card_title_margin"
+            android:layout_marginBottom="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/margin_big"
+            android:visibility="gone"/>
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_add_lang_ok"
             style="@style/MD2Button"

@@ -1,10 +1,12 @@
 package com.mrikso.apkrepacker.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.Toolbar;
@@ -61,6 +63,7 @@ public class AppEditorActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intance = this;
+       // onNewIntent(getIntent());
         setContentView(R.layout.activity_editor_apk);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -144,19 +147,19 @@ public class AppEditorActivity extends BaseActivity {
         patchApp.setOnClickListener(v -> patchApp());
     }
 
-    public void setSearchArguments(Bundle bundle) {
+    /*public void setSearchArguments(Bundle bundle) {
         findFragment.setArguments(bundle);
         //mFragmentAdapter.notifyDataSetChanged();
         //mViewPager.setAdapter(mFragmentAdapter);
         if (!fragments.contains(findFragment)) {
             fragments.add(findFragment);
-           /* mFragmentAdapter = new FragmentAdapter(getSupportFragmentManager(), fragments, titles);
+           *//* mFragmentAdapter = new FragmentAdapter(getSupportFragmentManager(), fragments, titles);
             mViewPager.setAdapter(mFragmentAdapter);
-            mTabLayout.setupWithViewPager(mViewPager);*/
+            mTabLayout.setupWithViewPager(mViewPager);*//*
         }
         // fragments.add(findFragment);
         mViewPager.getAdapter().notifyDataSetChanged();
-    }
+    }*/
 
     private boolean stringFilesExists() {
         if (!new File(projectPatch, "resources.arsc").exists() | new File(projectPatch, "res").exists()) {
@@ -191,6 +194,18 @@ public class AppEditorActivity extends BaseActivity {
         Fragment compileFragment = CompileFragment.newInstance(projectPatch);
         FragmentUtils.replace(compileFragment, this, android.R.id.content);
     }
+
+    /*@Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Bundle extras = intent.getExtras();
+        if (extras != null) {
+            if (extras.containsKey("showCompileFragment")) {
+                Toast.makeText(getBaseContext(), "lol", Toast.LENGTH_SHORT).show();
+                //showCompileFragment();
+            }
+        }
+    }*/
 
     @Override
     public void onBackPressed() {

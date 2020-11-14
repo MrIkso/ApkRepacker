@@ -59,11 +59,16 @@ public class ErrorAdapter extends RecyclerView.Adapter<ErrorAdapter.ViewHolder> 
         notifyDataSetChanged();
     }
 
+    public List<String> getErrorLines() {
+        return mErrorLines;
+    }
 
-    public interface OnItemInteractionListener{
+    public interface OnItemInteractionListener {
         void OnItemClicked(String filePath, int lineNumber);
 
+        void OnItemLongClick(String message);
     }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         AppCompatTextView mErrorText;
@@ -94,13 +99,9 @@ public class ErrorAdapter extends RecyclerView.Adapter<ErrorAdapter.ViewHolder> 
                     }
                     int finalLineNum = lineNum;
                     mViewFile.setOnClickListener(v -> {
-                        // Intent intent = TextEditor.getEditorIntent(activity, filePath, activity.srcApkPath);
                         if (finalLineNum > 0) {
                             mItemInteractionListener.OnItemClicked(filePath, finalLineNum);
-                           // UIUtils.toast(itemView.getContext(), filePath + " :"+ finalLineNum);
-                            //   ActivityUtil.attachParam(intent, "startLine", "" + lineNum);
                         }
-                        // activity.startActivity(intent);
                     });
                 }
             }
@@ -108,7 +109,10 @@ public class ErrorAdapter extends RecyclerView.Adapter<ErrorAdapter.ViewHolder> 
                 mViewFile.setVisibility(View.GONE);
             }
             mErrorText.setText(message);
-
+            itemView.setOnLongClickListener(view -> {
+                mItemInteractionListener.OnItemLongClick(message);
+                return true;
+            });
         }
     }
 }

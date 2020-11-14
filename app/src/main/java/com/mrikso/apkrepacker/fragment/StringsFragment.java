@@ -1,7 +1,6 @@
 package com.mrikso.apkrepacker.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -14,6 +13,7 @@ import android.view.inputmethod.EditorInfo;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatEditText;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,50 +24,49 @@ import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.jecelyin.common.utils.UIUtils;
 import com.mrikso.apkrepacker.R;
-import com.mrikso.apkrepacker.autotranslator.dictionary.DictionaryItem;
-import com.mrikso.apkrepacker.autotranslator.dictionary.DictionaryReader;
 import com.mrikso.apkrepacker.autotranslator.translator.TranslateItem;
 import com.mrikso.apkrepacker.filepicker.FilePickerDialog;
+import com.mrikso.apkrepacker.fragment.dialogs.ProgressDialogFragment;
 import com.mrikso.apkrepacker.fragment.dialogs.bottomsheet.AddLanguageDialogFragment;
 import com.mrikso.apkrepacker.fragment.dialogs.bottomsheet.AddNewStringDialogFragment;
 import com.mrikso.apkrepacker.fragment.dialogs.bottomsheet.StringsOptionsDialogFragment;
+import com.mrikso.apkrepacker.fragment.dialogs.bottomsheet.TranslateOptionsDialogFragment;
 import com.mrikso.apkrepacker.fragment.dialogs.bottomsheet.TranslateStringDialogFragment;
+import com.mrikso.apkrepacker.task.TranslateDictionaryTask;
 import com.mrikso.apkrepacker.task.TranslateTask;
+import com.mrikso.apkrepacker.ui.preferences.PreferenceHelper;
 import com.mrikso.apkrepacker.ui.stringlist.StringFile;
 import com.mrikso.apkrepacker.ui.stringlist.StringsAdapter;
+import com.mrikso.apkrepacker.utils.AppUtils;
 import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.IntentUtils;
 import com.mrikso.apkrepacker.utils.ScrollingViewOnApplyWindowInsetsListener;
-import com.mrikso.apkrepacker.utils.StringUtils;
 import com.mrikso.apkrepacker.viewmodel.StringFragmentViewModel;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
+import java.util.Locale;
 
 import me.zhanghai.android.fastscroll.FastScroller;
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
 
 public class StringsFragment extends Fragment implements AddLanguageDialogFragment.ItemClickListener,
         StringsAdapter.OnItemClickListener, View.OnClickListener, TranslateStringDialogFragment.ItemClickListener,
-        StringsOptionsDialogFragment.ItemClickListener, AddNewStringDialogFragment.ItemClickListener {
+        StringsOptionsDialogFragment.ItemClickListener, AddNewStringDialogFragment.ItemClickListener, TranslateOptionsDialogFragment.ItemClickListener {
 
     public static final String TAG = "StringsFragment";
 
-    public StringsAdapter mStringsAdapter;
+    private StringsAdapter mStringsAdapter;
     private RecyclerView mRecyclerView;
 
     private FloatingActionButton mFabSelectLanguage;
     private FloatingActionMenu mFabMenu;
     private AppCompatEditText mSearchText;
     private List<String> mLangCodes = new ArrayList<>();
-    private List<StringFile> mFangFiles = new ArrayList<>();
-    private boolean mIsAddLanguage;
-    private String targetLanguageCode;
+    private List<StringFile> mLangFiles = new ArrayList<>();
     private StringFragmentViewModel mViewModel;
     private boolean isChanget = false;
+    private DialogFragment dialog;
 
     public StringsFragment() {
         // Required empty public constructor
@@ -81,15 +80,8 @@ public class StringsFragment extends Fragment implements AddLanguageDialogFragme
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_app_strings, container, false);
-        return view;
+        return inflater.inflate(R.layout.fragment_app_strings, container, false);
     }
 
     public void onViewCreated(@NonNull View view, Bundle bundle) {
@@ -115,16 +107,21 @@ public class StringsFragment extends Fragment implements AddLanguageDialogFragme
     private void initList(View view) {
         mViewModel.getStingsFilesData().observe(getViewLifecycleOwner(), stringFiles -> {
             mLangCodes.clear();
-            mFangFiles.clear();
+            mLangFiles.clear();
             for (StringFile a : stringFiles) {
-                mLangCodes.add(a.lang());
-                mFangFiles.add(a);
+                Locale locale = a.locale();
+                if (locale != null) {
+                    mLangCodes.add(String.format("%1s (%2s)", a.locale().getDisplayName(), a.lang()));
+                } else {
+                    mLangCodes.add(a.lang());
+                }
+                mLangFiles.add(a);
             }
         });
 
         mViewModel.getStingsData().observe(getViewLifecycleOwner(), translateItems -> {
-            if(translateItems != null)
-            mStringsAdapter.setItems(translateItems);
+            if (translateItems != null)
+                mStringsAdapter.setItems(translateItems);
         });
 
         mStringsAdapter = new StringsAdapter(requireContext());
@@ -162,30 +159,25 @@ public class StringsFragment extends Fragment implements AddLanguageDialogFragme
         UIUtils.showListDialog(context, 0, 0, list, 0, new UIUtils.OnListCallback() {
             @Override
             public void onSelect(MaterialDialog dialog, int which) {
-                mViewModel.parseStings(mFangFiles.get(which));
+                mViewModel.parseStings(mLangFiles.get(which));
             }
         }, null);
     }
 
-
     @Override
-    public void onAddLangClick(String item) {
-        if (mIsAddLanguage)
+    public void onAddLangClick(String item, boolean autotranslate, boolean skipTranslated,
+                               boolean skipSupport) {
+        if (!autotranslate)
             mViewModel.addNewLang(item);
         else {
-            targetLanguageCode = item;
             //mViewModel.autoTranslate(item);
             TranslateTask translatingTask = new TranslateTask(mStringsAdapter.getData(), this);
+            translatingTask.setTargetLanguageCode(item);
+            translatingTask.setSkipSupport(skipSupport);
+            translatingTask.setSkipTranslated(skipTranslated);
+
             translatingTask.execute();
         }
-    }
-
-    @Override
-    public int setTitle() {
-        if (mIsAddLanguage)
-            return R.string.action_add_new_lang;
-        else
-            return R.string.action_auto_translate_lang;
     }
 
     @Override
@@ -194,14 +186,6 @@ public class StringsFragment extends Fragment implements AddLanguageDialogFragme
         translateStringDialogFragment.setData(item, position);
         translateStringDialogFragment.setItemClickListener(this);
         translateStringDialogFragment.show(getChildFragmentManager(), TranslateStringDialogFragment.TAG);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 10 /*&& !TranslateStringsHelper.getTranslatedStrings().isEmpty()*/) {
-            // mViewModel.saveStrings(TranslateStringsHelper.getTranslatedStrings(), mTargetLang.replace("-auto", ""));
-        }
     }
 
     @Override
@@ -228,7 +212,6 @@ public class StringsFragment extends Fragment implements AddLanguageDialogFragme
                 save();
                 break;
             case R.id.fab_more_options:
-                mIsAddLanguage = false;
                 mFabMenu.close(true);
                 StringsOptionsDialogFragment stringsOptionsDialog = StringsOptionsDialogFragment.newInstance();
                 stringsOptionsDialog.show(getChildFragmentManager(), StringsOptionsDialogFragment.TAG);
@@ -267,19 +250,18 @@ public class StringsFragment extends Fragment implements AddLanguageDialogFragme
                             save();
                         }
                     });
-                } else
-                    mIsAddLanguage = true;
-                AddLanguageDialogFragment fragment = AddLanguageDialogFragment.newInstance();
-                fragment.show(getChildFragmentManager(), AddLanguageDialogFragment.TAG);
+                } else {
+                    AddLanguageDialogFragment fragment = AddLanguageDialogFragment.newInstance(false);
+                    fragment.show(getChildFragmentManager(), AddLanguageDialogFragment.TAG);
+                }
                 break;
             case R.id.auto_translate_language:
-                mIsAddLanguage = false;
-                AddLanguageDialogFragment addLanguageDialogFragment = AddLanguageDialogFragment.newInstance();
+                AddLanguageDialogFragment addLanguageDialogFragment = AddLanguageDialogFragment.newInstance(true);
                 addLanguageDialogFragment.show(getChildFragmentManager(), AddLanguageDialogFragment.TAG);
                 break;
             case R.id.auto_translate_language_with:
                 new FilePickerDialog(requireContext())
-                        .setTitleText(getString(R.string.select_directory))
+                        .setTitleText(getString(R.string.select_translate_dictionary))
                         .setSelectMode(FilePickerDialog.MODE_SINGLE)
                         .setSelectType(FilePickerDialog.TYPE_FILE)
                         .setExtensions(new String[]{"mtd"})
@@ -289,9 +271,8 @@ public class StringsFragment extends Fragment implements AddLanguageDialogFragme
                         .setDialogListener(getString(R.string.choose_button_label), getString(R.string.cancel_button_label), new FilePickerDialog.FileDialogListener() {
                             @Override
                             public void onSelectedFilePaths(String[] filePaths) {
-                                new Thread(() -> {
-                                    parseDictionary(filePaths[0]);
-                                }).start();
+                                TranslateOptionsDialogFragment translateOptionsDialogFragment = TranslateOptionsDialogFragment.newInstance(filePaths[0]);
+                                translateOptionsDialogFragment.show(getChildFragmentManager(), TranslateOptionsDialogFragment.TAG);
                             }
 
                             @Override
@@ -326,11 +307,10 @@ public class StringsFragment extends Fragment implements AddLanguageDialogFragme
         mViewModel.saveStrings(mStringsAdapter.getData());
     }
 
-    public void parseDictionary(String path) {
+    /*public void parseDictionary(String path) {
         DictionaryReader dictionaryReader = new DictionaryReader(new File(path));
         dictionaryReader.readDictionary();
         List<TranslateItem> items = new ArrayList<>(mStringsAdapter.getData());
-        List<TranslateItem> iterator = new ArrayList<TranslateItem>();
 
         for (int i = 0; i < items.size(); i++) {
           //  TranslateItem item = items.get(i);
@@ -350,16 +330,51 @@ public class StringsFragment extends Fragment implements AddLanguageDialogFragme
 
         //mStringsAdapter.setUpdatedItems();
     }
+*/
 
-    // Get the google language code
-    // Convert -zh-rCN to zh-CN
-    public String getGoogleLangCode() {
-        String code = targetLanguageCode.substring(1);
-        int pos = code.indexOf("-");
-        if (pos != -1) {
-            code = code.substring(0, pos + 1) + code.substring(pos + 2);
+    @Override
+    public void onOkClick(String path) {
+        PreferenceHelper helper = PreferenceHelper.getInstance(requireContext());
+        TranslateDictionaryTask dictionaryTask = new TranslateDictionaryTask(this);
+        dictionaryTask.setDictionaryPath(path);
+        dictionaryTask.setTranslateItems(mStringsAdapter.getData());
+        dictionaryTask.setReverseDictionary(helper.isReverseDictionary());
+        dictionaryTask.setSkipSupport(helper.isSkipSupportLines());
+        dictionaryTask.setSkipTranslated(helper.isSkipTranslated());
+
+        dictionaryTask.execute();
+    }
+
+    public StringsAdapter getStringsAdapter() {
+        return mStringsAdapter;
+    }
+
+    public void showProgress() {
+        Bundle args = new Bundle();
+        args.putString(ProgressDialogFragment.TITLE, getResources().getString(R.string.translating_run_title));
+        args.putString(ProgressDialogFragment.MESSAGE, getResources().getString(R.string.dialog_please_wait));
+        args.putBoolean(ProgressDialogFragment.CANCELABLE, false);
+        //  args.putInt(ProgressDialogFragment.MAX, 100);
+        dialog = ProgressDialogFragment.newInstance();
+        dialog.setArguments(args);
+        dialog.show(getChildFragmentManager(), ProgressDialogFragment.TAG);
+    }
+
+    public void updateProgress(Integer... values) {
+        ProgressDialogFragment progress = getProgressDialogFragment();
+        if (progress == null) {
+            return;
         }
-        return code;
+        progress.updateProgress(values[0]);
+    }
+
+    public void hideProgress() {
+        dialog.dismiss();
+    }
+
+    private ProgressDialogFragment getProgressDialogFragment() {
+        Fragment fragment = getChildFragmentManager().findFragmentByTag(ProgressDialogFragment.TAG);
+        return (ProgressDialogFragment) fragment;
     }
 
     /*@Override

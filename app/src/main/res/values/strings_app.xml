@@ -392,6 +392,11 @@
     <string name="search_result">search result (%d) - %s</string>
     <string name="replace_in_files_title">Replace in all files</string>
     <string name="toast_replace_in_files">Replaced in %d files</string>
+    <string name="label_skip_translated">Skip translated lines</string>
+    <string name="select_translate_dictionary">Select translate dictionary:</string>
+    <string name="label_reverse_dictionary">Inverse transalation</string>
+    <string name="translating_run_title">Translating app</string>
+    <string name="string_id_copied">String id \"%s\" copied to clipboard</string>
 
     <plurals name="menu_copy_items_to">
         <item quantity="one">Copy %1$d item here</item>

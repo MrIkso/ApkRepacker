@@ -65,4 +65,15 @@ public class StringUtils {
         InputMethodManager inputMethodManager = (InputMethodManager) fragment.requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(fragment.requireView().getWindowToken(), 0);
     }
+
+    // Get the google language code
+    // Convert -zh-rCN to zh-CN
+    public static String getGoogleLangCode(String targetLanguageCode) {
+        String code = targetLanguageCode.substring(1);
+        int pos = code.indexOf("-");
+        if (pos != -1) {
+            code = code.substring(0, pos + 1) + code.substring(pos + 2);
+        }
+        return code;
+    }
 }
