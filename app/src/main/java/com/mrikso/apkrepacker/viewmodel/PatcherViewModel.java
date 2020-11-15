@@ -11,6 +11,8 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.github.cregrant.smaliscissors.engine.Main;
+import com.github.cregrant.smaliscissors.engine.OutStream;
 import com.mrikso.apkrepacker.adapter.PatchItem;
 import com.mrikso.apkrepacker.utils.ProjectUtils;
 import com.mrikso.apkrepacker.utils.common.DLog;
@@ -32,7 +34,7 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-public class PatcherViewModel extends AndroidViewModel implements IRulesInfo, IPatchContext {
+public class PatcherViewModel extends AndroidViewModel implements IRulesInfo, IPatchContext, OutStream {
 
     private Map<String, String> mGlobalVariables = new HashMap();
     private PatchExecutor mPatchExecutor;
@@ -84,12 +86,23 @@ public class PatcherViewModel extends AndroidViewModel implements IRulesInfo, IP
 
     public void start(List<PatchItem> patchItemList) {
         mPatchSize.postValue(patchItemList.size());
-        int count = 0;
+        //int count = 0;
+        ArrayList<String> args = new ArrayList<>(patchItemList.size()+1);
+        args.add(mProjectHelper.mProject);
         for (PatchItem item : patchItemList) {
-            count++;
-            runPatch(item.mPath);
+            //count++;
+            //runPatch(item.mPath);
+            args.add(item.mPath);
         }
-        mPatchCount.postValue(count);
+        Main.main(args.toArray(new String[0]), this);
+        mPatchCount.postValue(patchItemList.size());
+    }
+
+    @Override
+    public void println(Object x) {
+        String str = String.valueOf(x) + '\n';
+        mLog.setValue(str);
+        this.info(str, false);
     }
 
     @Nullable
