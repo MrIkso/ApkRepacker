@@ -1,6 +1,0 @@
-R_DEF: Internal format may change without notice
-local
-attr? use_legacy_parser
-attr? vector_src
-string app_name
-styleable VectorMasterView vector_src use_legacy_parser
