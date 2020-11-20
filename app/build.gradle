@@ -97,6 +97,7 @@ dependencies {
     implementation 'org.jsoup:jsoup:1.13.1'
     implementation 'org.jetbrains:annotations:19.0.0'
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+d    implementation project(path: ':patcher')
 
     // tests
     testImplementation 'junit:junit:4.13'
