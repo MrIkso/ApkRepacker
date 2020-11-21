@@ -6,26 +6,25 @@ import static java.lang.System.currentTimeMillis;
 
 class Executor {
     String executePatches(ArrayList<String> zipArr) {
-        Regex regex = new Regex();
         IO.loadProjectFiles();
         long startTime = currentTimeMillis();
         for (String zipFile : zipArr) {
             if (zipFile.equals("cancel")) {
                 return "cancel";
             }
-            Main.out.println("\nPatch - " + regex.getEndOfPath(zipFile));
+            Main.out.println("\nPatch - " + Regex.getEndOfPath(zipFile));
             Patch patch = new Patch();
-            Rule rule; new IO().loadRules(zipFile, patch);
+            Rule rule; IO.loadRules(zipFile, patch);
 
             while ((rule = patch.getNextRule())!=null) {
                 preProcessRule(rule, patch);
             }
 
             if (Prefs.verbose_level == 0) Main.out.println("Writing..");
-            new IO().writeChanges();
-            new IO().deleteAll(Prefs.tempDir);
+            IO.writeChanges();
+            IO.deleteAll(Prefs.tempDir);
         }
-        Main.out.println("------------------\n" + regex.getEndOfPath(Prefs.projectPath) + " patched in " + (currentTimeMillis() - startTime) + "ms.");
+        Main.out.println("------------------\n" + Regex.getEndOfPath(Prefs.projectPath) + " patched in " + (currentTimeMillis() - startTime) + "ms.");
         return "ok";
     }
 

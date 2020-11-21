@@ -6,13 +6,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Regex {
-    ArrayList<String> matchMultiLines(Pattern readyPattern, String content, String mode) {
+    static ArrayList<String> matchMultiLines(Pattern readyPattern, String content, String mode) {
         Matcher matcher = readyPattern.matcher(content);
         ArrayList<String> matchedArr = new ArrayList<>();
         while (matcher.find()) {
             for (int i = 1; i <= matcher.groupCount(); ++i) {
                 String textMatched = matcher.group(i);
                 switch (mode) {
+                    case "":
                     case "rules":
                     case "replace":
                         matchedArr.add(textMatched);
@@ -21,8 +22,6 @@ public class Regex {
                         matchedArr.addAll(Arrays.asList(textMatched.split("\\R")));
                         break;
                     case "target":
-                    case "":
-                        //todo move it to single match?
                         for (String str : textMatched.split("\\R")) {
                             str = str.replace("*/*", "*");
                             if (Prefs.run_type.equals("pc"))
@@ -36,7 +35,7 @@ public class Regex {
         return matchedArr;
     }
 
-    String matchSingleLine(Pattern readyPattern, String content) {
+    static String matchSingleLine(Pattern readyPattern, String content) {
         Matcher matcher = readyPattern.matcher(content);
         if (matcher.find()) {
             if (matcher.groupCount()==0)
@@ -46,7 +45,7 @@ public class Regex {
         return null;
     }
 
-    String getEndOfPath(String path) {
+    static String getEndOfPath(String path) {
         int last;
         if (Prefs.run_type.equals("pc"))
             last = path.lastIndexOf('\\')+1;
@@ -56,18 +55,15 @@ public class Regex {
         return path.substring(last);
     }
 
-    String globToRegex(String line)
-    {
+    static String globToRegex(String line) {
         line = line.trim();
         int strLen = line.length();
         StringBuilder sb = new StringBuilder(strLen);
         boolean escaping = false;
         int inBraces = 0;
         char prevChar = 0;
-        for (char currentChar : line.toCharArray())
-        {
-            switch (currentChar)
-            {
+        for (char currentChar : line.toCharArray()) {
+            switch (currentChar) {
                 case '*':
                     if (escaping)
                         sb.append("\\*");
@@ -97,8 +93,7 @@ public class Regex {
                     escaping = false;
                     break;
                 case '\\':
-                    if (escaping)
-                    {
+                    if (escaping) {
                         sb.append("\\\\");
                         escaping = false;
                     }
@@ -107,19 +102,15 @@ public class Regex {
                     break;
                 case '{':
                     if (escaping)
-                    {
                         sb.append("\\{");
-                    }
-                    else
-                    {
+                    else {
                         sb.append('(');
                         inBraces++;
                     }
                     escaping = false;
                     break;
                 case '}':
-                    if (inBraces > 0 && !escaping)
-                    {
+                    if (inBraces > 0 && !escaping) {
                         sb.append(')');
                         inBraces--;
                     }
@@ -131,9 +122,7 @@ public class Regex {
                     break;
                 case ',':
                     if (inBraces > 0 && !escaping)
-                    {
                         sb.append('|');
-                    }
                     else if (escaping)
                         sb.append("\\,");
                     else

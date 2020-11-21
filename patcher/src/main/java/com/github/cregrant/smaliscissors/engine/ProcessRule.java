@@ -36,9 +36,8 @@ class ProcessRule {
                 replace(dFile, rule);
 
                 if (!dFile.isNotModified()) {
-                    if (Prefs.verbose_level == 0) {
+                    if (Prefs.verbose_level == 0)
                         Main.out.println(dFile.getPath() + " patched.");
-                    }
                     synchronized (lock) {
                         ++patchedFilesNum;
                     }
@@ -97,7 +96,7 @@ class ProcessRule {
                     assignArr.add(str);
                 }
             }
-            ArrayList<String> valuesArr = new Regex().matchMultiLines(Pattern.compile(rule.match), dFile.getBody(), "replace");
+            ArrayList<String> valuesArr = Regex.matchMultiLines(Pattern.compile(rule.match), dFile.getBody(), "replace");
             for (int j = 0; j < valuesArr.size(); ++j) {
                 if (Prefs.verbose_level <= 1) {
                     Main.out.println("assigned \"" + valuesArr.get(j) + "\" to \"" + assignArr.get(j) + "\"");
@@ -114,21 +113,19 @@ class ProcessRule {
         String src = Prefs.tempDir + File.separator + rule.source;
         String dst = Prefs.projectPath + File.separator + rule.target;
         IO io = new IO();
-        if (rule.extract) io.zipExtract(src, dst);
+        if (rule.extract) IO.zipExtract(src, dst);
         else io.copy(src, dst);
         io.scanFolder(Prefs.projectPath, rule.target);
     }
 
     static void remove(Rule rule) {
-        IO io = new IO();
-        io.deleteAll(new File(Prefs.projectPath + File.separator + rule.target));
-        io.removeLoadedFile(rule.target);
+        IO.deleteAll(new File(Prefs.projectPath + File.separator + rule.target));
+        IO.removeLoadedFile(rule.target);
     }
 
     static void matchGoto(Rule rule, Patch patch) {
         applyAssign(rule);
         AtomicBoolean running = new AtomicBoolean(true);
-        Regex regex = new Regex();
         Pattern pattern = Pattern.compile(rule.match);
 
         int totalNum;
@@ -147,7 +144,7 @@ class ProcessRule {
                             dFile = xmlList.get(finalNum);
                         else
                             dFile = smaliList.get(finalNum);
-                        if (regex.matchSingleLine(pattern, dFile.getBody()) != null) {
+                        if (Regex.matchSingleLine(pattern, dFile.getBody()) != null) {
                             patch.setRuleName(rule.goTo);
                             running.set(false);
                         }
@@ -163,9 +160,9 @@ class ProcessRule {
         }
     }
 
-    private static void applyAssign(Rule rule) {
+    private static void applyAssign(Rule rule) {        //replacing ${GROUP} to some text
         if (!assignMap.isEmpty()) {
-            Set<Map.Entry<String, String>> set = assignMap.entrySet();      //replace ${GROUP}
+            Set<Map.Entry<String, String>> set = assignMap.entrySet();
             if (Prefs.verbose_level == 0) {
                 Main.out.println("Replacing variables to text:\n" + set);
             }
@@ -180,7 +177,8 @@ class ProcessRule {
                 }
                 if (foundInMatch)
                     rule.match = rule.match.replace(key, value);
-                else rule.replacement = rule.replacement.replace(key, value);
+                else
+                    rule.replacement = rule.replacement.replace(key, value);
             }
         }
     }

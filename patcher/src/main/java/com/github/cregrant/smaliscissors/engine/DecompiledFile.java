@@ -32,14 +32,14 @@ public class DecompiledFile {
         if ((!isXML && Prefs.keepSmaliFilesInRAM) || (isXML && Prefs.keepXmlFilesInRAM))
             return this.body;
         else
-            return new IO().read(Prefs.projectPath + File.separator + path);
+            return IO.read(Prefs.projectPath + File.separator + path);
     }
 
     public void setBody(String newBody) {
         if ((!isXML && Prefs.keepSmaliFilesInRAM) || (isXML && Prefs.keepXmlFilesInRAM))
             this.body = newBody;
         else
-            new IO().write(Prefs.projectPath + File.separator + path, newBody);
+            IO.write(Prefs.projectPath + File.separator + path, newBody);
     }
 
     public boolean equals(Object anObject) {

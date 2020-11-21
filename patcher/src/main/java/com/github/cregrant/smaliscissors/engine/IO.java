@@ -14,12 +14,9 @@ class IO {
 
     static String currentProjectPathCached = "";
 
-    void loadRules(String zipFile, Patch patch) {
+    static void loadRules(String zipFile, Patch patch) {
         Pattern patRule = Pattern.compile("(\\[.+?](?:\\RNAME:\\R.++)?(?:\\RGOTO:\\R.++)?(?:\\RSOURCE:\\R.++)?\\R(?:TARGET:[\\s\\S]*?)?\\[/.+?])", Pattern.UNIX_LINES);
-        if (!Prefs.rules_AEmode) {
-            Main.out.println("TruePatcher mode on.");
-        }
-        new IO().deleteAll(Prefs.tempDir);
+        deleteAll(Prefs.tempDir);
         Prefs.tempDir.mkdirs();
         String txtFile = Prefs.tempDir + File.separator + "patch.txt";
         zipExtract(zipFile, Prefs.tempDir.toString());
@@ -28,7 +25,7 @@ class IO {
             System.exit(1);
         }
 
-        ArrayList<String> rulesListArr = new Regex().matchMultiLines(Objects.requireNonNull(patRule), read(txtFile), "rules");
+        ArrayList<String> rulesListArr = Regex.matchMultiLines(Objects.requireNonNull(patRule), read(txtFile), "rules");
         RuleParser parser = new RuleParser();
         for (String rule : rulesListArr) patch.addRule(parser.parseRule(rule));
 
@@ -55,9 +52,9 @@ class IO {
         return resultString;
     }
 
-    void write(String path, String content) {
+    static void write(String path, String content) {
         try {
-            this.deleteAll(new File(path));
+            deleteAll(new File(path));
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(path));
             bufferedWriter.write(content);
             bufferedWriter.flush();
@@ -68,7 +65,7 @@ class IO {
         }
     }
 
-    void writeChanges() {
+    static void writeChanges() {
         if (Prefs.keepSmaliFilesInRAM) {
             for (int j = 0; j < ProcessRule.smaliList.size(); ++j) {
                 DecompiledFile tmpSmali = ProcessRule.smaliList.get(j);
@@ -104,7 +101,7 @@ class IO {
         }
     }
 
-    void zipExtract(String src, String dst) {
+    static void zipExtract(String src, String dst) {
         try (ZipInputStream zip = new ZipInputStream(new FileInputStream(src))) {
             ZipEntry zipEntry;
             while ((zipEntry = zip.getNextEntry()) != null) {
@@ -131,7 +128,7 @@ class IO {
         }
     }
 
-    File mergePath(String dstFolder, String toMerge) {
+    static File mergePath(String dstFolder, String toMerge) {
         String[] dstTree;
         String[] srcTree;
         if (dstFolder.contains("/"))
@@ -156,7 +153,7 @@ class IO {
         return new File(sb.toString());
     }
 
-    void deleteAll(File file) {
+    static void deleteAll(File file) {
         if (file.isDirectory()) {
             if (Objects.requireNonNull(file.list()).length == 0) {
                 file.delete();
@@ -192,7 +189,7 @@ class IO {
                 folders.add(i);
         }
         if (folders.isEmpty()) {
-            Main.out.println("WARNING: no smali folders found inside the project folder \"" + new Regex().getEndOfPath(Prefs.projectPath) + '\"');
+            Main.out.println("WARNING: no smali folders found inside the project folder \"" + Regex.getEndOfPath(Prefs.projectPath) + '\"');
         }
 
         if (new File(Prefs.projectPath + File.separator + "AndroidManifest.xml").exists()) {
@@ -338,7 +335,7 @@ class IO {
         }
     }
 
-    void removeLoadedFile(String shortPath) {
+    static void removeLoadedFile(String shortPath) {
         if (Prefs.verbose_level == 0) {
             Main.out.println(shortPath + " removed.");
         }

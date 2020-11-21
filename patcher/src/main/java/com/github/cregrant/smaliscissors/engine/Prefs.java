@@ -11,7 +11,6 @@ public class Prefs {
     public static File patchesDir;
     public static File tempDir;
     private static double versionConf = 0.01;
-    static boolean rules_AEmode = true;
     static int verbose_level = 1;
     static boolean keepSmaliFilesInRAM = false;
     static boolean keepXmlFilesInRAM = false;
@@ -35,7 +34,6 @@ public class Prefs {
             }
             verbose_level = Integer.parseInt(props.getProperty("Verbose_level"));
             versionConf = Float.parseFloat(props.getProperty("Version"));
-            rules_AEmode = Boolean.parseBoolean(props.getProperty("Rules_AEmode"));
             keepSmaliFilesInRAM = Boolean.parseBoolean(props.getProperty("Keep_smali_files_in_RAM"));
             keepXmlFilesInRAM = Boolean.parseBoolean(props.getProperty("Keep_xml_files_in_RAM"));
         }
@@ -53,7 +51,6 @@ public class Prefs {
             Properties props = new Properties();
             props.put("Version", String.format("%.2f", versionConf).replace(',', '.'));
             props.put("Verbose_level", String.valueOf(verbose_level));
-            props.put("Rules_AEmode", ((Boolean) rules_AEmode).toString());
             props.put("Keep_smali_files_in_RAM", ((Boolean) keepSmaliFilesInRAM).toString());
             props.put("Keep_xml_files_in_RAM", ((Boolean) keepXmlFilesInRAM).toString());
             props.store(output, "");

@@ -22,7 +22,10 @@ public class Main {
             else if (str.equalsIgnoreCase("keepXmlFilesInRAM")) Prefs.keepXmlFilesInRAM = true;
             else projectsList.add(str);
         }
-        Prefs.run_type = "module";
+        if (System.getProperty("os.name").startsWith("Windows"))
+            Prefs.run_type = "pc";
+        else
+            Prefs.run_type = "module";
         Prefs.patchesDir = new File(zipArr.get(0)).getParentFile();
         Prefs.tempDir = new File(Prefs.patchesDir + File.separator + "temp");
         runAsModule(projectsList, zipArr);
@@ -41,7 +44,7 @@ public class Main {
             Prefs.projectPath = currentProjectPath;
             patchResult = new Executor().executePatches(zipArr);
             if (patchResult.equals("error")) {
-                new IO().deleteAll(Prefs.tempDir);
+                IO.deleteAll(Prefs.tempDir);
                 Main.out.println("Executor error occurred");
             }
         }
