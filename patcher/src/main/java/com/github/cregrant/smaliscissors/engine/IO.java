@@ -216,10 +216,17 @@ class IO {
                             stack.push(file);
                         else {
                             String path = file.toString().replace(Prefs.projectPath + File.separator, "");
+                            boolean doNotSkip = true;
+                            if (Prefs.skipSomeSmaliFiles) {                  //skip some folders
+                                for (String str : Prefs.smaliFoldersToSkip)
+                                    if (path.contains(File.separator + str + File.separator)) {
+                                        doNotSkip = false;
+                                        break;
+                                    }
+                            }
                             DecompiledFile tmp;
                             boolean isSmali = path.endsWith(".smali");
-                            path.endsWith(".xml");
-                            if (isSmali || path.endsWith(".xml")) {
+                            if (doNotSkip && (isSmali || path.endsWith(".xml"))) {
                                 if (isSmali)
                                     tmp = new DecompiledFile(false);
                                 else

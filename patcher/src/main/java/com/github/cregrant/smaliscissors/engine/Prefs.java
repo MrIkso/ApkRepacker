@@ -14,6 +14,8 @@ public class Prefs {
     static int verbose_level = 1;
     static boolean keepSmaliFilesInRAM = false;
     static boolean keepXmlFilesInRAM = false;
+    static boolean skipSomeSmaliFiles = true;
+    static String[] smaliFoldersToSkip = new String[]{"android", "androidx", "kotlin", "kotlinx"};
     //todo move to main
 
     public void loadConf() {
