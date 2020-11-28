@@ -37,7 +37,7 @@ class Rule {
                     return false;
                 break;
             case "REMOVE_FILES":
-                if (target==null)
+                if (target==null && targetArr==null)
                     return false;
                 break;
             case "DUMMY":

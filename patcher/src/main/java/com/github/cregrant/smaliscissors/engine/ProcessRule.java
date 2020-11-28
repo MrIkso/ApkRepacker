@@ -97,11 +97,16 @@ class ProcessRule {
                 }
             }
             ArrayList<String> valuesArr = Regex.matchMultiLines(Pattern.compile(rule.match), dFile.getBody(), "replace");
-            for (int j = 0; j < valuesArr.size(); ++j) {
+            if (assignArr.size()!=valuesArr.size())
+                Main.out.println("WARNING: MATCH_ASSIGN found multiple results...");
+            for (int j = 0; j < assignArr.size(); ++j) {
+                String value = valuesArr.get(j);
+                assignMap.put(assignArr.get(j), value);
                 if (Prefs.verbose_level <= 1) {
-                    Main.out.println("assigned \"" + valuesArr.get(j) + "\" to \"" + assignArr.get(j) + "\"");
+                    if (value.length()>500)
+                        value = value.substring(0, 60) + " ... " + value.substring(value.length()-60);
+                    Main.out.println("assigned \"" + value + "\" to \"" + assignArr.get(j) + "\"");
                 }
-                assignMap.put(assignArr.get(j), valuesArr.get(j));
             }
         }
         if (assignMap.isEmpty()) {
@@ -119,8 +124,16 @@ class ProcessRule {
     }
 
     static void remove(Rule rule) {
-        IO.deleteAll(new File(Prefs.projectPath + File.separator + rule.target));
-        IO.removeLoadedFile(rule.target);
+        if (rule.target!=null) {
+            IO.deleteAll(new File(Prefs.projectPath + File.separator + rule.target));
+            IO.removeLoadedFile(rule.target);
+        }
+        else {
+            for (String target : rule.targetArr) {
+                IO.deleteAll(new File(Prefs.projectPath + File.separator + target));
+                IO.removeLoadedFile(target);
+            }
+        }
     }
 
     static void matchGoto(Rule rule, Patch patch) {

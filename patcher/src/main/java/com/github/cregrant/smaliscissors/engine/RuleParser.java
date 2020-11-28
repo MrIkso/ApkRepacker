@@ -60,7 +60,7 @@ class RuleParser {
                 matchGotoRule();
                 break;
         }
-        fixXml();
+        fixRegex();
         if (rule.checkRuleIntegrity())
             return rule;
         else {
@@ -158,11 +158,14 @@ class RuleParser {
         else rule.targetArr = targetsRaw;
     }
 
-    private void fixXml() {
+    private void fixRegex() {
+        if (rule.match!=null)
+            rule.match = rule.match.replace("\\n", "\\R");  //compatibility with windows
         if (rule.isXml) {
             if (rule.match!=null)
                 rule.match = rule.match.replace("><", ">\\s*?<").replace(" ", "\\s*?");
-            rule.replacement = rule.replacement.replace("><", ">\n<");
+            if (rule.replacement!=null)
+                rule.replacement = rule.replacement.replace("><", ">\n<");
         }
     }
 }

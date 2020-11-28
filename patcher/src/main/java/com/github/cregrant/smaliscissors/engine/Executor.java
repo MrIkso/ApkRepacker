@@ -38,7 +38,9 @@ class Executor {
                 Main.out.println("Target - " + rule.target);
             else {
                 Main.out.println("Targets:");
-                for (String target : rule.targetArr) Main.out.println("\n    " + target);
+                if (rule.targetArr.size()<100)
+                    for (String target : rule.targetArr) Main.out.println("    " + target);
+                else Main.out.println("    " + rule.targetArr.size() + " items");
             }
         }
 
@@ -68,8 +70,7 @@ class Executor {
             }
             Main.out.println("");
         } catch (Exception e) {
-            Main.out.println("ERROR:");
-            Main.out.println(e.getMessage());
+            Main.out.println("ERROR: " + e.toString());
         }
     }
 }
