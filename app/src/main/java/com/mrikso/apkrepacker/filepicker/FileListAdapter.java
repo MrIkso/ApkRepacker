@@ -21,8 +21,6 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 
 import com.mrikso.apkrepacker.R;
-import com.mrikso.apkrepacker.utils.AppUtils;
-import com.mrikso.apkrepacker.utils.FileUtil;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -171,7 +169,7 @@ public class FileListAdapter extends BaseAdapter {
         return view;
     }
 
-    private class ViewHolder {
+    private static class ViewHolder {
         ImageView ivType;
         TextView tvName, tvInfo;
         CheckBox cbMark;

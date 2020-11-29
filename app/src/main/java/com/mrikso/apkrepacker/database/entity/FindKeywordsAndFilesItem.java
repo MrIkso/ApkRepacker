@@ -3,7 +3,6 @@ package com.mrikso.apkrepacker.database.entity;
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;

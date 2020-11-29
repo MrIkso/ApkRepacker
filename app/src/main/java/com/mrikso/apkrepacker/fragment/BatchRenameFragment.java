@@ -79,8 +79,7 @@ public class BatchRenameFragment extends Fragment implements  View.OnClickListen
     }
 
     private void generateHelp() {
-        ArrayList<Variable> arrayList = new ArrayList();
-        arrayList.addAll(new VariableMatcher(VariableConfig.builder().
+        ArrayList<Variable> arrayList = new ArrayList<>(new VariableMatcher(VariableConfig.builder().
                 setContext(requireContext()).withNumberingStartAt(getNumberingStart())
                 .build()).getAll());
         for (Variable val : arrayList) {

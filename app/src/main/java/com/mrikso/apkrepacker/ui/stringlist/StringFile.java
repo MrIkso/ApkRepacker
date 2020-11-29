@@ -1,7 +1,5 @@
 package com.mrikso.apkrepacker.ui.stringlist;
 
-import android.text.TextUtils;
-
 import androidx.annotation.Nullable;
 
 import java.io.File;

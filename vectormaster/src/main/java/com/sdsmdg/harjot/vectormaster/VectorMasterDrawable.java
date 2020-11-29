@@ -136,7 +136,7 @@ public class VectorMasterDrawable extends Drawable {
         int tempPosition;
         PathModel pathModel = new PathModel();
         vectorModel = new VectorModel();
-        GroupModel groupModel = new GroupModel();
+        GroupModel groupModel;
         ClipPathModel clipPathModel = new ClipPathModel();
         Stack<GroupModel> groupModelStack = new Stack<>();
 
@@ -276,7 +276,8 @@ public class VectorMasterDrawable extends Drawable {
                         break;
 
                     case XmlPullParser.TEXT:
-                        Log.i(TAG, "" + xpp.getText());
+                        if (!xpp.getText().trim().isEmpty())
+                            Log.i(TAG, xpp.getText());
                         break;
                     case XmlPullParser.END_TAG:
                         switch (name) {

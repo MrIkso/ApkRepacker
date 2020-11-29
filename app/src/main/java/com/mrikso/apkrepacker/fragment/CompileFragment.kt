@@ -1,7 +1,6 @@
 package com.mrikso.apkrepacker.fragment
 
 import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
@@ -29,7 +28,6 @@ import com.mrikso.apkrepacker.fragment.dialogs.bottomsheet.FileOptionsDialogFrag
 import com.mrikso.apkrepacker.fragment.dialogs.bottomsheet.FullLogDialogFragment
 import com.mrikso.apkrepacker.service.BuildService
 import com.mrikso.apkrepacker.utils.*
-import com.mrikso.apkrepacker.utils.common.DLog
 import com.mrikso.apkrepacker.viewmodel.CompileFragmentViewModel
 import java.io.File
 
@@ -229,7 +227,7 @@ class CompileFragment : Fragment(), ErrorAdapter.OnItemInteractionListener {
     }
 
     override fun OnItemClicked(filePath: String?, lineNumber: Int) {
-        val fragment = FileOptionsDialogFragment.newInstance(filePath,lineNumber);
+        val fragment = FileOptionsDialogFragment.newInstance(filePath,lineNumber)
         fragment.show(parentFragmentManager,FileOptionsDialogFragment.TAG)
     }
 }

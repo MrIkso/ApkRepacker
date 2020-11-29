@@ -37,9 +37,9 @@ public class PatchRuleMatchReplace extends PatchRule {
     private boolean bRegex = false;
     private boolean isWildMatch;
     private List<String> keywords = new ArrayList<>();
-    private List<String> matches = new ArrayList();
+    private List<String> matches = new ArrayList<>();
     private PathFinder pathFinder;
-    private List<String> replaces = new ArrayList();
+    private List<String> replaces = new ArrayList<>();
     private String replacingStr = null;
 
     public PatchRuleMatchReplace() {

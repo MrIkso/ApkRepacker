@@ -3,7 +3,6 @@ package com.mrikso.apkrepacker.ui.findresult.files;
 import android.view.ViewGroup;
 
 import com.mrikso.apkrepacker.ui.filemanager.holder.FileListViewHolder;
-import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.ProjectUtils;
 
 import java.io.File;

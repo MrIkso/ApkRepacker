@@ -11,9 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.jecelyin.common.utils.UIUtils;
 import com.mrikso.apkrepacker.R;
-import com.mrikso.apkrepacker.fragment.dialogs.base.BaseBottomSheetDialogFragment;
 import com.mrikso.apkrepacker.ui.preferences.PreferenceHelper;
 import com.mrikso.apkrepacker.utils.StringUtils;
 
@@ -23,7 +21,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 public class FullLogDialogFragment extends BottomSheetDialogFragment {

@@ -16,13 +16,26 @@
  */
 package brut.androlib.mod;
 
-import java.io.*;
-import org.antlr.runtime.*;
+import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.Token;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.CommonTreeNodeStream;
 import org.apache.commons.io.IOUtils;
 import org.jf.dexlib2.writer.builder.DexBuilder;
-import org.jf.smali.*;
+import org.jf.smali.smaliFlexLexer;
+import org.jf.smali.smaliParser;
+import org.jf.smali.smaliTreeWalker;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author Ryszard Wiśniewski <brut.alll@gmail.com>
@@ -54,14 +67,14 @@ public class SmaliMod {
                                             boolean printTokens) throws IOException, RecognitionException {
 
         CommonTokenStream tokens;
-        LexerErrorInterface lexer;
+        smaliFlexLexer lexer;
 
         InputStream is = new FileInputStream(smaliFile);
-        InputStreamReader reader = new InputStreamReader(is, "UTF-8");
+        InputStreamReader reader = new InputStreamReader(is, StandardCharsets.UTF_8);
 
         lexer = new smaliFlexLexer(reader, apiLevel);
-        ((smaliFlexLexer)lexer).setSourceFile(smaliFile);
-        tokens = new CommonTokenStream((TokenSource) lexer);
+        lexer.setSourceFile(smaliFile);
+        tokens = new CommonTokenStream(lexer);
 
         if (printTokens) {
             tokens.getTokens();
@@ -88,7 +101,7 @@ public class SmaliMod {
             return false;
         }
 
-        CommonTree t = (CommonTree) result.getTree();
+        CommonTree t = result.getTree();
 
         CommonTreeNodeStream treeStream = new CommonTreeNodeStream(t);
         treeStream.setTokenStream(tokens);

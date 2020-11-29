@@ -1,31 +1,22 @@
 package com.mrikso.apkrepacker.ui.stringlist;
 
 import android.content.Context;
-import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.android.material.textfield.TextInputLayout;
-import com.google.common.collect.Iterables;
 import com.jecelyin.common.utils.UIUtils;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.autotranslator.translator.TranslateItem;
 import com.mrikso.apkrepacker.utils.StringUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class StringsAdapter extends RecyclerView.Adapter<StringsAdapter.ViewHolder> /*implements Filterable*/ {
     private static OnItemClickListener onItemClickListener;

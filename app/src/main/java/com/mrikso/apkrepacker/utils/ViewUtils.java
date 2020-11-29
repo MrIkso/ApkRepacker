@@ -18,7 +18,6 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -32,17 +31,13 @@ import androidx.annotation.Px;
 import androidx.annotation.StyleRes;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.view.ContextThemeWrapper;
-import androidx.core.util.ObjectsCompat;
 import androidx.core.view.MarginLayoutParamsCompat;
 import androidx.core.view.ViewCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.mrikso.apkrepacker.R;
-
-import java9.util.function.BooleanSupplier;
 
 public class ViewUtils {
 

@@ -148,7 +148,6 @@ public class ZipRODirectory extends AbstractDirectory {
         while (entries.hasMoreElements()) {
             ZipEntry entry = entries.nextElement();
             String name = entry.getName();
-            
             if (name.equals(getPath()) || ! name.startsWith(getPath()) || name.contains(".." + separator)) {
                 continue;
             }

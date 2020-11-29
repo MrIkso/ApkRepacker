@@ -5,13 +5,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import androidx.annotation.IntegerRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageButton;
-import androidx.appcompat.widget.AppCompatTextView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.button.MaterialButton;
@@ -20,9 +17,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.jecelyin.common.utils.UIUtils;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.autotranslator.translator.TranslateItem;
-import com.mrikso.apkrepacker.ide.editor.content.ClipboardCompat;
 import com.mrikso.apkrepacker.ui.publicxml.PublicXmlParser;
-import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.ProjectUtils;
 import com.mrikso.apkrepacker.utils.StringUtils;
 

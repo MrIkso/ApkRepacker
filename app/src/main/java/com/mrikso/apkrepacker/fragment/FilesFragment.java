@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
-import com.jecelyin.common.utils.IOUtils;
 import com.jecelyin.common.utils.UIUtils;
 import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
@@ -36,7 +35,6 @@ import com.mrikso.apkrepacker.ui.filemanager.utils.Utils;
 import com.mrikso.apkrepacker.ui.imageviewer.ImageViewerActivity;
 import com.mrikso.apkrepacker.ui.publicxml.PublicXmlParser;
 import com.mrikso.apkrepacker.utils.FileUtil;
-import com.mrikso.apkrepacker.utils.FragmentUtils;
 import com.mrikso.apkrepacker.utils.IntentUtils;
 import com.mrikso.apkrepacker.utils.ProjectUtils;
 import com.mrikso.apkrepacker.utils.StringUtils;
@@ -47,7 +45,6 @@ import com.sdsmdg.harjot.vectormaster.VectorMasterDrawable;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Objects;
 
 public class FilesFragment extends BaseFilesFragment implements OnBackPressedListener, OnItemSelectedListener,

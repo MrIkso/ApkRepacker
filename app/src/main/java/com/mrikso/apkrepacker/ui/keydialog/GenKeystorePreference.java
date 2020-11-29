@@ -158,7 +158,6 @@ public class GenKeystorePreference extends DialogPreference implements TextWatch
                 this.storePass.setText("");
                 return;
             default:
-                return;
         }
     }
 
@@ -335,8 +334,8 @@ protected void onBindDialogView(View view){
     );
         super.onBindDialogView(view);
 }
-    private X509Certificate generateCert(PrivateKey privateKey, PublicKey publicKey, X500Name x500Name, Date date, Date date2, CertificateExtensions certificateExtensions) throws CertificateEncodingException,
-            CertificateException, IOException, NoSuchAlgorithmException, NoSuchProviderException,
+    private X509Certificate generateCert(PrivateKey privateKey, PublicKey publicKey, X500Name x500Name, Date date, Date date2, CertificateExtensions certificateExtensions) throws
+            CertificateException, NoSuchAlgorithmException, NoSuchProviderException,
             SignatureException, InvalidKeyException {
         String str = "SHA512withRSA";
         try {

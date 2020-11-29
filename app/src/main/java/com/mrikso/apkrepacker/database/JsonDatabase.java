@@ -26,7 +26,6 @@ import com.mrikso.apkrepacker.database.entity.FindKeywordsAndFilesItem;
 import com.mrikso.apkrepacker.database.entity.FindKeywordsItem;
 import com.mrikso.apkrepacker.database.entity.Project;
 import com.mrikso.apkrepacker.database.entity.RecentFileItem;
-import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.ProjectUtils;
 import com.mrikso.apkrepacker.utils.common.DLog;
 

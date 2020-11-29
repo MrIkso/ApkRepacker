@@ -20,7 +20,6 @@ import com.unnamed.b.atv.model.TreeNode;
 
 import java.io.File;
 
-import static com.mrikso.apkrepacker.utils.FileUtil.getColorResource;
 import static com.mrikso.apkrepacker.utils.FileUtil.getColorResourceSimple;
 import static com.mrikso.apkrepacker.utils.FileUtil.getImageResource;
 

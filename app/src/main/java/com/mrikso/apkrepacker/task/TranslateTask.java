@@ -1,7 +1,5 @@
 package com.mrikso.apkrepacker.task;
 
-import android.os.AsyncTask;
-
 import com.mrikso.apkrepacker.autotranslator.translator.TranslateItem;
 import com.mrikso.apkrepacker.autotranslator.translator.Translator;
 import com.mrikso.apkrepacker.fragment.StringsFragment;

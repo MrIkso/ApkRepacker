@@ -1,7 +1,5 @@
 package com.mrikso.apkrepacker.ui.apkbuilder;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
 
 public interface IBuilderCallback {

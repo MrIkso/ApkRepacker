@@ -86,7 +86,7 @@ public class CopyOperation extends FileOperation<CopyArguments> {
         return true;
     }
 
-    private abstract class Copier {
+    private abstract static class Copier {
         private static final int COPY_BUFFER_SIZE = 32 * 1024;
 
         @NonNull
@@ -196,7 +196,7 @@ public class CopyOperation extends FileOperation<CopyArguments> {
         protected abstract boolean mkDir(@NonNull File newFile);
     }
 
-    private class NormalCopier extends Copier {
+    private static class NormalCopier extends Copier {
         NormalCopier(@NonNull Context context,
                      @NonNull OperationStatusDisplayer statusDisplayer,
                      int operationId) {
@@ -215,7 +215,7 @@ public class CopyOperation extends FileOperation<CopyArguments> {
         }
     }
 
-    private class SafCopier extends Copier {
+    private static class SafCopier extends Copier {
         private final Context context;
 
         SafCopier(@NonNull Context context,

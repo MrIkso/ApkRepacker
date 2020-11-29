@@ -12,15 +12,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.jecelyin.common.utils.UIUtils;
-import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.activity.CodeEditorActivity;
 import com.mrikso.apkrepacker.ui.dimenslist.DimensAdapter;
@@ -28,7 +25,6 @@ import com.mrikso.apkrepacker.ui.dimenslist.DimensMeta;
 import com.mrikso.apkrepacker.ui.dimenslist.DimensViewModel;
 
 import java.io.File;
-import java.util.Objects;
 
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
 

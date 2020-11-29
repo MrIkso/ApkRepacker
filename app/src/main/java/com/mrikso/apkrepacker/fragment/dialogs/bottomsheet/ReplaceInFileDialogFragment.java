@@ -19,7 +19,6 @@ import com.jecelyin.editor.v2.io.LocalFileWriter;
 import com.jecelyin.editor.v2.utils.ExtGrep;
 import com.jecelyin.editor.v2.utils.GrepBuilder;
 import com.mrikso.apkrepacker.R;
-import com.mrikso.apkrepacker.utils.ViewUtils;
 
 import org.apache.commons.io.IOUtils;
 

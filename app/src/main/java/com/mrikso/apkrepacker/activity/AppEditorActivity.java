@@ -1,12 +1,10 @@
 package com.mrikso.apkrepacker.activity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.Toolbar;
@@ -31,7 +29,6 @@ import com.mrikso.apkrepacker.ui.stringlist.StringFile;
 import com.mrikso.apkrepacker.utils.FragmentUtils;
 import com.mrikso.apkrepacker.utils.ProjectUtils;
 import com.mrikso.apkrepacker.utils.StringUtils;
-import com.mrikso.apkrepacker.utils.common.DLog;
 
 import java.io.File;
 import java.util.ArrayList;

@@ -1,7 +1,6 @@
 package com.mrikso.apkrepacker.fragment;
 
 import android.os.Bundle;
-import android.text.method.MovementMethod;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;

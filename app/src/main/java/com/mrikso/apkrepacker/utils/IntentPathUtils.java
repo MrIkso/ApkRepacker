@@ -14,9 +14,6 @@ import android.text.TextUtils;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
@@ -25,8 +22,6 @@ import androidx.annotation.Nullable;
 
 /*import java8.nio.file.Path;
 import java8.nio.file.Paths;*/
-import java9.util.function.Function;
-import me.zhanghai.java.functional.Functional;
 
 public class IntentPathUtils {
 

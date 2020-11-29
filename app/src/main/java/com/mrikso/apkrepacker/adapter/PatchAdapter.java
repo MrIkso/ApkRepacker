@@ -16,12 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mrikso.apkrepacker.R;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.mrikso.apkrepacker.utils.FileUtil.getColorResource;
-import static com.mrikso.apkrepacker.utils.FileUtil.getImageResource;
 
 public class PatchAdapter extends RecyclerView.Adapter<PatchAdapter.ViewHolder> {
 

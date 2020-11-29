@@ -6,7 +6,6 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.mrikso.apkrepacker.ui.projectlist.ProjectItem;
 import com.mrikso.apkrepacker.utils.AppExecutor;

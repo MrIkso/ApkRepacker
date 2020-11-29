@@ -20,8 +20,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.utils.ViewUtils;
 
-import pxb.android.axml.Axml;
-
 public class BaseBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
     private BottomSheetDialog mDialog;

@@ -17,7 +17,6 @@
 package com.mrikso.apkrepacker.ui.filemanager.storage.access;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.UriPermission;
 
 import androidx.annotation.NonNull;
@@ -30,7 +29,6 @@ import com.mrikso.apkrepacker.ui.filemanager.utils.FileUtils;
 import java.io.File;
 import java.util.List;
 
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static androidx.documentfile.provider.DocumentFile.fromTreeUri;
 
 import static com.mrikso.apkrepacker.ui.filemanager.storage.DocumentFileUtils.safAwareDelete;

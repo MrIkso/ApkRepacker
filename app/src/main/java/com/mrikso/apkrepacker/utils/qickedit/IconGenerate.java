@@ -103,7 +103,7 @@ public class IconGenerate {
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
         int size = width * height;
-        int pixels[] = new int[size];
+        int[] pixels = new int[size];
         Bitmap bitmap2 = bitmap.copy(Bitmap.Config.ARGB_4444, false);
         bitmap2.getPixels(pixels, 0, width, 0, 0, width, height);
         HashMap<Integer, Integer> colorMap = new HashMap<>();

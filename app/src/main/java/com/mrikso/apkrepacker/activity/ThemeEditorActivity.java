@@ -1,6 +1,5 @@
 package com.mrikso.apkrepacker.activity;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Toast;
 

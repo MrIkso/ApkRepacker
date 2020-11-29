@@ -10,7 +10,6 @@ import android.os.Environment;
 import android.os.StatFs;
 import android.util.Log;
 
-import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.activity.ExceptionActivity;
 
 import java.io.File;
@@ -82,8 +81,8 @@ public class ExceptionHandler implements Thread.UncaughtExceptionHandler {
     private long getTotalInternalMemorySize() {
         File path = Environment.getDataDirectory();
         StatFs stat = new StatFs(path.getPath());
-        long blockSize = stat.getBlockSize();
-        long totalBlocks = stat.getBlockCount();
+        long blockSize = stat.getBlockSizeLong();
+        long totalBlocks = stat.getBlockCountLong();
         return (totalBlocks * blockSize) / (1024 * 1024);
     }
 
@@ -146,8 +145,8 @@ public class ExceptionHandler implements Thread.UncaughtExceptionHandler {
         infoStringBuffer.append("\nTIME         : ").append(time);
         infoStringBuffer.append("\nUSER         : ").append(type);
         infoStringBuffer.append("\nDISPLAY      : ").append(user);
-        infoStringBuffer.append("\nTOTAL-INTERNAL-MEMORY     : ").append(getTotalInternalMemorySize() + " mb");
-        infoStringBuffer.append("\nAVAILABLE-INTERNAL-MEMORY : ").append(getAvailableInternalMemorySize() + " mb");
+        infoStringBuffer.append("\nTOTAL-INTERNAL-MEMORY     : ").append(getTotalInternalMemorySize()).append(" mb");
+        infoStringBuffer.append("\nAVAILABLE-INTERNAL-MEMORY : ").append(getAvailableInternalMemorySize()).append(" mb");
 
         return infoStringBuffer.toString();
     }

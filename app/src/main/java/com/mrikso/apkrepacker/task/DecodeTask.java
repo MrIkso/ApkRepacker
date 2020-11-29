@@ -1,7 +1,6 @@
 package com.mrikso.apkrepacker.task;
 
 import android.content.Context;
-import android.os.AsyncTask;
 
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.fragment.DecompileFragment;

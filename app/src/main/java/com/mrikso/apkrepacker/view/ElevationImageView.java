@@ -158,12 +158,12 @@ public class ElevationImageView extends AppCompatImageView {
         super.onAttachedToWindow();
     }
 
-    private final float getBlurRadius() {
+    private float getBlurRadius() {
         float maxElevation = TypedValue.applyDimension(1, 24.0F, getResources().getDisplayMetrics());
         return Math.min(25.0F * (this.customElevation / maxElevation), 25.0F);
     }
 
-    private final Bitmap getShadowBitmap(Bitmap bitmap) {
+    private Bitmap getShadowBitmap(Bitmap bitmap) {
         Allocation allocationIn = Allocation.createFromBitmap(rs, bitmap);
         Allocation allocationOut = Allocation.createTyped(rs, allocationIn.getType());
 
@@ -204,13 +204,13 @@ public class ElevationImageView extends AppCompatImageView {
         return bitmap;
     }
 
-    private final void generateShadow() {
+    private void generateShadow() {
         if (this.getDrawable() != null) {
             this.shadowBitmap = this.getShadowBitmap(this.getBitmapFromDrawable());
         }
     }
 
-    private final Bitmap getBitmapFromDrawable() {
+    private Bitmap getBitmapFromDrawable() {
         Drawable drawable = this.getDrawable();
         float blurRadius = this.getBlurRadius();
         int width = this.getWidth() + 2 * (int) blurRadius;

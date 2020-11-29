@@ -6,9 +6,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mrikso.apkrepacker.R;
-import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.ProjectUtils;
-import com.mrikso.apkrepacker.utils.common.DLog;
 import com.thoughtbot.expandablerecyclerview.listeners.OnGroupClickListener;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 import com.thoughtbot.expandablerecyclerview.viewholders.GroupViewHolder;

@@ -16,7 +16,6 @@ import com.mrikso.apkrepacker.ui.projectview.FileChangeListener;
 import com.mrikso.apkrepacker.ui.projectview.FolderStructureFragment;
 import com.mrikso.apkrepacker.ui.projectview.ProjectFileContract;
 import com.mrikso.apkrepacker.ui.projectview.ProjectFilePresenter;
-import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.ProjectUtils;
 
 import java.io.File;

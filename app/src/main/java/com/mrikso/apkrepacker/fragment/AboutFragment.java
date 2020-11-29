@@ -14,17 +14,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.fragment.dialogs.LicensesDialogFragment;
 import com.mrikso.apkrepacker.utils.AppUtils;
 import com.mrikso.apkrepacker.utils.Constant;
-import com.mrikso.apkrepacker.utils.FragmentUtils;
-import com.mrikso.apkrepacker.viewmodel.ProjectsFragmentViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -40,7 +36,6 @@ public class AboutFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ;
         initView(view);
     }
 

@@ -9,7 +9,7 @@ public class Patch {
     public String author;
     public String packagename;
     public int requiredEngine;
-    public List<PatchRule> rules = new ArrayList();
+    public List<PatchRule> rules = new ArrayList<>();
 
     public Patch(){
 

@@ -1,7 +1,6 @@
 package com.mrikso.apkrepacker.utils;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -12,8 +11,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.util.Base64;
-import android.util.DisplayMetrics;
-import android.view.WindowManager;
 
 import com.mrikso.apkrepacker.R;
 

@@ -15,7 +15,6 @@ import brut.util.Logger
 import com.jecelyin.common.utils.DLog
 import com.jecelyin.common.utils.IOUtils
 import com.mrikso.apkrepacker.R
-import com.mrikso.apkrepacker.activity.AppEditorActivity
 import com.mrikso.apkrepacker.task.BuildTask
 import com.mrikso.apkrepacker.ui.apkbuilder.IBuilderCallback
 import com.mrikso.apkrepacker.ui.apkbuilder.TaskStepInfo
@@ -132,15 +131,16 @@ class BuildService : Service(), IBuilderCallback, Logger {
     }
 
     override fun info(@StringRes id: Int, vararg args: Any?) {
-        mCompileLogMutable.append(String.format("I: %s", getString(id, *args)))
+        val text = "I: " + getString(id, *args)
+        mCompileLogMutable.append(text)
         mCompileLogMutable.append(LINE_SEPARATOR_WIN)
-        DLog.i("BuildService", String.format("I: %s", getString(id, *args)))
+        DLog.i("BuildService", text)
     }
 
     override fun warning(@StringRes id: Int, vararg args: Any?) {
         mCompileLogMutable.append(String.format("W: %s", getString(id, *args)))
         mCompileLogMutable.append(LINE_SEPARATOR_WIN)
-        DLog.w("BuildService", getString(id, *args));
+        DLog.w("BuildService", getString(id, *args))
     }
 
     override fun fine(@StringRes id: Int, vararg args: Any?) {
@@ -153,7 +153,7 @@ class BuildService : Service(), IBuilderCallback, Logger {
     }
 
     override fun error(@StringRes id: Int, vararg args: Any?) {
-        compileLog = getString(id, *args);
+        compileLog = getString(id, *args)
         mCompileLogMutable.append(String.format("E: %s", compileLog))
         mCompileLogMutable.append(LINE_SEPARATOR_WIN)
         DLog.e("BuildService", compileLog)

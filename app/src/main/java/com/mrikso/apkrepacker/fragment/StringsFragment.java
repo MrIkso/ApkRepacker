@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
@@ -37,7 +36,6 @@ import com.mrikso.apkrepacker.task.TranslateTask;
 import com.mrikso.apkrepacker.ui.preferences.PreferenceHelper;
 import com.mrikso.apkrepacker.ui.stringlist.StringFile;
 import com.mrikso.apkrepacker.ui.stringlist.StringsAdapter;
-import com.mrikso.apkrepacker.utils.AppUtils;
 import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.IntentUtils;
 import com.mrikso.apkrepacker.utils.ScrollingViewOnApplyWindowInsetsListener;

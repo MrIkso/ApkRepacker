@@ -20,9 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.chip.Chip;
 import com.jecelyin.common.utils.UIUtils;
-import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
-import com.mrikso.apkrepacker.activity.MainActivity;
 import com.mrikso.apkrepacker.fragment.dialogs.bottomsheet.AppsOptionsItemDialogFragment;
 import com.mrikso.apkrepacker.fragment.dialogs.bottomsheet.DecompileOptionsDialogFragment;
 import com.mrikso.apkrepacker.ui.appslist.AppsAdapter;

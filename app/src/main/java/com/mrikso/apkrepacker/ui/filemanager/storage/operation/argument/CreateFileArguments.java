@@ -19,7 +19,6 @@ package com.mrikso.apkrepacker.ui.filemanager.storage.operation.argument;
 
 import androidx.annotation.NonNull;
 
-import com.mrikso.apkrepacker.fragment.base.BaseFilesFragment;
 import com.mrikso.apkrepacker.ui.filemanager.storage.operation.FileOperation;
 
 import java.io.File;

@@ -21,12 +21,10 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.jecelyin.common.utils.UIUtils;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.ui.filemanager.FileAdapter;
-import com.mrikso.apkrepacker.ui.filemanager.utils.FileUtils;
 import com.mrikso.apkrepacker.ui.filemanager.holder.DirectoryHolder;
 import com.mrikso.apkrepacker.ui.filemanager.holder.FileHolder;
 import com.mrikso.apkrepacker.ui.filemanager.holder.FileListViewHolder;
 import com.mrikso.apkrepacker.ui.filemanager.misc.DirectoryScanner;
-import com.mrikso.apkrepacker.utils.AppUtils;
 import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.IntegerArray;
 import com.mrikso.apkrepacker.utils.PermissionsUtils;
@@ -93,7 +91,7 @@ public abstract class BaseFilesFragment extends Fragment implements FileListView
     @Override
     public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mFlipper = (WaitingViewFlipper) view.findViewById(R.id.flipper);
+        mFlipper = view.findViewById(R.id.flipper);
         mSdCard = FileUtil.getExternalStorage(requireContext());
 
         // Get arguments
@@ -157,7 +155,7 @@ public abstract class BaseFilesFragment extends Fragment implements FileListView
 
     private void requestPermissions() {
         showLoading(true);
-        if(!PermissionsUtils.checkAndRequestStoragePermissions(this));{
+        if (!PermissionsUtils.checkAndRequestStoragePermissions(this)) {
             showPermissionDenied();
         }
     }

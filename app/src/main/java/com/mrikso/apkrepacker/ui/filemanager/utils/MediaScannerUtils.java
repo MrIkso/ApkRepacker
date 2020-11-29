@@ -65,7 +65,7 @@ public abstract class MediaScannerUtils {
         ArrayList<String> filePaths = new ArrayList<>();
         getPathsUnder(filePaths, parentFile);
 
-        MediaScannerConnection.scanFile(c.getApplicationContext(), filePaths.toArray(new String[filePaths.size()]), null,
+        MediaScannerConnection.scanFile(c.getApplicationContext(), filePaths.toArray(new String[0]), null,
                 sLogScannerListener);
     }
 

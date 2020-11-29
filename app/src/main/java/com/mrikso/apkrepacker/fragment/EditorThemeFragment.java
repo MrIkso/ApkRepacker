@@ -32,8 +32,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jecelyin.editor.v2.EditorPreferences;
@@ -50,8 +48,6 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import me.zhanghai.android.fastscroll.FastScrollerBuilder;
 
 public class EditorThemeFragment extends Fragment {
     private RecyclerView mRecyclerView;

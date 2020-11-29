@@ -8,8 +8,6 @@ import android.os.Build;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
-import java.util.Objects;
-
 public class PermissionsUtils {
     public static final int REQUEST_CODE_STORAGE_PERMISSIONS = 322;
 

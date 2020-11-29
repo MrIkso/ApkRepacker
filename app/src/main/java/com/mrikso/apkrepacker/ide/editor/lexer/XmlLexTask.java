@@ -167,7 +167,7 @@ public class XmlLexTask extends Antlr4LexTask<XMLLexer> {
         }
     }
 
-    private class XMLFormatter extends XMLParserBaseVisitor<Void> {
+    private static class XMLFormatter extends XMLParserBaseVisitor<Void> {
         int newPos;
         private IndentStringBuilder sb;
         private int width;

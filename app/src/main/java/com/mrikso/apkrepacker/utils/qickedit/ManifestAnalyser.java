@@ -15,11 +15,11 @@ public class ManifestAnalyser {
     private static File apkFile;
 
     public ManifestAnalyser(File apk) {
-        this.apkFile = apk;
+        apkFile = apk;
     }
 
     public ManifestAnalyser(String apk) {
-        this.apkFile = new File(apk);
+        apkFile = new File(apk);
     }
 
     public static boolean isSplitRequired() throws IOException, XmlPullParserException {
@@ -128,29 +128,20 @@ public class ManifestAnalyser {
 
     private static int addAssets(final File apkFile, final Object assetManagerInstance) {
         try {
-            Method addAssetPath = assetManagerInstance.getClass().getMethod("addAssetPath", new Class[]{String.class});
+            Method addAssetPath = assetManagerInstance.getClass().getMethod("addAssetPath", String.class);
             return (Integer) addAssetPath.invoke(assetManagerInstance, apkFile.getAbsolutePath());
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
         }
         return -1;
     }
 
     private static Object getAssetManager() {
-        Class assetManagerClass = null;
+        Class assetManagerClass;
         try {
             assetManagerClass = Class.forName("android.content.res.AssetManager");
-            Object assetManagerInstance = assetManagerClass.newInstance();
-            return assetManagerInstance;
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+            return assetManagerClass.newInstance();
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
         return null;

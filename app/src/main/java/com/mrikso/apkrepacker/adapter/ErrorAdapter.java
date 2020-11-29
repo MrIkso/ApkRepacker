@@ -9,7 +9,6 @@ import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.jecelyin.common.utils.UIUtils;
 import com.mrikso.apkrepacker.R;
 
 import java.io.File;

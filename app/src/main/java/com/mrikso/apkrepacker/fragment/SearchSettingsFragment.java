@@ -12,14 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatImageButton;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import com.github.clans.fab.FloatingActionButton;
@@ -35,13 +33,10 @@ import com.mrikso.apkrepacker.database.JsonDatabase;
 import com.mrikso.apkrepacker.filepicker.FilePickerDialog;
 import com.mrikso.apkrepacker.ui.autocompleteeidttext.CustomAdapter;
 import com.mrikso.apkrepacker.ui.preferences.PreferenceHelper;
-import com.mrikso.apkrepacker.utils.FileUtil;
-import com.mrikso.apkrepacker.utils.FragmentUtils;
 import com.mrikso.apkrepacker.utils.ProjectUtils;
 import com.mrikso.apkrepacker.utils.StringUtils;
 import com.mrikso.apkrepacker.utils.ViewUtils;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

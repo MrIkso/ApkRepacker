@@ -21,9 +21,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.documentfile.provider.DocumentFile;
 
-
 import com.mrikso.apkrepacker.fragment.MyFilesFragment;
-import com.mrikso.apkrepacker.fragment.base.BaseFilesFragment;
 import com.mrikso.apkrepacker.ui.filemanager.holder.FileHolder;
 import com.mrikso.apkrepacker.ui.filemanager.storage.DocumentFileUtils;
 import com.mrikso.apkrepacker.ui.filemanager.storage.operation.argument.ExtractArguments;
@@ -92,7 +90,7 @@ public class ExtractOperation extends FileOperation<ExtractArguments> {
         return true;
     }
 
-    private abstract class Extractor {
+    private abstract static class Extractor {
         boolean extract(ExtractArguments args) {
             List<FileHolder> zipHolders = args.getZipFiles();
             File dstDirectory = args.getTarget();
@@ -141,7 +139,7 @@ public class ExtractOperation extends FileOperation<ExtractArguments> {
                             new BufferedOutputStream(outputStream(outputFile))
             ) {
                 int len;
-                byte buf[] = new byte[BUFFER_SIZE];
+                byte[] buf = new byte[BUFFER_SIZE];
                 while ((len = inputStream.read(buf)) > 0) {
                     outputStream.write(buf, 0, len);
                 }
@@ -177,7 +175,7 @@ public class ExtractOperation extends FileOperation<ExtractArguments> {
         abstract OutputStream outputStream(File outputFile) throws FileNotFoundException;
     }
 
-    private class NormalExtractor extends Extractor {
+    private static class NormalExtractor extends Extractor {
         @Override
         public boolean createDir(File dir) {
             return dir.exists() || dir.mkdirs();

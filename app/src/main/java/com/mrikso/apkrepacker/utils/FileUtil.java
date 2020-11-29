@@ -19,11 +19,11 @@ import android.webkit.MimeTypeMap;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.mrikso.apkrepacker.utils.common.DLog;
 import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.filepicker.Utility;
 import com.mrikso.apkrepacker.ui.preferences.PreferenceHelper;
+import com.mrikso.apkrepacker.utils.common.DLog;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -39,8 +39,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-
-import static com.mrikso.apkrepacker.App.getContext;
 
 public class FileUtil {
     private static final String TAG = "FileUtil";
@@ -573,7 +571,7 @@ public class FileUtil {
     public static ArrayList<File> searchFilesName(Context context, String name) {
         ArrayList<File> list = new ArrayList<>();
         Uri uri = MediaStore.Files.getContentUri("external");
-        String data[] = new String[]{MediaStore.Files.FileColumns.DATA};
+        String[] data = new String[]{MediaStore.Files.FileColumns.DATA};
         Cursor cursor = new CursorLoader(context, uri, data, null, null, null).loadInBackground();
         if (cursor != null) {
             while (cursor.moveToNext()) {

@@ -30,13 +30,11 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.google.android.material.shape.MaterialShapeDrawable;
 import com.google.android.material.textfield.TextInputEditText;
 import com.jecelyin.common.utils.UIUtils;
-import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.filepicker.FilePickerDialog;
 import com.mrikso.apkrepacker.fragment.dialogs.ProgressDialogFragment;
 import com.mrikso.apkrepacker.task.SimpleEditTask;
 import com.mrikso.apkrepacker.utils.AppUtils;
-import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.FragmentUtils;
 import com.mrikso.apkrepacker.utils.QickEditParams;
 import com.mrikso.apkrepacker.utils.SignUtil;

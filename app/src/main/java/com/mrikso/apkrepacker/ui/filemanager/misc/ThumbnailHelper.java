@@ -33,8 +33,6 @@ import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.content.res.AppCompatResources;
-
 import com.mrikso.apkrepacker.ui.filemanager.holder.FileHolder;
 import com.mrikso.apkrepacker.ui.filemanager.utils.FileUtils;
 import com.mrikso.apkrepacker.ui.filemanager.utils.Utils;

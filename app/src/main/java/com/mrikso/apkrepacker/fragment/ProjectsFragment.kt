@@ -81,7 +81,7 @@ class ProjectsFragment : Fragment(),
         mProjectsList!!.adapter = mAdapter
         mToolBar!!.title = getString(R.string.projects_count, mAdapter!!.itemCount)
 
-        initData();
+        initData()
     }
 
     private fun initData() {

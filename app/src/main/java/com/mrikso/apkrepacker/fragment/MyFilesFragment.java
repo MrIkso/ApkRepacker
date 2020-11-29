@@ -45,8 +45,6 @@ import com.mrikso.apkrepacker.utils.ViewUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Locale;
 import java.util.Objects;
 
 public class MyFilesFragment extends BaseFilesFragment implements View.OnClickListener, ApkOptionsDialogFragment.ItemClickListener,

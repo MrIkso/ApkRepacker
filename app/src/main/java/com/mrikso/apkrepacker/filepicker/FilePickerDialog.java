@@ -4,7 +4,6 @@ package com.mrikso.apkrepacker.filepicker;
 import android.app.Dialog;
 import android.content.Context;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
@@ -25,8 +24,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.Objects;
-
 
 
 public class FilePickerDialog extends Dialog implements AdapterView.OnItemClickListener, AbsListView.OnScrollListener {

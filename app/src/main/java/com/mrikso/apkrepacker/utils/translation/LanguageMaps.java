@@ -5,12 +5,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class LanguageMaps {
-    private static LinkedHashMap langMap;
+    private static LinkedHashMap<String, String> langMap;
 
     static {
-        LinkedHashMap linkedHashMap = new LinkedHashMap();
-        langMap = linkedHashMap;
-        linkedHashMap.put("-aa", "Afar");
+        langMap = new LinkedHashMap<>();
+        langMap.put("-aa", "Afar");
         langMap.put("-ab", "Abkhazian");
         langMap.put("-af", "Afrikaans");
         langMap.put("-ak", "Akan");
@@ -208,19 +207,19 @@ public class LanguageMaps {
             return "Default";
         }
         int indexOf = str.indexOf(45, 1);
-        String str2 = (String) langMap.get(indexOf != -1 ? str.substring(0, indexOf) : str);
+        String str2 = langMap.get(indexOf != -1 ? str.substring(0, indexOf) : str);
         return str2 != null ? str2 + " (" + str + ")" : " (" + str + ")";
     }
 
     public static void addLang(String[] strArr, String[] strArr2) {
         int i = 0;
-        Iterator it = langMap.entrySet().iterator();
+        Iterator<Map.Entry<String, String>> it = langMap.entrySet().iterator();
         while (true) {
             int i2 = i;
             if (it.hasNext()) {
-                Map.Entry entry = (Map.Entry) it.next();
-                strArr[i2] = (String) entry.getKey();
-                strArr2[i2] = (String) entry.getValue();
+                Map.Entry<String, String> entry = it.next();
+                strArr[i2] = entry.getKey();
+                strArr2[i2] = entry.getValue();
                 i = i2 + 1;
             } else {
                 return;

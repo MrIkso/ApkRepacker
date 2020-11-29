@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jaredrummler.android.colorpicker.ColorPanelView;
 import com.jecelyin.common.utils.UIUtils;
-import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.utils.StringUtils;
 

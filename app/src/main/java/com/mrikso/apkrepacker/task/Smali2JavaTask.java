@@ -2,20 +2,17 @@ package com.mrikso.apkrepacker.task;
 
 import android.os.AsyncTask;
 
-import com.mrikso.apkrepacker.activity.IdeActivity;
 import com.jecelyin.common.utils.UIUtils;
 import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
-import com.mrikso.apkrepacker.utils.FileUtil;
+import com.mrikso.apkrepacker.activity.IdeActivity;
 import com.mrikso.apkrepacker.utils.Smali2Java;
 
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.Token;
-import org.antlr.runtime.TokenSource;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.CommonTreeNodeStream;
 import org.jf.dexlib2.writer.builder.DexBuilder;
-import org.jf.smali.LexerErrorInterface;
 import org.jf.smali.SmaliOptions;
 import org.jf.smali.smaliFlexLexer;
 import org.jf.smali.smaliParser;
@@ -24,6 +21,7 @@ import org.jf.smali.smaliTreeWalker;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 public class Smali2JavaTask extends AsyncTask<File, CharSequence, Boolean> {
     private IdeActivity editorActivity;
@@ -39,11 +37,11 @@ public class Smali2JavaTask extends AsyncTask<File, CharSequence, Boolean> {
         FileInputStream fis = null;
         try {
             fis = new FileInputStream(smaliFile);
-            InputStreamReader reader = new InputStreamReader(fis, "UTF-8");
+            InputStreamReader reader = new InputStreamReader(fis, StandardCharsets.UTF_8);
 
-            LexerErrorInterface lexer = new smaliFlexLexer(reader, options.apiLevel);
-            ((smaliFlexLexer) lexer).setSourceFile(smaliFile);
-            CommonTokenStream tokens = new CommonTokenStream((TokenSource) lexer);
+            smaliFlexLexer lexer = new smaliFlexLexer(reader, options.apiLevel);
+            lexer.setSourceFile(smaliFile);
+            CommonTokenStream tokens = new CommonTokenStream(lexer);
 
             if (options.printTokens) {
                 tokens.getTokens();

@@ -20,7 +20,6 @@ import com.mrikso.apkrepacker.ui.preferences.PreferenceHelper;
 import com.mrikso.apkrepacker.ui.stringlist.DirectoryScanner;
 import com.mrikso.apkrepacker.ui.stringlist.StringFile;
 import com.mrikso.apkrepacker.utils.AppExecutor;
-import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.ProjectUtils;
 import com.mrikso.apkrepacker.utils.common.DLog;
 
@@ -89,9 +88,7 @@ public class StringFragmentViewModel extends AndroidViewModel {
      * ищем все строки локализаций
      */
     public void findStringFiles() {
-        if (new File(mProjectPath, "resources.arsc").exists() | !new File(mProjectPath, "res").exists()) {
-            return;
-        } else {
+        if (!new File(mProjectPath, "resources.arsc").exists() && new File(mProjectPath, "res").exists()) {
             new Thread(() -> {
                 DirectoryScanner scanner = new DirectoryScanner();
                 mStringsFilesMutableLiveData.postValue(scanner.findStringFiles(mProjectPath));
@@ -132,7 +129,7 @@ public class StringFragmentViewModel extends AndroidViewModel {
      */
     public void parseStings(StringFile file) {
         mCurrentLangFile = file;
-        List<TranslateItem> stringValues = new ArrayList();
+        List<TranslateItem> stringValues = new ArrayList<>();
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
         try {
             DocumentBuilder documentBuilder = builderFactory.newDocumentBuilder();
