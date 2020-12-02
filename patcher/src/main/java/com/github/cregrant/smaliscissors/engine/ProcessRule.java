@@ -35,11 +35,11 @@ class ProcessRule {
                     dFile = smaliList.get(finalNum);
                 replace(dFile, rule);
 
-                if (!dFile.isNotModified()) {
-                    if (Prefs.verbose_level == 0)
-                        Main.out.println(dFile.getPath() + " patched.");
+                if (dFile.isModified()) {
+                    //if (Prefs.verbose_level == 0)
+                    //    Main.out.println(dFile.getPath() + " patched.");
                     synchronized (lock) {
-                        ++patchedFilesNum;
+                        patchedFilesNum++;
                     }
                 }
                 return null;
@@ -52,7 +52,6 @@ class ProcessRule {
             Main.out.println(e.getMessage());
             System.exit(1);
         }
-
 
         if (Prefs.verbose_level <= 2) {
             if (rule.isSmali)
@@ -197,6 +196,6 @@ class ProcessRule {
     }
 
     public static void dex() {
-        Main.out.println("HAHa very fun");
+        Main.out.println("Executing dex is not supported yet");
     }
 }

@@ -8,8 +8,9 @@ public class DecompiledFile {
     private boolean isModified = false;
     private final boolean isXML;
 
-    DecompiledFile(boolean isXmlFile) {
+    DecompiledFile(boolean isXmlFile, String filePath) {
         isXML = isXmlFile;
+        path = filePath;
     }
 
     public String getPath() {
@@ -20,7 +21,7 @@ public class DecompiledFile {
         this.isModified = state;
     }
 
-    public boolean isNotModified() {
+    public boolean isModified() {
         return !this.isModified;
     }
 

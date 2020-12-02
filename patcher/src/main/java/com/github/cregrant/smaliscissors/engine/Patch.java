@@ -5,6 +5,8 @@ import java.util.ArrayList;
 class Patch {
     ArrayList<Rule> rules = new ArrayList<>();
     int currentRuleNum = 0;
+    boolean smaliNeeded = false;
+    boolean xmlNeeded = false;
 
     public void addRule(Rule rule) {
         if (rule!=null)

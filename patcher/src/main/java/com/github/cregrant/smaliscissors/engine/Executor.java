@@ -6,16 +6,18 @@ import static java.lang.System.currentTimeMillis;
 
 class Executor {
     String executePatches(ArrayList<String> zipArr) {
-        IO.loadProjectFiles();
         long startTime = currentTimeMillis();
         for (String zipFile : zipArr) {
             if (zipFile.equals("cancel")) {
                 return "cancel";
             }
             Main.out.println("\nPatch - " + Regex.getEndOfPath(zipFile));
-            Patch patch = new Patch();
-            Rule rule; IO.loadRules(zipFile, patch);
+            Patch patch = IO.loadRules(zipFile);
+            boolean scanXml = patch.xmlNeeded && ProcessRule.xmlList.isEmpty();
+            boolean scanSmali = patch.smaliNeeded && ProcessRule.smaliList.isEmpty();
+            IO.loadProjectFiles(scanXml, scanSmali);
 
+            Rule rule;
             while ((rule = patch.getNextRule())!=null) {
                 preProcessRule(rule, patch);
             }
