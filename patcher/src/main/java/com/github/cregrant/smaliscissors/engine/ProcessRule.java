@@ -1,19 +1,26 @@
 package com.github.cregrant.smaliscissors.engine;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
 
 class ProcessRule {
     static ArrayList<DecompiledFile> smaliList = new ArrayList<>();
     static ArrayList<DecompiledFile> xmlList = new ArrayList<>();
-    static int patchedFilesNum = 0;
+    static int patchedFilesNum;
     static HashMap<String, String> assignMap = new HashMap<>();
 
     @SuppressWarnings("RegExpRedundantEscape")
     static void matchReplace(Rule rule) {
+        BackgroundWorker.createIfTerminated();
+        patchedFilesNum = 0;
         applyAssign(rule);
         //important escape for android
         rule.replacement = rule.replacement.replaceAll("\\$\\{GROUP(\\d{1,2})\\}", "\\$$1");
@@ -24,10 +31,10 @@ class ProcessRule {
             totalNum = xmlList.size();
         else
             totalNum = smaliList.size();
-        List<Callable<Boolean>> tasks = new ArrayList<>(totalNum);
+
         for (int num=0; num<totalNum; num++) {
             int finalNum = num;
-            Callable<Boolean> r = () -> {
+            Runnable r = () -> {
                 DecompiledFile dFile;
                 if (rule.isXml)
                     dFile = xmlList.get(finalNum);
@@ -42,12 +49,13 @@ class ProcessRule {
                         patchedFilesNum++;
                     }
                 }
-                return null;
             };
-            tasks.add(r);
+            BackgroundWorker.executor.submit(r);
         }
+
         try {
-            BackgroundWorker.executor.invokeAll(tasks);
+            BackgroundWorker.executor.shutdown();
+            BackgroundWorker.executor.awaitTermination(15, TimeUnit.MINUTES);
         } catch (Exception e) {
             Main.out.println(e.getMessage());
             System.exit(1);
@@ -59,7 +67,6 @@ class ProcessRule {
             else
                 Main.out.println(patchedFilesNum + " xml files patched.");
         }
-        patchedFilesNum = 0;
     }
 
     private static void replace(DecompiledFile dFile, Rule rule) {
@@ -116,21 +123,27 @@ class ProcessRule {
     static void add(Rule rule) {
         String src = Prefs.tempDir + File.separator + rule.source;
         String dst = Prefs.projectPath + File.separator + rule.target;
-        IO io = new IO();
         if (rule.extract) IO.zipExtract(src, dst);
-        else io.copy(src, dst);
-        io.scanFolder(Prefs.projectPath, rule.target);
+        else IO.copy(src, dst);
+        ArrayList<DecompiledFile> newFiles = Scan.scanFolder(new File(rule.target)); //todo check for correctness
+        for (DecompiledFile df : newFiles) {
+            if (df.isXML())
+                xmlList.add(df);
+            else
+                smaliList.add(df);
+        }
+
     }
 
     static void remove(Rule rule) {
         if (rule.target!=null) {
             IO.deleteAll(new File(Prefs.projectPath + File.separator + rule.target));
-            IO.removeLoadedFile(rule.target);
+            Scan.removeLoadedFile(rule.target);
         }
         else {
             for (String target : rule.targetArr) {
                 IO.deleteAll(new File(Prefs.projectPath + File.separator + target));
-                IO.removeLoadedFile(target);
+                Scan.removeLoadedFile(target);
             }
         }
     }
