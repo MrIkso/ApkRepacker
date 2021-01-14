@@ -6,19 +6,21 @@ import java.io.FileOutputStream;
 import java.util.Properties;
 
 public class Prefs {
-    public static String run_type = "";
-    public static String projectPath = "";
+    public static boolean isWindows = System.getProperty("os.name").startsWith("Windows");
+    public static String projectPath;
     public static File patchesDir;
+    public static String zipName;
     public static File tempDir;
     private static double versionConf = 0.01;
     static int verbose_level = 1;
+    static boolean optimizeRules = true;
     static boolean keepSmaliFilesInRAM = false;
     static boolean keepXmlFilesInRAM = false;
-    static boolean skipSomeSmaliFiles = true;
-    static String[] smaliFoldersToSkip = new String[]{"android", "androidx", "kotlin", "kotlinx"};
+    static final boolean skipSomeSmaliFiles = true;
+    static final String[] smaliFoldersToSkip = new String[]{"android", "androidx", "kotlin", "kotlinx"};
     //todo move to main
 
-    public void loadConf() {
+    public static void loadConf() {
         Properties props = new Properties();
         String settingsFilename = System.getProperty("user.dir") + File.separator + "config" + File.separator + "conf.txt";
         try {
@@ -47,7 +49,7 @@ public class Prefs {
         }
     }
 
-    void saveConf() {
+    private static void saveConf() {
         try {
             FileOutputStream output = new FileOutputStream(System.getProperty("user.dir") + File.separator + "config" + File.separator + "conf.txt");
             Properties props = new Properties();
@@ -65,9 +67,9 @@ public class Prefs {
 
     private void upgradeConf() {
         Main.out.println("Upgrading config file...");
-        Main.out.println(versionConf + " --> 0.01");
-        versionConf = 0.01f;
-        this.saveConf();
+        Main.out.println(versionConf + " --> " + Main.version);
+        versionConf = Main.version;
+        Prefs.saveConf();
         Main.out.println("Upgraded.");
     }
 }

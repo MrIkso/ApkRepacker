@@ -11,6 +11,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.github.cregrant.smaliscissors.engine.DexExecutor;
 import com.github.cregrant.smaliscissors.engine.Main;
 import com.github.cregrant.smaliscissors.engine.OutStream;
 import com.mrikso.apkrepacker.adapter.PatchItem;
@@ -26,6 +27,8 @@ import com.mrikso.patchengine.interfaces.IRulesInfo;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -34,9 +37,11 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-public class PatcherViewModel extends AndroidViewModel implements IRulesInfo, IPatchContext, OutStream {
+import dalvik.system.DexClassLoader;
 
-    private Map<String, String> mGlobalVariables = new HashMap();
+public class PatcherViewModel extends AndroidViewModel implements IRulesInfo, IPatchContext, OutStream, DexExecutor {
+
+    private Map<String, String> mGlobalVariables = new HashMap<>();
     private PatchExecutor mPatchExecutor;
     private ProjectHelper mProjectHelper;
     private MutableLiveData<String> mLog = new MutableLiveData<>();
@@ -94,8 +99,19 @@ public class PatcherViewModel extends AndroidViewModel implements IRulesInfo, IP
             //runPatch(item.mPath);
             args.add(item.mPath);
         }
-        Main.main(args.toArray(new String[0]), this);
+        Main.main(args.toArray(new String[0]), this, this);
         mPatchCount.postValue(patchItemList.size());
+    }
+
+    @Override
+    public void runDex(String dexPath, String entrance, String mainClass, String apkPath, String zipPath, String projectPath, String param, String tempDir) {
+        try {
+            Class<?> loadedClass = new DexClassLoader(dexPath, tempDir, null, com.github.cregrant.smaliscissors.engine.Main.class.getClassLoader()).loadClass(mainClass);
+            Method method = loadedClass.getMethod(entrance, String.class, String.class, String.class, String.class);
+            method.invoke(loadedClass.getDeclaredConstructor().newInstance(), apkPath, zipPath, projectPath, param);
+        } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | ClassNotFoundException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

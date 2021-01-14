@@ -2,7 +2,7 @@ package com.github.cregrant.smaliscissors.engine;
 
 import java.io.File;
 
-public class DecompiledFile {
+class DecompiledFile {
     private String path;
     private String body;
     private boolean isModified = false;
@@ -14,54 +14,50 @@ public class DecompiledFile {
         path = filePath;
     }
 
-    public boolean isXML() {
+    boolean isXML() {
         return this.isXML;
     }
 
-    public String getPath() {
+    String getPath() {
         return this.path;
     }
 
-    public void setModified(boolean state) {
+    void setModified(boolean state) {
         this.isModified = state;
     }
 
-    public boolean isModified() {
-        return !this.isModified;
+    boolean isModified() {
+        return this.isModified;
     }
 
-    public void setPath(String newPath) {
-        this.path = newPath;
-    }
-
-    public String getBody() {
-        if ((!isXML && Prefs.keepSmaliFilesInRAM) || (isXML && Prefs.keepXmlFilesInRAM))
+    String getBody() {
+        if (isXML ? Prefs.keepXmlFilesInRAM : Prefs.keepSmaliFilesInRAM)
             return this.body;
         else
             return IO.read(Prefs.projectPath + File.separator + path);
     }
 
-    public void setBody(String newBody) {
-        if ((!isXML && Prefs.keepSmaliFilesInRAM) || (isXML && Prefs.keepXmlFilesInRAM))
+    void setBody(String newBody) {
+        if (isXML ? Prefs.keepXmlFilesInRAM : Prefs.keepSmaliFilesInRAM)
             this.body = newBody;
         else
             IO.write(Prefs.projectPath + File.separator + path, newBody);
     }
 
-    public void setBigSize(boolean state) {
+    void setBigSize(boolean state) {
         this.isBigSize = state;
     }
 
-    public boolean isBigSize() {
+    boolean isBigSize() {
         return !this.isBigSize;
     }
 
-    public boolean equals(Object anObject) {
-        if (this == anObject) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
             return true;
         }
-        if (anObject instanceof DecompiledFile) {
-            return this.path.equals(((DecompiledFile)anObject).getPath()) && this.isModified == ((DecompiledFile)anObject).isModified && this.body.equals(((DecompiledFile)anObject).getBody());
+        if (obj instanceof DecompiledFile) {
+            return this.path.equals(((DecompiledFile) obj).path) && this.isModified == ((DecompiledFile) obj).isModified && this.body.equals(((DecompiledFile) obj).getBody());
         }
         return false;
     }
