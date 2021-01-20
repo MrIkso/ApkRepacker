@@ -74,15 +74,18 @@ class Executor {
         else if (Prefs.verbose_level == 1) {
             Main.out.println("Type - " + rule.type);
             if (!rule.type.equals("EXECUTE_DEX") && !rule.type.equals("DUMMY") ) {
+
                 if (rule.target != null)
                     Main.out.println("Target - " + rule.target);
-                else {
+
+                else if (rule.targetArr != null) {
                     Main.out.println("Targets:");
                     if (rule.targetArr.size() < 100) {
                         for (String target : rule.targetArr)
                             Main.out.println("    " + target);
                     }
-                    else Main.out.println("    " + rule.targetArr.size() + " items");
+                    else
+                        Main.out.println("    " + rule.targetArr.size() + " items");
                 }
             }
         }

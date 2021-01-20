@@ -74,9 +74,6 @@ class ProcessRule {
         String smaliBodyNew = null;
         for (Rule rule : rules) {
             if (dFile.getPath().matches(rule.target)) {
-                if (dFile.getPath().contains("smali/android/p.smali")) //test
-                    Main.out.println("ffff");
-
                 if (smaliBody==null)
                     smaliBody = dFile.getBody();  //loading file body for a first time
                 else
@@ -218,7 +215,7 @@ class ProcessRule {
             for (Map.Entry<String, String> entry : set) {
                 String key = "${" + entry.getKey() + "}";
                 boolean foundInMatch = rule.match.contains(key);
-                boolean foundInReplacement = rule.replacement.contains(key);
+                boolean foundInReplacement = rule.replacement.contains(key);  //fixme
                 if (foundInMatch || foundInReplacement) {
                     String value = entry.getValue();
                     if (Prefs.verbose_level == 0)

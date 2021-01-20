@@ -156,7 +156,12 @@ class RuleParser {
             rule.match = rule.match.replace("\\n", "\\R");  //compatibility with windows
         if (rule.isXml) {
             if (rule.match!=null)
-                rule.match = rule.match.replace("><", ">\\s*?<").replace(" ", "\\s*?");
+                rule.match = rule.match
+                        .replace("><", ">\\s*?<")
+                        .replace(" ", "\\s*?")
+                        .replace(".*", "[\\s\\S]*?")
+                        .replace(".+", "[\\s\\S]+?");
+
             if (rule.replacement!=null)
                 rule.replacement = rule.replacement.replace("><", ">\n<");
         }

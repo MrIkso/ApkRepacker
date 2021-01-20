@@ -122,6 +122,7 @@ class Rule {
     boolean canBeMerged(Rule OtherRule) {
         return this.isXml==OtherRule.isXml
                 && this.isSmali==OtherRule.isSmali
-                && this.isRegex==OtherRule.isRegex;
+                && this.isRegex==OtherRule.isRegex
+                && OtherRule.name==null;
     }
 }
