@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_paste"
+        android:icon="@drawable/ic_paste"
+        android:title="@string/paste" />
+    <item
+        android:id="@+id/action_copy_original_value"
+        android:icon="@drawable/ic_copy"
+        android:title="@string/copy_original_value" />
+    <item
+        android:id="@+id/action_copy_id"
+        android:icon="@drawable/ic_copy"
+        android:title="@string/action_copy_id" />
+    <item
+        android:id="@+id/action_clear"
+        android:icon="@drawable/ic_clear"
+        android:title="@string/clear_translated" />
+    <item
+        android:id="@+id/action_auto_translate"
+        android:icon="@drawable/ic_translate"
+        android:title="@string/translate_string" />
+    <item
+        android:id="@+id/action_delete"
+        android:icon="@drawable/ic_delete"
+        android:title="@string/action_delete_strings" />
+</menu>

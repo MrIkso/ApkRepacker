@@ -3,72 +3,31 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:foreground="?android:attr/selectableItemBackground"
-    android:paddingBottom="2dp"
-    android:paddingTop="2dp">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:foreground="?android:attr/selectableItemBackground">
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/buttonsContainer"
-        android:layout_toStartOf="@+id/buttonsContainer"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+    <ImageView
+        android:id="@+id/img_icon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="4dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:contentDescription="@null"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_misc_file" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/img_arrow"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            app:srcCompat="@drawable/ic_arrow_right" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/img_icon"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:scaleType="center"
-            app:srcCompat="@drawable/ic_misc_file" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:textSize="12sp"
-            android:layout_marginStart="5dp"
-            android:text="Text.smali"
-            android:id="@+id/node_value"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:gravity="center_vertical"
-        android:id="@+id/buttonsContainer"
+    <TextView
+        android:id="@+id/list_item_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/linearLayout"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:orientation="horizontal">
+        android:layout_centerVertical="true"
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@id/img_icon"
+        tools:text="/sdcard"
+        android:textSize="14sp" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/img_add"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:background="?selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true"
-            app:srcCompat="@drawable/ic_add" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/img_delete"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:background="?selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true"
-            app:srcCompat="@drawable/ic_close" />
-
-    </LinearLayout>
 
 </RelativeLayout>

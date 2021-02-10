@@ -15,10 +15,10 @@ import androidx.appcompat.widget.PopupMenu;
 import com.google.android.material.textfield.TextInputLayout;
 import com.jecelyin.common.utils.UIUtils;
 import com.jecelyin.editor.v2.EditorPreferences;
-import com.jecelyin.editor.v2.utils.ExtGrep;
-import com.jecelyin.editor.v2.utils.MatcherResult;
+import com.mrikso.apkrepacker.activity.TextEditorActivity;
+import com.mrikso.apkrepacker.utils.grep.ExtGrep;
+import com.mrikso.apkrepacker.utils.grep.MatcherResult;
 import com.mrikso.apkrepacker.R;
-import com.mrikso.apkrepacker.activity.IdeActivity;
 import com.mrikso.apkrepacker.database.ITabDatabase;
 import com.mrikso.apkrepacker.database.JsonDatabase;
 import com.mrikso.apkrepacker.ui.autocompleteeidttext.CustomAdapter;
@@ -43,7 +43,7 @@ public class SearchPanel implements ProgressObserver {
     private boolean mWholeWordsOnly;
     private boolean mRegex, mReplaceMode;
     private Context mContext;
-    private IdeActivity mActivity;
+    private TextEditorActivity mActivity;
     private EditorPreferences mEditorPreferences;
     private ITabDatabase mDatabase;
     private FindThread mTaskFind = null;
@@ -60,7 +60,7 @@ public class SearchPanel implements ProgressObserver {
         return new SearchPanel(context);
     }
 
-    public void setActivity(IdeActivity activity) {
+    public void setActivity(TextEditorActivity activity) {
         mActivity = activity;
     }
 

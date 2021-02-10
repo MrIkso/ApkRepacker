@@ -62,4 +62,8 @@ public class ProjectUtils {
     public static String getCurrentPath() {
         return currentPath;
     }
+
+    public static String getProjectName() {
+        return new File(getProjectPath()).getName();
+    }
 }

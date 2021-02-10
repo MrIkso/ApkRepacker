@@ -19,13 +19,11 @@ package com.jecelyin.editor.v2.manager;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+
 import androidx.core.content.ContextCompat;
 
-import com.mrikso.apkrepacker.R;
-import com.mrikso.apkrepacker.activity.IdeActivity;
-
 import com.jecelyin.common.utils.DrawableUtils;
-import com.jecelyin.editor.v2.adapter.MainMenuAdapter;
+import com.mrikso.apkrepacker.R;
 
 /**
  * @author Jecelyin Peng <jecelyin@gmail.com>
@@ -35,11 +33,11 @@ public class MenuManager {
     private static int toolbarIconDisabledColor;
     private static int menuIconNormalColor;
 
-    public MenuManager(IdeActivity mainActivity) {
+    /*public MenuManager(TextEditorActivity mainActivity) {
         MainMenuAdapter adapter = new MainMenuAdapter(mainActivity);
         mainActivity.getMenuRecyclerView().setAdapter(adapter);
         adapter.setMenuItemClickListener(mainActivity);
-    }
+    }*/
 
     public static void init(Context context) {
         int[] attrs = new int[]{

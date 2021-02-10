@@ -275,7 +275,7 @@
     <string name="install_as_framework">Import as framework</string>
     <string name="toast_import_framework_done">Framework successfully imported</string>
     <string name="dialog_import">Importing..</string>
-    <string name="project">Project:</string>
+    <string name="project">File tree</string>
     <string name="select_from_storage">Select from storage</string>
     <string name="action_create_xml">Create xml file</string>
     <string name="action_create_class">Create smali class file</string>
@@ -394,9 +394,14 @@
     <string name="toast_replace_in_files">Replaced in %d files</string>
     <string name="label_skip_translated">Skip translated lines</string>
     <string name="select_translate_dictionary">Select translate dictionary:</string>
-    <string name="label_reverse_dictionary">Inverse transalation</string>
+    <string name="label_reverse_dictionary">Inverse translations</string>
     <string name="translating_run_title">Translating app</string>
     <string name="string_id_copied">String id \"%s\" copied to clipboard</string>
+    <string name="label_skip_support_lines">Skip support lines</string>
+    <string name="close_unchanged">Close Unchanged</string>
+    <string name="clear_translated">Clear Translated</string>
+    <string name="action_delete_strings">Delete string</string>
+    <string name="copy_original_value">Copy original value</string>
 
     <plurals name="menu_copy_items_to">
         <item quantity="one">Copy %1$d item here</item>

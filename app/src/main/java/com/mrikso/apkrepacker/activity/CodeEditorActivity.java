@@ -12,29 +12,27 @@ import com.mrikso.apkrepacker.ide.editor.EditorDelegate;
 import com.mrikso.apkrepacker.ide.editor.IEditorDelegate;
 import com.google.android.material.navigation.NavigationView;
 import com.mrikso.apkrepacker.R;
-import com.mrikso.apkrepacker.ui.projectview.FileChangeListener;
-import com.mrikso.apkrepacker.ui.projectview.FolderStructureFragment;
-import com.mrikso.apkrepacker.ui.projectview.ProjectFileContract;
-import com.mrikso.apkrepacker.ui.projectview.ProjectFilePresenter;
+
+import com.mrikso.apkrepacker.ui.projectview.ProjectTreeStructureFragment;
 import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.ProjectUtils;
 
 import java.io.File;
 
-public class CodeEditorActivity  extends IdeActivity implements FileChangeListener {
-    protected ProjectFileContract.Presenter mFilePresenter;
+public class CodeEditorActivity  extends BaseActivity  {
+   // protected ProjectFileContract.Presenter mFilePresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
-    @Override
+ //   @Override
     protected int getRootLayoutId() {
         return R.layout.activity_code_editor;
     }
 
-    @Override
+   /* @Override
     public void onFileDeleted(File deleted) {
         Pair<Integer, IEditorDelegate> position = mTabManager.getEditorDelegate(deleted);
         if (position != null) {
@@ -58,11 +56,11 @@ public class CodeEditorActivity  extends IdeActivity implements FileChangeListen
       //  } else {
 
        // }
-    }
+    }*/
     /**
      * @return current file selected
      */
-    @Nullable
+   /* @Nullable
     protected File getCurrentFile() {
         EditorDelegate editorFragment = getCurrentEditorDelegate();
         if (editorFragment != null) {
@@ -70,16 +68,16 @@ public class CodeEditorActivity  extends IdeActivity implements FileChangeListen
         }
         return null;
     }
-
-    @Override
+*/
+    //@Override
     protected void initLeftNavigationView(@NonNull NavigationView nav) {
-        super.initLeftNavigationView(nav);
-        String tag = FolderStructureFragment.TAG;
-        FolderStructureFragment folderStructureFragment = FolderStructureFragment.newInstance(new File(ProjectUtils.getProjectPath()));
-        ViewGroup viewGroup = nav.findViewById(R.id.left_navigation_content);
+     //   super.initLeftNavigationView(nav);
+        String tag = ProjectTreeStructureFragment.TAG;
+      //  FolderStructureFragment folderStructureFragment = FolderStructureFragment.newInstance(new File(ProjectUtils.getProjectPath()));
+        ViewGroup viewGroup = nav.findViewById(R.id.right_navigation_view);
         viewGroup.removeAllViews();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.left_navigation_content, folderStructureFragment, tag).commit();
-        mFilePresenter = new ProjectFilePresenter(folderStructureFragment);
+        ft.replace(R.id.right_navigation_view, new ProjectTreeStructureFragment(), tag).commit();
+       // mFilePresenter = new ProjectFilePresenter(folderStructureFragment);
     }
 }

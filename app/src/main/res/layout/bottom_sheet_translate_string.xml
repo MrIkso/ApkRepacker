@@ -30,14 +30,14 @@
                 android:textStyle="bold"
                 android:text="@string/translate_string" />
 
-            <LinearLayout
+            <!--<LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:animateLayoutChanges="true"
                 android:orientation="horizontal"
-                android:layout_marginEnd="@dimen/card_title_margin">
+                android:layout_marginEnd="@dimen/card_title_margin">-->
 
-                <androidx.appcompat.widget.AppCompatImageButton
+               <!-- <androidx.appcompat.widget.AppCompatImageButton
                     android:id="@+id/button_paste"
                     style="@style/ActionItem"
                     android:layout_width="36dp"
@@ -65,17 +65,16 @@
                     android:layout_gravity="center_vertical"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:tint="?android:textColorSecondary"
-                    app:srcCompat="@drawable/ic_clear" />
+                    app:srcCompat="@drawable/ic_clear" />-->
                 <androidx.appcompat.widget.AppCompatImageButton
-                    android:id="@+id/delete_string"
-                    style="@style/ActionItem"
+                    android:id="@+id/popup_menu"
+                    android:layout_marginEnd="@dimen/item_margin"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:layout_gravity="center_vertical"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:tint="@color/red_primary_dark"
-                    app:srcCompat="@drawable/ic_delete" />
-            </LinearLayout>
+                    android:background="?selectableItemBackgroundBorderless"
+                    app:srcCompat="@drawable/ic_more" />
+          <!--  </LinearLayout>-->
 
         </LinearLayout>
 
@@ -112,6 +111,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/TextInputLayout"
+                android:id="@+id/new_value_text_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/text_after_translation"

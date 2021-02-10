@@ -181,6 +181,11 @@ public class StringsFragment extends Fragment implements AddLanguageDialogFragme
     }
 
     @Override
+    public void onTranslateSting(String code) {
+        // don not use this
+    }
+
+    @Override
     public void onTranslateClicked(TranslateItem item, int position) {
         TranslateStringDialogFragment translateStringDialogFragment = TranslateStringDialogFragment.newInstance();
         translateStringDialogFragment.setData(item, position);
@@ -251,12 +256,12 @@ public class StringsFragment extends Fragment implements AddLanguageDialogFragme
                         }
                     });
                 } else {
-                    AddLanguageDialogFragment fragment = AddLanguageDialogFragment.newInstance(false);
+                    AddLanguageDialogFragment fragment = AddLanguageDialogFragment.newInstance(false, false);
                     fragment.show(getChildFragmentManager(), AddLanguageDialogFragment.TAG);
                 }
                 break;
             case R.id.auto_translate_language:
-                AddLanguageDialogFragment addLanguageDialogFragment = AddLanguageDialogFragment.newInstance(true);
+                AddLanguageDialogFragment addLanguageDialogFragment = AddLanguageDialogFragment.newInstance(true, false);
                 addLanguageDialogFragment.show(getChildFragmentManager(), AddLanguageDialogFragment.TAG);
                 break;
             case R.id.auto_translate_language_with:

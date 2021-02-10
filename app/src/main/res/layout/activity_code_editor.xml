@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -14,18 +14,16 @@
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:animateLayoutChanges="false"
-            android:theme="@style/AppTheme.AppBarOverlay"
-            android:backgroundTint="?colorPrimary">
+            android:backgroundTint="?colorPrimary"
+            android:theme="@style/AppTheme.AppBarOverlay">
 
             <androidx.appcompat.widget.Toolbar
-                android:id="@id/toolbar"
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:theme="?actionBarTheme"
-                app:popupTheme="?actionBarPopupTheme" />
+                android:layout_height="?attr/actionBarSize"
+                app:popupTheme="?attr/actionBarPopupTheme"/>
 
-            <androidx.appcompat.widget.AppCompatTextView
+            <!--<androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/txt_document_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -35,50 +33,28 @@
                 android:textColor="?toolbarTextColor"
                 android:textSize="10sp"
                 tools:ignore="SmallSp"
-                tools:text="Main.java | UTF-8 Java" />
-
-            <com.ogaclejapan.smarttablayout.SmartTabLayout
-                android:id="@+id/tab_layout"
-                android:layout_width="match_parent"
-                android:layout_height="36dp"
-                app:stl_clickable="true"
-                app:stl_distributeEvenly="false"
-                app:stl_dividerThickness="1dp"
-                app:stl_drawDecorationAfterTab="false"
-                app:stl_indicatorAlwaysInCenter="false"
-                app:stl_indicatorColor="?colorAccent"
-                app:stl_indicatorCornerRadius="2dp"
-                app:stl_indicatorGravity="bottom"
-                app:stl_indicatorInFront="true"
-                app:stl_indicatorInterpolation="smart"
-                app:stl_indicatorThickness="4dp"
-                app:stl_indicatorWidth="auto"
-                app:stl_indicatorWithoutPadding="false"
-                app:stl_overlineThickness="0dp" />
-
-
+                tools:text="Main.java | UTF-8 Java" />-->
         </com.google.android.material.appbar.AppBarLayout>
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="bottom"
-            android:orientation="vertical"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-            <com.jecelyin.editor.v2.manager.EditorPager
-                android:id="@+id/editor_view_pager"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
             <LinearLayout
-                android:layout_gravity="bottom"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:elevation="25dp"
-                android:background="#fff"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
+                <include
+                    layout="@layout/loading_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center" />
+                <com.jecelyin.editor.v2.manager.EditorPager
+                    android:id="@+id/tab_pager"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -86,66 +62,55 @@
                     android:orientation="vertical"
                     android:layout_gravity="bottom"
                     android:background="?android:attr/windowBackground">
-
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="?android:attr/windowBackground"/>
+                    <!--панель символов-->
                     <HorizontalScrollView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:fillViewport="true">
 
                         <com.jecelyin.editor.v2.widget.SymbolBarLayout
                             android:id="@+id/symbolBarLayout"
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:background="?android:attr/windowBackground"
-                            android:visibility="visible" />
+                            android:layout_height="wrap_content"
+                            android:visibility="gone" />
                     </HorizontalScrollView>
                     <!--добавляем поисковую панель-->
-                    <include
-                        layout="@layout/search_panel"
+                    <include layout="@layout/search_panel"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
                         android:fillViewport="false"
-                        android:visibility="gone" />
-
+                        android:visibility="gone"/>
                 </LinearLayout>
 
             </LinearLayout>
-        </LinearLayout>
+        </FrameLayout>
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView
-        android:id="@id/left_navigation_view"
+        android:id="@+id/left_navigation_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="false">
 
         <LinearLayout
-            android:id="@id/left_navigation_content"
+            android:id="@+id/left_navigation_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="?colorPrimary"
             android:orientation="vertical">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="?actionBarSize"
-                android:background="?attr/colorPrimary"
-                android:orientation="horizontal">
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/versionTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginBottom="15dp"
-                    android:textColor="?android:textColorPrimary"
-                    tools:text="16.1.1" />
-
-            </RelativeLayout>
+            <include layout="@layout/tab_drawer_header"/>
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/open_tabs_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </LinearLayout>
@@ -153,17 +118,11 @@
     </com.google.android.material.navigation.NavigationView>
 
     <com.google.android.material.navigation.NavigationView
-        android:id="@id/right_navigation_view"
-        android:fitsSystemWindows="false"
-        android:layout_width="250dp"
+        android:id="@+id/right_navigation_view"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:background="?attr/colorPrimary"
-        android:layout_gravity="end">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/menuRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+        android:layout_gravity="end"
+        android:fitsSystemWindows="false">
     </com.google.android.material.navigation.NavigationView>
 
 </androidx.drawerlayout.widget.DrawerLayout>

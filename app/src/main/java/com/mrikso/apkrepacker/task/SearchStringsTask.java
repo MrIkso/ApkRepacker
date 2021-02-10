@@ -5,9 +5,8 @@ import android.content.Context;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.BackgroundColorSpan;
-import android.text.style.ForegroundColorSpan;
 
-import com.jecelyin.editor.v2.utils.ExtGrep;
+import com.mrikso.apkrepacker.utils.grep.ExtGrep;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.fragment.FindFragment;
 import com.mrikso.apkrepacker.task.base.CoroutinesAsyncTask;

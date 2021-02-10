@@ -62,7 +62,7 @@
                 android:layout_gravity="center_vertical"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:tint="?android:textColorSecondary"
-                app:srcCompat="@drawable/palette" />
+                app:srcCompat="@drawable/ic_palette" />
 
         </LinearLayout>
 

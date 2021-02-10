@@ -234,7 +234,7 @@
     <string name="install_as_framework">Импортировать как framework</string>
     <string name="toast_import_framework_done">Фреймворк успешно импортирован</string>
     <string name="dialog_import">Импортирование…</string>
-    <string name="project">Проект:</string>
+    <string name="project">Дерево файлов</string>
     <string name="select_from_storage">Выбрать из хранилища</string>
     <string name="action_create_xml">Создать xml файл</string>
     <string name="action_create_class">Создать smali файл</string>

@@ -6,9 +6,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mrikso.apkrepacker.R;
-import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.ProjectUtils;
-import com.mrikso.apkrepacker.utils.common.DLog;
 import com.thoughtbot.expandablerecyclerview.listeners.OnGroupClickListener;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 import com.thoughtbot.expandablerecyclerview.viewholders.GroupViewHolder;
@@ -30,13 +28,13 @@ public class ParentViewHolder extends GroupViewHolder implements View.OnClickLis
     @Override
     public void expand() {
         super.expand();
-        textView_parent.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_down_arrow, 0);
+        textView_parent.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
     }
 
     @Override
     public void collapse() {
         super.collapse();
-        textView_parent.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_up_arrow, 0);
+        textView_parent.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0);
     }
 
     public void changeTextColor() {

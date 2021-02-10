@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:singleLine="true"
-                android:ellipsize="marquee"
+                android:ellipsize="middle"
                 android:textColor="@color/white"
                 tools:text="/storage/emulated/0" />
         </LinearLayout>

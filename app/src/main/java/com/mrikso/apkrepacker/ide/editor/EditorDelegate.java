@@ -22,7 +22,7 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.text.Editable;
+import android.text.TextUtils;
 import android.view.View;
 
 import androidx.annotation.MainThread;
@@ -30,10 +30,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
+import com.jecelyin.editor.v2.common.OnVisibilityChangedListener;
 import com.mrikso.apkrepacker.R;
+import com.mrikso.apkrepacker.activity.TextEditorActivity;
 import com.mrikso.apkrepacker.ide.editor.lexer.CssLexTask;
 import com.mrikso.apkrepacker.utils.common.ShareUtil;
-import com.mrikso.apkrepacker.activity.IdeActivity;
 
 import com.mrikso.apkrepacker.ide.editor.lexer.CppLexTask;
 import com.mrikso.apkrepacker.ide.editor.lexer.HtmlLexTask;
@@ -52,15 +53,16 @@ import com.jecelyin.editor.v2.EditorPreferences;
 import com.jecelyin.editor.v2.common.Command;
 import com.jecelyin.editor.v2.dialog.DocumentInfoDialog;
 import com.jecelyin.editor.v2.widget.menu.MenuDef;
+import com.mrikso.apkrepacker.view.EditorView;
 import com.mrikso.codeeditor.util.NonProgLexTask;
 
 import java.io.File;
 import java.util.Locale;
 
-public class EditorDelegate implements  IEditorDelegate, HighlightEditorView.OnEditStateChangedListener {
+public class EditorDelegate implements  IEditorDelegate, HighlightEditorView.OnEditStateChangedListener, OnVisibilityChangedListener {
     public final static String KEY_CLUSTER = "is_cluster";
     private static final String TAG = "EditorDelegate";
-    private final Handler mHandler = new Handler();
+    private static boolean disableAutoSave = false;
     private Context mContext;
     private Document mDocument;
     @NonNull
@@ -68,39 +70,76 @@ public class EditorDelegate implements  IEditorDelegate, HighlightEditorView.OnE
     private int mOrientation;
     private boolean loaded = true;
     @Nullable
-    private IEditAreaView mEditText;
+    private EditorView mEditText;
 
-
-    EditorDelegate(@NonNull SavedState ss) {
+    public EditorDelegate(@NonNull SavedState ss) {
         savedState = ss;
     }
 
-    EditorDelegate(@NonNull File file, int offset, String encoding) {
+    public EditorDelegate(int index, @Nullable File file, int offset, String encoding) {
+        savedState = new SavedState();
+        savedState.index = index;
+        savedState.file = file;
+        savedState.cursorOffset = offset;
+        savedState.encoding = encoding;
+        if (savedState.file != null) {
+            savedState.title = savedState.file.getName();
+        }
+    }
+
+    public EditorDelegate(int index, String title, Parcelable object) {
+        savedState = new SavedState();
+        savedState.index = index;
+        savedState.title = title;
+        savedState.editorState = object;
+    }
+
+    public EditorDelegate(int index, String title, CharSequence content) {
+        savedState = new SavedState();
+        savedState.index = index;
+        savedState.title = title;
+    //    savedState.t = content;
+    }
+
+    public static void setDisableAutoSave(boolean b) {
+        disableAutoSave = b;
+    }
+
+    public EditorDelegate(@NonNull File file, int offset, String encoding) {
         savedState = new SavedState();
         savedState.encoding = encoding;
         savedState.cursorOffset = offset;
         setCurrentFileToEdit(file);
     }
+    
+
+    public void setRemoved() {
+        if (mEditText == null)
+            return;
+        mEditText.setRemoved();
+    }
 
     private void setCurrentFileToEdit(File file) {
-        savedState.file = file;
-        savedState.title = savedState.file.getName();
+        if (file != null) {
+            savedState.file = file;
+            savedState.title = savedState.file.getName();
+        }
     }
 
     void onLoadStart() {
         loaded = false;
         assert mEditText != null;
-        mEditText.setEnabled(false);
+        getEditText().setEnabled(false);
     }
 
     void onLoadFinish() {
         assert mEditText != null;
-        mEditText.setEnabled(true);
-        mEditText.setOnEditStateChangedListener(this);
-        mEditText.post(() -> {
-            mEditText.setLexTask(LexerUtil.createLexer(mDocument.getFile().getName(), mDocument.getFile()));
-            if (savedState.cursorOffset < mEditText.getText().length() && savedState.cursorOffset != -1) {
-                mEditText.gotoLine(savedState.cursorOffset);
+        getEditText().setEnabled(true);
+        getEditText().setOnEditStateChangedListener(this);
+        getEditText().post(() -> {
+            getEditText().setLexTask(LexerUtil.createLexer(mDocument.getFile().getName(), mDocument.getFile()));
+            if (savedState.cursorOffset < getEditText().getText().length() && savedState.cursorOffset != -1) {
+                getEditText().gotoLine(savedState.cursorOffset);
             }
         });
 
@@ -110,15 +149,15 @@ public class EditorDelegate implements  IEditorDelegate, HighlightEditorView.OnE
         String fileName = mDocument.getFile().getPath().replaceAll("[^A-Za-z0-9_]", "_");
         SharedPreferences historyData = mContext.getSharedPreferences(
                 fileName, Context.MODE_PRIVATE);
-        //mEditText.restoreEditHistory(historyData);
+        //getEditText().restoreEditHistory(historyData);
     }
 
     public Context getContext() {
         return mContext;
     }
 
-    private IdeActivity getActivity() {
-        return (IdeActivity) mContext;
+    private TextEditorActivity getActivity() {
+        return (TextEditorActivity) mContext;
     }
 
     public String getTitle() {
@@ -126,7 +165,7 @@ public class EditorDelegate implements  IEditorDelegate, HighlightEditorView.OnE
     }
 
     public String getPath() {
-        return mDocument == null ? savedState.file.getPath() : mDocument.getPath();
+        return mDocument == null ? (savedState.file == null ? null : savedState.file.getPath()) : mDocument.getPath();
     }
 
     public String getEncoding() {
@@ -134,36 +173,36 @@ public class EditorDelegate implements  IEditorDelegate, HighlightEditorView.OnE
     }
 
     public String getText() {
-        return mEditText.getText().toString();
-    }
-
-    public Editable getEditableText() {
-        return null;// mEditText.getText().;
+        return getEditText().getText().toString();
     }
 
     public IEditAreaView getEditText() {
-        return mEditText;
+        return mEditText.getEditText();
     }
 
-    public void onCreate(IEditAreaView editorView) {
+    public void onCreate(@NonNull EditorView editorView) {
+        if (mDocument != null)
+            return;
+
         mContext = editorView.getContext();
         mEditText = editorView;
 
         mOrientation = mContext.getResources().getConfiguration().orientation;
 
+        mEditText.setVisibilityChangedListener(this);
         mDocument = new Document(mContext, this, savedState.file);
-        mEditText.setReadOnly(EditorPreferences.getInstance(mContext).isReadOnly());
-        //mEditText.setCustomSelectionActionModeCallback(new EditorSelectionActionModeCallback());
+        getEditText().setReadOnly(EditorPreferences.getInstance(mContext).isReadOnly());
+        //getEditText().setCustomSelectionActionModeCallback(new EditorSelectionActionModeCallback());
 
         if (savedState.editorState != null)
             try {
                 mDocument.onRestoreInstanceState(savedState);
-                mEditText.onRestoreInstanceState(savedState.editorState);
+                getEditText().onRestoreInstanceState(savedState.editorState);
             } catch (Exception e) {
                 //wrong state
                 e.printStackTrace();
             }
-        else {
+        else if (savedState.file != null)  {
             mDocument.loadFile(savedState.file, savedState.encoding);
         }
 
@@ -175,7 +214,7 @@ public class EditorDelegate implements  IEditorDelegate, HighlightEditorView.OnE
         String fileName = mDocument.getFile().getPath().replaceAll("[^A-Za-z0-9_]", "_");
         SharedPreferences historyData = mContext.getSharedPreferences(
                 fileName, Context.MODE_PRIVATE);
-        mEditText.saveHistory(historyData);
+        getEditText().saveHistory(historyData);
 
  */
         if (isChanged() && EditorPreferences.getInstance(getContext()).isAutoSave()) {
@@ -185,7 +224,7 @@ public class EditorDelegate implements  IEditorDelegate, HighlightEditorView.OnE
     }
 
     public boolean isChanged() {
-        return mEditText != null && mEditText.isChanged();
+        return mEditText != null && getEditText().isChanged();
     }
 
     @NonNull
@@ -266,73 +305,73 @@ public class EditorDelegate implements  IEditorDelegate, HighlightEditorView.OnE
         if (mEditText == null) {
             return -1;
         }
-        return mEditText.getSelectionEnd();
+        return getEditText().getSelectionEnd();
     }
 
     @Override
-    public void doCommand(Command command) {
+    public boolean doCommand(Command command) {
         if (mEditText == null)
-            return;
+            return false;
         boolean readonly = EditorPreferences.getInstance(mContext).isReadOnly();
         switch (command.what) {
             case HIDE_SOFT_INPUT:
-                InputMethodManagerCompat.hideSoftInput((View) mEditText);
+                InputMethodManagerCompat.hideSoftInput((View) getEditText());
                 break;
             case SHOW_SOFT_INPUT:
-                InputMethodManagerCompat.showSoftInput((View) mEditText);
+                InputMethodManagerCompat.showSoftInput((View) getEditText());
                 break;
             case UNDO:
                 if (!readonly) {
-                    mEditText.undo();
+                    getEditText().undo();
                 }
                 break;
             case REDO:
                 if (!readonly) {
-                    mEditText.redo();
+                    getEditText().redo();
                 }
                 break;
             case CUT:
                 if (!readonly) {
-                    mEditText.doCut();
-                    return;
+                    getEditText().doCut();
+                    return readonly;
                 }
             case COPY:
-                mEditText.doCopy();
-                return;
+                getEditText().doCopy();
+                return readonly;
             case PASTE:
                 if (!readonly) {
-                    mEditText.doPaste();
-                    return;
+                    getEditText().doPaste();
+                    return readonly;
                 }
             case SELECT_ALL:
-                mEditText.selectAll();
-                return;
+                getEditText().selectAll();
+                return readonly;
             case DUPLICATION:
                 if (!readonly)
-                  //  mEditText.duplicateSelection();
+                  //  getEditText().duplicateSelection();
                 break;
             case GOTO_INDEX:
                 int col = command.args.getInt("col", -1);
                 int line = command.args.getInt("line", -1);
-                mEditText.gotoLine(line);
+                getEditText().gotoLine(line);
                 break;
             case GOTO_TOP:
-                mEditText.gotoTop();
+                getEditText().gotoTop();
                 break;
             case GOTO_END:
-                mEditText.gotoEnd();
+                getEditText().gotoEnd();
                 break;
             case DOC_INFO:
                 DocumentInfoDialog documentInfoDialog = new DocumentInfoDialog(mContext);
                 documentInfoDialog.setDocument(mDocument);
-                documentInfoDialog.setEditAreaView(mEditText);
+                documentInfoDialog.setEditAreaView(getEditText());
                 documentInfoDialog.setPath(mDocument.getPath());
                 documentInfoDialog.show();
                 break;
             case READONLY_MODE:
                 EditorPreferences editorPreferences = EditorPreferences.getInstance(mContext);
                 boolean readOnly = editorPreferences.isReadOnly();
-                mEditText.setReadOnly(readOnly);
+                getEditText().setReadOnly(readOnly);
                 break;
             case SAVE:
                 if (!readonly) {
@@ -353,14 +392,14 @@ public class EditorDelegate implements  IEditorDelegate, HighlightEditorView.OnE
                 break;
             case INSERT_TEXT:
                 if (!readonly) {
-                    mEditText.insert((CharSequence) command.object);
+                    getEditText().insert((CharSequence) command.object);
                 }
                 break;
             case RELOAD_WITH_ENCODING:
                 reOpenWithEncoding((String) command.object);
                 break;
             case REQUEST_FOCUS:
-                mEditText.requestFocus();
+                getEditText().requestFocus();
                 break;
             case SHARE_CODE:
                 shareCurrentContent();
@@ -371,10 +410,11 @@ public class EditorDelegate implements  IEditorDelegate, HighlightEditorView.OnE
                 break;
             case REFRESH_THEME:
                 if (mEditText != null) {
-                    mEditText.setTheme(EditorPreferences.getInstance(mContext).getEditorTheme());
+                    getEditText().setTheme(EditorPreferences.getInstance(mContext).getEditorTheme());
                 }
                 break;
         }
+        return true;
     }
 
     /**
@@ -396,7 +436,7 @@ public class EditorDelegate implements  IEditorDelegate, HighlightEditorView.OnE
     }
 */
     private void shareCurrentContent() {
-        ShareUtil.shareText(mContext, mEditText.getText().toString());
+        ShareUtil.shareText(mContext, getEditText().getText().toString());
     }
 
     private void reOpenWithEncoding(final String encoding) {
@@ -422,6 +462,7 @@ public class EditorDelegate implements  IEditorDelegate, HighlightEditorView.OnE
      */
     @MainThread
     public void onDocumentChanged() {
+        DLog.d("EditorDelegate","onDocumentChanged called");
         setCurrentFileToEdit(mDocument.getFile());
         noticeMenuChanged();
     }
@@ -430,51 +471,51 @@ public class EditorDelegate implements  IEditorDelegate, HighlightEditorView.OnE
     private void noticeMenuChanged() {
         //MainActivity mainActivity = (MainActivity) this.context;
         getActivity().setMenuStatus(R.id.action_save, isChanged() ? MenuDef.STATUS_NORMAL : MenuDef.STATUS_DISABLED);
-        getActivity().setMenuStatus(R.id.action_undo, mEditText != null && mEditText.doCanUndo() ? MenuDef.STATUS_NORMAL : MenuDef.STATUS_DISABLED);
-        getActivity().setMenuStatus(R.id.action_redo, mEditText != null && mEditText.doCanRedo() ? MenuDef.STATUS_NORMAL : MenuDef.STATUS_DISABLED);
+        getActivity().setMenuStatus(R.id.action_undo, mEditText != null && getEditText().doCanUndo() ? MenuDef.STATUS_NORMAL : MenuDef.STATUS_DISABLED);
+        getActivity().setMenuStatus(R.id.action_redo, mEditText != null && getEditText().doCanRedo() ? MenuDef.STATUS_NORMAL : MenuDef.STATUS_DISABLED);
         getActivity().getTabManager().onDocumentChanged();
     }
 
     void setMode(String name) {
         switch (name){
             case"C++":
-                mEditText.setLexTask(new CppLexTask());
+                getEditText().setLexTask(new CppLexTask());
                 break;
             case"Java":
-                mEditText.setLexTask(new JavaLexTask());
+                getEditText().setLexTask(new JavaLexTask());
             break;
             case"Smali":
-                mEditText.setLexTask(new SmaliLexTask());
+                getEditText().setLexTask(new SmaliLexTask());
             break;
             case"Html":
-                mEditText.setLexTask(new HtmlLexTask());
+                getEditText().setLexTask(new HtmlLexTask());
             break;
             case "Json":
-                mEditText.setLexTask(new JsonLexTask());
+                getEditText().setLexTask(new JsonLexTask());
             break;
             case "Xml":
-                mEditText.setLexTask(new XmlLexTask());
+                getEditText().setLexTask(new XmlLexTask());
             break;
             case"Css":
-                mEditText.setLexTask(new CssLexTask());
+                getEditText().setLexTask(new CssLexTask());
             break;
             case "None":
-                mEditText.setLexTask(NonProgLexTask.instance);
+                getEditText().setLexTask(NonProgLexTask.instance);
                 break;
             default:
-                mEditText.setLexTask(NonProgLexTask.instance);
+                getEditText().setLexTask(NonProgLexTask.instance);
                 break;
         }
 
     }
     /*
     private void convertSelectedText(int id) {
-        if (mEditText == null || !mEditText.hasSelection()) {
+        if (mEditText == null || !getEditText().hasSelection()) {
             return;
         }
 
-        int start = mEditText.getSelectionStart();
-        int end = mEditText.getSelectionEnd();
+        int start = getEditText().getSelectionStart();
+        int end = getEditText().getSelectionEnd();
 
         String selectedText = getEditableText().subSequence(start, end).toString();
 
@@ -488,15 +529,15 @@ public class EditorDelegate implements  IEditorDelegate, HighlightEditorView.OnE
         getEditableText().replace(start, end, selectedText);
     }
      */
-    Parcelable onSaveInstanceState() {
+    public Parcelable onSaveInstanceState() {
         if (mDocument != null) {
             mDocument.onSaveInstanceState(savedState);
         }
         if (mEditText != null) {
-            mEditText.setFreezesText(true);
+            getEditText().setFreezesText(true);
         }
 
-        if (loaded && mDocument != null) {
+        if (!disableAutoSave && loaded && mDocument != null) {
             if (EditorPreferences.getInstance(mContext).isAutoSave()) {
                 int newOrientation = mContext.getResources().getConfiguration().orientation;
                 if (mOrientation != newOrientation) {
@@ -525,6 +566,14 @@ public class EditorDelegate implements  IEditorDelegate, HighlightEditorView.OnE
         onDocumentChanged();
     }
 
+    @Override
+    public void onVisibilityChanged(int visibility) {
+        if (visibility != View.VISIBLE)
+            return;
+
+        noticeMenuChanged();
+    }
+
 
     public static class SavedState implements Parcelable {
         public static final Creator<SavedState> CREATOR = new Creator<SavedState>() {
@@ -540,6 +589,7 @@ public class EditorDelegate implements  IEditorDelegate, HighlightEditorView.OnE
         };
         int cursorOffset;
         int lineNumber;
+        int index;
         File file;
         String title;
         String encoding;
@@ -552,6 +602,7 @@ public class EditorDelegate implements  IEditorDelegate, HighlightEditorView.OnE
         }
 
         SavedState(Parcel in) {
+            this.index = in.readInt();
             this.cursorOffset = in.readInt();
             this.lineNumber = in.readInt();
             String file = in.readString();
@@ -575,6 +626,7 @@ public class EditorDelegate implements  IEditorDelegate, HighlightEditorView.OnE
 
         @Override
         public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(this.index);
             dest.writeInt(this.cursorOffset);
             dest.writeInt(this.lineNumber);
             dest.writeString(this.file.getPath());
@@ -599,7 +651,7 @@ public class EditorDelegate implements  IEditorDelegate, HighlightEditorView.OnE
                     R.styleable.SelectionModeDrawables);
 
             boolean readOnly = Preferences.getInstance(mContext).isReadOnly();
-            boolean selected = mEditText.hasSelection();
+            boolean selected = getEditText().hasSelection();
             if (selected) {
                 menu.add(0, R.id.action_find_replace, 6, R.string.find).
                        // setIcon(R.drawable.ic_find_replace_white).
@@ -645,7 +697,7 @@ public class EditorDelegate implements  IEditorDelegate, HighlightEditorView.OnE
                 convertSelectedText(item.getItemId());
                 return true;
             } else if (i == R.id.action_duplicate) {
-                mEditText.duplicateSelection();
+                getEditText().duplicateSelection();
                 return true;
             }
             return false;

@@ -1,18 +1,16 @@
 package com.mrikso.apkrepacker.fragment.dialogs.bottomsheet;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-
-import androidx.annotation.IntegerRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.view.menu.MenuBuilder;
+import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.appcompat.widget.AppCompatImageButton;
-import androidx.appcompat.widget.AppCompatTextView;
-
+import androidx.appcompat.widget.PopupMenu;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -20,16 +18,16 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.jecelyin.common.utils.UIUtils;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.autotranslator.translator.TranslateItem;
-import com.mrikso.apkrepacker.ide.editor.content.ClipboardCompat;
+import com.mrikso.apkrepacker.autotranslator.translator.Translator;
 import com.mrikso.apkrepacker.ui.publicxml.PublicXmlParser;
-import com.mrikso.apkrepacker.utils.FileUtil;
 import com.mrikso.apkrepacker.utils.ProjectUtils;
 import com.mrikso.apkrepacker.utils.StringUtils;
 
 import java.io.File;
+import java.util.concurrent.Executors;
 
 
-public class TranslateStringDialogFragment extends BottomSheetDialogFragment implements View.OnClickListener {
+public class TranslateStringDialogFragment extends BottomSheetDialogFragment implements View.OnClickListener, MenuItem.OnMenuItemClickListener, AddLanguageDialogFragment.ItemClickListener {
 
     public static final String TAG = "TranslateStringDialogFragment";
 
@@ -39,7 +37,7 @@ public class TranslateStringDialogFragment extends BottomSheetDialogFragment imp
     private String mOldValue;
     private TextInputEditText mOldEdit;
     private TextInputEditText mNewEdit;
-    private AppCompatImageButton mDeleteString;
+    private TextInputLayout mNewEditLayout;
     private int mItemPosition;
 
     public static TranslateStringDialogFragment newInstance() {
@@ -50,7 +48,7 @@ public class TranslateStringDialogFragment extends BottomSheetDialogFragment imp
         mListener = listener;
     }
 
-    public void setData(TranslateItem item, int position){
+    public void setData(TranslateItem item, int position) {
         mKey = item.name;
         mOldValue = item.originValue;
         mNewValue = item.translatedValue;
@@ -68,56 +66,86 @@ public class TranslateStringDialogFragment extends BottomSheetDialogFragment imp
         super.onViewCreated(view, savedInstanceState);
         MaterialButton ok = view.findViewById(R.id.btn_add_lang_ok);
         ok.setOnClickListener(this);
-        AppCompatImageButton copyOldValue = view.findViewById(R.id.button_copy);
+        AppCompatImageButton copyOldValue = view.findViewById(R.id.popup_menu);
         copyOldValue.setOnClickListener(this);
-        copyOldValue.setOnLongClickListener(view1 -> {
-            new Thread(() -> {
-                PublicXmlParser xmlParser = new PublicXmlParser(new File(ProjectUtils.getProjectPath() + "/res/values/public.xml"));
-                getActivity().runOnUiThread(() -> {
-                    String id = xmlParser.getIdByName(mKey);
-                    StringUtils.setClipboard(requireContext(), id, false);
-                    UIUtils.toast(requireContext(), getString(R.string.string_id_copied, id));
-                });
-            }).start();
-            return true;
-        });
-        AppCompatImageButton pasteValue = view.findViewById(R.id.button_paste);
-        pasteValue.setOnClickListener(this);
-        AppCompatImageButton clearNewValue = view.findViewById(R.id.button_clear);
-        clearNewValue.setOnClickListener(this);
         TextInputLayout textInputLayout = view.findViewById(R.id.text_input_layout_old);
         textInputLayout.setHint(mKey);
-        mDeleteString = view.findViewById(R.id.delete_string);
-        mDeleteString.setOnClickListener(this);
+
+        mNewEditLayout = view.findViewById(R.id.new_value_text_layout);
         mOldEdit = view.findViewById(R.id.old_value);
         mOldEdit.setText(mOldValue);
         mNewEdit = view.findViewById(R.id.new_value);
         mNewEdit.setText(mNewValue);
     }
 
-    @SuppressLint("ResourceType")
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.btn_add_lang_ok:
                 mListener.onTranslateClicked(mNewEdit.getText().toString(), mItemPosition);
                 dismiss();
                 break;
-            case R.id.button_clear:
-                mNewEdit.setText("");
-                break;
-            case R.id.button_paste:
-                mNewEdit.setText(StringUtils.getClipboard(requireContext()));
-                break;
-            case R.id.button_copy:
-                StringUtils.setClipboard(requireContext(), mOldValue, true);
-                break;
-            case R.id.delete_string:
-                mListener.onDeleteString(mItemPosition);
-                dismiss();
+            case R.id.popup_menu:
+                PopupMenu popupMenu = new PopupMenu(requireContext(), view);
+                popupMenu.inflate(R.menu.string_item_menu);
+                popupMenu.setOnMenuItemClickListener(this::onMenuItemClick);
+                MenuPopupHelper menuHelper = new MenuPopupHelper(requireContext(), (MenuBuilder) popupMenu.getMenu(), view);
+                menuHelper.setForceShowIcon(true);
+                menuHelper.show();
                 break;
         }
 
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_paste:
+                mNewEdit.setText(StringUtils.getClipboard(requireContext()));
+                return true;
+            case R.id.action_copy_original_value:
+                StringUtils.setClipboard(requireContext(), mOldValue, true);
+                return true;
+            case R.id.action_copy_id:
+                Executors.newSingleThreadExecutor().execute(() -> {
+                    PublicXmlParser xmlParser = new PublicXmlParser(new File(ProjectUtils.getProjectPath() + "/res/values/public.xml"));
+                    getActivity().runOnUiThread(() -> {
+                        String idText = xmlParser.getIdByName(mKey);
+                        StringUtils.setClipboard(requireContext(), idText, false);
+                        UIUtils.toast(requireContext(), getString(R.string.string_id_copied, idText));
+                    });
+                });
+                return true;
+            case R.id.action_clear:
+                mNewEdit.setText("");
+                return true;
+            case R.id.action_auto_translate:
+                AddLanguageDialogFragment addLanguageDialogFragment = AddLanguageDialogFragment.newInstance(true, true);
+                addLanguageDialogFragment.show(getChildFragmentManager(), AddLanguageDialogFragment.TAG);
+                return true;
+            case R.id.action_delete:
+                mListener.onDeleteString(mItemPosition);
+                dismiss();
+                return true;
+
+        }
+        return false;
+    }
+
+    @Override
+    public void onAddLangClick(String code, boolean autotranslate, boolean skipTranslated, boolean skipSupport) {
+
+    }
+
+    @Override
+    public void onTranslateSting(String code) {
+        Executors.newSingleThreadExecutor().execute(()->{
+            String googleLangCode = StringUtils.getGoogleLangCode(code);
+            mNewEdit.setText(new Translator(googleLangCode).translate(mOldValue));
+            mNewEditLayout.clearFocus();
+            mNewEditLayout.requestFocus();
+        });
     }
 
     public interface ItemClickListener {

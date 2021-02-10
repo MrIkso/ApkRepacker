@@ -28,6 +28,7 @@ import androidx.annotation.Nullable;
 
 import com.jecelyin.editor.v2.EditorPreferences;
 import com.mrikso.apkrepacker.utils.ViewUtils;
+import com.mrikso.apkrepacker.utils.common.DLog;
 import com.mrikso.codeeditor.util.Document;
 import com.mrikso.codeeditor.util.DocumentProvider;
 import com.mrikso.codeeditor.view.FreeScrollingTextField;
@@ -280,6 +281,7 @@ public abstract class HighlightEditorView extends FreeScrollingTextField
 
     @Override
     public void gotoLine(int line) {
+        DLog.i("goto line called");
         if (line > hDoc.getRowCount()) {
             line = hDoc.getRowCount();
 

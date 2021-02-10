@@ -10,7 +10,7 @@
     android:background="?selectableItemBackground">
 
     <ImageView
-        android:src="@drawable/ic_chevron_right"
+        android:src="@drawable/ic_arrow_right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:scaleType="center"
@@ -25,7 +25,7 @@
         android:ellipsize="middle"
         android:singleLine="true"
         android:drawablePadding="5dp"
-        android:drawableEnd="@drawable/ic_down_arrow"
+        android:drawableEnd="@drawable/ic_arrow_down"
         tools:text="File name"
         android:textStyle="bold" />
 </LinearLayout>

@@ -34,6 +34,7 @@ public class AddLanguageDialogFragment extends BottomSheetDialogFragment impleme
 
     public static final String TAG = "AddLanguageDialogFragment";
     private static final String TRANSLATE_MODE = "is_translate_mode";
+    private static final String SINGLE_TRANSLATE_MODE = "is_single_translate_mode";
     private TextInputEditText languageCode, et_lang;
     private AppCompatTextView mTitle;
     private MaterialButton addLang;
@@ -44,14 +45,17 @@ public class AddLanguageDialogFragment extends BottomSheetDialogFragment impleme
     private PreferenceHelper mHelper;
     private ItemClickListener mListener;
     private boolean mAutotranslate;
+    private boolean mSingleTranslate;
 
-    public static AddLanguageDialogFragment newInstance(boolean translate) {
+    public static AddLanguageDialogFragment newInstance(boolean translate, boolean singleLine) {
         AddLanguageDialogFragment fragment = new  AddLanguageDialogFragment();
         Bundle args = new Bundle();
         args.putBoolean(TRANSLATE_MODE, translate);
+        args.putBoolean(SINGLE_TRANSLATE_MODE, singleLine);
         fragment.setArguments(args);
         return fragment;
     }
+
 
     @Nullable
     @Override
@@ -80,11 +84,6 @@ public class AddLanguageDialogFragment extends BottomSheetDialogFragment impleme
         langNames = Languages.languages;
         this.langCodes = Languages.codes;
         int size = LanguageMaps.getMapSize();
-        if (this.langCodes == null || this.langNames == null) {
-            this.langCodes = new String[size];
-            this.langNames = new String[size];
-            LanguageMaps.addLang(this.langCodes, this.langNames);
-        }
 
         String selected = selectedLang("-" + Locale.getDefault().getLanguage());
         int selectedCode = selectedLangCode("-" + Locale.getDefault().getLanguage());
@@ -95,10 +94,13 @@ public class AddLanguageDialogFragment extends BottomSheetDialogFragment impleme
         Bundle args = getArguments();
         if (args != null) {
             mAutotranslate = args.getBoolean(TRANSLATE_MODE, false);
+            mSingleTranslate = args.getBoolean(TRANSLATE_MODE, false);
             if(mAutotranslate){
                 mTitle.setText(R.string.action_auto_translate_lang);
-                mSkipTranslated.setVisibility(View.VISIBLE);
-                mSkipSupportLines.setVisibility(View.VISIBLE);
+                if(!mSingleTranslate) {
+                    mSkipTranslated.setVisibility(View.VISIBLE);
+                    mSkipSupportLines.setVisibility(View.VISIBLE);
+                }
             }
             else
             mTitle.setText(R.string.action_add_new_lang);
@@ -162,12 +164,16 @@ public class AddLanguageDialogFragment extends BottomSheetDialogFragment impleme
         boolean skipSupport = mSkipSupportLines.isChecked();
         mHelper.setSkipTranslated(skipTranslated);
         mHelper.setSkipSupportLines(skipSupport);
-        mListener.onAddLangClick(Objects.requireNonNull(languageCode.getText()).toString(),mAutotranslate, skipTranslated, skipSupport);
+        if(mSingleTranslate){
+            mListener.onTranslateSting(Objects.requireNonNull(languageCode.getText()).toString());
+        }else
+            mListener.onAddLangClick(Objects.requireNonNull(languageCode.getText()).toString(),mAutotranslate, skipTranslated, skipSupport);
         dismiss();
     }
 
     public interface ItemClickListener {
         void onAddLangClick(String code, boolean autotranslate, boolean skipTranslated, boolean skipSupport);
+        void onTranslateSting(String code);
     }
 }
 

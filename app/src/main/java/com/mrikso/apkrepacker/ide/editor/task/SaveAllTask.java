@@ -17,43 +17,42 @@
 
 package com.mrikso.apkrepacker.ide.editor.task;
 
-import android.os.AsyncTask;
 import androidx.annotation.Nullable;
-
-import com.mrikso.apkrepacker.utils.common.DLog;
-import com.mrikso.apkrepacker.activity.IdeActivity;
-import com.mrikso.apkrepacker.ide.editor.pager.EditorFragmentPagerAdapter;
-import com.mrikso.apkrepacker.ide.file.SaveListener;
-import com.mrikso.apkrepacker.ide.editor.IEditorDelegate;
+import com.jecelyin.editor.v2.adapter.EditorAdapter;
 import com.jecelyin.editor.v2.manager.TabManager;
+import com.mrikso.apkrepacker.activity.TextEditorActivity;
+import com.mrikso.apkrepacker.ide.editor.IEditorDelegate;
+import com.mrikso.apkrepacker.ide.file.SaveListener;
+import com.mrikso.apkrepacker.task.base.CoroutinesAsyncTask;
+import com.mrikso.apkrepacker.utils.common.DLog;
 
 /**
  * Created by Duy on 30-Apr-18.
  */
 
-public class SaveAllTask extends AsyncTask<Void, Void, Boolean> {
+public class SaveAllTask extends CoroutinesAsyncTask<Void, Void, Boolean> {
     private static final String TAG = "SaveAllTask";
-    private IdeActivity editorActivity;
+    private TextEditorActivity editorActivity;
     @Nullable
     private SaveListener saveListener;
     private Exception exception;
 
-    public SaveAllTask(IdeActivity editorActivity, @Nullable SaveListener saveListener) {
+    public SaveAllTask(TextEditorActivity editorActivity, @Nullable SaveListener saveListener) {
         this.editorActivity = editorActivity;
         this.saveListener = saveListener;
     }
 
     @Override
-    protected void onPreExecute() {
+    public void onPreExecute() {
         super.onPreExecute();
     }
 
     @Override
-    protected Boolean doInBackground(Void... voids) {
+    public Boolean doInBackground(Void... voids) {
         long startTime = System.currentTimeMillis();
 
         TabManager tabManager = editorActivity.getTabManager();
-        EditorFragmentPagerAdapter editorPagerAdapter = tabManager.getEditorPagerAdapter();
+        EditorAdapter editorPagerAdapter = tabManager.getEditorAdapter();
         for (IEditorDelegate editorDelegate : editorPagerAdapter.getAllEditor()) {
             try {
                 editorDelegate.saveCurrentFile();
@@ -70,9 +69,9 @@ public class SaveAllTask extends AsyncTask<Void, Void, Boolean> {
     }
 
     @Override
-    protected void onPostExecute(Boolean aBoolean) {
+    public void onPostExecute(Boolean aBoolean) {
         super.onPostExecute(aBoolean);
-        EditorFragmentPagerAdapter editorPagerAdapter = editorActivity.getTabManager().getEditorPagerAdapter();
+        EditorAdapter editorPagerAdapter = editorActivity.getTabManager().getEditorAdapter();
         for (IEditorDelegate editorDelegate : editorPagerAdapter.getAllEditor()) {
             editorDelegate.onDocumentChanged();
         }

@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.appcompat.view.menu.MenuBuilder;
+import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.PopupMenu;
@@ -330,8 +332,10 @@ public class MyFilesFragment extends BaseFilesFragment implements View.OnClickLi
                 PopupMenu popupMenu = new PopupMenu(requireContext(), v);
                 popupMenu.inflate(R.menu.filemanager_menu);
                 popupMenu.setOnMenuItemClickListener(this);
+                MenuPopupHelper menuHelper = new MenuPopupHelper(requireContext(), (MenuBuilder) popupMenu.getMenu(), v);
+                menuHelper.setForceShowIcon(true);
                 popupMenu.getMenu().findItem(R.id.action_sd_card).setVisible(mSdCard != null).setTitle(mFlag ? R.string.intenal_sd_card : R.string.action_sd_card);
-                popupMenu.show();
+                menuHelper.show();
                 break;
             case R.id.action_search:
                 break;

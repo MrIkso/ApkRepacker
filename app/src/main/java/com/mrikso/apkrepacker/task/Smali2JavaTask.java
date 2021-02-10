@@ -2,11 +2,11 @@ package com.mrikso.apkrepacker.task;
 
 import android.os.AsyncTask;
 
-import com.mrikso.apkrepacker.activity.IdeActivity;
 import com.jecelyin.common.utils.UIUtils;
 import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
-import com.mrikso.apkrepacker.utils.FileUtil;
+import com.mrikso.apkrepacker.activity.TextEditorActivity;
+import com.mrikso.apkrepacker.task.base.CoroutinesAsyncTask;
 import com.mrikso.apkrepacker.utils.Smali2Java;
 
 import org.antlr.runtime.CommonTokenStream;
@@ -25,12 +25,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 
-public class Smali2JavaTask extends AsyncTask<File, CharSequence, Boolean> {
-    private IdeActivity editorActivity;
+public class Smali2JavaTask extends CoroutinesAsyncTask<File, CharSequence, Boolean> {
+  private TextEditorActivity editorActivity;
     private String javaCode;
     private File smali;
 
-    public Smali2JavaTask(IdeActivity editorActivity) {
+    public Smali2JavaTask(TextEditorActivity editorActivity) {
         this.editorActivity = editorActivity;
     }
 
@@ -102,7 +102,7 @@ public class Smali2JavaTask extends AsyncTask<File, CharSequence, Boolean> {
     }
 
     @Override
-    protected void onPostExecute(Boolean result) {
+    public void onPostExecute(Boolean result) {
         super.onPostExecute(result);
         editorActivity.openJavaText(javaCode, smali.getName()/*FileUtil.getNameVithoutExt(smali)*/);
         //dialog.hideProgress();
@@ -112,7 +112,7 @@ public class Smali2JavaTask extends AsyncTask<File, CharSequence, Boolean> {
     }
 
     @Override
-    protected Boolean doInBackground(File... files) {
+    public Boolean doInBackground(File... files) {
         boolean success = true;
         for (File file : files) {
             if (!process(file))

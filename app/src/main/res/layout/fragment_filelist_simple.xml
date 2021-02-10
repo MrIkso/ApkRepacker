@@ -36,7 +36,7 @@
                     android:fadingEdge="horizontal"
                     android:fadingEdgeLength="20dp"
                     android:requiresFadingEdge="horizontal"
-                    tools:listitem="@layout/patch_button_layout" />
+                    tools:listitem="@layout/path_button_layout" />
 
             </LinearLayout>
 

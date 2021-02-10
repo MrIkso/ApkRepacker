@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.appcompat.view.menu.MenuBuilder;
+import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.PopupMenu;
@@ -25,6 +27,7 @@ import com.mrikso.apkrepacker.App;
 import com.mrikso.apkrepacker.R;
 import com.mrikso.apkrepacker.activity.AppEditorActivity;
 import com.mrikso.apkrepacker.activity.CodeEditorActivity;
+import com.mrikso.apkrepacker.activity.TextEditorActivity;
 import com.mrikso.apkrepacker.filepicker.FilePickerDialog;
 import com.mrikso.apkrepacker.fragment.base.BaseFilesFragment;
 import com.mrikso.apkrepacker.recycler.OnItemSelectedListener;
@@ -302,7 +305,7 @@ public class FilesFragment extends BaseFilesFragment implements OnBackPressedLis
                             ImageViewerActivity.setViewerData(getContext(), getFileAdapter(), file);
                             startActivity(new Intent(getActivity(), ImageViewerActivity.class));
                         } else {
-                            Intent intent = new Intent(getActivity(), CodeEditorActivity.class);
+                            Intent intent = new Intent(getActivity(), TextEditorActivity.class);
                             intent.putExtra("filePath", file.getAbsolutePath());
                             intent.putExtra("currentDirectory", mCurrentDirectory.getAbsolutePath());
                             startActivity(intent);
@@ -384,11 +387,13 @@ public class FilesFragment extends BaseFilesFragment implements OnBackPressedLis
                     PopupMenu popupMenu = new PopupMenu(requireContext(), v);
                     popupMenu.inflate(R.menu.filemanager_project_menu);
                     popupMenu.setOnMenuItemClickListener(this);
+                    MenuPopupHelper menuHelper = new MenuPopupHelper(requireContext(), (MenuBuilder) popupMenu.getMenu(), v);
+                    menuHelper.setForceShowIcon(true);
                     popupMenu.getMenu().findItem(R.id.action_open_with).setVisible(mSelectedFile.isFile());
                     popupMenu.getMenu().findItem(R.id.action_open_in_editor).setVisible(mSelectedFile.isFile());
                     popupMenu.getMenu().findItem(R.id.action_share).setVisible(mSelectedFile.isFile());
                     popupMenu.getMenu().findItem(R.id.action_copy_id).setVisible(mSelectedFile.isFile() && mSelectedFile.getAbsolutePath().contains(mProjectPath + "/res/"));
-                    popupMenu.show();
+                    menuHelper.show();
                 } else {
                     //todo add support multiselections
                 }

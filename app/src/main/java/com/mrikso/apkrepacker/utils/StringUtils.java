@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.jecelyin.common.utils.UIUtils;
-import com.jecelyin.editor.v2.utils.ExtGrep;
+import com.mrikso.apkrepacker.utils.grep.ExtGrep;
 import com.mrikso.apkrepacker.R;
 
 public class StringUtils {

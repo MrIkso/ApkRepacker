@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:ignore="AlwaysShowAction">
+
+    <item
+        android:id="@+id/action_explore"
+        android:icon="@drawable/ic_explore"
+        android:title="@string/explore"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_save"
+        android:icon="@drawable/ic_save_white"
+        android:title="@string/save"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/action_undo"
+        android:icon="@drawable/ic_undo_white"
+        android:title="@string/undo"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/action_redo"
+        android:icon="@drawable/ic_redo_white"
+        android:title="@string/redo"
+        app:showAsAction="always"/>
+    <!--<item
+        android:id="@+id/action_edit"
+        android:icon="@drawable/ic_rename"
+        android:title="@string/editor"
+        app:showAsAction="always"/>-->
+    <item
+        android:id="@+id/action_find_replace"
+        android:icon="@drawable/ic_find_in_page_white"
+        android:title="@string/find_or_replace" />
+    <item
+        android:id="@+id/action_goto_top"
+        android:icon="@drawable/ic_vertical_align_top_white"
+        android:title="@string/jump_to_start" />
+    <item
+        android:id="@+id/action_goto_end"
+        android:icon="@drawable/ic_vertical_align_bottom_white"
+        android:title="@string/jump_to_end" />
+    <item
+        android:id="@+id/action_goto_line"
+        android:icon="@drawable/ic_goto_line"
+        android:title="@string/goto_line" />
+    <item
+        android:id="@+id/action_smali_java"
+        android:icon="@drawable/ic_java"
+        android:title="@string/smali_java" />
+    <item
+        android:id="@+id/action_highlight"
+        android:icon="@drawable/ic_highlight_white"
+        android:title="@string/highlight_language" />
+    <item
+        android:id="@+id/action_readonly"
+        android:checkable="true"
+        android:icon="@drawable/ic_preview"
+        android:title="@string/read_only" />
+    <item
+        android:id="@+id/action_hide_symbol_panel"
+        android:checkable="true"
+        android:icon="@drawable/ic_preview"
+        android:title="@string/hide_symbol_panel" />
+    <item
+        android:id="@+id/action_encoding"
+        android:icon="@drawable/ic_encoding"
+        android:title="@string/encoding" />
+    <item
+        android:id="@+id/action_info"
+        android:icon="@drawable/ic_info"
+        android:title="@string/document_info" />
+    <item
+        android:id="@+id/action_editor_setting"
+        android:icon="@drawable/ic_settings_white"
+        android:title="@string/editor_setting" />
+    <item
+        android:id="@+id/action_exit"
+        android:icon="@drawable/ic_exit"
+        android:title="@string/exit" />
+
+</menu>

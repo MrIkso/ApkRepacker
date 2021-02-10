@@ -79,7 +79,7 @@ public class RangeAdapter extends BaseAdapter {
         TextView tv;
         if (convertView == null) {
             convertView = LayoutInflater.from(parent.getContext()).inflate(getLayoutResId(), parent, false);
-            tv = (TextView) convertView.findViewById(getTextResId());
+            tv = convertView.findViewById(getTextResId());
             convertView.setTag(tv);
         } else {
             tv = (TextView) convertView.getTag();

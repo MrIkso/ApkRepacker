@@ -105,7 +105,7 @@
             android:gravity="center_vertical"
             android:visibility="gone">
             <androidx.appcompat.widget.AppCompatImageView
-                app:srcCompat="@drawable/ic_close_black"
+                app:srcCompat="@drawable/ic_close"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginStart="5dp"

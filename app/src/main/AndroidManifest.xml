@@ -41,11 +41,11 @@
         <activity
             android:name=".activity.ExceptionActivity"
             android:label="@string/title_activity_exception" />
-        <activity android:name=".activity.CodeEditorActivity"
+        <activity android:name=".activity.TextEditorActivity"
             android:parentActivityName=".activity.MainActivity"/>
         <activity android:name=".activity.ThemeEditorActivity" />
         <activity android:name=".activity.EditorSettingsActivity" />
-        <activity android:name=".activity.IdeActivity"/>
+
         <activity android:name=".ui.imageviewer.ImageViewerActivity"/>
 
         <provider

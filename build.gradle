@@ -1,7 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = "1.4.10"
+    ext.kotlin_version = "1.4.21"
     repositories {
         maven { url "https://jitpack.io" }
         google()
@@ -27,9 +27,9 @@ allprojects {
 }
 
 ext {
-        kotlin_version = "1.4.10"
-        compileSdkVersion = 29
-        buildToolsVersion = '29.0.3'
+        kotlin_version = '1.4.21'
+        compileSdkVersion = 30
+        buildToolsVersion = '30.0.3'
         targetSdkVersion = 28
         minSdkVersion = 21
 }

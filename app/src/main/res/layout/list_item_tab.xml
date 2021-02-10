@@ -36,6 +36,6 @@
         android:foreground="?android:attr/selectableItemBackground"
         android:gravity="center"
         android:padding="4dp"
-        app:srcCompat="@drawable/baseline_close_24" />
+        app:srcCompat="@drawable/ic_close" />
 
 </LinearLayout>

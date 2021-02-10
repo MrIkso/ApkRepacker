@@ -14,16 +14,16 @@ import java.util.Objects;
 public class Translator {
 
     private WebBrowser browser;
-    private String startUrl;
-
+    private final String START_URL = "https://translate.google.com/";
+    private String translateUrl = "http://translate.google.com/translate_a/single?client=gtx&dt=t&dj=1&ie=UTF-8&sl=auto&tl=";
+    private final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36";
     // This is a temporary var
     private int jsonIndex = 0;
 
     private String targetLangCode;
 
-    public Translator(String userAgent, String target) {
-        this.browser = new WebBrowser(userAgent);
-        this.startUrl = "https://translate.google.com/";
+    public Translator(String target) {
+        this.browser = new WebBrowser(USER_AGENT);
         this.targetLangCode = target;
     }
 
@@ -62,22 +62,39 @@ public class Translator {
         queryBuf.deleteCharAt(queryBuf.length() - 1);
         String contentToTranslate = queryBuf.toString();
 
-        String url = "http://translate.google.com/translate_a/single?client=gtx&dt=t&dj=1&ie=UTF-8&sl=auto&tl="
-                + targetLangCode + "&q=" + encodeToUrl(contentToTranslate);
+        String url = translateUrl + targetLangCode + "&q=" + encodeToUrl(contentToTranslate);
         // String url = "https://translate.google.com/translate_a/single?client=webapp&sl=auto&tl="
         //         + targetLangCode + "&hl=en&dt=bd&dt=ex&dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=ss&dt=t&otf=1&ssel=0&tsel=0&kc=1&tk="
         //       + encodeToUrl(getToken(tkk, contentToTranslate)) + "&q=" + encodeToUrl(contentToTranslate);
         DLog.d("url=%s", url);
 
         //create browser and translate strings from google translator and get translated json content
-        String content = browser.get(url, startUrl);
+        String content = browser.get(url, START_URL);
 
         // Succeed
-        if(content != null)
-        // if (content != null && content.startsWith("[[[\"") && (position = content.lastIndexOf("]")) != -1) {
-        parseContent(content, items);
+        if (content != null)
+            // if (content != null && content.startsWith("[[[\"") && (position = content.lastIndexOf("]")) != -1) {
+            parseContent(content, items);
         //  }
-        //  DLog.d(String.format("content=%s", content));
+        DLog.d(String.format("content=%s", content));
+    }
+
+    public String translate(String value) {
+        String translated = null;
+        String url = translateUrl + targetLangCode + "&q=" + encodeToUrl(value);
+        DLog.d("url=%s", url);
+
+        //create browser and translate strings from google translator and get translated json content
+        String content = browser.get(url, START_URL);
+
+        // Succeed
+        if (content != null) {
+            JsonParser jsonParser = new JsonParser();
+            JsonElement element = jsonParser.parse(content);
+            JsonArray sentences = element.getAsJsonObject().get("sentences").getAsJsonArray();
+            translated = checkIsFormattedValue(Objects.requireNonNull(extractAllValueFromJson(sentences)));
+        }
+        return translated;
     }
 
     // Parse the content and save result to items

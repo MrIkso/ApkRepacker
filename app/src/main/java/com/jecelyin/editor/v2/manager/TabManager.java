@@ -1,11 +1,13 @@
 /*
- * Copyright 2018 Mr Duy
+ * Copyright (C) 2016 Jecelyin Peng <jecelyin@gmail.com>
+ *
+ * This file is part of 920 Text Editor.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,164 +20,166 @@ package com.jecelyin.editor.v2.manager;
 
 import android.content.DialogInterface;
 import android.database.DataSetObserver;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.util.Pair;
-import androidx.viewpager.widget.PagerAdapter;
+import androidx.core.view.GravityCompat;
 import androidx.viewpager.widget.ViewPager;
 
-import com.jecelyin.editor.v2.EditorPreferences;
+
+import com.jecelyin.editor.v2.adapter.EditorAdapter;
+import com.jecelyin.editor.v2.adapter.TabAdapter;
 import com.jecelyin.editor.v2.common.TabCloseListener;
 import com.jecelyin.editor.v2.dialog.SaveConfirmDialog;
 import com.mrikso.apkrepacker.R;
-import com.mrikso.apkrepacker.activity.IdeActivity;
-import com.mrikso.apkrepacker.database.ITabDatabase;
+import com.mrikso.apkrepacker.activity.TextEditorActivity;
 import com.mrikso.apkrepacker.database.JsonDatabase;
 import com.mrikso.apkrepacker.database.entity.RecentFileItem;
 import com.mrikso.apkrepacker.ide.editor.EditorDelegate;
 import com.mrikso.apkrepacker.ide.editor.IEditorDelegate;
-import com.mrikso.apkrepacker.ide.editor.pager.EditorFragmentPagerAdapter;
-import com.mrikso.apkrepacker.ide.editor.pager.EditorPageDescriptor;
 import com.mrikso.apkrepacker.ide.editor.task.SaveAllTask;
 import com.mrikso.apkrepacker.ide.file.SaveListener;
-import com.mrikso.apkrepacker.utils.FileUtil;
-import com.ogaclejapan.smarttablayout.SmartTabLayout;
+import com.mrikso.apkrepacker.utils.common.DLog;
+import com.mrikso.apkrepacker.view.EditorView;
 
 import java.io.File;
 import java.util.ArrayList;
 
+/**
+ * @author Jecelyin Peng <jecelyin@gmail.com>
+ */
+public class TabManager implements ViewPager.OnPageChangeListener {
+    private final TextEditorActivity mainActivity;
+    private final TabAdapter tabAdapter;
+    private EditorAdapter editorAdapter;
 
-public class TabManager implements ViewPager.OnPageChangeListener, SmartTabLayout.TabProvider, ITabManager {
-    @NonNull
-    private IdeActivity mActivity;
-    private EditorFragmentPagerAdapter mPagerAdapter;
-    @Nullable
-    private TextView mTxtDocumentInfo;
-    @Nullable
-    private SmartTabLayout mTabLayout;
-    private ViewPager mViewPager;
+    public TabManager(TextEditorActivity activity) {
+        this.mainActivity = activity;
 
-    public TabManager(@NonNull IdeActivity activity, @NonNull ViewPager viewPager) {
-        mActivity = activity;
-        mViewPager = viewPager;
-        mTxtDocumentInfo = mActivity.findViewById(R.id.txt_document_info);
-        mTabLayout = mActivity.findViewById(R.id.tab_layout);
-        if (mTabLayout != null) {
-            mTabLayout.setCustomTabView(this);
+        this.tabAdapter = new TabAdapter();
+        tabAdapter.setOnClickListener(this::onTabMenuViewsClick);
+        //  mainActivity.getTabRecyclerView().addItemDecoration(new HorizontalDividerItemDecoration.Builder(activity.getContext()).build());
+        mainActivity.getTabRecyclerView().setAdapter(tabAdapter);
+
+        initEditor();
+
+        mainActivity.mToolbar.setNavigationOnClickListener(v -> mainActivity.mDrawerLayout.openDrawer(GravityCompat.START));
+        mainActivity.mTabPager.setOnPageChangeListener(this);
+    }
+
+    private void onTabMenuViewsClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_close:
+                closeTab((int) v.getTag());
+                break;
+            default:
+                int position = (int) v.getTag();
+                mainActivity.closeMenu();
+                setCurrentTab(position);
+                break;
         }
     }
 
-    public void createEditor() {
-        mPagerAdapter = new EditorFragmentPagerAdapter(mActivity);
-        mViewPager.setAdapter(mPagerAdapter);
+    private void initEditor() {
+        editorAdapter = new EditorAdapter(mainActivity);
+        mainActivity.mTabPager.setAdapter(editorAdapter); //优先，避免TabAdapter获取不到正确的CurrentItem
 
-        if (EditorPreferences.getInstance(mActivity).isOpenLastFiles()) {
-            ITabDatabase database = JsonDatabase.getInstance(mActivity);
-            ArrayList<RecentFileItem> recentFiles = database.getRecentFiles(true);
-            ArrayList<EditorPageDescriptor> descriptors = new ArrayList<>();
-            File file;
-            for (RecentFileItem item : recentFiles) {
-                file = new File(item.path);
-                if (!(file.isFile() && file.canRead() && file.canWrite())) {
-                    database.updateRecentFile(item.path, false);
+      /*  if (Pref.getInstance(mainActivity).isOpenLastFiles()) {
+            ArrayList<DBHelper.RecentFileItem> recentFiles = DBHelper.getInstance(mainActivity).getRecentFiles(true);
+
+            File f;
+            for (DBHelper.RecentFileItem item : recentFiles) {
+                f = new File(item.path);
+                if (!f.isFile())
                     continue;
-                }
-                descriptors.add(new EditorPageDescriptor(file, item.offset, item.encoding));
+                editorAdapter.newEditor(false, f, item.offset, item.encoding);
+                setCurrentTab(editorAdapter.getCount() - 1); //fixme: auto load file, otherwise click other tab will crash by search result
             }
-
-            mPagerAdapter.addAll(descriptors);
-            mViewPager.setOffscreenPageLimit(mPagerAdapter.getCount());
+            editorAdapter.notifyDataSetChanged();
             updateTabList();
 
-            int lastTab = EditorPreferences.getInstance(mActivity).getLastTab();
+            int lastTab = Pref.getInstance(mainActivity).getLastTab();
             setCurrentTab(lastTab);
+        }*/
 
-//            if (descriptors.isEmpty()) {
-//                mActivity.createNewFile();
-//            }
-        }
-
-        mPagerAdapter.registerDataSetObserver(new DataSetObserver() {
+        editorAdapter.registerDataSetObserver(new DataSetObserver() {
             @Override
             public void onChanged() {
                 updateTabList();
-                updateToolbar();
-                mViewPager.setOffscreenPageLimit(mPagerAdapter.getCount());
+
+             /*   if (!exitApp && editorAdapter.getCount() == 0) {
+                   // newTab();
+                }*/
             }
         });
+
+        //if (editorAdapter.getCount() == 0)
+        // editorAdapter.newEditor("test" /*mainActivity.getString(R.string.new_filename, editorAdapter.countNoFileEditor() + 1)*/, null);
     }
 
-    @Override
-    public boolean newTab(File file) {
-        return newTab(file, 0, "UTF-8");
+    public void newTab() {
+        editorAdapter.newEditor("test"/*mainActivity.getString(R.string.new_filename, editorAdapter.getCount() + 1)*/, null);
+        setCurrentTab(editorAdapter.getCount() - 1);
     }
 
-    /**
-     * @return true if new tab added success, otherwise return fable
-     */
-    public boolean newTab(File file, int offset, String encoding) {
-        if (!file.exists() || !file.canRead() || !file.canWrite()) {
-            return false;
-        }
+    public boolean newTab(CharSequence content) {
+        editorAdapter.newEditor("test"/*mainActivity.getString(R.string.new_filename, editorAdapter.getCount() + 1)*/, content);
+        setCurrentTab(editorAdapter.getCount() - 1);
+        return true;
+    }
 
-        int count = mPagerAdapter.getCount();
+    public boolean newTab(File path) {
+        return newTab(path, 0, "utf-8");
+    }
+
+    public boolean newTab(File path, String encoding) {
+        return newTab(path, 0, encoding);
+    }
+
+    public boolean newTab(File path, int offset, String encoding) {
+        int count = editorAdapter.getCount();
         for (int i = 0; i < count; i++) {
-            EditorPageDescriptor descriptor = mPagerAdapter.getPageDescriptor(i);
-            if (descriptor.getPath() == null)
+            EditorDelegate fragment = editorAdapter.getItem(i);
+            if (fragment.getPath() == null)
                 continue;
-            if (descriptor.getPath().equals(file.getPath())) {
+            if (fragment.getPath().equals(path.getPath())) {
                 setCurrentTab(i);
                 return false;
             }
         }
-        mPagerAdapter.newEditor(file, offset, encoding);
+        editorAdapter.newEditor(path, offset, encoding);
         setCurrentTab(count);
         return true;
     }
 
-    @Override
     public int getTabCount() {
-        return mPagerAdapter.getCount();
+        if (tabAdapter == null)
+            return 0;
+        return tabAdapter.getItemCount();
     }
 
-    @Override
     public int getCurrentTab() {
-        return mViewPager.getCurrentItem();
+        return mainActivity.mTabPager.getCurrentItem();
     }
 
-    @Override
-    public void setCurrentTab(int index) {
-        int tabCount = mViewPager.getAdapter().getCount();
-        index = Math.min(Math.max(0, index), tabCount);
-
-        mViewPager.setCurrentItem(index);
+    public void setCurrentTab(final int index) {
+        mainActivity.mTabPager.setCurrentItem(index);
+        tabAdapter.setCurrentTab(index);
         updateToolbar();
     }
 
-    @Override
-    public void closeAllTab() {
-        while (getTabCount() > 0) {
-            closeTab(0);
-        }
+    public void closeTab(int position) {
+        editorAdapter.removeEditor(position, (path, encoding, offset) -> {
+            JsonDatabase.getInstance(mainActivity).updateRecentFile(path, false);
+            int currentTab = getCurrentTab();
+            if (getTabCount() != 0) {
+                setCurrentTab(currentTab); //设置title等等
+            }
+            //tabAdapter.setCurrentTab(currentTab);
+        }, false);
     }
 
-    @Override
-    public void closeTab(int position) {
-        mPagerAdapter.removeEditor(position, new TabCloseListener() {
-            @Override
-            public void onClose(String path, String encoding, int offset) {
-                JsonDatabase.getInstance(mActivity).updateRecentFile(path, false);
-                int currentTab = getCurrentTab();
-                if (getTabCount() != 0) {
-                    setCurrentTab(currentTab);
-                }
-            }
-        });
+    public EditorAdapter getEditorAdapter() {
+        return editorAdapter;
     }
 
     @Override
@@ -185,7 +189,7 @@ public class TabManager implements ViewPager.OnPageChangeListener, SmartTabLayou
 
     @Override
     public void onPageSelected(int position) {
-        updateToolbar();
+        tabAdapter.setCurrentTab(position);
     }
 
     @Override
@@ -194,42 +198,31 @@ public class TabManager implements ViewPager.OnPageChangeListener, SmartTabLayou
     }
 
     private void updateTabList() {
-        ViewPager pager = mViewPager;
+        tabAdapter.setTabInfoList(editorAdapter.getTabInfoList());
+        tabAdapter.notifyDataSetChanged();
+    }
 
-        //can not remove old tab listener
-        pager.clearOnPageChangeListeners();
-
-        //auto add page change listener
-        if (mTabLayout != null) {
-            mTabLayout.setViewPager(pager);
-        }
-        pager.addOnPageChangeListener(this);
+    public void updateEditorView(int index, EditorView editorView) {
+        editorAdapter.setEditorView(index, editorView);
     }
 
     public void onDocumentChanged() {
+        DLog.d("TabManager", "DocumentChanged");
         updateTabList();
         updateToolbar();
     }
 
     private void updateToolbar() {
-        if (mTxtDocumentInfo == null) {
+        EditorDelegate delegate = editorAdapter.getItem(getCurrentTab());
+        if (delegate == null)
             return;
-        }
-        EditorDelegate delegate = mPagerAdapter.getEditorDelegateAt(getCurrentTab());
-        if (delegate == null) {
-            mTxtDocumentInfo.setText("");
-        } else {
-            mTxtDocumentInfo.setText(delegate.getToolbarText());
-        }
+        //mainActivity.mToolbar.setTitle(delegate.getToolbarText());
     }
 
     public boolean onDestroy() {
-        if (mViewPager != null) {
-            EditorPreferences.getInstance(mActivity).setLastTab(getCurrentTab());
-        }
+
         ArrayList<File> needSaveFiles = new ArrayList<>();
-        ITabDatabase database = JsonDatabase.getInstance(mActivity);
-        ArrayList<IEditorDelegate> allEditor = mPagerAdapter.getAllEditor();
+        ArrayList<IEditorDelegate> allEditor = editorAdapter.getAllEditor();
         for (IEditorDelegate editorDelegate : allEditor) {
             String path = editorDelegate.getPath();
             String encoding = editorDelegate.getEncoding();
@@ -237,7 +230,13 @@ public class TabManager implements ViewPager.OnPageChangeListener, SmartTabLayou
             if (editorDelegate.isChanged()) {
                 needSaveFiles.add(editorDelegate.getDocument().getFile());
             }
-            database.updateRecentFile(path, encoding, offset);
+            RecentFileItem recentFileItem = new RecentFileItem();
+            recentFileItem.setPath(path);
+            recentFileItem.setEncoding(encoding);
+            recentFileItem.setOffset(offset);
+            recentFileItem.setLastOpen(true);
+            recentFileItem.setTime(System.currentTimeMillis());
+            JsonDatabase.getInstance(mainActivity).updateRecentFile(path, encoding, offset);
         }
 
         if (needSaveFiles.isEmpty()) {
@@ -254,107 +253,41 @@ public class TabManager implements ViewPager.OnPageChangeListener, SmartTabLayou
             }
             fileName.append(")");
 
-            SaveConfirmDialog saveConfirmDialog = new SaveConfirmDialog(mActivity, fileName.toString(),
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+            SaveConfirmDialog saveConfirmDialog = new SaveConfirmDialog(mainActivity, fileName.toString(),
+                    (dialog, which) -> {
+                        if (which == DialogInterface.BUTTON_POSITIVE) {
+                            SaveAllTask saveAllTask = new SaveAllTask(mainActivity, new SaveListener() {
+                                @Override
+                                public void onSavedSuccess() {
+                                    mainActivity.finish();
+                                }
+
+                                @Override
+                                public void onSaveFailed(Exception e) {
+
+                                }
+                            });
+                            dialog.dismiss();
+                            saveAllTask.execute();
+                        } else if (which == DialogInterface.BUTTON_NEGATIVE) {
                             dialog.cancel();
-                            switch (which) {
-                                case DialogInterface.BUTTON_POSITIVE:
-                                    SaveAllTask saveAllTask = new SaveAllTask(mActivity, new SaveListener() {
-                                        @Override
-                                        public void onSavedSuccess() {
-                                            mActivity.finish();
-                                        }
-
-                                        @Override
-                                        public void onSaveFailed(Exception e) {
-
-                                        }
-                                    });
-                                    dialog.dismiss();
-                                    saveAllTask.execute();
-                                    break;
-                                case DialogInterface.BUTTON_NEGATIVE:
-                                    dialog.cancel();
-                                    mActivity.finish();
-                                    break;
-                                case DialogInterface.BUTTON_NEUTRAL:
-                                    dialog.cancel();
-                                    break;
-                            }
-
+                            mainActivity.finish();
+                        } else if (which == DialogInterface.BUTTON_NEUTRAL) {
+                            dialog.cancel();
                         }
+
                     });
             saveConfirmDialog.show();
             return false;
         }
     }
 
-    public EditorFragmentPagerAdapter getEditorPagerAdapter() {
-        return mPagerAdapter;
-    }
-
-    /**
-     * Get current editor edit file
-     *
-     * @return first is index, second is {@link EditorDelegate}, null if not found
-     */
-    @Nullable
-    public Pair<Integer, IEditorDelegate> getEditorDelegate(File file) {
-        ArrayList<IEditorDelegate> allEditor = mPagerAdapter.getAllEditor();
-        for (int i = 0, allEditorSize = allEditor.size(); i < allEditorSize; i++) {
-            IEditorDelegate delegate = allEditor.get(i);
-            File editFile = delegate.getDocument().getFile();
-            if (FileUtil.isSameFile(file, editFile)) {
-                return new Pair<>(i, delegate);
+    public void closeAllUnchanged() {
+        editorAdapter.removeAll(new TabCloseListener() {
+            @Override
+            public void onClose(String path, String encoding, int offset) {
+                editorAdapter.removeAll(this, true);
             }
-        }
-
-        //file editor with name only, if has more editor, return null
-        Pair<Integer, IEditorDelegate> result = null;
-        for (int i = 0, allEditorSize = allEditor.size(); i < allEditorSize; i++) {
-            IEditorDelegate delegate = allEditor.get(i);
-            File editFile = delegate.getDocument().getFile();
-            if (editFile.getName().equals(file.getPath())) {
-                if (result != null) {
-                    return null;
-                }
-                result = new Pair<>(i, delegate);
-            }
-        }
-        return result;
-    }
-
-    /**
-     * Auto refresh all view when adapter change, so make position is final not cause any effect
-     */
-    @Override
-    public View createTabView(ViewGroup container, final int position, PagerAdapter adapter) {
-        if (adapter instanceof EditorFragmentPagerAdapter) {
-            EditorFragmentPagerAdapter editorAdapter = (EditorFragmentPagerAdapter) adapter;
-            LayoutInflater layoutInflater = LayoutInflater.from(mActivity);
-            View view = layoutInflater.inflate(R.layout.list_item_tab, container, false);
-            TextView txtName = view.findViewById(R.id.txt_name);
-            final EditorPageDescriptor item = editorAdapter.getPageDescriptor(position);
-            final File file = new File(item.getPath());
-
-            txtName.setText(file.getName());
-            txtName.setOnClickListener(v -> mViewPager.setCurrentItem(position));
-            /*
-            txtName.setOnLongClickListener(v -> {
-                Toast.makeText(mActivity,
-                        "Path:" + file.getPath() + ", Encoding " + item.getEncoding(),
-                        Toast.LENGTH_SHORT)
-                        .show();
-                //handled, do not move to editor
-                return true;
-            });
-
-             */
-            view.findViewById(R.id.btn_close).setOnClickListener(v -> closeTab(position));
-            return view;
-        }
-        return null;
+        }, true);
     }
 }

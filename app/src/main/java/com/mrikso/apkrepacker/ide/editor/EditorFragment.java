@@ -22,14 +22,12 @@ import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-
 import com.mrikso.apkrepacker.R;
-import com.mrikso.apkrepacker.ide.editor.pager.EditorPageDescriptor;
+
 import com.mrikso.apkrepacker.ide.editor.view.CodeEditor;
 
 import java.io.File;
@@ -57,9 +55,9 @@ public class EditorFragment extends Fragment {
         return fragment;
     }
 
-    public static EditorFragment newInstance(EditorPageDescriptor desc) {
+   /* public static EditorFragment newInstance(EditorPageDescriptor desc) {
         return newInstance(desc.getFile(), desc.getCursorOffset(), desc.getEncoding());
-    }
+    }*/
 
     @Nullable
     @Override
@@ -72,9 +70,8 @@ public class EditorFragment extends Fragment {
             File file = (File) arguments.getSerializable(KEY_FILE);
             mEditorDelegate = new EditorDelegate(file, offset, encoding);
         }
-        View view =  inflater.inflate(R.layout.fragment_code_editor, container, false);
 
-        return view;
+        return inflater.inflate(R.layout.fragment_code_editor, container, false);
     }
 
     @Override
@@ -85,7 +82,7 @@ public class EditorFragment extends Fragment {
       //  view.runOnUi(() -> {
            // new FastScrollerBuilder(fastScrollScrollView).useMd2Style().build();
      //   });
-        mEditorDelegate.onCreate(codeEditor);
+       // mEditorDelegate.onCreate(codeEditor);
         /*
         if (getActivity() instanceof IEditorStateListener) {
             IEditorStateListener listener = (IEditorStateListener) getActivity();

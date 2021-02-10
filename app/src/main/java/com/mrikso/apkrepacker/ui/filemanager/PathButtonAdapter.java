@@ -29,7 +29,7 @@ public class PathButtonAdapter extends RecyclerView.Adapter<PathButtonAdapter.Vi
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.patch_button_layout, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.path_button_layout, parent, false);
         return new ViewHolder(view);
     }
 
@@ -38,7 +38,7 @@ public class PathButtonAdapter extends RecyclerView.Adapter<PathButtonAdapter.Vi
         File path = pathList.get(position);
         String name = path.getName();
         holder.textView.setText(name);
-        holder.textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, position != pathList.size() - 1 ? R.drawable.ic_chevron_right : 0, 0);
+        holder.textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, position != pathList.size() - 1 ? R.drawable.ic_arrow_right : 0, 0);
         holder.textView.setOnClickListener(v -> {
             if (onItemClickListener != null)
                 onItemClickListener.onItemClick(position, v);

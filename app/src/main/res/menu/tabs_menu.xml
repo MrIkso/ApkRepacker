@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_save_all"
+        android:icon="@drawable/ic_save_white"
+        android:title="@string/save_all" />
+    <item
+        android:id="@+id/action_close_unchanged"
+        android:icon="@drawable/ic_close"
+        android:title="@string/close_unchanged" />
+</menu>

@@ -135,4 +135,5 @@
     <string name="confirm_exit">Confirm of the exit</string>
     <string name="attention_title">Attention!</string>
     <string name="jadx_doesnt_support_on_this_prone">Unforunaely, Jadx is not supported on your device. The minimum version of the android should be 8 (Oreo)</string>
+    <string name="explore">Explore methods</string>
 </resources>

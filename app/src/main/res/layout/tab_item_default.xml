@@ -1,18 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="46dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="?editorTabBackground"
-    android:foreground="?selectableItemBackground"
-    android:orientation="horizontal"
-    android:padding="8dp">
+    android:background="@drawable/selectable_background">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/list_item_icon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:scaleType="center"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/text_margin_small"
+        android:layout_marginEnd="@dimen/text_margin_small"
+        tools:src="@drawable/ic_rename"
+        tools:ignore="ContentDescription" />
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:id="@+id/container_main"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_toEndOf="@id/list_item_icon"
+        android:layout_marginEnd="@dimen/text_margin_small"
         android:orientation="vertical">
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -21,7 +32,7 @@
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="?android:attr/textColorPrimary"
+            android:textColor="?attr/textColor"
             tools:text="Hello.c" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -29,17 +40,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:textColor="?android:attr/textColorSecondary"
+            android:singleLine="true"
+            android:ellipsize="middle"
             tools:text="/mnt/sdcard/example/android/helloworld/src/main/java/hello.java" />
 
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/btn_close"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_toEndOf="@id/container_main"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:scaleType="center"
-        app:srcCompat="@drawable/ic_close_black"
-         />
+        app:srcCompat="@drawable/ic_close"
+        android:layout_marginStart="@dimen/list_item_name_marginEnd"
+        android:background="?selectableItemBackgroundBorderless" />
 
-</LinearLayout>
+</RelativeLayout>

@@ -21,7 +21,8 @@ import android.app.Dialog;
 import android.content.Context;
 
 
-import com.mrikso.apkrepacker.activity.IdeActivity;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.mrikso.apkrepacker.activity.TextEditorActivity;
 
 /**
  * @author Jecelyin Peng <jecelyin@gmail.com>
@@ -42,8 +43,12 @@ public abstract class AbstractDialog {
         return new AlertDialog.Builder(context);
     }
 
-    protected IdeActivity getMainActivity() {
-        return (IdeActivity) context;
+    protected MaterialDialog.Builder getDialogBuilder() {
+        return new MaterialDialog.Builder(context);
+    }
+
+    protected TextEditorActivity getMainActivity() {
+        return (TextEditorActivity) context;
     }
 
     public abstract void show();

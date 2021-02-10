@@ -592,7 +592,7 @@ public abstract class FreeScrollingTextField extends View implements Document.Te
         invalidate();
     }
 
-    private void resetView() {
+    public void resetView() {
         mCaretPosition = mCaretRow = 0;
         xExtent = mLineMaxWidth = 0;
         mFieldController.setSelectText(false);

@@ -18,7 +18,7 @@ public class TranslateTask extends CoroutinesAsyncTask<Void, ArrayList<Translate
     private Random r = new Random();
     private List<TranslateItem> untranslated;
     private List<TranslateItem> translatedItems = new ArrayList<>();
-    private final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36";
+
     private StringsFragment fragment;
     private String targetLanguageCode;
     private boolean mSkipTranslated;
@@ -32,7 +32,6 @@ public class TranslateTask extends CoroutinesAsyncTask<Void, ArrayList<Translate
     public void setSkipTranslated(boolean skip) {
         mSkipTranslated = skip;
     }
-
 
     public void setSkipSupport(boolean skipSupport) {
         this.mSkipSupport = skipSupport;
@@ -68,7 +67,7 @@ public class TranslateTask extends CoroutinesAsyncTask<Void, ArrayList<Translate
 
         String code = StringUtils.getGoogleLangCode(targetLanguageCode);
 
-        Translator translator = new Translator(USER_AGENT, code);
+        Translator translator = new Translator(code);
 
         List<TranslateItem> todo = new ArrayList<>();
         for (TranslateItem item : untranslated) {

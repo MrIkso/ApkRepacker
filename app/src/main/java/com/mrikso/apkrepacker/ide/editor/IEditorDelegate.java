@@ -40,6 +40,6 @@ public interface IEditorDelegate {
 
     String getEncoding();
 
-    void doCommand(Command command);
+    boolean doCommand(Command command);
 
 }
