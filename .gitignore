@@ -2,6 +2,8 @@
 .gradle/
 /local.properties
 /.idea/
+/.PVS-Studio/
+/hs*
 .DS_Store
 build/
 captures/

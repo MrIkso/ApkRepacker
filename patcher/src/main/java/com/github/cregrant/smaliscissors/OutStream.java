@@ -1,4 +1,4 @@
-package com.github.cregrant.smaliscissors.engine;
+package com.github.cregrant.smaliscissors;
 
 public interface OutStream {
     void println(Object x);

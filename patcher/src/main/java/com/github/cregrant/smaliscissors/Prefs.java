@@ -1,4 +1,4 @@
-package com.github.cregrant.smaliscissors.engine;
+package com.github.cregrant.smaliscissors;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,20 +9,20 @@ public class Prefs {
     public static boolean isWindows = System.getProperty("os.name").startsWith("Windows");
     public static String projectPath;
     public static File patchesDir;
-    public static String zipName;
+    public static String zipPath;
     public static File tempDir;
     private static double versionConf = 0.01;
     static int verbose_level = 1;
     static boolean optimizeRules = true;
-    static boolean keepSmaliFilesInRAM = false;
-    static boolean keepXmlFilesInRAM = false;
+    public static boolean keepSmaliFilesInRAM = false;
+    public static boolean keepXmlFilesInRAM = false;
     static final boolean skipSomeSmaliFiles = true;
     static final String[] smaliFoldersToSkip = new String[]{"android", "androidx", "kotlin", "kotlinx"};
     //todo move to main
 
     public static void loadConf() {
         Properties props = new Properties();
-        String settingsFilename = System.getProperty("user.dir") + File.separator + "config" + File.separator + "conf.txt";
+        String settingsFilename = System.getProperty("user.dir") + "/config/conf.txt";
         try {
             FileInputStream input = new FileInputStream(settingsFilename);
             props.load(input);
@@ -51,7 +51,7 @@ public class Prefs {
 
     private static void saveConf() {
         try {
-            FileOutputStream output = new FileOutputStream(System.getProperty("user.dir") + File.separator + "config" + File.separator + "conf.txt");
+            FileOutputStream output = new FileOutputStream(System.getProperty("user.dir") + "/config/conf.txt");
             Properties props = new Properties();
             props.put("Version", String.format("%.2f", versionConf).replace(',', '.'));
             props.put("Verbose_level", String.valueOf(verbose_level));

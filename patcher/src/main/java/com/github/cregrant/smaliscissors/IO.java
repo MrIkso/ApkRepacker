@@ -1,4 +1,8 @@
-package com.github.cregrant.smaliscissors.engine;
+package com.github.cregrant.smaliscissors;
+
+import com.github.cregrant.smaliscissors.structures.DecompiledFile;
+import com.github.cregrant.smaliscissors.structures.Patch;
+import com.github.cregrant.smaliscissors.structures.Rule;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -10,25 +14,25 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
-class IO {
+public class IO {
 
     private static String loadedProject = "";
     private static final Pattern patRule = Pattern.compile("(\\[.+?](?:\\R(?:NAME|GOTO|SOURCE|SCRIPT|TARGET):)[\\s\\S]*?\\[/.+?])");
 
     static Patch loadRules(String zipFile) {
-        deleteAll(Prefs.tempDir);
+        delete(Prefs.tempDir);
         //noinspection ResultOfMethodCallIgnored
         Prefs.tempDir.mkdirs();
         zipExtract(zipFile, Prefs.tempDir.toString());
         Patch patch = new Patch();
-        String txtFile = Prefs.tempDir + File.separator + "patch.txt";
+        String txtFile = Prefs.tempDir + "/patch.txt";
         if (!new File(txtFile).exists()) {
             Main.out.println("No patch.txt file in patch!");
             return patch;
         }
 
         RuleParser parser = new RuleParser();
-        ArrayList<String> tempArr = Regex.matchMultiLines(Objects.requireNonNull(patRule), read(txtFile), "rules");
+        ArrayList<String> tempArr = Regex.matchMultiLines(Objects.requireNonNull(patRule), read(txtFile), Regex.MatchType.Full);
         ArrayList<Rule> rawRulesArr = new ArrayList<>(tempArr.size());
 
         for (String singleRule : tempArr) {
@@ -41,7 +45,7 @@ class IO {
             while (true) {
                 if (next < rawRulesArr.size() && Prefs.optimizeRules) {  //check if next rule exists and optimization enabled
                     Rule nextRule = rawRulesArr.get(next);
-                    if (nextRule.type.equals("MATCH_REPLACE") && rule.canBeMerged(nextRule)) {   //check for next rule type
+                    if ((nextRule.type == Rule.Type.MATCH_REPLACE) && rule.canBeMerged(nextRule)) {   //check for next rule type
                         rule.mergedRules.add(nextRule);
                         next++;
                         i++;
@@ -67,7 +71,7 @@ class IO {
         return patch;
     }
 
-    static String read(String path) {
+    public static String read(String path) {
         final FileInputStream is;
         String resultString = null;
         try {
@@ -90,8 +94,8 @@ class IO {
         return resultString;
     }
 
-    static void write(String path, String content) {
-        deleteAll(new File(path));
+    public static void write(String path, String content) {
+        delete(new File(path));
         try {
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(path));
             bufferedWriter.write(content);
@@ -102,6 +106,8 @@ class IO {
             e.printStackTrace();
         }
     }
+
+
 
     static void writeChanges() {
         if (Prefs.keepSmaliFilesInRAM) {
@@ -172,16 +178,8 @@ class IO {
     }
 
     private static File mergePath(String dstFolder, String toMerge) {
-        String[] dstTree;
-        String[] srcTree;
-        if (dstFolder.contains("/"))
-            dstTree = dstFolder.split("/");
-        else
-            dstTree = dstFolder.split("\\\\");
-        if (toMerge.contains("/"))
-            srcTree = toMerge.split("/");
-        else
-            srcTree = toMerge.split("\\\\");
+        String[] dstTree = dstFolder.replace('\\', '/').split("/");
+        String[] srcTree = toMerge.replace('\\', '/').split("/");
         Collection<String> fullTree = new ArrayList<>();
         fullTree.addAll(Arrays.asList(dstTree));
         fullTree.addAll(Arrays.asList(srcTree));
@@ -196,14 +194,14 @@ class IO {
         return new File(sb.toString());
     }
 
-    static void deleteAll(File file) {
+    static void delete(File file) {
         if (file.isDirectory()) {
             if (Objects.requireNonNull(file.list()).length == 0) {
                 file.delete();
             }
             else {
                 for (File child : Objects.requireNonNull(file.listFiles())) {
-                    deleteAll(child);
+                    delete(child);
                 }
                 if (Objects.requireNonNull(file.list()).length == 0)
                     file.delete();
@@ -220,8 +218,6 @@ class IO {
         }
         else if (smaliNeeded || xmlNeeded) {
             //other project (multiple patching available on pc) or empty files arrays
-            Scan.smaliList.clear();
-            Scan.xmlList.clear();
             Scan.scanProject(xmlNeeded, smaliNeeded);
             loadedProject = Prefs.projectPath;
         }

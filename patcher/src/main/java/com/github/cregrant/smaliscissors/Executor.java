@@ -1,4 +1,7 @@
-package com.github.cregrant.smaliscissors.engine;
+package com.github.cregrant.smaliscissors;
+
+import com.github.cregrant.smaliscissors.structures.Patch;
+import com.github.cregrant.smaliscissors.structures.Rule;
 
 import java.io.File;
 
@@ -9,9 +12,9 @@ class Executor {
         long startTime = currentTimeMillis();
         for (String zipFile : zipArr) {
             Prefs.patchesDir = new File(zipFile).getParentFile();
-            Prefs.tempDir = new File(Prefs.patchesDir + File.separator + "temp");
-            Prefs.zipName = Regex.getEndOfPath(zipFile);
-            Main.out.println("\nPatch - " + Prefs.zipName);
+            Prefs.tempDir = new File(Prefs.patchesDir + "/temp");
+            Prefs.zipPath = Regex.getEndOfPath(zipFile);
+            Main.out.println("\nPatch - " + Prefs.zipPath);
 
             Patch patch = IO.loadRules(zipFile);
             boolean scanXml = patch.xmlNeeded && Scan.xmlList.isEmpty();
@@ -33,7 +36,7 @@ class Executor {
             if (Prefs.verbose_level == 0 && (Prefs.keepXmlFilesInRAM || Prefs.keepSmaliFilesInRAM))
                 Main.out.println("Writing changes to disk...");
             IO.writeChanges();
-            IO.deleteAll(Prefs.tempDir);
+            IO.delete(Prefs.tempDir);
         }
         Main.out.println("------------------\n" + Regex.getEndOfPath(Prefs.projectPath) + " patched in " + (currentTimeMillis() - startTime) + "ms.");
     }
@@ -42,27 +45,30 @@ class Executor {
         printRuleInfo(rule);
         //noinspection EnhancedSwitchMigration
         switch (rule.type) {
-            case "MATCH_ASSIGN":
+            case MATCH_ASSIGN:
                 ProcessRule.assign(rule);
                 break;
-            case "MATCH_REPLACE":
+            case MATCH_REPLACE:
                 ProcessRule.matchReplace(rule);
                 break;
-            case "ADD_FILES":
+            case ADD_FILES:
                 ProcessRule.add(rule);
                 break;
-            case "REMOVE_FILES":
+            case REMOVE_FILES:
                 ProcessRule.remove(rule);
                 break;
-            case "EXECUTE_DEX":
+            case EXECUTE_DEX:
                 Main.out.println("Executing dex...");
                 ProcessRule.dex(rule);
                 break;
-            case "GOTO":
+            case GOTO:
                 patch.setRuleName(rule.goTo);
                 break;
-            case "MATCH_GOTO":
+            case MATCH_GOTO:
                 ProcessRule.matchGoto(rule, patch);
+                break;
+            case REMOVE_CODE:
+                ProcessRule.removeCode(rule);
                 break;
         }
         Main.out.println("");
@@ -73,19 +79,16 @@ class Executor {
             Main.out.println(rule.toString());
         else if (Prefs.verbose_level == 1) {
             Main.out.println("Type - " + rule.type);
-            if (!rule.type.equals("EXECUTE_DEX") && !rule.type.equals("DUMMY") ) {
-
+            if (rule.type != Rule.Type.EXECUTE_DEX && rule.type != Rule.Type.DUMMY) {
                 if (rule.target != null)
                     Main.out.println("Target - " + rule.target);
-
-                else if (rule.targetArr != null) {
+                else {
                     Main.out.println("Targets:");
                     if (rule.targetArr.size() < 100) {
                         for (String target : rule.targetArr)
                             Main.out.println("    " + target);
                     }
-                    else
-                        Main.out.println("    " + rule.targetArr.size() + " items");
+                    else Main.out.println("    " + rule.targetArr.size() + " items");
                 }
             }
         }

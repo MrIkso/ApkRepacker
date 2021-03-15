@@ -1,4 +1,6 @@
-package com.github.cregrant.smaliscissors.engine;
+package com.github.cregrant.smaliscissors;
+
+import com.github.cregrant.smaliscissors.structures.DecompiledFile;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -7,12 +9,11 @@ import java.util.Objects;
 import java.util.Stack;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 class Scan {
-    static ArrayList<DecompiledFile> smaliList = new ArrayList<>();
-    static ArrayList<DecompiledFile> xmlList = new ArrayList<>();
+    static ArrayList<DecompiledFile> smaliList = new ArrayList<>(1);
+    static ArrayList<DecompiledFile> xmlList = new ArrayList<>(1);
 
     static void scanProject(boolean xmlNeeded, boolean smaliNeeded) {
         long startTime = System.currentTimeMillis();
@@ -21,6 +22,7 @@ class Scan {
         BackgroundWorker.createIfTerminated();
 
         if (smaliNeeded) {         //add smali folders
+            smaliList = new ArrayList<>(10000);
             File[] list = new File(Prefs.projectPath).listFiles();
             if (Objects.requireNonNull(list).length == 0)
                 Main.out.println("WARNING: no smali folders found inside the project folder \"" + Regex.getEndOfPath(Prefs.projectPath) + '\"');
@@ -34,20 +36,21 @@ class Scan {
         }
         //add AndroidManifest.xml & res folder
         if (xmlNeeded) {
+            xmlList = new ArrayList<>(1000);
             if (new File(Prefs.projectPath + File.separator + "AndroidManifest.xml").exists()) {
                 DecompiledFile manifest = new DecompiledFile(true, "AndroidManifest.xml");
                 xmlList.add(manifest);
             }
             File resFolder = new File(Prefs.projectPath + File.separator + "res");
-            if (resFolder.exists() || Objects.requireNonNull(resFolder.list()).length != 0) {
+            if (resFolder.exists() && Objects.requireNonNull(resFolder.list()).length > 0) {
                 task = BackgroundWorker.executor.submit(() -> scanFolder(resFolder));
                 results.add(task);
             }
             else
                 Main.out.println("WARNING: no resources found inside the res folder.");
         }
-        ArrayList<DecompiledFile> bigSmaliList = new ArrayList<>();
-        ArrayList<DecompiledFile> bigXmlList = new ArrayList<>();
+        ArrayList<DecompiledFile> bigSmaliList = new ArrayList<>(100);
+        ArrayList<DecompiledFile> bigXmlList = new ArrayList<>(100);
 
         try {
             for (Future<ArrayList<DecompiledFile>> array : results) {
@@ -83,13 +86,7 @@ class Scan {
         if (Prefs.keepXmlFilesInRAM)
             loadToRam(xmlList);
 
-        try {
-            BackgroundWorker.executor.shutdown();
-            BackgroundWorker.executor.awaitTermination(60, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            System.exit(0);
-        }
+        BackgroundWorker.computeAndDestroy();
         Main.out.println(smaliList.size() + " smali & " + xmlList.size() + " xml files found in " + (System.currentTimeMillis() - startTime) + "ms.\n");
     }
 
@@ -107,18 +104,17 @@ class Scan {
         while (!stack.isEmpty()) {
             if (stack.peek().isDirectory()) {
                 for (File file : Objects.requireNonNull(stack.pop().listFiles())) {
+
                     if (file.isDirectory()) {
-                        boolean doNotSkip = true;
                         if (Prefs.skipSomeSmaliFiles) {                  //skip some folders
-                            for (String str : Prefs.smaliFoldersToSkip)
-                                if (file.getPath().startsWith(str)) {
-                                    doNotSkip = false;
+                            for (String str : Prefs.smaliFoldersToSkip) {
+                                if (file.getPath().startsWith(str))
                                     break;
-                                }
+                            }
                         }
-                        if (doNotSkip)
-                            stack.push(file);
+                        stack.push(file);
                     }
+
                     else {
                         DecompiledFile tmp;
                         if ((tmp = scanFile(file)) != null) {
@@ -142,18 +138,18 @@ class Scan {
         if (!(isSmali || isXml))   //not xml nor smali: skip
             return null;
 
-        return new DecompiledFile(isXml, path);
+        return new DecompiledFile(isXml, path.replace('\\', '/'));
     }
 
-    static void removeLoadedFile(String shortPath) {
-        if (Prefs.isWindows)
-            shortPath = shortPath.replace("\\\\", "\\");  //simple regex-to-path convert
-        if (Prefs.verbose_level == 0) {
-            Main.out.println(shortPath + " removed.");
-        }
-        boolean isXml = shortPath.endsWith(".xml");
-        int size;
+    static ArrayList<String> removeLoadedFile(String shortPath, boolean isRegexEnabled, boolean returnDeletedFilesArray) {
+        boolean isXml = shortPath.startsWith("res");
+        boolean isInnerPath = !isXml && !shortPath.startsWith("smali");
+        if (isInnerPath && isRegexEnabled)
+            shortPath = "smali.*?/" + shortPath;    //an inner path is given
+
         ArrayList<DecompiledFile> files;
+        int size;
+
         if (isXml) {
             files = xmlList;
             size = xmlList.size();
@@ -162,14 +158,33 @@ class Scan {
             files = smaliList;
             size = smaliList.size();
         }
+        ArrayList<String> deleted = new ArrayList<>();
 
-        for (int i = 0; i < size; i++) {
-            if (files.get(i).getPath().equals(shortPath)) {
-                files.remove(i);
-                i--;
-                size--;
+        if (isRegexEnabled) {
+            for (int i = 0; i < size; i++) {
+                if (files.get(i).getPath().matches(shortPath)) {
+                    if (returnDeletedFilesArray)
+                        deleted.add(files.get(i).getPath());
+                    files.remove(i);
+                    i--;
+                    size--;
+                }
             }
         }
+        else {
+            for (int i = 0; i < size; i++) {
+                if (files.get(i).getPath().contains(shortPath)) {
+                    if (returnDeletedFilesArray)
+                        deleted.add(files.get(i).getPath());
+                    files.remove(i);
+                    i--;
+                    size--;
+                }
+            }
+        }
+        if (Prefs.verbose_level == 0)
+            Main.out.println(shortPath + " removed.");
+        return deleted;
     }
 
     static String getApkPath() {

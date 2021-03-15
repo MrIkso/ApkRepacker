@@ -1,11 +1,11 @@
-package com.github.cregrant.smaliscissors.engine;
+package com.github.cregrant.smaliscissors;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
     static final double version = 0.01;
-    static OutStream out;
+    public static OutStream out;
     static DexExecutor dex;
 
     public static void main(String[] args, OutStream logger, DexExecutor dexExecutor) {
@@ -32,6 +32,8 @@ public class Main {
             else projectsList.add(str);
         }
         patchProjects(projectsList, zipArr);
+        Scan.smaliList = new ArrayList<>(1);
+        Scan.xmlList = new ArrayList<>(1);
         Main.out.println("All done in " + (System.currentTimeMillis() - startTimeTotal) + " ms");
         Main.out.println("Good bye Sir.");
     }

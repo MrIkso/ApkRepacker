@@ -1,4 +1,4 @@
-package com.github.cregrant.smaliscissors.engine;
+package com.github.cregrant.smaliscissors;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,27 +6,27 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 class Regex {
-    static ArrayList<String> matchMultiLines(Pattern readyPattern, CharSequence content, String mode) {
+    enum MatchType {
+        Full,
+        Split,
+        SplitPath,
+    }
+    static ArrayList<String> matchMultiLines(Pattern readyPattern, CharSequence content, MatchType mode) {
         Matcher matcher = readyPattern.matcher(content);
         ArrayList<String> matchedArr = new ArrayList<>();
         while (matcher.find()) {
             for (int i = 1; i <= matcher.groupCount(); ++i) {
                 String textMatched = matcher.group(i);
                 switch (mode) {
-                    case "":
-                    case "rules":
-                    case "replace":
+                    case Full:
                         matchedArr.add(textMatched);
                         break;
-                    case "assign":
+                    case Split:
                         matchedArr.addAll(Arrays.asList(textMatched.split("\\R")));
                         break;
-                    case "target":
+                    case SplitPath:
                         for (String str : textMatched.split("\\R")) {
-                            str = str.replace("*/*", "*");
-                            if (Prefs.isWindows)
-                                str = str.replace("/", "\\\\");
-                            matchedArr.add(globToRegex(str));
+                            matchedArr.add(str.replace("*/*", "*"));
                         }
                         break;
                 }
@@ -46,16 +46,11 @@ class Regex {
     }
 
     static String getEndOfPath(String path) {
-        int last;
-        if (Prefs.isWindows)
-            last = path.lastIndexOf('\\')+1;
-        else
-            last = path.lastIndexOf('/')+1;
-        if (last == 0) return path;
+        int last = path.lastIndexOf('/')+1;
         return path.substring(last);
     }
 
-    private static String globToRegex(String line) {
+    static String globToRegex(String line) {
         line = line.trim();
         int strLen = line.length();
         StringBuilder sb = new StringBuilder(strLen);
@@ -79,7 +74,7 @@ class Regex {
                         sb.append('.');
                     escaping = false;
                     break;
-                //case '.':
+                case '.':
                 case '(':
                 case ')':
                 case '+':
@@ -94,7 +89,7 @@ class Regex {
                     break;
                 case '\\':
                     if (escaping) {
-                        sb.append("\\\\");
+                        sb.append("\\");
                         escaping = false;
                     }
                     else

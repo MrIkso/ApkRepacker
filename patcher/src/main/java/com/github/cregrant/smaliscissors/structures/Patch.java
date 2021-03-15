@@ -1,28 +1,28 @@
-package com.github.cregrant.smaliscissors.engine;
+package com.github.cregrant.smaliscissors.structures;
 
 import java.util.ArrayList;
 
-class Patch {
+public class Patch {
     private final ArrayList<Rule> rules = new ArrayList<>();
     private int currentRuleNum = 0;
-    boolean smaliNeeded = false;
-    boolean xmlNeeded = false;
+    public boolean smaliNeeded = false;
+    public boolean xmlNeeded = false;
 
-    void addRule(Rule rule) {
+    public void addRule(Rule rule) {
         if (rule!=null)
             rules.add(rule);
     }
 
-    void setRuleName(String someName) {
+    public void setRuleName(String someName) {
         for (Rule r : rules) {
-            if (r.name!=null && r.name.equalsIgnoreCase(someName)) {
+            if (r.ruleName !=null && r.ruleName.equalsIgnoreCase(someName)) {
                 currentRuleNum = r.num;
                 break;
             }
         }
     }
 
-    Rule getNextRule() {
+    public Rule getNextRule() {
         if (currentRuleNum < rules.size()) {
             Rule rule = rules.get(currentRuleNum);
             currentRuleNum++;
@@ -31,7 +31,7 @@ class Patch {
         return null;
     }
 
-    int getRulesCount() {
+    public int getRulesCount() {
         return rules.size();
     }
 }

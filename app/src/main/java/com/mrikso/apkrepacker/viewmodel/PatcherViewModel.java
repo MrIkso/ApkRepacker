@@ -11,9 +11,10 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.github.cregrant.smaliscissors.engine.DexExecutor;
-import com.github.cregrant.smaliscissors.engine.Main;
-import com.github.cregrant.smaliscissors.engine.OutStream;
+import com.github.cregrant.smaliscissors.Main;
+import com.github.cregrant.smaliscissors.DexExecutor;
+import com.github.cregrant.smaliscissors.Main;
+import com.github.cregrant.smaliscissors.OutStream;
 import com.mrikso.apkrepacker.adapter.PatchItem;
 import com.mrikso.apkrepacker.utils.ProjectUtils;
 import com.mrikso.apkrepacker.utils.common.DLog;
@@ -106,7 +107,7 @@ public class PatcherViewModel extends AndroidViewModel implements IRulesInfo, IP
     @Override
     public void runDex(String dexPath, String entrance, String mainClass, String apkPath, String zipPath, String projectPath, String param, String tempDir) {
         try {
-            Class<?> loadedClass = new DexClassLoader(dexPath, tempDir, null, com.github.cregrant.smaliscissors.engine.Main.class.getClassLoader()).loadClass(mainClass);
+            Class<?> loadedClass = new DexClassLoader(dexPath, tempDir, null, com.github.cregrant.smaliscissors.Main.class.getClassLoader()).loadClass(mainClass);
             Method method = loadedClass.getMethod(entrance, String.class, String.class, String.class, String.class);
             method.invoke(loadedClass.getDeclaredConstructor().newInstance(), apkPath, zipPath, projectPath, param);
         } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | ClassNotFoundException | InvocationTargetException e) {
@@ -160,7 +161,7 @@ public class PatcherViewModel extends AndroidViewModel implements IRulesInfo, IP
     @Override
     public List<String> getLauncherActivities() {
         try {
-            List<String> act = new ArrayList<>();
+            List<String> act = new ArrayList<>(1);
             ManifestData manifestData = AndroidManifestParser.parse(new File(getDecodeRootPath()+ "/"+ SdkConstants.FN_ANDROID_MANIFEST_XML));
             DLog.d("LauncherActivity : " + manifestData.getLauncherActivity().getName());
             act.add(manifestData.getLauncherActivity().getName());

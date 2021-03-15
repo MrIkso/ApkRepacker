@@ -1,54 +1,57 @@
-package com.github.cregrant.smaliscissors.engine;
+package com.github.cregrant.smaliscissors.structures;
+
+import com.github.cregrant.smaliscissors.IO;
+import com.github.cregrant.smaliscissors.Prefs;
 
 import java.io.File;
 
-class DecompiledFile {
+public class DecompiledFile {
     private String path;
     private String body;
     private boolean isModified = false;
     private final boolean isXML;
     private boolean isBigSize = false;
 
-    DecompiledFile(boolean isXmlFile, String filePath) {
+    public DecompiledFile(boolean isXmlFile, String filePath) {
         isXML = isXmlFile;
         path = filePath;
     }
 
-    boolean isXML() {
+    public boolean isXML() {
         return this.isXML;
     }
 
-    String getPath() {
+    public String getPath() {
         return this.path;
     }
 
-    void setModified(boolean state) {
+    public void setModified(boolean state) {
         this.isModified = state;
     }
 
-    boolean isModified() {
+    public boolean isModified() {
         return this.isModified;
     }
 
-    String getBody() {
+    public String getBody() {
         if (isXML ? Prefs.keepXmlFilesInRAM : Prefs.keepSmaliFilesInRAM)
             return this.body;
         else
             return IO.read(Prefs.projectPath + File.separator + path);
     }
 
-    void setBody(String newBody) {
+    public void setBody(String newBody) {
         if (isXML ? Prefs.keepXmlFilesInRAM : Prefs.keepSmaliFilesInRAM)
             this.body = newBody;
         else
             IO.write(Prefs.projectPath + File.separator + path, newBody);
     }
 
-    void setBigSize(boolean state) {
+    public void setBigSize(boolean state) {
         this.isBigSize = state;
     }
 
-    boolean isBigSize() {
+    public boolean isBigSize() {
         return !this.isBigSize;
     }
 

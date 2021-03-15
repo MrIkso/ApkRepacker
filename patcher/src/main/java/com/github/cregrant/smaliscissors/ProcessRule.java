@@ -1,8 +1,12 @@
-package com.github.cregrant.smaliscissors.engine;
+package com.github.cregrant.smaliscissors;
 
-import java.io.*;
+import com.github.cregrant.smaliscissors.smali.SmaliAnalyzer;
+import com.github.cregrant.smaliscissors.structures.DecompiledFile;
+import com.github.cregrant.smaliscissors.structures.Patch;
+import com.github.cregrant.smaliscissors.structures.Rule;
+
+import java.io.File;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
 
@@ -28,18 +32,10 @@ class ProcessRule {
         BackgroundWorker.createIfTerminated();
         patchedFilesNum = 0;
         Object lock = new Object();
+        ArrayList<DecompiledFile> files = replaceRule.isXml ? Scan.xmlList : Scan.smaliList;
 
-        ArrayList<DecompiledFile> files;
-        if (replaceRule.isXml)
-            files = Scan.xmlList;
-        else
-            files = Scan.smaliList;
-        int totalNum = files.size();
-
-        for (int num=0; num<totalNum; num++) {
-            int finalNum = num;
+        for (DecompiledFile dFile : files) {
             Runnable r = () -> {
-                DecompiledFile dFile = files.get(finalNum);
                 replace(dFile, mergedRules);
                 if (dFile.isModified()) {
                     dFile.setModified(false);
@@ -52,14 +48,7 @@ class ProcessRule {
             };
             BackgroundWorker.executor.submit(r);
         }
-
-        try {
-            BackgroundWorker.executor.shutdown();
-            BackgroundWorker.executor.awaitTermination(15, TimeUnit.MINUTES);
-        } catch (Exception e) {
-            Main.out.println(e.getMessage());
-            System.exit(1);
-        }
+        BackgroundWorker.computeAndDestroy();
 
         if (Prefs.verbose_level <= 2) {
             if (replaceRule.isSmali)
@@ -73,7 +62,8 @@ class ProcessRule {
         String smaliBody = null;
         String smaliBodyNew = null;
         for (Rule rule : rules) {
-            if (dFile.getPath().matches(rule.target)) {
+            String target = Regex.globToRegex(rule.target);
+            if (dFile.getPath().matches(target)) {
                 if (smaliBody==null)
                     smaliBody = dFile.getBody();  //loading file body for a first time
                 else
@@ -84,7 +74,7 @@ class ProcessRule {
                 else
                     smaliBodyNew = smaliBody.replace(rule.match, rule.replacement);
 
-                if (!smaliBodyNew.equals(smaliBody)) {
+                if (!dFile.isModified() && !smaliBodyNew.equals(smaliBody)) {
                     dFile.setModified(true);
                 }
             }
@@ -95,26 +85,20 @@ class ProcessRule {
 
     static void assign(Rule rule) {
         ArrayList<String> assignArr = new ArrayList<>();
-        DecompiledFile dFile;
-        int end;
+        ArrayList<DecompiledFile> files;
         if (rule.isXml)
-            end = Scan.xmlList.size();
+            files = Scan.xmlList;
         else
-            end = Scan.smaliList.size();
-        for (int k=0; k<end; k++) {
-            if (rule.isXml)
-                dFile = Scan.xmlList.get(k);
-            else dFile = Scan.smaliList.get(k);
-            if (!dFile.getPath().matches(rule.target))
+            files = Scan.smaliList;
+
+        for (DecompiledFile dFile : files) {
+            if (!dFile.getPath().contains(rule.target))
                 continue;
+
             for (String variable : rule.assignments) {
-                for (String str : variable.split("=")) {
-                    if (str.contains("${GROUP"))
-                        continue;
-                    assignArr.add(str);
-                }
+                assignArr.add(variable.substring(0, variable.indexOf('=')));
             }
-            ArrayList<String> valuesArr = Regex.matchMultiLines(Pattern.compile(rule.match), dFile.getBody(), "replace");
+            ArrayList<String> valuesArr = Regex.matchMultiLines(Pattern.compile(rule.match), dFile.getBody(), Regex.MatchType.Split);
             if (assignArr.size() > valuesArr.size())
                 Main.out.println("WARNING: MATCH_ASSIGN found multiple results...");
             else if (assignArr.size() < valuesArr.size())
@@ -123,8 +107,8 @@ class ProcessRule {
                 String value = valuesArr.get(j);
                 assignMap.put(assignArr.get(j), value);
                 if (Prefs.verbose_level <= 1) {
-                    if (value.length()>500)
-                        value = value.substring(0, 60) + " ... " + value.substring(value.length()-60);
+                    if (value.length() > 500)
+                        value = value.substring(0, 60) + " ... " + value.substring(value.length() - 60);
                     Main.out.println("assigned \"" + value + "\" to \"" + assignArr.get(j) + "\"");
                 }
             }
@@ -144,33 +128,36 @@ class ProcessRule {
 
         BackgroundWorker.createIfTerminated();
         Iterable<DecompiledFile> newFiles = Scan.scanFolder(new File(Prefs.projectPath + File.separator + rule.target));
-        try {
-            BackgroundWorker.executor.shutdown();
-            BackgroundWorker.executor.awaitTermination(60, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        BackgroundWorker.computeAndDestroy();
+
         for (DecompiledFile df : newFiles) {
-            if (df.isXML()) {
-                Scan.removeLoadedFile(df.getPath());
+            Scan.removeLoadedFile(df.getPath(), false, false);
+            if (df.isXML())
                 Scan.xmlList.add(df);
-            }
-            else {
-                Scan.removeLoadedFile(df.getPath());
+            else
                 Scan.smaliList.add(df);
-            }
         }
     }
 
     static void remove(Rule rule) {
-        if (rule.target!=null) {
-            IO.deleteAll(new File(Prefs.projectPath + File.separator + rule.target));
-            Scan.removeLoadedFile(rule.target);
-        }
-        else {
-            for (String target : rule.targetArr) {
-                IO.deleteAll(new File(Prefs.projectPath + File.separator + target));
-                Scan.removeLoadedFile(target);
+        ArrayList<String> forRemove = new ArrayList<>(4);
+        if (rule.targetArr!=null)
+            forRemove.addAll(rule.targetArr);
+        if (rule.target!=null)
+            forRemove.add(rule.target);
+
+        for (String target : forRemove) {
+            if (target.startsWith("L"))
+                target = target.substring(1);
+
+            if (target.contains("*") || target.contains("?")) {
+                ArrayList<String> deleted = Scan.removeLoadedFile(Regex.globToRegex(target), true, true);
+                for (String str : deleted)
+                    IO.delete(new File(Prefs.projectPath + File.separator + str));
+            }
+            else {
+                Scan.removeLoadedFile(target, false, false);
+                IO.delete(new File(Prefs.projectPath + File.separator + target));
             }
         }
     }
@@ -198,12 +185,16 @@ class ProcessRule {
                 };
                 BackgroundWorker.executor.submit(r);
             }
-            BackgroundWorker.executor.shutdown();
-            BackgroundWorker.executor.awaitTermination(15, TimeUnit.MINUTES);
+            BackgroundWorker.computeAndDestroy();
         } catch (Exception e) {
             Main.out.println(e.getMessage());
             System.exit(1);
         }
+    }
+
+    static void removeCode(Rule rule) {
+        remove(rule);
+        new SmaliAnalyzer().analyze(Scan.smaliList, rule);
     }
 
     private static void applyAssign(Rule rule) {        //replacing ${GROUP} to some text
@@ -215,7 +206,7 @@ class ProcessRule {
             for (Map.Entry<String, String> entry : set) {
                 String key = "${" + entry.getKey() + "}";
                 boolean foundInMatch = rule.match.contains(key);
-                boolean foundInReplacement = rule.replacement.contains(key);  //fixme
+                boolean foundInReplacement = rule.replacement.contains(key);
                 if (foundInMatch || foundInReplacement) {
                     String value = entry.getValue();
                     if (Prefs.verbose_level == 0)
@@ -233,7 +224,7 @@ class ProcessRule {
         String apkPath = Scan.getApkPath();
         if (apkPath == null)
             Main.out.println("ERROR: apk file not found.");
-        String zipPath = Prefs.patchesDir + File.separator + Prefs.zipName;
+        String zipPath = Prefs.patchesDir + File.separator + Prefs.zipPath;
         String projectPath = Prefs.projectPath;
         String dexPath = Prefs.tempDir + File.separator + rule.script;
         Main.dex.runDex(dexPath, rule.entrance, rule.mainClass, apkPath, zipPath, projectPath, rule.param, Prefs.tempDir.toString());
