@@ -92,17 +92,17 @@ class ProcessRule {
             files = Scan.smaliList;
 
         for (DecompiledFile dFile : files) {
-            if (!dFile.getPath().contains(rule.target))
+            if (!dFile.getPath().matches(rule.target))
                 continue;
 
             for (String variable : rule.assignments) {
                 assignArr.add(variable.substring(0, variable.indexOf('=')));
             }
-            ArrayList<String> valuesArr = Regex.matchMultiLines(Pattern.compile(rule.match), dFile.getBody(), Regex.MatchType.Split);
-            if (assignArr.size() > valuesArr.size())
+            ArrayList<String> valuesArr = Regex.matchMultiLines(Pattern.compile(rule.match), dFile.getBody(), Regex.MatchType.Full);
+            if (assignArr.size() < valuesArr.size())
                 Main.out.println("WARNING: MATCH_ASSIGN found multiple results...");
-            else if (assignArr.size() < valuesArr.size())
-                Main.out.println("WARNING: MATCH_ASSIGN not found enough results...");
+            else if (assignArr.size() > valuesArr.size())
+                Main.out.println("WARNING: MATCH_ASSIGN found not enough results...");
             for (int j = 0; j < assignArr.size(); ++j) {
                 String value = valuesArr.get(j);
                 assignMap.put(assignArr.get(j), value);

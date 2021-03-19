@@ -26,7 +26,7 @@ class Regex {
                         break;
                     case SplitPath:
                         for (String str : textMatched.split("\\R")) {
-                            matchedArr.add(str.replace("*/*", "*"));
+                            matchedArr.add(str.replace("*/*", "*").trim());
                         }
                         break;
                 }

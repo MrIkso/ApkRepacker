@@ -129,10 +129,15 @@ public class IO {
     }
 
     static void copy(String src, String dst) {
+        src = src.trim(); dst = dst.trim();
         File dstFile = new File(dst);
+        File srcFile = new File(src);
+        boolean srcIsFolder = srcFile.isDirectory();
+        boolean dstIsFolder = dstFile.isDirectory();
+        if (!srcIsFolder && dstIsFolder)    //someone is trying to copy file to name of folder bruh
+            dst = dst + '/' + Regex.getEndOfPath(src);    //append file name
         if (dstFile.exists())
             dstFile.delete();
-        src = src.trim(); dst = dst.trim();
         File dstFolder = dstFile.getParentFile();
         dstFolder.mkdirs();
 
@@ -145,7 +150,7 @@ public class IO {
         }
         catch (IOException e) {
             e.printStackTrace();
-            Main.out.println("Error during copying file...");
+            Main.out.println("Error during copying file...\nFrom " + src + "\nTo " + dst);
         }
     }
 
@@ -207,7 +212,7 @@ public class IO {
                     file.delete();
             }
         }
-        else
+        else if (file.exists())
             file.delete();
     }
 

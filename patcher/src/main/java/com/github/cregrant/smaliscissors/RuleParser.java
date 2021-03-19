@@ -4,7 +4,6 @@ import com.github.cregrant.smaliscissors.Regex.MatchType;
 import com.github.cregrant.smaliscissors.structures.Rule;
 
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.regex.Pattern;
 
 import static com.github.cregrant.smaliscissors.Regex.matchMultiLines;
@@ -12,20 +11,20 @@ import static com.github.cregrant.smaliscissors.Regex.matchSingleLine;
 
 class RuleParser {
     static private final Pattern patSource = Pattern.compile("SOURCE:\\R(.+)");
-    static private final Pattern patExtract = Pattern.compile("EXTRACT:\\R\\s*?(.+)");
+    static private final Pattern patExtract = Pattern.compile("EXTRACT:\\R(.+)");
     @SuppressWarnings("RegExpRedundantEscape")
-    static private final Pattern patAssignment = Pattern.compile("\\R\\s*?(.+?=\\$\\{GROUP\\d{1,2}\\})");
+    static private final Pattern patAssignment = Pattern.compile("\\R(.+?=\\$\\{GROUP\\d{1,2}\\})");
     static private final Pattern patReplacement = Pattern.compile("REPLACE:\\R([\\S\\s]*?)\\R?\\[/MATCH_REPLACE]");
     static private final Pattern patTarget = Pattern.compile("TARGET:\\R\\s*?([\\s\\S]*?)\\R(?:(?:MATCH|EXTRACT|SOURCE):|\\[/)");
     static private final Pattern patMatch = Pattern.compile("MATCH:\\R(.+)");
-    static private final Pattern patName = Pattern.compile("NAME:\\R\\s*?(.+)");
+    static private final Pattern patName = Pattern.compile("NAME:\\R(.+)");
     static private final Pattern patRegexEnabled = Pattern.compile("REGEX:\\R(.+)");
     static private final Pattern patScript = Pattern.compile("SCRIPT:\\R(.+)");
     static private final Pattern patIsSmaliNeeded = Pattern.compile("SMALI_NEEDED:\\R(.+)");
     static private final Pattern patMainClass = Pattern.compile("MAIN_CLASS:\\R(.+)");
     static private final Pattern patEntrance = Pattern.compile("ENTRANCE:\\R(.+)");
     static private final Pattern patParam = Pattern.compile("PARAM:\\R(.+)");
-    static private final Pattern patGoto = Pattern.compile("GOTO:\\R\\s*?(.+)");
+    static private final Pattern patGoto = Pattern.compile("GOTO:\\R(.+)");
     private Rule rule;
     private String patch;
     static private int num = 0;
@@ -35,7 +34,13 @@ class RuleParser {
         patch = patchStr;
         rule.num = num;
         num++;
-        getType();
+        try {
+            rule.type = Rule.Type.valueOf(patch.substring(patch.indexOf('[')+1, patch.indexOf(']')));
+        } catch (EnumConstantNotPresentException e) {
+            Main.out.println("Error parsing type of rule №" + num + ". " + patch.substring(patch.indexOf('[')+1, patch.indexOf(']')));
+            return null;
+        }
+
         //noinspection EnhancedSwitchMigration
         switch (rule.type) {
             case MATCH_ASSIGN:
@@ -67,86 +72,72 @@ class RuleParser {
                 break;
         }
         fixRegex();
-        if (rule.checkRuleIntegrity())
+        if (rule.ruleIntegrityPassed())
             return rule;
         else {
-            Main.out.println("Error parsing rule " + num);
+            Main.out.println("Error parsing rule №" + num);
             return null;
         }
     }
 
-    private void getType() {
-        int k = 1;
-        StringBuilder sb = new StringBuilder(17);
-        char ch;
-        while ((ch = patch.charAt(k))!=']') {
-            sb.append(ch);
-            k++;
-        }
-        rule.type = Rule.Type.valueOf(sb.toString());
-
-    }
-
     private void matchRule() {
-        rule.ruleName = matchSingleLine(patName, patch);
+        rule.ruleName = parseString(patName);
         getTargets();
         rule.match = matchSingleLine(patMatch, patch);
         rule.replacement = matchSingleLine(patReplacement, patch);
-        rule.isRegex = Objects.requireNonNull(matchSingleLine(patRegexEnabled, patch)).trim().equalsIgnoreCase("true");
+        rule.isRegex = parseBoolean(patRegexEnabled);
     }
 
     private void assignRule() {
-        rule.ruleName = matchSingleLine(patName, patch);
+        rule.ruleName = parseString(patName);
         getTargets();
         rule.match = matchSingleLine(patMatch, patch);
-        rule.isRegex = Objects.requireNonNull(matchSingleLine(patRegexEnabled, patch)).trim().equalsIgnoreCase("true");
+        rule.isRegex = parseBoolean(patRegexEnabled);
         rule.assignments = matchMultiLines(patAssignment, patch, MatchType.Split);
     }
 
     private void addRule() {
-        rule.ruleName = matchSingleLine(patName, patch);
-        rule.source = matchSingleLine(patSource, patch);
-        try {
-            rule.extract = Objects.requireNonNull(matchSingleLine(patExtract, patch)).trim().equalsIgnoreCase("true");
-        } catch (NullPointerException ignored) {}
+        rule.ruleName = parseString(patName);
+        rule.source = parseString(patSource);
+        rule.extract = parseBoolean(patExtract);
         getTargets();
     }
 
     private void removeCodeRule() {
-        rule.ruleName = matchSingleLine(patName, patch);
+        rule.ruleName = parseString(patName);
         rule.isSmali = true;
         getTargets();
     }
 
     private void removeFilesRule() {
-        rule.ruleName = matchSingleLine(patName, patch);
+        rule.ruleName = parseString(patName);
         getTargets();
     }
 
     private void dummyRule() {
-        rule.ruleName = matchSingleLine(patName, patch);
+        rule.ruleName = parseString(patName);
     }
 
     private void dexRule() {
-        rule.ruleName = matchSingleLine(patName, patch);
-        rule.script = Objects.requireNonNull(matchSingleLine(patScript, patch)).trim();
-        rule.isSmali = Boolean.getBoolean(Objects.requireNonNull(matchSingleLine(patIsSmaliNeeded, patch)).trim());
-        rule.mainClass = Objects.requireNonNull(matchSingleLine(patMainClass, patch)).trim();
-        rule.entrance = Objects.requireNonNull(matchSingleLine(patEntrance, patch)).trim();
-        rule.param = Objects.requireNonNull(matchSingleLine(patParam, patch)).trim();
+        rule.ruleName = parseString(patName);
+        rule.script = parseString(patScript);
+        rule.isSmali = parseBoolean(patIsSmaliNeeded);
+        rule.mainClass = parseString(patMainClass);
+        rule.entrance = parseString(patEntrance);
+        rule.param = parseString(patParam);
     }
 
     private void gotoRule() {
-        rule.ruleName = matchSingleLine(patName, patch);
-        rule.goTo = matchSingleLine(patGoto, patch);
+        rule.ruleName = parseString(patName);
+        rule.goTo = parseString(patGoto);
     }
 
     private void matchGotoRule() {
-        rule.ruleName = matchSingleLine(patName, patch);
+        rule.ruleName = parseString(patName);
         getTargets();
         rule.match = matchSingleLine(patMatch, patch);
-        rule.isRegex = Boolean.getBoolean(Objects.requireNonNull(matchSingleLine(patRegexEnabled, patch)).trim());
-        rule.goTo = matchSingleLine(patGoto, patch);
+        rule.isRegex = parseBoolean(patRegexEnabled);
+        rule.goTo = parseString(patGoto);
     }
 
     private void getTargets() {
@@ -164,9 +155,25 @@ class RuleParser {
         else rule.targetArr = targetsRaw;
     }
 
-    private void fixRegex() {
+    private String parseString(Pattern pattern) {       //removes some whitespace
+        String text = matchSingleLine(pattern, patch);
+        if (text!=null)
+            return text.trim();
+        else
+            return null;
+    }
+
+    private boolean parseBoolean(Pattern pattern) {
+        String text = matchSingleLine(pattern, patch);
+        if (text!=null && text.trim().equalsIgnoreCase("true"))
+            return true;
+        else
+            return false;
+    }
+
+    private void fixRegex() {   //add compatibility with non-ApkEditor xml style
         if (rule.match!=null)
-            rule.match = rule.match.replace("\\n", "\\R");  //compatibility with windows
+            rule.match = rule.match.replace("\\n", "\\R");
         if (rule.isXml) {
             if (rule.match!=null)
                 rule.match = rule.match.replace("><", ">\\s*?<").replace(" ", "\\s*?");

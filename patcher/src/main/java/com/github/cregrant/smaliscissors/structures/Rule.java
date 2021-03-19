@@ -33,9 +33,9 @@ public class Rule {
     public boolean extract = false;
     public ArrayList<String> targetArr;
     public ArrayList<String> assignments;
-    public ArrayList<Rule> mergedRules = new ArrayList<>(1);
+    public ArrayList<Rule> mergedRules = new ArrayList<>(3);
 
-    public boolean checkRuleIntegrity() {
+    public boolean ruleIntegrityPassed() {
         switch (type) {
             case MATCH_ASSIGN:
                 if (target == null || match == null || assignments == null)
@@ -50,11 +50,11 @@ public class Rule {
                     return false;
                 break;
             case REMOVE_FILES:
-                if (target==null && targetArr==null)
+                if (target == null && targetArr == null)
                     return false;
                 break;
             case DUMMY:
-                if (ruleName ==null)
+                if (ruleName == null)
                     return false;
                 break;
             case EXECUTE_DEX:
@@ -62,7 +62,7 @@ public class Rule {
                     return false;
                 break;
             case GOTO:
-                if (goTo==null)
+                if (goTo == null)
                     return false;
                 break;
             case MATCH_GOTO:

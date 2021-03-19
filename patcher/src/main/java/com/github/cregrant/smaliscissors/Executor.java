@@ -82,7 +82,7 @@ class Executor {
             if (rule.type != Rule.Type.EXECUTE_DEX && rule.type != Rule.Type.DUMMY) {
                 if (rule.target != null)
                     Main.out.println("Target - " + rule.target);
-                else {
+                else if (rule.targetArr != null) {
                     Main.out.println("Targets:");
                     if (rule.targetArr.size() < 100) {
                         for (String target : rule.targetArr)
