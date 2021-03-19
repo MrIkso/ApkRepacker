@@ -34,7 +34,8 @@ public class Main {
         patchProjects(projectsList, zipArr);
         Scan.smaliList = new ArrayList<>(1);
         Scan.xmlList = new ArrayList<>(1);
-        Main.out.println("All done in " + (System.currentTimeMillis() - startTimeTotal) + " ms");
+        if (projectsList.size() > 1)
+            Main.out.println("All done in " + (System.currentTimeMillis() - startTimeTotal) + " ms");
         Main.out.println("Good bye Sir.");
     }
 

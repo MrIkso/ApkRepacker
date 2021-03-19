@@ -27,9 +27,9 @@ allprojects {
 }
 
 ext {
-        kotlin_version = "1.4.10"
+        kotlin_version = '1.4.31'
         compileSdkVersion = 29
-        buildToolsVersion = '29.0.3'
+        buildToolsVersion = '30.0.1'
         targetSdkVersion = 28
         minSdkVersion = 21
 }
