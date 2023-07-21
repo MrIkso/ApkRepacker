@@ -3,6 +3,9 @@ package com.mrikso.apkrepacker.viewmodel;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -12,10 +15,12 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.github.cregrant.smaliscissors.Main;
-import com.github.cregrant.smaliscissors.DexExecutor;
-import com.github.cregrant.smaliscissors.Main;
-import com.github.cregrant.smaliscissors.OutStream;
+import com.github.cregrant.smaliscissors.common.outer.DexExecutor;
+import com.github.cregrant.smaliscissors.common.outer.PatcherTask;
 import com.mrikso.apkrepacker.adapter.PatchItem;
+import com.mrikso.apkrepacker.ui.preferences.PreferenceHelper;
+import com.mrikso.apkrepacker.utils.logback.LogbackPatcherConfig;
+import com.mrikso.apkrepacker.utils.logback.PatcherAppender;
 import com.mrikso.apkrepacker.utils.ProjectUtils;
 import com.mrikso.apkrepacker.utils.common.DLog;
 import com.mrikso.apkrepacker.utils.manifestparser.SdkConstants;
@@ -35,12 +40,13 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import dalvik.system.DexClassLoader;
 
-public class PatcherViewModel extends AndroidViewModel implements IRulesInfo, IPatchContext, OutStream, DexExecutor {
+public class PatcherViewModel extends AndroidViewModel implements IRulesInfo, IPatchContext, DexExecutor {
 
     private Map<String, String> mGlobalVariables = new HashMap<>();
     private PatchExecutor mPatchExecutor;
@@ -92,15 +98,34 @@ public class PatcherViewModel extends AndroidViewModel implements IRulesInfo, IP
 
     public void start(List<PatchItem> patchItemList) {
         mPatchSize.postValue(patchItemList.size());
-        //int count = 0;
-        ArrayList<String> args = new ArrayList<>(patchItemList.size()+1);
-        args.add(mProjectHelper.mProject);
+        Handler logHandler = new Handler(Looper.getMainLooper()) {
+            @Override
+            public void handleMessage(Message msg) {
+                mLog.setValue(String.valueOf(msg.obj));
+            }
+        };
+        PatcherAppender.setHandler(logHandler);
+
+        ArrayList<PatcherTask> tasks = new ArrayList<>();
         for (PatchItem item : patchItemList) {
-            //count++;
-            //runPatch(item.mPath);
-            args.add(item.mPath);
+            PatcherTask task = new PatcherTask(mProjectHelper.mProject);
+            task.addPatchPath(item.mPath);
+            tasks.add(task);
         }
-        Main.main(args.toArray(new String[0]), this, this);
+
+        File logFile = new File(PreferenceHelper.getInstance(mContext).getDecodingPath() + "/patcher_log.txt");
+        LogbackPatcherConfig.setLoggingFile(logFile);
+
+        Runnable r = () -> {
+            try {
+                Main.runPatcher(this, null, tasks);
+            } catch (Exception e) {
+                mLog.setValue("Failed.");
+            } finally {
+                PatcherAppender.clear();
+            }
+        };
+        Executors.newSingleThreadExecutor().execute(r);
         mPatchCount.postValue(patchItemList.size());
     }
 
@@ -113,13 +138,6 @@ public class PatcherViewModel extends AndroidViewModel implements IRulesInfo, IP
         } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | ClassNotFoundException | InvocationTargetException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void println(Object x) {
-        String str = String.valueOf(x) + '\n';
-        mLog.setValue(str);
-        this.info(str, false);
     }
 
     @Nullable
