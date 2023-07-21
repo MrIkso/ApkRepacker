@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<configuration>
+
+<!--    <statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener"/>-->
+
+    <appender name="PATCHER" class="com.mrikso.apkrepacker.utils.PatcherAppender"/>
+
+    <logger name="com.github.cregrant.smaliscissors" level="INFO">
+        <appender-ref ref="PATCHER"/>
+    </logger>
+</configuration>
