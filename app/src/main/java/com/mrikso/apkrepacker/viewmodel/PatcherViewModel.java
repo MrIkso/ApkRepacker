@@ -18,7 +18,9 @@ import com.github.cregrant.smaliscissors.Main;
 import com.github.cregrant.smaliscissors.common.outer.DexExecutor;
 import com.github.cregrant.smaliscissors.common.outer.PatcherTask;
 import com.mrikso.apkrepacker.adapter.PatchItem;
-import com.mrikso.apkrepacker.utils.PatcherAppender;
+import com.mrikso.apkrepacker.ui.preferences.PreferenceHelper;
+import com.mrikso.apkrepacker.utils.logback.LogbackPatcherConfig;
+import com.mrikso.apkrepacker.utils.logback.PatcherAppender;
 import com.mrikso.apkrepacker.utils.ProjectUtils;
 import com.mrikso.apkrepacker.utils.common.DLog;
 import com.mrikso.apkrepacker.utils.manifestparser.SdkConstants;
@@ -96,7 +98,6 @@ public class PatcherViewModel extends AndroidViewModel implements IRulesInfo, IP
 
     public void start(List<PatchItem> patchItemList) {
         mPatchSize.postValue(patchItemList.size());
-        //int count = 0;
         Handler logHandler = new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(Message msg) {
@@ -107,12 +108,13 @@ public class PatcherViewModel extends AndroidViewModel implements IRulesInfo, IP
 
         ArrayList<PatcherTask> tasks = new ArrayList<>();
         for (PatchItem item : patchItemList) {
-            //count++;
-            //runPatch(item.mPath);
             PatcherTask task = new PatcherTask(mProjectHelper.mProject);
             task.addPatchPath(item.mPath);
             tasks.add(task);
         }
+
+        File logFile = new File(PreferenceHelper.getInstance(mContext).getDecodingPath() + "/patcher_log.txt");
+        LogbackPatcherConfig.setLoggingFile(logFile);
 
         Runnable r = () -> {
             try {

@@ -3,10 +3,25 @@
 <configuration>
 
 <!--    <statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener"/>-->
+    <property name="VERBOSE_DEBUG_PATTERN" value="%d{HH:mm:ss.SSS} %level [%thread] %logger %msg%n"/>
 
-    <appender name="PATCHER" class="com.mrikso.apkrepacker.utils.PatcherAppender"/>
+    <appender name="PATCHER" class="com.mrikso.apkrepacker.utils.logback.PatcherAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+    </appender>
 
-    <logger name="com.github.cregrant.smaliscissors" level="INFO">
+    <appender name="PATCHER_FILE_DEBUG" class="ch.qos.logback.core.FileAppender">
+        <append>false</append>
+        <immediateFlush>true</immediateFlush>
+
+        <encoder>
+            <pattern>${VERBOSE_DEBUG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.github.cregrant.smaliscissors" level="DEBUG">
         <appender-ref ref="PATCHER"/>
+        <appender-ref ref="PATCHER_FILE_DEBUG"/>
     </logger>
 </configuration>
