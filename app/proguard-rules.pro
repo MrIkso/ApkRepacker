@@ -36,5 +36,7 @@ private *;
 -keepclassmembernames class * {
 @com.google.gson.annotations.SerializedName <fields>;
 }
+-keep class com.mrikso.apkrepacker.utils.logback.PatcherAppender {*;}
+-keep class ch.qos.logback.** {*;}
 
 #-keep @inteface com.google.gson.annotations.SerializedName
