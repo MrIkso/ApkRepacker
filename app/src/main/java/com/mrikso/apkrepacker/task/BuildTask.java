@@ -101,7 +101,7 @@ public class BuildTask extends CoroutinesAsyncTask<File, CharSequence, Boolean> 
         } catch (Exception e) {
            // mBuilderCallback.taskFailed(e.getMessage());
             logger.log(Level.WARNING, e.getMessage(), e);
-            //e.printStackTrace();
+            e.printStackTrace();
             cancel(true);
             return false;
         }
