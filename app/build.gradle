@@ -102,7 +102,7 @@ dependencies {
     //commons io
     implementation 'commons-io:commons-io:2.8.0'
     //patcher
-    implementation 'com.github.Cregrant.SmaliScissors:patcher:v1.0.0'
+    implementation 'com.github.Cregrant.SmaliScissors:patcher:v1.0.1'
     //logs
     implementation 'org.slf4j:slf4j-api:1.7.36'
     implementation 'ch.qos.logback:logback-classic:1.2.11'
