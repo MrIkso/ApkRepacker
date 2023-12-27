@@ -172,9 +172,10 @@ class BuildService : Service(), IBuilderCallback, Logger {
         if (ex == null) return
         mCompileLogMutable.append(String.format(fmt, ch, ex.message))
         mCompileLogMutable.append(LINE_SEPARATOR_WIN)
-        for (ste in ex.stackTrace)
+        for (ste in ex.stackTrace) {
             mCompileLogMutable.append(String.format(fmt, ch, ste))
             mCompileLogMutable.append(LINE_SEPARATOR_WIN)
+        }
         log(fmt, ch, ex.cause)
     }
 
