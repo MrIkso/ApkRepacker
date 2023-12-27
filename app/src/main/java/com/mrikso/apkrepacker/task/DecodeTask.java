@@ -121,7 +121,7 @@ public class DecodeTask extends CoroutinesAsyncTask<File, CharSequence, Boolean>
         ApkDecoder decoder = new ApkDecoder(apk, lib, this);
         int action = this.action;
         decoder.setApkFileName(name);
-        decoder.setBaksmaliDebugMode(true);
+        decoder.setBaksmaliDebugMode(false);
         decoder.setDecodeAssets(ApkDecoder.DECODE_ASSETS_FULL);
         if ((action & 2) > 0)
             decoder.setDecodeResources(ApkDecoder.DECODE_RESOURCES_FULL);
