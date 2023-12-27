@@ -38,7 +38,7 @@
             android:key="pref_decode_folder"
             android:title="@string/pref_decode_folder" />
         <ListPreference
-            android:defaultValue="0"
+            android:defaultValue="3"
             android:entries="@array/decoding_names"
             android:entryValues="@array/decoding_values"
             android:key="pref_decode_mode"
